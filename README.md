@@ -1,6 +1,12 @@
-# Neighbourhood
+# Covid 19 Neighbourhood Dashboard
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.3.
+
+## To successfully run this project, you have to add environment variables
+In your terminal run (UNIX System ONLY):
+```
+./create_env.sh
+```
 
 ## Development server
 
