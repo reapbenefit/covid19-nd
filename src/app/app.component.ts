@@ -708,7 +708,7 @@ export class AppComponent {
     var childrenCategory;
     data.forEach(element => {
       childrenCategory = new TreeviewItem({
-        text: element.name, value: element.menuId, collapsed: true, checked: false, children: [
+        text: element.name, value: element.menuId, collapsed: false, checked: false, children: [
           { text: 'a', value: 0 },
         ]
       });
