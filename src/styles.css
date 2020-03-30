@@ -1,0 +1,33 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa;
+}
+
+.agm-map-container-inner[_ngcontent-c4]{
+    position: unset !important;
+}
+.agm-map-container-inner{
+    position: unset !important;
+}
+
+@media only screen and (max-width: 600px) {
+    #myLocation {
+        top: 70%;
+        left: 84.3%;
+    }
+    #centerLocation{
+        top: calc(100vh - 250px) !important;
+        left: 46.6% !important;
+    }
+    #SeachIcon{
+        position: relative;
+        top: -24px;
+        left: 88%;
+        z-index: 1;
+        color: grey;
+    }
+  }

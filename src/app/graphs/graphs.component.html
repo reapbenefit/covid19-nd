@@ -1,0 +1,110 @@
+<div class="row" *ngIf="aqm">
+  <div class="col-lg-4">
+    <select class="form-control" (change)="selectedAQMData1($event.target.value)">
+      <option [value]="Select">Select</option>
+      <option *ngFor="let aqm of AQMList" [value]="aqm.stationId">{{aqm.name}}</option>
+    </select>
+  </div>
+  <div class="col-lg-4 dispCenter">
+    <div class="row">
+      <div class="col-lg-12 dispCenter">
+        <img (click)="open(Legend,'Legend')" src="../../assets/Icons/grpahs.png" alt="Graph Icon"
+          style="width: 32px; height: 32px;" title="Legends">
+      </div>
+      <div class="col-lg-12 dispCenter">
+        <span>Last 24hrs <i class="fa fa-arrow-right" aria-hidden="true"></i></span>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <select class="form-control" (change)="selectedAQMData2($event.target.value)">
+      <option [value]="Select">Select</option>
+      <option *ngFor="let aqm of AQMList" [value]="aqm.stationId">{{aqm.name}}</option>
+    </select>
+  </div>
+</div>
+<div [hidden]="!NoData" style="display: flex;justify-content: center;">
+  <ngx-charts-bar-horizontal [view]="view" [scheme]="colorScheme" [results]="single" [showDataLabel]="showDataLabel"
+    [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="true"
+    [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" (select)="onSelect($event)">
+  </ngx-charts-bar-horizontal>
+  <ngx-charts-bar-horizontal [view]="view" [scheme]="colorScheme" [results]="StatusGraph"
+    [showDataLabel]="showDataLabel" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+    [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel" (select)="onSelect($event)">
+  </ngx-charts-bar-horizontal>
+</div>
+<div class="row" style="padding-top: 1.5rem;" *ngIf="AQM">
+  <div class="col-lg-6">
+    <div class="row">
+      <div class="col-lg-12" style="display: flex;justify-content: center;">
+        <span>{{AQMGraphLoc1Nm}}</span>
+      </div>
+    </div>
+    <div class="row" *ngFor="let loc1 of AQMGraphLoc1" style="min-height: 100px;">
+      <div class="col-lg-12">
+        <ngx-charts-bar-vertical [yScaleMin]="yScale" [view]="viewAQM1" [barPadding]="1" [scheme]="loc1.colorSchemeAQM"
+          [results]="loc1.values" [showDataLabel]="false" [gradient]="gradient" [xAxis]="true" [yAxis]="showYAxis"
+          [legend]="false" [showXAxisLabel]="true" [showYAxisLabel]="true" [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="loc1.type" (select)="onSelect($event)" [roundEdges]="false">
+        </ngx-charts-bar-vertical>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="row">
+      <div class="col-lg-12" style="display: flex;justify-content: center;">
+        <span>{{AQMGraphLoc2Nm}}</span>
+      </div>
+    </div>
+    <div class="row" *ngFor="let loc2 of AQMGraphLoc2" style="min-height: 100px;">
+      <div class="col-lg-12">
+        <ngx-charts-bar-vertical [yScaleMin]="yScale" [view]="viewAQM1" [barPadding]="1" [scheme]="loc2.colorSchemeAQM"
+          [results]="loc2.values" [showDataLabel]="false" [gradient]="gradient" [xAxis]="true" [yAxis]="showYAxis"
+          [legend]="false" [showXAxisLabel]="true" [showYAxisLabel]="true" [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="loc2.type" (select)="onSelect($event)" [roundEdges]="false">
+        </ngx-charts-bar-vertical>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="col-lg-12" [hidden]="NoData" style="display: flex;justify-content: center;padding: 10px;">
+  <span>No Data Found to compare the given Wards, Please select.</span>
+</div> -->
+
+<ng-template #Legend let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title">Legends</h5>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <i class="fa fa-times" aria-hidden="true" style="font-size: 18px;color: red"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row" style="border-bottom: 1px solid lightgray;margin: 0;">
+      <div class="col-lg-2 dispCenter">
+        <b>AQI</b>
+      </div>
+      <div class="col-lg-5 dispCenter">
+        <b>Remark</b>
+      </div>
+      <div class="col-lg-5 dispCenter">
+        <b>Colour Code</b>
+      </div>
+    </div>
+    <div class="row" *ngFor="let legend of Legends" style="height: 30px;margin: 0;">
+      <div class="col-lg-2 dispCenter">
+        <span>{{legend.index}}</span>
+      </div>
+      <div class="col-lg-5 dispCenter">
+        <span>{{legend.remark}}</span>
+      </div>
+      <div class="col-lg-5 dispCenter">
+        <input class="form-control" disabled="true" [ngStyle]="{'background-color': legend.color}"
+          style="width: 100px;height: 20px;" />
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">Close</button>
+  </div>
+</ng-template>

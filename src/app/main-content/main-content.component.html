@@ -1,0 +1,212 @@
+<div class="content">
+  <div class="row" style="padding: 0.5rem;">
+    <div class="col-lg-12 col-md-12 col-xs-12 center">
+      <app-maps-component [MapData]="MapData" (wardDetails)="wardDetails($event)"></app-maps-component>
+    </div>
+    <div class="col-lg-12 p-0">
+      <div *ngIf="showGraphs" class="Showgraph">
+        <div class="col-lg-12 closeBorder" style="display: flex;justify-content: flex-end;">
+          <i class="fa fa-times" aria-hidden="true" style="cursor: pointer;color: red;font-size: 20px;"
+            (click)="hideGraph()"></i>
+        </div>
+        <div class="col-lg-12 col-md-12 col-xs-12 graph">
+          <div class="row" style="max-height: 370px;overflow-y: auto;">
+            <div class="col-lg-12" style="display: flex;justify-content: flex-end;" *ngIf="false">
+              <div class="row" [hidden]="!ShowComp">
+                <div class="col-lg-2">
+                  <button class="btn btn-primary" [ngClass]="showCompare ? 'green' : ''"
+                    (click)="compareMethod('compare')" style="width: 150px">
+                    <span *ngIf="!showCompare">Compare Wards</span>
+                    <span *ngIf="showCompare">Close Compare</span>
+                  </button>
+                </div>
+                <div class="col-lg-4" *ngIf="showCompare">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <ngx-select-dropdown (change)="compareSelected1($event)" [multiple]="false"
+                        [(ngModel)]="ward1Selected" [config]="config" [options]="Wards"></ngx-select-dropdown>
+                    </div>
+                    <div class="col-lg-12">
+                      <span *ngIf="ward1Data != undefined">{{ward1Data}}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4" *ngIf="showCompare">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <ngx-select-dropdown (change)="compareSelected2($event)" [multiple]="false"
+                        [(ngModel)]="ward2Selected" [config]="config" [options]="Wards"></ngx-select-dropdown>
+                    </div>
+                    <div class="col-lg-12">
+                      <span *ngIf="ward2Data != undefined">{{ward2Data}}</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="col-lg-2" *ngIf="showCompare">
+                    <select class="form-control" (change)="StatusSelected($event.target.value)">
+                      <option [value]="Select">Select</option>
+                    </select>
+                  </div> -->
+                <div *ngIf="!showCompare" class="col-lg-10"></div>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <app-graphs [showPieValue]="showPie" [aqm]='aqm' [AQMGraphLocAll]="AQMGraphLocAll" [ShowComp]="ShowComp"
+                [GraphDataStatus]="GraphDataStatus" [showCompare]="showCompare" [GraphData]="GraphData"
+                [Compare]="Compare"></app-graphs>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row infoWindow" *ngIf="ShowGovernance">
+        <div class="col-lg-12 infoClose">
+          <i class="fa fa-times" aria-hidden="true" style="cursor: pointer;color: red;font-size: 20px;"
+            (click)="hideGovernance()"></i>
+        </div>
+        <div class="col-lg-6">
+          <table>
+            <tbody>
+              <tr>
+                <td style="width: 32%;"><span>Corporator Name: </span></td>
+                <td><span>{{WardDetailsData.corporator_name}}</span></td>
+              </tr>
+              <tr>
+                <td style="width: 32%;"><span>Contact Number :</span></td>
+                <td><span>{{WardDetailsData.contactNum}}</span></td>
+              </tr>
+              <tr>
+                <td style="width: 32%;"><span>Address :</span></td>
+                <td><span>{{WardDetailsData.address}}</span></td>
+              </tr>
+              <tr>
+                <td style="width: 32%;"><span>MLA Name :</span></td>
+                <td><span>{{WardDetailsData.mlaName}}</span></td>
+              </tr>
+              <tr>
+                <td style="width: 32%;"><span>MLA Address :</span></td>
+                <td><span>{{WardDetailsData.mlaAddress}}</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-lg-6 governance">
+          <table class="table table-striped">
+            <tr>
+              <th>Category</th>
+              <th>Open</th>
+              <th>Assigned</th>
+              <th>Resolved</th>
+            </tr>
+            <tr *ngFor="let issue of wardIssueData">
+              <td><span>{{issue.category}}</span></td>
+              <td><span>{{issue.open}}</span></td>
+              <td><span>{{issue.assigned}}</span></td>
+              <td><span>{{issue.resolved}}</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="row infoWindow" *ngIf="ShowAgencies">
+        <div class="col-lg-12 infoClose">
+          <i class="fa fa-times" aria-hidden="true" style="cursor: pointer;color: red;font-size: 20px;"
+            (click)="hideAgencies()"></i>
+        </div>
+        <div class="col-lg-12 agencies">
+          <table class="table table-striped">
+            <tr>
+              <th>Agency</th>
+              <th>Address</th>
+              <th>Contact Number</th>
+              <th>Manager</th>
+            </tr>
+            <tr *ngFor="let agency of WardAgencyList">
+              <td><span>{{agency.civicBody_name}}</span></td>
+              <td><span>{{agency.address}}</span></td>
+              <td><span>{{agency.contactNum}}</span></td>
+              <td><span>{{agency.manager}}</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="row infoWindow" *ngIf="ShowIssues">
+        <div class="col-lg-12">
+          <div class="row infoClose" style="align-items: center;">
+            <div class="col-lg-10">
+              <button class="btn btn-primary" style="padding-top: 0;height: 28px;"
+                (click)="open(Compare,'comapre')">Compare Graphs</button>
+            </div>
+            <div class="col-lg-2" style="display: flex;justify-content: flex-end;">
+              <i class="fa fa-times" aria-hidden="true" style="cursor: pointer;color: red;font-size: 20px;"
+                (click)="hideIssues()"></i>
+            </div>
+          </div>
+          <div class="row" style="align-items: center;" *ngFor="let issue of IssueDataList">
+            <div class="col-lg-1" style="font-weight: 600;text-decoration: underline;">
+              {{issue.name}}
+            </div>
+            <div class="col-lg-5 issues">
+              <table class="table table-bordered">
+                <tr>
+                  <td style="width: 40%;">Agency</td>
+                  <td>{{issue.agency}}</td>
+                </tr>
+                <tr>
+                  <td style="width: 40%;">Contact Number</td>
+                  <td>{{issue.cntNum}}</td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-lg-6 displayCenter">
+              <ngx-charts-bar-horizontal-stacked [view]="view" [scheme]="colorScheme" [results]="issue.graphData"
+                [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                [showXAxisLabel]="showXAxisLabel" [showDataLabel]="showDataLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+                [yAxisLabel]="yAxisLabel" (select)="onSelect($event)">
+              </ngx-charts-bar-horizontal-stacked>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #Compare let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title">Compare</h5>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <i class="fa fa-times" aria-hidden="true" style="font-size: 18px;color: red"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row" style="align-items: center; border-bottom: 1px solid lightgray;">
+      <div class="col-lg-4">
+        <ngx-select-dropdown (change)="compareSelected1($event)" [multiple]="false" [(ngModel)]="ward1Selected"
+          [config]="config" [options]="Wards"></ngx-select-dropdown>
+      </div>
+      <div class="col-lg-8">
+        <ngx-charts-bar-horizontal-stacked [view]="viewComp" [scheme]="colorScheme" [results]="ward1DataGraph"
+          [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="false"
+          [showXAxisLabel]="showXAxisLabel" [showDataLabel]="showDataLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel">
+        </ngx-charts-bar-horizontal-stacked>
+      </div>
+    </div>
+    <div class="row" style="align-items: center">
+      <div class="col-lg-4">
+        <ngx-select-dropdown (change)="compareSelected2($event)" [multiple]="false" [(ngModel)]="ward2Selected"
+          [config]="config" [options]="Wards"></ngx-select-dropdown>
+      </div>
+      <div class="col-lg-8">
+        <ngx-charts-bar-horizontal-stacked [view]="viewComp" [scheme]="colorScheme" [results]="ward2DataGraph"
+          [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="false"
+          [showXAxisLabel]="showXAxisLabel" [showDataLabel]="showDataLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel">
+        </ngx-charts-bar-horizontal-stacked>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="GetDataForCompare()">Get Data</button>
+    <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">Close</button>
+  </div>
+</ng-template>
