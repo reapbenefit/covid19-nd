@@ -12,9 +12,4 @@ echo "export const environment = {
 echo "export const environment = {
   production: false,
   maps_api_key: '$maps_api_key'
-};" > ./src/environments/test.ts
-
-echo "export const environment = {
-  production: false,
-  maps_api_key: '$maps_api_key'
 };" > ./src/environments/environment.ts
