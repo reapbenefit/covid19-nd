@@ -1166,8 +1166,13 @@ export class AppComponent {
     window.open('https://ee.kobotoolbox.org/x/#4v5Ilf7D');
   }
   FeedBack() {
-    window.open('../assets/html/FeedBack.html');
     this.formButtonClickEvent('FeedBack_Click', 'Links', 'Menu', 'button_click');
+    window.open('https://forms.gle/bSJpGUsm4sFGE3EW6');
+  }
+
+  toVolunteer() {
+    this.formButtonClickEvent('Volunteer_Click', 'Links', 'Menu', 'button_click');
+    window.open('https://forms.gle/vwYaFt7SFS8fMAT48');
   }
 
   formButtonClickEvent(eventName, eventCategory, eventLabel, eventAction) {
