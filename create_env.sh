@@ -7,8 +7,7 @@ mkdir ./src/environments
 echo "export const environment = {
   production: true,
   maps_api_key: '$maps_api_key'
-};
-" > ./src/environments/environment.prod.ts
+};" > ./src/environments/environment.prod.ts
 
 echo "export const environment = {
   production: false,
