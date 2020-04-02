@@ -1,4 +1,4 @@
-import { Component, NgZone, ViewChild, ElementRef } from '@angular/core';
+import { Component, NgZone, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { DataService } from './services/data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 // import { } from 'googlemaps';
@@ -12,12 +12,21 @@ import { GoogleAnalyticsService } from './services/google-analytics.service';
 
 declare const google: any;
 
+import { DeviceDetectorService } from 'ngx-device-detector';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+
+
+  openpopups = false;
+  searchLocation = false;
+  filterSearch = false;
+  isMobile = false;
+
 
   // @ViewChild('Governance') Governance: ElementRef;
 
@@ -120,12 +129,13 @@ export class AppComponent {
   subscription: Subscription;
   subscriptionWithCord: Subscription;
 
-  constructor(private dataService: DataService,
+  constructor(private deviceService: DeviceDetectorService, private dataService: DataService,
     private modalService: NgbModal,
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private commonService: CommonService,
     private googleAnalyticsService: GoogleAnalyticsService) {
+
     this.subscription = this.commonService.getZoom().subscribe(message => {
       // this.getDashboardData(this.dataService.catType);
       this.NewObj.level = this.dataService.zoom;
@@ -136,6 +146,22 @@ export class AppComponent {
       this.NewObj.longitude = cordnates.data.lng;
       this.CollectionsData(this.NewObj);
     });
+  }
+
+  // For Mobile View
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.epicFunction();
+  }
+  epicFunction() {
+    const isMobile = this.deviceService.isMobile();
+    const isTablet = this.deviceService.isTablet();
+    const isDesktopDevice = this.deviceService.isDesktop();
+    this.isMobile = isMobile;
+
+    console.log(isMobile);  // returns if the device is a mobile device (android / iPhone / windows-phone etc)
+    console.log(isTablet);  // returns if the device us a tablet (iPad etc)
+    console.log(isDesktopDevice); // returns if the app is running on a Desktop browser.
   }
 
 
@@ -277,6 +303,7 @@ export class AppComponent {
   public SelectedCity;
   public showMenuItems = false;
   SelectCity(event) {
+    this.searchLocation = false;
     this.searchElementRef.nativeElement.value = '';
     this.MenuItems = this.getMenuJSON(this.MenuData);
     if (event.value != undefined) {
@@ -731,6 +758,10 @@ export class AppComponent {
 
   private CitiesList;
   ngOnInit() {
+
+    // Find Device 
+    this.epicFunction();
+
     // this.Wards = ward;
     this.Wards.sort(this.dynamicSort("name"));
     let obj = {

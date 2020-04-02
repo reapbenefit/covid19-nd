@@ -26,6 +26,7 @@
     "bootstrap": "^4.3.1",
     "core-js": "^2.5.4",
     "jquery": "^3.3.1",
+    "ngx-device-detector": "^1.4.1",
     "ngx-select-dropdown": "^1.0.1",
     "ngx-treeview": "^6.0.2",
     "rxjs": "~6.3.3",

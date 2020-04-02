@@ -17,6 +17,7 @@ import { TreeviewModule } from 'ngx-treeview';
 import { GoogleAnalyticsService } from './services/google-analytics.service';
 import { environment } from './../environments/environment.prod'
 
+import { DeviceDetectorModule } from 'ngx-device-detector';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +41,8 @@ import { environment } from './../environments/environment.prod'
       language: 'en',
       libraries: ['geometry', 'places'],
       apiKey: environment.maps_api_key
-    })
+    }),
+    DeviceDetectorModule.forRoot()
   ],
   providers: [CommonService, GoogleAnalyticsService],
   bootstrap: [AppComponent]
