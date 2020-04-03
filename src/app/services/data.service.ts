@@ -8,6 +8,7 @@ export class DataService {
 
     public baseURL = "https://devlp.solveninja.org/wp-includes/rest-api";
     public baseURLCOVID = "https://devlp.solveninja.org/wp-includes/covid/rest-api";
+    public baseURLES = "http://52.172.26.84/"
     // public baseURL = "https://solveninja.org/wp-includes/rest-api";
     public SelectedCity = 1;
     public SelectedCityLat = 12.9796;
@@ -67,6 +68,24 @@ export class DataService {
     getMenuList(obj) {
         return this.httpClient.post(`${this.baseURLCOVID}/neighbourHood/getMenuItems.php`, obj, { headers: this.headers });
     }
+    private getSubMenus(obj) {
+      var menu;
+      let menuItems = []
+      obj["menuData"].forEach((menu, index) => {
+          let submenus = menu["submenus"];
+          var id;
+          submenus.split(",").forEach((id, index) => {
+            menuItems.push(id);
+          });
+      });
+      return menuItems;
+    }
+    CollectionsDataES(obj) {
+        let menuItems = this.getSubMenus(obj);
+        let params = {menuData: menuItems};
+        return this.httpClient.get(`${this.baseURLES}/places`, {params: params, headers: this.headers});
+    }
+
     CollectionsData(obj) {
         return this.httpClient.post(`${this.baseURLCOVID}/neighbourHood/controller.php`, obj, { headers: this.headers });
     }

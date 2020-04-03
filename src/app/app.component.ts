@@ -286,7 +286,7 @@ export class AppComponent {
       this.showMenuItems = true;
       this.ShowForum = false;
       this.mapData = [];
-      // this.showgraphs = false;      
+      // this.showgraphs = false;
       this.SelectedCity = event.value.id;
       this.dataService.SelectCityID = Number(this.SelectedCity);
       this.dataService.SelectedCity = event.value.id;
@@ -1101,10 +1101,10 @@ export class AppComponent {
   }
 
   public ServiceRequest = null;
+
   CollectionsData(obj) {
     this.ServiceRequest ? this.ServiceRequest.unsubscribe() : null
-    this.ServiceRequest = this.dataService.CollectionsData(obj).subscribe(data => {
-      // console.log(data);
+    this.ServiceRequest = this.dataService.CollectionsDataES(obj).subscribe(data => {
       let resMap: any = data;
       this.mapData = resMap.data;
     });
