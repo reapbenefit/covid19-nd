@@ -18,7 +18,7 @@ import { GoogleAnalyticsService } from './services/google-analytics.service';
 import { environment } from './../environments/environment.prod'
 
 import { DeviceDetectorModule } from 'ngx-device-detector';
-@NgModule({ 
+@NgModule({  
   declarations: [
     AppComponent,
     MainContentComponent,
