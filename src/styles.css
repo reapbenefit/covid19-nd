@@ -133,7 +133,7 @@ div#page {
     position: relative !important;
 }
 .map-location i {
-    position: absolute !important;
+    position: absolute !important; 
     top: 10px !important;
     left: unset !important;
     right: 12px !important;
