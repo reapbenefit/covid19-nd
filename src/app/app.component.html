@@ -449,11 +449,11 @@
         <i class="fa fa-map-marker"></i>
       </a>
     </div>
-    <span class="fa fa-filter" (click)="filterSearch = !filterSearch"></span>
   </div>
   <div class="search-menu" *ngIf="searchLocation" style="top: 58px;z-index: 9999 !important;">
     <div class="search-menu-box animated fadeInDown">
       <div class="location-dropdown">
+        <a href="#" class="close-menu" (click)="searchLocation = searchLocation"><i class="fa fa-times-circle"></i></a>
         <a>My Current Location</a>
       </div>
       <div class="map-wrapper">
@@ -480,7 +480,7 @@
     <div class="search-menu-box animated fadeInDown">
       <div class="clear-close">
         <span class="cle">clear</span>
-        <span class="clo" (click)="filterSearch = false">close</span>
+        <span class="clo" (click)="filterSearch = false"><i class="fa fa-times-circle fa-2x"></i></span>
       </div>
       <div class="tree-wrapper" >
         <div class="tree-box" *ngFor="let menuItem of MenuItems;let menuIndex = index;">
@@ -508,24 +508,21 @@
 
   <!-- Page Footer -->
   <div id="footer-menu" [ngStyle]="{'bottom': openpopups? '-100px': '0'}">
-    <a (click)="openpopups = true" href="JavaScript:void(0)" class="active">
+    <a href="JavaScript:void(0)" (click)="filterSearch = !filterSearch" class="active">
+      <span class="icon fa fa-filter"></span>
+      <span class="title-f">Map</span>
+      <strong></strong></a>
+    <a (click)="openpopups = true" href="JavaScript:void(0)">
       <span class="coranaimg">
         <!-- <img style="width: 27px;height: 25px;" src="../assets/img/corana.png" alt=""> -->
       </span>
-      <span class="title-f">Corona</span>
+      <span class="title-f">Resources</span>
       <strong></strong></a>
-    <a target="_blank" href="https://discourse.solveninja.org/tags/">
-      <span class="icon fa fa-comments"></span>
-      <span class="title-f">Forum</span>
-      <strong></strong></a>
-    <a target="_blank" href="http://testnd.solveninja.org/assets/html/NDData.html" class="">
-      <span class="icon fa fa-info-circle"></span>
-      <span class="title-f">Data</span>
-      <strong></strong></a>
-    <a target="_blank" href="http://internaldashboard.solveninja.org:4000/public/dashboard/07b9f145-5be8-4206-942e-7251e15791d9">
-      <span class="icon fa fa-bar-chart"></span>
-      <span class="title-f">Analytics</span>
-      <strong></strong></a>
+      <a (click)="openpopups1 = true" href="JavaScript:void(0)">
+        <span class="icon fa fa-link">
+        </span>
+        <span class="title-f">External</span>
+        <strong></strong></a>
     <div class="clear"></div>
   </div>
   <!-- Page Footer -->
@@ -541,10 +538,30 @@
       </div>
       <div class="content">
         <ul class="link-list">
-          <li><a target="_blank" href="https://covid.apollo247.com/">Self Assessment <i class="fa fa-angle-right"></i> </a></li>
+          <li><a style="color: #155724;" (click)="NeighbourhoodForum()">Self Assessment <i class="fa fa-angle-right"></i> </a></li>
           <li><a target="_blank" href="https://ee.kobotoolbox.org/x/#4v5Ilf7D">Social distancing <i class="fa fa-angle-right"></i> </a></li>
           <li><a target="_blank" href="https://ee.kobotoolbox.org/x/#Rpxexbz7">Help The Needy <i class="fa fa-angle-right"></i> </a></li>
           <li><a target="_blank" href="https://forms.gle/vwYaFt7SFS8fMAT48">Volunteer <i class="fa fa-angle-right"></i> </a></li>
+        </ul>
+        <div class="clear"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ra-custom-popup" *ngIf="openpopups1">
+    <div class="animated bounceInUp menu-popups  menu-active">
+      <div class="menu-title">
+        <h1 class="popup-title">External Links</h1>
+        <p class="color-highlight">
+          
+        </p>
+        <a href="#" class="close-menu" (click)="openpopups1 = false"><i class="fa fa-times-circle"></i></a>
+      </div>
+      <div class="content">
+        <ul class="link-list">
+          <li><a style="color: #155724;" target="_blank" href="https://discourse.solveninja.org/tags/">Forum <i class="fa fa-angle-right"></i> </a></li>
+          <li><a target="_blank" href="http://testnd.solveninja.org/assets/html/NDData.html">Data <i class="fa fa-angle-right"></i> </a></li>
+          <li><a target="_blank" href="http://internaldashboard.solveninja.org:4000/public/dashboard/07b9f145-5be8-4206-942e-7251e15791d9">Analytics <i class="fa fa-angle-right"></i> </a></li>
         </ul>
         <div class="clear"></div>
       </div>
