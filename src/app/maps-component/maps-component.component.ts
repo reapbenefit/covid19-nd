@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
-import { MouseEvent } from '@agm/core';
+import { MouseEvent, LatLngBounds } from '@agm/core';
 import { DataService } from '../services/data.service';
 import { CommonService } from '../services/common.service';
 import { GoogleAnalyticsService } from '../services/google-analytics.service';
@@ -9,6 +9,8 @@ import { GoogleAnalyticsService } from '../services/google-analytics.service';
   templateUrl: './maps-component.component.html',
   styleUrls: ['./maps-component.component.css']
 })
+
+
 export class MapsComponentComponent implements OnInit {
 
   @ViewChild('infoWindow') infoWindow: ElementRef
@@ -16,7 +18,7 @@ export class MapsComponentComponent implements OnInit {
   @Input() MapData;
   @Output() wardDetails = new EventEmitter();
   public zoom: number = 10;
-  // initial center position for the map    
+  // initial center position for the map
   public lat: any = 13.04501680979963;
   public lng: any = 77.60573693017929;
 
@@ -25,8 +27,9 @@ export class MapsComponentComponent implements OnInit {
   public markers = [];
 
   constructor(private dataService: DataService,
-    private commonService: CommonService,
-    private googleAnalyticsService: GoogleAnalyticsService) { }
+              private commonService: CommonService,
+              private googleAnalyticsService: GoogleAnalyticsService) {
+  }
 
   ngOnInit() {
     this.locationDetails = {
@@ -182,6 +185,15 @@ export class MapsComponentComponent implements OnInit {
       this.currentWard = data;
       this.wardDetails.emit(this.currentWard.details[0]);
     })
+  }
+
+  boundsChange(bounds: LatLngBounds) {
+    // The Elastic query likes the rectangle to be specified with top-left and
+    // bottom-right, hence converting NorthEast/SouthWest to the same.
+    let topLeft = {lat: bounds.getNorthEast().lat(), lng: bounds.getSouthWest().lng()}
+    let bottomRight = {lat: bounds.getSouthWest().lat(), lng: bounds.getNorthEast().lng()}
+    this.dataService.topLeft = topLeft;
+    this.dataService.bottomRight = bottomRight;
   }
 
   zoomChange(event) {

@@ -9,6 +9,7 @@ import { CommonService } from './services/common.service';
 import { ward } from './services/wards';
 import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
 import { GoogleAnalyticsService } from './services/google-analytics.service';
+import { ClusteringService } from './services/clustering.service';
 
 declare const google: any;
 
@@ -125,7 +126,8 @@ export class AppComponent {
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private commonService: CommonService,
-    private googleAnalyticsService: GoogleAnalyticsService) {
+    private googleAnalyticsService: GoogleAnalyticsService,
+    private clusteringService: ClusteringService) {
     this.subscription = this.commonService.getZoom().subscribe(message => {
       // this.getDashboardData(this.dataService.catType);
       this.NewObj.level = this.dataService.zoom;
@@ -286,7 +288,7 @@ export class AppComponent {
       this.showMenuItems = true;
       this.ShowForum = false;
       this.mapData = [];
-      // this.showgraphs = false;      
+      // this.showgraphs = false;
       this.SelectedCity = event.value.id;
       this.dataService.SelectCityID = Number(this.SelectedCity);
       this.dataService.SelectedCity = event.value.id;
@@ -759,6 +761,7 @@ export class AppComponent {
       var TempMenuData: any = data;
       this.MenuData = TempMenuData.data;
       this.MenuItems = this.getMenuJSON(this.MenuData);
+      this.clusteringService.addMenuData(this.MenuData);
     });
     // this.dataService.AQMdata(obj).subscribe(data => {
     //   this.AQMDataLoad = data;
@@ -1101,13 +1104,13 @@ export class AppComponent {
   }
 
   public ServiceRequest = null;
+
   CollectionsData(obj) {
     this.ServiceRequest ? this.ServiceRequest.unsubscribe() : null
-    this.ServiceRequest = this.dataService.CollectionsData(obj).subscribe(data => {
-      // console.log(data);
-      let resMap: any = data;
-      this.mapData = resMap.data;
-    });
+    this.ServiceRequest = this.dataService.CollectionsDataES(obj).subscribe((response: any) => {
+      let resMap: any = response;
+      this.mapData = this.clusteringService.make_clusters(response.data, this.dataService.zoom);
+    })
   }
 
   SingleSelectMenuDropDown(event, MenuID) {
