@@ -761,6 +761,7 @@ export class AppComponent {
       var TempMenuData: any = data;
       this.MenuData = TempMenuData.data;
       this.MenuItems = this.getMenuJSON(this.MenuData);
+      this.clusteringService.addMenuData(this.MenuData);
     });
     // this.dataService.AQMdata(obj).subscribe(data => {
     //   this.AQMDataLoad = data;
@@ -1103,9 +1104,10 @@ export class AppComponent {
   }
 
   public ServiceRequest = null;
+
   CollectionsData(obj) {
     this.ServiceRequest ? this.ServiceRequest.unsubscribe() : null
-    this.ServiceRequest = this.dataService.CollectionsData(obj).subscribe((response: any) => {
+    this.ServiceRequest = this.dataService.CollectionsDataES(obj).subscribe((response: any) => {
       let resMap: any = response;
       this.mapData = this.clusteringService.make_clusters(response.data, this.dataService.zoom);
     })

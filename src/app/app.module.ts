@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AgmOverlays } from "agm-overlays"
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MainContentComponent } from './main-content/main-content.component';
@@ -35,6 +36,7 @@ import { environment } from './../environments/environment.prod'
     NgbModule,
     SelectDropDownModule,
     TreeviewModule.forRoot(),
+    AgmOverlays,
     AgmCoreModule.forRoot({
       clientId: '<mandatory>',
       language: 'en',
