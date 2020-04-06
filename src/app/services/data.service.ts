@@ -55,7 +55,7 @@ export class DataService {
         return this.httpClient.post(`${this.baseURL}/getWardName.php`, obj, { headers: this.headers });
     }
     getCorrLocDetails(obj) {
-        return this.httpClient.post(`${this.baseURL}/getDetailData.php`, obj, { headers: this.headers });
+        return this.httpClient.post(`${this.baseURLCOVID}/getDetailData.php`, obj, { headers: this.headers });
         // return this.httpClient.post(`${this.baseURL}/neighbourHood/getDetailData.php`, obj, { headers: this.headers });
     }
 
