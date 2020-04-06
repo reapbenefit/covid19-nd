@@ -1,0 +1,7 @@
+{
+    "/api/v1/user/data/read": {
+        "source": false,
+        "changeOrigin": false,
+        "target": "http://localhost:3000"
+    }
+}

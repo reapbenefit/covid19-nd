@@ -13,6 +13,7 @@ import { GoogleAnalyticsService } from './services/google-analytics.service';
 declare const google: any;
 
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { UserDataService } from './services/user/user-data.service';
 
 @Component({
   selector: 'app-root',
@@ -128,8 +129,14 @@ export class AppComponent {
   public showComp = false;
   subscription: Subscription;
   subscriptionWithCord: Subscription;
+  displayName: string;
+  userRole: string[];
+  userData: any;
 
-  constructor(private deviceService: DeviceDetectorService, private dataService: DataService,
+  constructor(
+    private userService: UserDataService,
+    private deviceService: DeviceDetectorService,
+    private dataService: DataService,
     private modalService: NgbModal,
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
@@ -758,6 +765,20 @@ export class AppComponent {
 
   private CitiesList;
   ngOnInit() {
+
+    try {
+      this.userService.$userData.subscribe((userData) => {
+        console.log('userData : ', userData);
+        if (userData.data['first_name']) {
+          this.displayName = userData.data['first_name'];
+        } else {
+          this.displayName = userData.data['username'];
+        }
+        this.userRole = userData.data['userrole']['roles'];
+      });
+    } catch (e) {
+      console.log('Error while fetching user details from keycloak in Header Component. Error : ', e);
+    }
 
     // Find Device 
     this.epicFunction();

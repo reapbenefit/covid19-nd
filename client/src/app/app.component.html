@@ -205,6 +205,11 @@
     </div>
     <!--Map Page Content  -->
     <div id="content" *ngIf="!ShowForum && !ShowAnalytics">
+      <div class="row">
+        <div class="col-lg-12">
+          <app-header></app-header>
+          </div>
+      </div>
       <div class="row" style="color: blue;">
         <div class="col-lg-1 col-xs-6 vercenter">
           <button class="btn btn-primary" style="height: 25px;padding-top: 0;" (click)="closeSideNav()">
@@ -219,28 +224,28 @@
           class="form-control searchInput" #search [formControl]="searchControl" (input)="searchText($event)"
           style="padding-right: 1.3rem;">
         <i *ngIf="showClear" class="fa fa-times clearSearch cursor" (click)="ClearSearch()" aria-hidden="true"></i> -->
-          <div class="row" style="justify-content: flex-end;">
-            <div class="col-lg-4">
+          <div class="row" style="justify-content: flex-end;" *ngIf="userRole && userRole.length">
+            <div class="col-lg-4" *ngIf="userRole.indexOf('public') > -1">
               <button class="btn btn-primary" (click)="NeighbourhoodForum()"
                 style="width: 100%;height: 25px;padding: 0;background-color: #00695c !IMPORTANT;border-color: #88c03f !IMPORTANT;">
                 <span style="color:white;">Coronavirus Self Assessment</span>
               </button>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-4" *ngIf="userRole.indexOf('public') > -1">
               <button class="btn btn-primary" (click)="NeighbourhoodData()"
                 style="width: 100%;height: 25px;padding: 0;background-color: #00695c !IMPORTANT;border-color: #88c03f !IMPORTANT;">
                 <!-- <span style="color:white;">Neighbourhood Data</span> -->
                 <span style="color:white;">Social distancing</span>
               </button>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-4" *ngIf="userRole.indexOf('ngo') > -1">
               <button class="btn btn-primary" (click)="NeighbourhoodAnalytics()"
                 style="width: 100%;height: 25px;padding: 0;background-color: #00695c !IMPORTANT;border-color: #88c03f !IMPORTANT;">
                 <!-- <span style="color:white;">Neighbourhood Analytics</span> -->
                 <span style="color:white;">Help The Needy</span>
               </button>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-4" *ngIf="userRole.indexOf('ngo') > -1">
               <button class="btn btn-primary" (click)="toVolunteer()"
                 style="width: 100%;height: 25px;padding: 0;background-color: #00695c !IMPORTANT;border-color: #88c03f !IMPORTANT;">
                 <!-- <span style="color:white;">Neighbourhood Analytics</span> -->

@@ -17,6 +17,8 @@ import { TreeviewModule } from 'ngx-treeview';
 import { GoogleAnalyticsService } from './services/google-analytics.service';
 import { environment } from './../environments/environment.prod'
 import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
+import { HeaderComponent } from './header/header.component';
+
 
 import { DeviceDetectorModule } from 'ngx-device-detector';
 @NgModule({  
@@ -24,7 +26,8 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
     AppComponent,
     MainContentComponent,
     MapsComponentComponent,
-    GraphsComponent
+    GraphsComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
