@@ -57,6 +57,6 @@
     </agm-info-window>
   </agm-marker>
   <agm-overlay *ngFor="let m of markers" [latitude] = "m.lat" [longitude] = "m.lng" >
-    <div class="overlay-marker" *ngIf="m.total > 1" style="margin-top: -20px; width: 30px; height: 30px; margin-left: -5px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: blue"> {{m.total}} </div>
+    <div class="overlay-marker" *ngIf="m.total > 1" style="width: 32px; height: 32px; margin-left: -6px; margin-top: -12px; display: flex; justify-content: center; align-items: center;"> <span style="color: blue; font-size: 13px; font-weight: bold; text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;">{{m.total}}</span> </div>
   </agm-overlay>
 </agm-map>
