@@ -7,6 +7,7 @@ import { Injectable } from '@angular/core';
 export class ClusteringService {
 
   public parentMenus = {};
+  public menus = {};
 
   private add_parent(child, parent) {
     this.parentMenus[child] = parent;
@@ -14,10 +15,18 @@ export class ClusteringService {
 
   addMenuData(data) {
     data.forEach(element => {
+      this.menus[element.menuId] = element;
       element.subMenus.forEach(submenu => {
         this.add_parent(submenu.submenuId, element.menuId)
+        this.menus[submenu.submenuId] = submenu;
       })
     })
+  }
+
+  private getIconForCluster(c) {
+    let parentId = this.parentMenus[c["menuId"]];
+    let parentName = this.menus[parentId]["name"];
+    return './assets/Icons/cluster-' + parentName.replace(/\s+/g, '').toLowerCase() + '.png';
   }
 
   private distance(cluster1, cluster2) {
@@ -59,7 +68,7 @@ export class ClusteringService {
     }
     clusters.forEach(c => {
       if (c["total"] > 1) {
-        c["icon"] = 'https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclustererplus/images/m1.png';
+        c["icon"] = this.getIconForCluster(c);
       }
     });
     return clusters;
