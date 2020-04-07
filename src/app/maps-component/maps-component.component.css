@@ -1,5 +1,6 @@
 agm-map {
   height: 300px;
+  width: 100%;
 }
 .searchInput{
       z-index: 1;
