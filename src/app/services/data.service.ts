@@ -17,7 +17,7 @@ export class DataService {
     public centerLat = 77.5906;
     public topLeft = {lat: this.SelectedCityLat, lng: this.SelectedCityLng};
     public bottomRight = {lat: this.SelectedCityLat, lng: this.SelectedCityLng};
-    public zoom = 10;
+    public zoom = 13;
     public AQMDataList;
     public getcurrentlocation = false;
     public catType = 0;
@@ -58,7 +58,7 @@ export class DataService {
         return this.httpClient.post(`${this.baseURL}/getWardName.php`, obj, { headers: this.headers });
     }
     getCorrLocDetails(obj) {
-        return this.httpClient.post(`${this.baseURL}/getDetailData.php`, obj, { headers: this.headers });
+        return this.httpClient.post(`${this.baseURLCOVID}/getDetailData.php`, obj, { headers: this.headers });
         // return this.httpClient.post(`${this.baseURL}/neighbourHood/getDetailData.php`, obj, { headers: this.headers });
     }
 
