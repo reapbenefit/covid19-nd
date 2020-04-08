@@ -52,7 +52,7 @@ body {
 }
 ::-webkit-scrollbar {
     width: 5px;
-    height: 10px;
+    height: 10px; 
     background: #155724 !important;
 }
 
