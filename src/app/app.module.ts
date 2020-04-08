@@ -16,8 +16,9 @@ import { CommonService } from './services/common.service';
 import { TreeviewModule } from 'ngx-treeview';
 import { GoogleAnalyticsService } from './services/google-analytics.service';
 import { environment } from './../environments/environment.prod'
-
-@NgModule({
+import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
+import { DeviceDetectorModule } from 'ngx-device-detector';
+@NgModule({  
   declarations: [
     AppComponent,
     MainContentComponent,
@@ -40,7 +41,9 @@ import { environment } from './../environments/environment.prod'
       language: 'en',
       libraries: ['geometry', 'places'],
       apiKey: environment.maps_api_key
-    })
+    }),
+    DeviceDetectorModule.forRoot(),
+    AgmJsMarkerClustererModule
   ],
   providers: [CommonService, GoogleAnalyticsService],
   bootstrap: [AppComponent]

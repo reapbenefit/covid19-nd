@@ -177,6 +177,10 @@ a.article:hover {
     }
 }
 
+.fa-filter {
+    font-size: large !important;
+}
+
 .about-us{
     max-height: 400px;
     overflow-y: auto;
@@ -219,6 +223,9 @@ a.article:hover {
 }
 .green{
     background-color: #88c03e !important;
+}
+.green-color{
+    color: #88c03e;
 }
 .modal-header{
     background-color: #88c03e !important;
