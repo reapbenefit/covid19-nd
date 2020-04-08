@@ -15,6 +15,8 @@ export class DataService {
     public SelectedCityLng = 77.5906;
     public centerLng = 12.9796;
     public centerLat = 77.5906;
+    public topLeft = {lat: this.SelectedCityLat, lng: this.SelectedCityLng};
+    public bottomRight = {lat: this.SelectedCityLat, lng: this.SelectedCityLng};
     public zoom = 10;
     public AQMDataList;
     public getcurrentlocation = false;
@@ -82,7 +84,13 @@ export class DataService {
     }
     CollectionsDataES(obj) {
         let menuItems = this.getSubMenus(obj);
-        let params = {menuData: menuItems};
+        let params = {
+          menuData: menuItems,
+          topLeftLat: "" + this.topLeft.lat,
+          topLeftLon: "" + this.topLeft.lng,
+          bottomRightLat: "" + this.bottomRight.lat,
+          bottomRightLon: "" + this.bottomRight.lng,
+        };
         return this.httpClient.get(`${this.baseURLES}/places`, {params: params, headers: this.headers});
     }
 
