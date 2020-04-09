@@ -375,6 +375,7 @@ export class AppComponent {
     this.NewObj.longitude = Number(this.dataService.SelectedCityLng);
     this.CollectionsData(this.NewObj);
     this.formButtonClickEvent('Menu', 'City_Menu', 'City_Select', 'Select');
+    this.defaultSelectTrigger();
   }
 
   private dwcGraph;
@@ -1226,8 +1227,17 @@ export class AppComponent {
   }
 
   // Ra Custom Code
-  defaultCategoriesSelect = 92; //"People Needing Help" value is 101
-  default_Ca_Se_flag = 1; // Only one Time 
+  defaultCategoriesSelect = 92; //"People Needing Help" value is 101  
+  defaultSelectTrigger(){
+    console.log("default");
+    setTimeout(() => {
+      this.MenuItems.forEach(ele => {
+        if (ele[0]['value'] == this.defaultCategoriesSelect) {
+          this.selectAll(ele);
+        }
+      })
+    }, 1000)
+  }
   openCaategoriesPopup() {
     // setDefault select
     this.SelectCity({
@@ -1240,15 +1250,7 @@ export class AppComponent {
     });
 
     this.searchLocation = true;
-
-    setTimeout(()=>{
-      this.default_Ca_Se_flag && this.MenuItems.forEach(ele => {
-        if (ele[0]['value'] == this.defaultCategoriesSelect) {
-          this.selectAll(ele);
-        }
-        this.default_Ca_Se_flag = 0;
-      })
-    },1000)
+    this.defaultSelectTrigger();
   }
   singleselect(child, items) {
     child.internalChecked = !child.internalChecked;
