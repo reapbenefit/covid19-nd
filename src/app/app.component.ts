@@ -1,4 +1,4 @@
-import { Component, NgZone, ViewChild, ElementRef } from '@angular/core';
+import { Component, NgZone, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { DataService } from './services/data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 // import { } from 'googlemaps';
@@ -12,12 +12,23 @@ import { GoogleAnalyticsService } from './services/google-analytics.service';
 
 declare const google: any;
 
+import { DeviceDetectorService } from 'ngx-device-detector';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+
+
+  openpopups = false;
+  searchLocation = false;
+  filterSearch = false;
+  isMobile = false;
+  menupopup = false;
+
+
 
   // @ViewChild('Governance') Governance: ElementRef;
 
@@ -120,12 +131,13 @@ export class AppComponent {
   subscription: Subscription;
   subscriptionWithCord: Subscription;
 
-  constructor(private dataService: DataService,
+  constructor(private deviceService: DeviceDetectorService, private dataService: DataService,
     private modalService: NgbModal,
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private commonService: CommonService,
     private googleAnalyticsService: GoogleAnalyticsService) {
+
     this.subscription = this.commonService.getZoom().subscribe(message => {
       // this.getDashboardData(this.dataService.catType);
       this.NewObj.level = this.dataService.zoom;
@@ -136,6 +148,22 @@ export class AppComponent {
       this.NewObj.longitude = cordnates.data.lng;
       this.CollectionsData(this.NewObj);
     });
+  }
+
+  // For Mobile View
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.epicFunction();
+  }
+  epicFunction() {
+    const isMobile = this.deviceService.isMobile();
+    const isTablet = this.deviceService.isTablet();
+    const isDesktopDevice = this.deviceService.isDesktop();
+    this.isMobile = isMobile;
+
+    console.log(isMobile);  // returns if the device is a mobile device (android / iPhone / windows-phone etc)
+    console.log(isTablet);  // returns if the device us a tablet (iPad etc)
+    console.log(isDesktopDevice); // returns if the app is running on a Desktop browser.
   }
 
 
@@ -277,6 +305,8 @@ export class AppComponent {
   public SelectedCity;
   public showMenuItems = false;
   SelectCity(event) {
+    console.log(event);
+    this.searchLocation = false;
     this.searchElementRef.nativeElement.value = '';
     this.MenuItems = this.getMenuJSON(this.MenuData);
     if (event.value != undefined) {
@@ -286,7 +316,7 @@ export class AppComponent {
       this.showMenuItems = true;
       this.ShowForum = false;
       this.mapData = [];
-      // this.showgraphs = false;
+      // this.showgraphs = false;      
       this.SelectedCity = event.value.id;
       this.dataService.SelectCityID = Number(this.SelectedCity);
       this.dataService.SelectedCity = event.value.id;
@@ -731,6 +761,10 @@ export class AppComponent {
 
   private CitiesList;
   ngOnInit() {
+
+    // Find Device 
+    this.epicFunction();
+
     // this.Wards = ward;
     this.Wards.sort(this.dynamicSort("name"));
     let obj = {
@@ -759,6 +793,11 @@ export class AppComponent {
       var TempMenuData: any = data;
       this.MenuData = TempMenuData.data;
       this.MenuItems = this.getMenuJSON(this.MenuData);
+
+      // Default selection set
+      setTimeout(() => {
+        this.openCaategoriesPopup();
+      }, 500);
     });
     // this.dataService.AQMdata(obj).subscribe(data => {
     //   this.AQMDataLoad = data;
@@ -847,6 +886,7 @@ export class AppComponent {
   public ShowCitySelect = true;
   public ShowWardSelect = true;
   TreeMenuItemsSelect(event, menu) {
+    console.log({ event, menu });
     if (event.length > 0) {
       let menuIncludes = false;
       let menuIndex;
@@ -1101,7 +1141,6 @@ export class AppComponent {
   }
 
   public ServiceRequest = null;
-
   CollectionsData(obj) {
     this.ServiceRequest ? this.ServiceRequest.unsubscribe() : null
     this.ServiceRequest = this.dataService.CollectionsDataES(obj).subscribe(data => {
@@ -1185,4 +1224,58 @@ export class AppComponent {
     this.dataService.SelectedCityLat = Number(markerList.lat);
     this.dataService.SelectedCityLng = Number(markerList.lng);
   }
+
+  // Ra Custom Code
+  defaultCategoriesSelect = 92; //"People Needing Help" value is 101
+  default_Ca_Se_flag = 1; // Only one Time 
+  openCaategoriesPopup() {
+    // setDefault select
+    this.SelectCity({
+      "value": {
+        "id": "1",
+        "cityName": "Bangalore Urban",
+        "lat": "12.9796734",
+        "lng": "77.5890556"
+      }
+    });
+
+    this.searchLocation = true;
+
+    setTimeout(()=>{
+      this.default_Ca_Se_flag && this.MenuItems.forEach(ele => {
+        if (ele[0]['value'] == this.defaultCategoriesSelect) {
+          this.selectAll(ele);
+        }
+        this.default_Ca_Se_flag = 0;
+      })
+    },1000)
+  }
+  singleselect(child, items) {
+    child.internalChecked = !child.internalChecked;
+    this.TreeMenuItemsSelect([child.value], items);
+  }
+  selectAll(items) {
+    let temp = [];
+    items[0]['internalChildren'].forEach(element => {
+      element.internalChecked = true;
+      temp.push(element.value);
+    });
+    this.TreeMenuItemsSelect(temp, items)
+  }
+  deselectAll(items) {
+    items[0]['internalChildren'].forEach(element => {
+      element.internalChecked = false;
+    });
+    this.TreeMenuItemsSelect([], items)
+  }
+  getcounterCount(items) {
+    let temp = 0;
+    items && items[0] && items[0]['internalChildren'].forEach(element => {
+      element.internalChecked ? (temp = temp + 1) : temp;
+    });
+    return temp;
+  }
+  //End Ra Custom Code
+
+
 }
