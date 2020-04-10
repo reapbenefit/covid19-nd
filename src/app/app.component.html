@@ -268,7 +268,36 @@
             </ngx-treeview>
           </div>
         </div>
-        <ul *ngFor="let menuItem of MenuItems;let menuIndex = index;" class="box">
+
+        <!-- Custom google search -->
+        <div class="ra-custom-google" [ngClass]="{'collapseme': collapseGooglesearch}" *ngIf="false">
+
+          <div class="search">
+            <input type="text" placeholder="Search Location">
+            <span class="fa fa-search"></span>
+            <span class=""></span>
+          </div>
+          <div class="result" *ngIf="googleData?.length">
+            <div class="collapse-me" (click)="collapseGooglesearch = !collapseGooglesearch" 
+              title="{{collapseGooglesearch ? 'Open': 'Close'}}">
+              <span class="fa fa-sort-desc"  [ngClass]="{'openrotate': collapseGooglesearch}"></span>
+            </div>
+            <ul>
+                <li *ngFor="let item of googleData;let index = index">
+                  <div class="lat-details">
+                    <h5>{{item.data.name}}</h5>
+                    <p>{{item.data.address}}</p>
+                  </div>
+                  <div class="lat-icons">
+                    <span class="fa fa fa-external-link-square"></span>
+                  </div>
+                </li>
+            </ul>
+          </div>
+        </div>
+        <!--End  Custom google search -->
+
+        <ul *ngFor="let menuItem of MenuItems;let menuIndex = index;" class="box" >
           <li class="first-child-section">
             <div class="header-sec">
               {{menuItem[0].text}}
@@ -292,6 +321,7 @@
             </div>
           </li>
         </ul>
+
       </div>
       <!-- End ra-custom-categories  -->
 

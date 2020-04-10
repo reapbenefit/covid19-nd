@@ -4,7 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 // import { } from 'googlemaps';
 import { MapsAPILoader } from '@agm/core';
 import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { CommonService } from './services/common.service';
 import { ward } from './services/wards';
 import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
@@ -27,7 +27,7 @@ export class AppComponent {
   filterSearch = false;
   isMobile = false;
   menupopup = false;
-
+  collapseGooglesearch = false; 
 
 
   // @ViewChild('Governance') Governance: ElementRef;
@@ -1142,11 +1142,23 @@ export class AppComponent {
   }
 
   public ServiceRequest = null;
+  googleData = [] ; 
   CollectionsData(obj) {
+    console.log(obj);
     this.ServiceRequest ? this.ServiceRequest.unsubscribe() : null
-    this.ServiceRequest = this.dataService.CollectionsDataES(obj).subscribe(data => {
+    this.ServiceRequest = this.dataService.CollectionsDataES (obj).subscribe(data => {
       let resMap: any = data;
       this.mapData = resMap.data;
+
+      // let services = resMap.data.map(aa=>{
+      //   var callme = this.dataService.getCorrLocDetails(aa);
+      //   return callme;
+      // })
+      // forkJoin(services).subscribe(result=>{
+      //   console.log(result);
+      //   this.googleData = result;
+      // });
+
     });
   }
 
@@ -1254,8 +1266,16 @@ export class AppComponent {
   }
   singleselect(child, items) {
     child.internalChecked = !child.internalChecked;
-    this.TreeMenuItemsSelect([child.value], items);
+    let temp = [];
+    items[0]['internalChildren'].forEach(element => {
+      if (element.internalChecked == true){
+        temp.push(element.value);
+      }
+    });
+    this.TreeMenuItemsSelect(temp, items)
+
   }
+
   selectAll(items) {
     let temp = [];
     items[0]['internalChildren'].forEach(element => {
@@ -1276,7 +1296,7 @@ export class AppComponent {
       element.internalChecked ? (temp = temp + 1) : temp;
     });
     return temp;
-  }
+  }  
   //End Ra Custom Code
 
 

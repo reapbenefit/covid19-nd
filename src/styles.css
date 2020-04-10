@@ -4,14 +4,14 @@
 /* @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700"; */
 @import "https://fonts.googleapis.com/css?family=Poppins:200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap";
 body {
-    font-family: 'Poppins', sans-serif;
-    background: #fafafa;
+    font-family: "Poppins", sans-serif;
+    height: 100%;
 }
 
-.agm-map-container-inner[_ngcontent-c4]{
+.agm-map-container-inner[_ngcontent-c4] {
     position: unset !important;
 }
-.agm-map-container-inner{
+.agm-map-container-inner {
     position: unset !important;
 }
 
@@ -20,28 +20,23 @@ body {
         top: 70%;
         left: 84.3%;
     }
-    #centerLocation{
+    #centerLocation {
         top: calc(100vh - 250px) !important;
         left: 46.6% !important;
     }
-    #SeachIcon{
+    #SeachIcon {
         position: relative;
         top: -24px;
         left: 88%;
         z-index: 1;
         color: grey;
     }
-  }
+}
 
-  
 /* Custom Code Ramesh */
 html {
     height: 100%;
     min-height: 100%;
-}
-body {
-    height: 100%;
-    background: #f0f7f77a !important;
 }
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px #dfdfdf !important;
@@ -53,8 +48,8 @@ body {
 }
 ::-webkit-scrollbar {
     width: 5px;
-    height: 10px; 
-    background: #155724 !important;
+    height: 10px;
+    background: #909090 !important;
 }
 
 div#page {
@@ -415,7 +410,7 @@ li.first-child-section-mobile .body-sec-mobile ul {
 }
 
 li.first-child-section-mobile .body-sec-mobile ul li {
-        background: #dfdfdf;
+    background: #dfdfdf;
     margin: 0 5px;
     border-radius: 10px;
     padding: 3px 15px;
@@ -483,6 +478,7 @@ body {
     min-height: 100vh;
     transition: all 0.3s;
     overflow: hidden;
+    position: relative;
 }
 .ra-header {
     padding: 5px 10px;
@@ -625,11 +621,11 @@ body {
     top: 40px;
 }
 .ra-custom-categories {
-    position: fixed;
+    position: absolute;
     /* left: 0;
     top: 70px; */
     z-index: 9999 !important;
-    margin-top: 10px;
+    margin-top: 2px;
 }
 .ra-custom-categories ul.box {
     list-style: none;
@@ -789,9 +785,9 @@ span.selection-cnt {
     font-size: 12px;
     margin-bottom: 0px;
     font-weight: 500;
-    color: #4CAF50;
+    color: #4caf50;
 }
-.web-title{
+.web-title {
     color: #595959;
     font-size: 18px;
     font-weight: 500;
@@ -800,7 +796,7 @@ span.selection-cnt {
     margin-left: 12px;
 }
 @media only screen and (max-width: 1125px) {
-    .web-title{
+    .web-title {
         font-size: 18px;
         margin-left: 47px;
     }
@@ -832,5 +828,138 @@ span.selection-cnt {
     }
 }
 /* Ra Custom Web */
+
+/* Google Search */
+.ra-custom-google {
+    display: flex;
+    flex-direction: column;
+    width: 420px;
+    height: 100%;
+    transition: all .2s ease-in-out;
+}
+.ra-custom-google.collapseme {
+    margin-left: -420px;
+}
+
+.ra-custom-google .search{
+    flex: 0;
+}
+.ra-custom-google .result {
+    flex: 1;
+    position: relative;
+}
+.ra-custom-google .search {
+    background: #ffff;
+    position: relative;
+    padding: 5px 10px 5px 10px;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 12px;
+    z-index: 99 !important;
+}
+
+.ra-custom-google .search input {
+    border: 1px solid transparent;
+    width: 94%;
+    height: 35px;
+}
+
+.ra-custom-google .search input {
+    outline: none;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+.ra-custom-google .search .fa-search {
+    font-size: 15px;
+    color: #bcbcbc;
+    cursor: pointer;
+}
+.ra-custom-google .result ul {
+    list-style: none;
+    padding: 0px;
+    margin-top: 70px;
+    overflow: auto;
+    padding-bottom: 10px;
+    max-height: 81Vh;
+    overflow: auto;
+    margin-bottom: 0px;
+}
+.ra-custom-google .result ul li h5 {
+    font-size: 14px;
+    text-transform: capitalize;
+    font-weight: 400;
+}
+.ra-custom-google .result ul li h6 {
+    font-size: 10px;
+    text-transform: capitalize;
+    font-weight: 200;
+    color: #333;
+}
+.ra-custom-google .result ul li p {
+    font-size: 12px;
+    color: #70757a;
+}
+.ra-custom-google .result ul li {
+    border-bottom: 1px solid #f2f2f2;
+    margin: 10px 20px 10px 20px;
+    display: flex;
+    flex-direction: row;
+}
+
+.ra-custom-google .result {
+    margin-top: -70px;
+    display: flex;
+    height: 100%;
+    border: 1px solid #dfdfdf;
+    border-top: 0px;
+    background: #fff;
+}
+.ra-custom-google .result ul li .lat-details {
+    flex: 1;
+}
+.ra-custom-google .result ul li .lat-icons {
+    flex: 0;
+    display: flex;
+    padding-left: 8px;
+}
+
+.ra-custom-google .result ul li .lat-icons span {
+    margin: auto;
+    color: #8dc346;
+    background: #fff;
+    border-radius: 50px;
+    border: 1px solid #dfdfdf;
+    padding: 8px 9px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.ra-custom-google .result .collapse-me {
+    width: 30px;
+    height: 45px;
+    background: #fff;
+    position: absolute;
+    right: -30px;
+    top: 12px;
+    display: flex;
+    margin: auto;
+    border: 1px solid #dfdfdf;
+    cursor: pointer;
+}
+
+.ra-custom-google .result .collapse-me span {
+    margin: auto;
+    color: #b9b9b9;
+    font-size: 18px;
+    transition: all .2s ease-in-out .2s;
+    transform: rotate(90deg) translateY(-2px);
+
+
+}
+span.fa.fa-sort-desc.openrotate {
+    transform: rotate(-90deg) translateY(-3px);
+}
+
+/* End Google Search */
 
 /* End Custom Code Ramesh */
