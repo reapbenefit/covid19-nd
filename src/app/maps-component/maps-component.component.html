@@ -56,4 +56,5 @@
       </div>
     </agm-info-window>
   </agm-marker>
+  <agm-data-layer [geoJson]="geoJson" [style]="styleFunc" (layerClick)="onClick($event)"></agm-data-layer>
 </agm-map>

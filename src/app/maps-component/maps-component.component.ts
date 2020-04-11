@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
-import { MouseEvent, LatLngBounds } from '@agm/core';
+import { MouseEvent, LatLngBounds, AgmDataLayer, AgmMap, DataMouseEvent } from '@agm/core';
 import { DataService } from '../services/data.service';
 import { CommonService } from '../services/common.service';
 import { GoogleAnalyticsService } from '../services/google-analytics.service';
+import geoJson from '../../assets/SampleGeoJson.json';
 
 @Component({
   selector: 'app-maps-component',
@@ -23,10 +24,26 @@ export class MapsComponentComponent implements OnInit {
   public infoWindowOpened = null
   public previous_info_window = null
   public markers = [];
+  geoJson = geoJson;
+
+  styleFunc(feature: any): any {
+    return ({
+      clickable: true,
+      fillColor: feature.getProperty('color'),
+      strokeWeight: 1
+    });
+  }
+
+  onClick(clickEvent: DataMouseEvent): void {
+    console.log('Click Event Detected');
+    console.log(clickEvent.latLng.toString());
+  }
 
   constructor(private dataService: DataService,
     private commonService: CommonService,
-    private googleAnalyticsService: GoogleAnalyticsService) { }
+    private googleAnalyticsService: GoogleAnalyticsService) {
+    this.geoJson = JSON.parse(JSON.stringify(this.geoJson));
+  }
 
   ngOnInit() {
     this.locationDetails = {
@@ -211,5 +228,4 @@ export class MapsComponentComponent implements OnInit {
   openURL(URL) {
     window.open(URL);
   }
-
 }
