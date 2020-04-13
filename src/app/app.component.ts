@@ -1234,6 +1234,11 @@ export class AppComponent {
     );
   }
 
+  NeighbourhoodMultilingulSelfAssessment() {
+    this.formButtonClickEvent('Menu', 'Links_Button', 'NeighbourhoodForum', 'Links_Button');
+    window.open('https://covidselfcheck.app/');
+  }
+
   markerListClick(markerList) {
     this.dataService.SelectedCityLat = Number(markerList.lat);
     this.dataService.SelectedCityLng = Number(markerList.lng);
