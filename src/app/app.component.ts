@@ -27,7 +27,8 @@ export class AppComponent {
   filterSearch = false;
   isMobile = false;
   menupopup = false;
-  collapseGooglesearch = false; 
+  collapseGooglesearch = false;
+  defaultpage = 'Home';
 
 
   // @ViewChild('Governance') Governance: ElementRef;
@@ -762,7 +763,6 @@ export class AppComponent {
 
   private CitiesList;
   ngOnInit() {
-
     // Find Device 
     this.epicFunction();
 
@@ -922,6 +922,7 @@ export class AppComponent {
       this.NewObj.level = this.dataService.zoom;
       this.NewObj.latitude = Number(this.dataService.SelectedCityLat);
       this.NewObj.longitude = Number(this.dataService.SelectedCityLng);
+      console.log(this.NewObj);
       this.CollectionsData(this.NewObj);
     } else {
       for (let menuSel2 = 0; menuSel2 < this.NewObj.menuData.length; menuSel2++) {
@@ -1142,11 +1143,11 @@ export class AppComponent {
   }
 
   public ServiceRequest = null;
-  googleData = [] ; 
+  googleData = [];
   CollectionsData(obj) {
     console.log(obj);
     this.ServiceRequest ? this.ServiceRequest.unsubscribe() : null
-    this.ServiceRequest = this.dataService.CollectionsDataES (obj).subscribe(data => {
+    this.ServiceRequest = this.dataService.CollectionsDataES(obj).subscribe(data => {
       let resMap: any = data;
       this.mapData = resMap.data;
 
@@ -1240,7 +1241,7 @@ export class AppComponent {
 
   // Ra Custom Code
   defaultCategoriesSelect = 92; //"People Needing Help" value is 101  
-  defaultSelectTrigger(){
+  defaultSelectTrigger() {
     console.log("default");
     setTimeout(() => {
       this.MenuItems.forEach(ele => {
@@ -1262,13 +1263,13 @@ export class AppComponent {
     });
 
     this.searchLocation = true;
-    this.defaultSelectTrigger();
+    // this.defaultSelectTrigger();
   }
   singleselect(child, items) {
     child.internalChecked = !child.internalChecked;
     let temp = [];
     items[0]['internalChildren'].forEach(element => {
-      if (element.internalChecked == true){
+      if (element.internalChecked == true) {
         temp.push(element.value);
       }
     });
@@ -1296,7 +1297,180 @@ export class AppComponent {
       element.internalChecked ? (temp = temp + 1) : temp;
     });
     return temp;
-  }  
+  }
+
+  resetAllSelection(){
+    this.MenuItems.forEach(ele => {
+      ele[0]['internalChildren'].forEach(element => {
+        element.internalChecked = false;
+      });
+      this.TreeMenuItemsSelect([], ele);
+    });
+
+    this.NewObj['menuData'] = [];
+
+  }
+
+  homepageButton1() {
+    this.resetAllSelection();
+    var value = 92;
+    this.MenuItems.forEach(ele => {
+      let temp = [];
+      if (ele[0]['value'] == value) {
+        ele[0] && ele[0]['internalChildren'].forEach(child => {
+          child.internalChecked = true;
+          temp.push(child.value);
+        });
+        setTimeout(()=>{
+          this.TreeMenuItemsSelect(temp, ele);
+          this.defaultpage = 'LocalData';
+          this.searchLocation = false;
+        },50)
+      } else {
+        ele[0] && ele[0]['internalChildren'].forEach(child => {
+          child.internalChecked = false;
+        });
+      }
+    })
+  }
+  homepageButton2() {
+    this.resetAllSelection();
+    var value = 101; // People Needy Help
+    var value1 = 130; // settlement
+    this.MenuItems.forEach(ele => {
+      let temp = [];
+      if (ele[0]['value'] == value) {
+        ele[0] && ele[0]['internalChildren'].forEach(child => {
+          child.internalChecked = true;
+          temp.push(child.value);
+        });
+        setTimeout(()=>{
+          this.TreeMenuItemsSelect(temp, ele);
+        },50)
+      } else {
+
+        if (ele[0]['value'] == value1) {
+          ele[0] && ele[0]['internalChildren'].forEach(child => {
+            child.internalChecked = true;
+            temp.push(child.value);
+          });
+          setTimeout(() => {
+            this.TreeMenuItemsSelect(temp, ele);
+          });
+        } else {
+          ele[0] && ele[0]['internalChildren'].forEach(child => {
+            child.internalChecked = false;
+          });
+        }
+      }
+
+      this.defaultpage = 'LocalData';
+      this.searchLocation = false;
+
+    })
+  }
+  homepageButton3() {
+    this.resetAllSelection();
+    var value = 121; // Volunteers near me
+    var value1 = 112; // Shops near me
+    var value2 = 97; // Shops near me
+
+    this.MenuItems.forEach(ele => {
+      let temp = [];
+      if (ele[0]['value'] == value) {
+        ele[0] && ele[0]['internalChildren'].forEach(child => {
+          child.internalChecked = true;
+          temp.push(child.value);
+        });
+        setTimeout(() => {
+          this.TreeMenuItemsSelect(temp, ele);
+        });
+      } else {
+
+        if (ele[0]['value'] == value1) {
+          ele[0] && ele[0]['internalChildren'].forEach(child => {
+            child.internalChecked = true;
+            temp.push(child.value);
+          });
+          setTimeout(() => {
+            this.TreeMenuItemsSelect(temp, ele);
+          });
+        } else {
+
+          if (ele[0]['value'] == value2) {
+            ele[0] && ele[0]['internalChildren'].forEach(child => {
+              child.internalChecked = true;
+              temp.push(child.value);
+            });
+            setTimeout(() => {
+              this.TreeMenuItemsSelect(temp, ele);
+            });
+          } else {
+            ele[0] && ele[0]['internalChildren'].forEach(child => {
+              child.internalChecked = false;
+            });
+          }
+        }
+      }
+
+      this.defaultpage = 'LocalData';
+      this.searchLocation = false;
+
+    })
+  }
+
+  homeDirect(value) {
+    this.resetAllSelection();
+    console.log(value);
+    this.MenuItems.forEach(ele => {
+      let temp = [];
+      if (ele[0]['value'] == value) {
+        ele[0] && ele[0]['internalChildren'].forEach(child => {
+          child.internalChecked = true;
+          temp.push(child.value);
+        });
+        this.TreeMenuItemsSelect(temp, ele);
+        this.defaultpage = 'LocalData';
+        this.searchLocation = false;
+      } else {
+        ele[0] && ele[0]['internalChildren'].forEach(child => {
+          child.internalChecked = false;
+        });
+      }
+
+    })
+  }
+
+  pageLocaLData() {
+    this.resetAllSelection();
+    this.defaultSelectTrigger();
+    this.defaultpage = 'LocalData';
+    this.searchLocation = true;
+  }
+
+
+  getcounts() {
+    this.MenuItems && this.MenuItems.forEach(val => {
+      var child = val[0]['internalChildren'].map(x => { return x.value });
+      let obj1 = {
+        menuData: [
+          {
+            "menuId": val[0].value || "",
+            "submenus": child.join() || ''
+          }
+        ]
+      }
+      this.dataService.CollectionsDataES(obj1).subscribe(data => {
+        console.log(data);
+      }, (err) => {
+        console.log(err);
+      }, () => {
+        console.log('Completed');
+      });
+    })
+
+  }
+
   //End Ra Custom Code
 
 

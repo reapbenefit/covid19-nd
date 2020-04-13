@@ -229,3 +229,4 @@ export class MapsComponentComponent implements OnInit {
     window.open(URL);
   }
 }
+

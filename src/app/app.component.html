@@ -278,26 +278,26 @@
             <span class=""></span>
           </div>
           <div class="result" *ngIf="googleData?.length">
-            <div class="collapse-me" (click)="collapseGooglesearch = !collapseGooglesearch" 
+            <div class="collapse-me" (click)="collapseGooglesearch = !collapseGooglesearch"
               title="{{collapseGooglesearch ? 'Open': 'Close'}}">
-              <span class="fa fa-sort-desc"  [ngClass]="{'openrotate': collapseGooglesearch}"></span>
+              <span class="fa fa-sort-desc" [ngClass]="{'openrotate': collapseGooglesearch}"></span>
             </div>
             <ul>
-                <li *ngFor="let item of googleData;let index = index">
-                  <div class="lat-details">
-                    <h5>{{item.data.name}}</h5>
-                    <p>{{item.data.address}}</p>
-                  </div>
-                  <div class="lat-icons">
-                    <span class="fa fa fa-external-link-square"></span>
-                  </div>
-                </li>
+              <li *ngFor="let item of googleData;let index = index">
+                <div class="lat-details">
+                  <h5>{{item.data.name}}</h5>
+                  <p>{{item.data.address}}</p>
+                </div>
+                <div class="lat-icons">
+                  <span class="fa fa fa-external-link-square"></span>
+                </div>
+              </li>
             </ul>
           </div>
         </div>
         <!--End  Custom google search -->
 
-        <ul *ngFor="let menuItem of MenuItems;let menuIndex = index;" class="box" >
+        <ul *ngFor="let menuItem of MenuItems;let menuIndex = index;" class="box">
           <li class="first-child-section">
             <div class="header-sec">
               {{menuItem[0].text}}
@@ -563,134 +563,189 @@
 </div>
 
 <div id="page" *ngIf="isMobile">
-  <!-- Page header -->
-  <div class="header header-fixed">
-    <div class="logo"></div>
-    <div class="ra-title">
-      <h5>Covid Neighbourhood</h5>
-      <h5>Dashboard</h5>
-    </div>
-    <div class="left-menu" id="current">
-      <p>Current Location</p>
-      <h5 class="cur-lo">{{CitySelected?.cityName || 'Bangalore'}}</h5>
-    </div>
+
+  <div class="loader" *ngIf="!MenuItems">
+    <span class="fa fa-spinner fa-spin"></span>
   </div>
-  <div class="filter-menu-bar" id="location">
-    <div class="filter-btn cat" (click)="filterSearch = !filterSearch;">
-      <span class="fa fa-filter"></span> LOCAL DATA
-    </div>
-    <div class="filter-btn loc" (click)="searchLocation = !searchLocation; openpopups = false">
-      <span class="fa fa-map-marker"></span> LOCATION
-    </div>
-  </div>
-  <div class="search-menu" [ngStyle]="{'display': searchLocation? 'block': 'none'}"
-    style="top: 58px;z-index: 99 !important;">
-    <div class="search-menu-box animated fadeInDown">
-      <div class="location-dropdown">
-        <a href="JavaScript:void(0)" class="close-menu" (click)="searchLocation = false"><i
-            class="fa fa-times-circle"></i></a>
-        <!-- <a>My Current Location</a> -->
+
+
+  <div class="routing-section-localdata" style="position: relative;"
+    [ngStyle]="{'display': (defaultpage == 'LocalData')? 'block': 'none'}">
+    <!-- Page header -->
+    <div class="header header-fixed" >
+      <div class="logo"></div>
+      <div class="ra-title">
+        <h5>Covid Neighbourhood</h5>
+        <h5>Dashboard</h5>
       </div>
-      <div class="city-location" *ngIf="ShowCitySelect">
-        <label style="margin-bottom: 0px;font-size: 14px;">Select City</label>
-        <ngx-select-dropdown (change)="SelectCity($event)" [multiple]="false" [(ngModel)]="CitySelected"
-          [config]="configCity" [options]="cities"></ngx-select-dropdown>
+      <div class="left-menu" id="current">
+        <p>Current Location</p>
+        <h5 class="cur-lo">{{CitySelected?.cityName || 'Bangalore'}}</h5>
       </div>
-      <span style="    text-align: center;
-    font-weight: 200;
-    font-size: 14px;
-    margin: 0px 0;
-    position: relative;
-    top: -3px;"> ( OR ) </span>
-      <div class="map-wrapper">
-        <label style="margin-bottom: 0px;font-size: 14px;">Select Location</label>
-        <div class="map-location">
-          <input placeholder="Select location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
-            class="form-control searchInput" #search [formControl]="searchControl" (input)="searchText($event)">
-          <i class="fa fa-search" id="SeachIcon"></i>
+    </div>
+    <div class="filter-menu-bar" id="location">
+      <div class="filter-btn cat" (click)="filterSearch = !filterSearch;">
+        <span class="fa fa-filter"></span> LOCAL DATA
+      </div>
+      <div class="filter-btn loc" (click)="searchLocation = !searchLocation; openpopups = false">
+        <span class="fa fa-map-marker"></span> LOCATION
+      </div>
+    </div>
+    <div class="search-menu" [ngStyle]="{'display': searchLocation? 'block': 'none'}"
+      style="top: 58px;z-index: 99 !important;">
+      <div class="search-menu-box animated fadeInDown">
+        <div class="location-dropdown">
+          <a href="JavaScript:void(0)" class="close-menu" (click)="searchLocation = false"><i
+              class="fa fa-times-circle"></i></a>
+          <!-- <a>My Current Location</a> -->
         </div>
-      </div>
-      <div class="city-location" *ngIf="ShowWardSelect && false">
-        <label style="margin-bottom: 0px;font-size: 14px;">Ward</label>
-        <ngx-select-dropdown (change)="WardSelectedEvent($event)" [multiple]="false" [(ngModel)]="WardSelected"
-          [config]="configWard" [options]="Wards"></ngx-select-dropdown>
-      </div>
-    </div>
-  </div>
-  <div class="search-menu" *ngIf="filterSearch && showMenuItems" style="top: 56px;z-index: 99 !important;">
-    <div class="search-menu-box animated fadeInDown">
-      <div class="clear-close">
-        <span class="clo" (click)="filterSearch = false"><i class="fa fa-times-circle fa-2x"></i></span>
-      </div>
-      <div class="tree-wrapper">
-        <!-- ra-custom-categories Mobile -->
-        <div class="ra-custom-categories-mobile">
-          <div class="category" style="display: none !important;">
-            <!-- Do not remove this based on this down tree func working -->
-            <div class="" *ngFor="let menuItem of MenuItems;let menuIndex = index;">
-              <ngx-treeview [config]="configMenu" [items]="menuItem"
-                (selectedChange)="TreeMenuItemsSelect($event,menuItem)">
-              </ngx-treeview>
-            </div>
+        <div class="city-location" *ngIf="ShowCitySelect">
+          <label style="margin-bottom: 0px;font-size: 14px;">Select City</label>
+          <ngx-select-dropdown (change)="SelectCity($event)" [multiple]="false" [(ngModel)]="CitySelected"
+            [config]="configCity" [options]="cities"></ngx-select-dropdown>
+        </div>
+        <span style="    text-align: center;
+          font-weight: 200;
+          font-size: 14px;
+          margin: 0px 0;
+          position: relative;
+          top: -3px;"> ( OR ) </span>
+        <div class="map-wrapper">
+          <label style="margin-bottom: 0px;font-size: 14px;">Select Location</label>
+          <div class="map-location">
+            <input placeholder="Select location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
+              class="form-control searchInput" #search [formControl]="searchControl" (input)="searchText($event)">
+            <i class="fa fa-search" id="SeachIcon"></i>
           </div>
-          <ul *ngFor="let menuItem of MenuItems;let menuIndex = index;" class="box">
-            <li class="first-child-section-mobile">
-              <div class="header-sec-mobile"
-                (click)="this['mobiletreelvel'+menuIndex] = !this['mobiletreelvel'+menuIndex]">
-                {{menuItem[0].text}}
-                <span class="count" *ngIf="getcounterCount(menuItem) != 0">{{getcounterCount(menuItem)}}</span>
-                <i class="collapsicons fa fa-chevron-down"
-                  [ngClass]="{'uparrow': !this['mobiletreelvel'+menuIndex] }"></i>
-              </div>
-              <div class="body-sec-mobile" [ngClass]="{'active': !this['mobiletreelvel'+menuIndex]}">
-                <div *ngIf="menuItem[0]?.internalChildren && menuItem[0]?.internalChildren.length" class="child-box">
-                  <span class="selection-cnt-mobile">
-                    <span class="" (click)="selectAll(menuItem)">Select</span> /
-                    <span class="" (click)="deselectAll(menuItem)">Deselect all</span>
-                  </span>
-                  <ul>
-                    <li class="child-list-mobile" *ngFor="let child of menuItem[0].internalChildren"
-                      (click)="singleselect(child, menuItem)" [ngClass]="{'checked': child.internalChecked}">
-                      <span>{{child.text}}</span>
-                    </li>
-                  </ul>
-                </div>
-
-              </div>
-            </li>
-          </ul>
         </div>
-        <!-- End ra-custom-categories Mobile -->
+        <div class="city-location" *ngIf="ShowWardSelect && false">
+          <label style="margin-bottom: 0px;font-size: 14px;">Ward</label>
+          <ngx-select-dropdown (change)="WardSelectedEvent($event)" [multiple]="false" [(ngModel)]="WardSelected"
+            [config]="configWard" [options]="Wards"></ngx-select-dropdown>
+        </div>
       </div>
     </div>
-  </div>
-  <!-- Page header -->
+    <div class="search-menu" *ngIf="filterSearch && showMenuItems" style="top: 56px;z-index: 99 !important;">
+      <div class="search-menu-box animated fadeInDown">
+        <div class="clear-close">
+          <span class="clo" (click)="filterSearch = false"><i class="fa fa-times-circle fa-2x"></i></span>
+        </div>
+        <div class="tree-wrapper">
+          <!-- ra-custom-categories Mobile -->
+          <div class="ra-custom-categories-mobile">
+            <div class="category" style="display: none !important;">
+              <!-- Do not remove this based on this down tree func working -->
+              <div class="" *ngFor="let menuItem of MenuItems;let menuIndex = index;">
+                <ngx-treeview [config]="configMenu" [items]="menuItem"
+                  (selectedChange)="TreeMenuItemsSelect($event,menuItem)">
+                </ngx-treeview>
+              </div>
+            </div>
+            <ul *ngFor="let menuItem of MenuItems;let menuIndex = index;" class="box">
+              <li class="first-child-section-mobile">
+                <div class="header-sec-mobile"
+                  (click)="this['mobiletreelvel'+menuIndex] = !this['mobiletreelvel'+menuIndex]">
+                  {{menuItem[0].text}}
+                  <span class="count" *ngIf="getcounterCount(menuItem) != 0">{{getcounterCount(menuItem)}}</span>
+                  <i class="collapsicons fa fa-chevron-down"
+                    [ngClass]="{'uparrow': !this['mobiletreelvel'+menuIndex] }"></i>
+                </div>
+                <div class="body-sec-mobile" [ngClass]="{'active': !this['mobiletreelvel'+menuIndex]}">
+                  <div *ngIf="menuItem[0]?.internalChildren && menuItem[0]?.internalChildren.length" class="child-box">
+                    <span class="selection-cnt-mobile">
+                      <span class="" (click)="selectAll(menuItem)">Select</span> /
+                      <span class="" (click)="deselectAll(menuItem)">Deselect all</span>
+                    </span>
+                    <ul>
+                      <li class="child-list-mobile" *ngFor="let child of menuItem[0].internalChildren"
+                        (click)="singleselect(child, menuItem)" [ngClass]="{'checked': child.internalChecked}">
+                        <span>{{child.text}}</span>
+                      </li>
+                    </ul>
+                  </div>
 
-  <!-- Page Main -->
-  <div class="page-content">
-    <div class="map-section">
-      <!-- <div id="map"></div> -->
-      <app-main-content [mapData]="mapData" [AQM]="AQM" [AQMGraphLoc]="AQMGraphLoc" [graphData]="graphData"
-        [graphDataStatus]="graphDataStatus" [showComp]="showComp" [compare]="compare" [showgraphs]="showgraphs"
-        [selIssCat]="selIssCat" (WardData)="WardData($event)" (hideGraphs)="hideGraphs($event)"
-        [WardDetails]="WardDetails" [showGovernance]="showGovernance" [wardAgencyList]="wardAgencyList"
-        [showAgencies]="showAgencies" [IssueData]="IssueData" [showIssues]="showIssues"></app-main-content>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <!-- End ra-custom-categories Mobile -->
+        </div>
+      </div>
     </div>
+    <!-- Page header -->
+
+    <!-- Page Main -->
+    <div class="page-content">
+      <div class="map-section">
+        <!-- <div id="map"></div> -->
+        <app-main-content [mapData]="mapData" [AQM]="AQM" [AQMGraphLoc]="AQMGraphLoc" [graphData]="graphData"
+          [graphDataStatus]="graphDataStatus" [showComp]="showComp" [compare]="compare" [showgraphs]="showgraphs"
+          [selIssCat]="selIssCat" (WardData)="WardData($event)" (hideGraphs)="hideGraphs($event)"
+          [WardDetails]="WardDetails" [showGovernance]="showGovernance" [wardAgencyList]="wardAgencyList"
+          [showAgencies]="showAgencies" [IssueData]="IssueData" [showIssues]="showIssues"></app-main-content>
+      </div>
+    </div>
+    <!-- Page Main -->
   </div>
-  <!-- Page Main -->
+
+  <div class="routing-section-home"
+    style="position: relative;height: 100%;display: block;max-height: calc(92vh - 23px);overflow: auto;"
+    [ngStyle]="{'display': (defaultpage == 'Home')? 'block': 'none'}">
+
+    <div class="header header-fixed" style="z-index: 9 !important;">
+      <div class="logo"></div>
+    </div>
+
+    <div class="home-page-title" style="padding-top: 60px;">
+      <h5 class="home-page-header-title text-center"
+        style="color: #96c953;font-size: 18px !important;margin-bottom: 12px;">
+        Covid Neighbourhood Dashboard
+      </h5>
+      <ul class="bullet-points">
+        <li class="text-center">Join Hands With Us</li>
+        <!-- <li>Supported successfully</li> -->
+        <!-- <li>Medical facilities mapped</li>
+        <li>People needing help, you represent facilities tool mapped</li>
+        <li>Resource like canteens, PDS-Rations, Shops mapped</li>
+        <li>Shops near you mapped</li>
+        <li>Volunteers near you Mapped</li> -->
+      </ul>
+      <div class="action-button">
+        <a href="JavaScript:void(0)" (click)="homepageButton1()">Want Medical Help?</a>
+        <a href="JavaScript:void(0)" (click)="homepageButton2()">Want to help needy?</a>
+        <a href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where you can get help?</a>
+      </div>
+    </div>
+
+    <ng-template [ngIf]="false">
+      <h6 class="sub-title-home" style="margin: 20px 25px 5px 20px">Find More</h6>
+      <div class="hom-page-body">
+        <div *ngFor="let menuItem of MenuItems;let menuIndex = index;" class="box"
+          (click)="homeDirect(menuItem[0].value)">
+          <div class="title-b">{{menuItem[0].text}}</div>
+          <span class="count"
+            *ngIf="menuItem[0]?.internalChildren?.length">{{menuItem[0]?.internalChildren?.length}}</span>
+        </div>
+      </div>
+    </ng-template>
+
+  </div>
 
   <!-- Page Footer -->
   <div id="footer-menu" [ngStyle]="{'bottom': openpopups? '-100px': '0'}">
-    <a (click)="openpopups = !openpopups" href="JavaScript:void(0)" class="active">
+    <a href="JavaScript:void(0)" [ngClass]="{'active': defaultpage == 'Home'}"
+      (click)="defaultpage = 'Home'; searchLocation = true">
+      <span class="icon fa fa-home"></span>
+      <span class="title-f">Home</span>
+      <strong></strong></a>
+    <!-- <a (click)="openpopups = !openpopups" href="JavaScript:void(0)">
       <span class="coranaimg">
       </span>
       <span class="title-f">Participate</span>
-      <strong></strong></a>
-    <!-- <a target="_blank" href="http://testnd.solveninja.org/assets/html/NDData.html" class="">
-                <span class="icon fa fa-info-circle"></span>
-                <span class="title-f">Local Data</span>
-                <strong></strong></a> -->
-    <a href="JavaScript:void(0)" (click)="filterSearch = !filterSearch" class="">
+      <strong></strong></a> -->
+
+    <!-- <a href="JavaScript:void(0)" (click)="filterSearch = !filterSearch" class=""> -->
+    <a href="JavaScript:void(0)" [ngClass]="{'active': defaultpage == 'LocalData'}" (click)="pageLocaLData()">
       <span class="icon fa fa-filter"></span>
       <span class="title-f">Local Data</span>
       <strong></strong></a>
@@ -705,7 +760,7 @@
         <strong></strong></a> -->
     <a (click)="menupopup = !menupopup" href="JavaScript:void(0)">
       <span class="icon fa fa-bars"></span>
-      <span class="title-f">Menu</span>
+      <span class="title-f">More</span>
       <strong></strong></a>
 
 
@@ -713,6 +768,7 @@
   </div>
   <!-- Page Footer -->
 
+  <!-- Participate Menu -->
   <div class="ra-custom-popup" *ngIf="openpopups">
     <div class="animated bounceInUp menu-popups  menu-active">
       <div class="menu-title">
@@ -736,13 +792,27 @@
       </div>
     </div>
   </div>
+  <!-- End Participate Menu -->
+
+  <!-- More Menu -->
   <div class="ra-custom-popup" *ngIf="menupopup">
     <div class="animated bounceInUp menu-popups  menu-active">
       <div class="menu-title">
-        <a href="#" class="close-menu" (click)="menupopup = false"><i class="fa fa-times-circle"></i></a>
+        <a href="#" style="top: -9px;right: -4px;" class="close-menu" (click)="menupopup = false"><i
+            class="fa fa-times-circle"></i></a>
       </div>
       <div class="content">
         <ul class="link-list">
+          <li><a style="color: #155724;" (click)="NeighbourhoodForum()">Self Assessment <i
+                class="fa fa-angle-right"></i> </a>
+          </li>
+          <li><a style="color: #155724;" (click)="NeighbourhoodData()">Social distancing <i
+                class="fa fa-angle-right"></i> </a>
+          </li>
+          <li><a style="color: #155724;" (click)="NeighbourhoodAnalytics()">Help The Needy <i
+                class="fa fa-angle-right"></i> </a>
+          </li>
+          <li><a style="color: #155724;" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>
           <li><a style="color: #155724;" href="">About Us <i class="fa fa-angle-right"></i> </a></li>
           <li><a style="color: #155724;" href="">FAQ<i class="fa fa-angle-right"></i> </a></li>
           <li><a style="color: #155724;" href="">Feedback<i class="fa fa-angle-right"></i> </a></li>
@@ -751,6 +821,7 @@
       </div>
     </div>
   </div>
+  <!-- More Menu -->
 
   <div class="ra-custom-popup" *ngIf="openpopups1">
     <div class="animated bounceInUp menu-popups  menu-active">

@@ -959,7 +959,107 @@ span.selection-cnt {
 span.fa.fa-sort-desc.openrotate {
     transform: rotate(-90deg) translateY(-3px);
 }
+.home-page-title h5 {
+    font-weight: 600;
+    color: #333;
+    font-size: 20px !important;
+}
 
+.home-page-title {
+    margin: 20px 25px 15px 25px;
+    text-transform: capitalize;
+}
+.home-page-title p {
+    font-size: 12px !important;
+    margin: 0 5% !important;
+}
+.hom-page-body {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #f0f7f7 !important;
+    z-index: 999 !important;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: row;
+}
+.loader span {
+    margin: auto;
+    font-size: 22px !important;
+    color: #4CAF50;
+}
+.hom-page-body {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.hom-page-body .box {
+    flex-basis: 45%;
+    margin-bottom: 10px;
+    background: #fff;
+    padding: 15px 10px;
+    text-align: center;
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #dfdfdf;
+    box-shadow: 0px 2px 4px rgba(0,0,0, .1);
+}
+.hom-page-body .box .title-b {
+    flex: 1;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+.hom-page-body .box span {
+    display: block;
+    position: relative;
+    left: 0;
+    right: 0;
+    font-weight: 600 !important;
+    font-size: 26px;
+}
+.hom-page-body .box:nth-child(odd) {
+    border-right: 0px !important;
+}
+ul.bullet-points {
+    list-style: none;
+    padding-left: 6px;
+    /* padding: 0px; */
+    color: #999;
+    text-align: left !important;
+    font-size: 14px;
+}
+ul.bullet-points li {
+    margin-bottom: 7px;
+}
+h6.sub-title-home {
+    font-weight: 400 !important;
+    border-bottom: 1px solid #dfdfdf;
+    padding-bottom: 5px;
+    text-transform: capitalize;
+}
+.action-button {
+
+}
+.action-button a {
+    display: block;
+    font-size: 14px;
+    background: #f19001;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin: 10px 5px;
+    text-align: center;
+}
 /* End Google Search */
 
 /* End Custom Code Ramesh */
