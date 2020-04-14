@@ -2,7 +2,7 @@ import { Component, NgZone, ViewChild, ElementRef, HostListener } from '@angular
 import { DataService } from './services/data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 // import { } from 'googlemaps';
-import { MapsAPILoader } from '@agm/core';
+import { MapsAPILoader, LatLngBounds } from '@agm/core';
 import { FormControl } from '@angular/forms';
 import { Subscription, forkJoin } from 'rxjs';
 import { CommonService } from './services/common.service';
@@ -29,6 +29,7 @@ export class AppComponent {
   menupopup = false;
   collapseGooglesearch = false;
   defaultpage = 'Home';
+  detail_legends = true;
 
 
   // @ViewChild('Governance') Governance: ElementRef;
@@ -377,6 +378,9 @@ export class AppComponent {
     this.CollectionsData(this.NewObj);
     this.formButtonClickEvent('Menu', 'City_Menu', 'City_Select', 'Select');
     this.defaultSelectTrigger();
+    // get New count based on city changed
+    this.getInMapLocation();
+
   }
 
   private dwcGraph;
@@ -765,7 +769,6 @@ export class AppComponent {
   ngOnInit() {
     // Find Device 
     this.epicFunction();
-
     // this.Wards = ward;
     this.Wards.sort(this.dynamicSort("name"));
     let obj = {
@@ -797,7 +800,8 @@ export class AppComponent {
 
       // Default selection set
       setTimeout(() => {
-        this.openCaategoriesPopup();
+        this.yourCurrentLocation();
+        this.getInMapLocation();
       }, 500);
     });
     // this.dataService.AQMdata(obj).subscribe(data => {
@@ -1150,16 +1154,6 @@ export class AppComponent {
     this.ServiceRequest = this.dataService.CollectionsDataES(obj).subscribe(data => {
       let resMap: any = data;
       this.mapData = resMap.data;
-
-      // let services = resMap.data.map(aa=>{
-      //   var callme = this.dataService.getCorrLocDetails(aa);
-      //   return callme;
-      // })
-      // forkJoin(services).subscribe(result=>{
-      //   console.log(result);
-      //   this.googleData = result;
-      // });
-
     });
   }
 
@@ -1245,6 +1239,7 @@ export class AppComponent {
   }
 
   // Ra Custom Code
+  // Default Categories Seletion Value
   defaultCategoriesSelect = 92; //"People Needing Help" value is 101  
   defaultSelectTrigger() {
     console.log("default");
@@ -1256,19 +1251,38 @@ export class AppComponent {
       })
     }, 1000)
   }
-  openCaategoriesPopup() {
-    // setDefault select
-    this.SelectCity({
-      "value": {
-        "id": "1",
-        "cityName": "Bangalore Urban",
-        "lat": "12.9796734",
-        "lng": "77.5890556"
-      }
-    });
+  yourCurrentLocation() {
+    // // setDefault select
 
-    this.searchLocation = true;
-    // this.defaultSelectTrigger();
+    // if ("geolocation" in navigator) {
+    //   navigator.geolocation.getCurrentPosition(position => {
+    //     this.dataService.SelectedCityLat = position.coords.latitude;
+    //     this.dataService.SelectedCityLng = position.coords.longitude;
+    //     this.SelectCity({
+    //       "value": {
+    //         "cityName": "Your Location Location",
+    //         "lat": this.dataService.SelectedCityLat,
+    //         "lng": this.dataService.SelectedCityLng
+    //       }
+    //     });
+    //     this.searchLocation = true;
+    //     this.defaultSelectTrigger();
+    //     console.log(this.dataService.SelectedCityLat);
+    //     console.log(this.dataService.SelectedCityLng);
+    //   });
+    // }
+
+      this.SelectCity({
+        "value": {
+          "id": "1",
+          "cityName": "Bangalore Urban",
+          "lat": "12.9796734",
+          "lng": "77.5890556"
+        }
+      });
+      this.searchLocation = true;
+      this.defaultSelectTrigger();
+    
   }
   singleselect(child, items) {
     child.internalChecked = !child.internalChecked;
@@ -1281,7 +1295,6 @@ export class AppComponent {
     this.TreeMenuItemsSelect(temp, items)
 
   }
-
   selectAll(items) {
     let temp = [];
     items[0]['internalChildren'].forEach(element => {
@@ -1296,6 +1309,10 @@ export class AppComponent {
     });
     this.TreeMenuItemsSelect([], items)
   }
+  /**
+   * Get count of subcategories count 
+   * @param items 
+   */
   getcounterCount(items) {
     let temp = 0;
     items && items[0] && items[0]['internalChildren'].forEach(element => {
@@ -1304,18 +1321,22 @@ export class AppComponent {
     return temp;
   }
 
-  resetAllSelection(){
+  /**
+   * Reset All Selected Options from Tree
+   */
+  resetAllSelection() {
     this.MenuItems.forEach(ele => {
       ele[0]['internalChildren'].forEach(element => {
         element.internalChecked = false;
       });
-      this.TreeMenuItemsSelect([], ele);
     });
-
     this.NewObj['menuData'] = [];
 
   }
 
+  /**
+   * On Click "Want Medical Help?"
+   */
   homepageButton1() {
     this.resetAllSelection();
     var value = 92;
@@ -1326,11 +1347,11 @@ export class AppComponent {
           child.internalChecked = true;
           temp.push(child.value);
         });
-        setTimeout(()=>{
+        setTimeout(() => {
           this.TreeMenuItemsSelect(temp, ele);
           this.defaultpage = 'LocalData';
           this.searchLocation = false;
-        },50)
+        }, 50)
       } else {
         ele[0] && ele[0]['internalChildren'].forEach(child => {
           child.internalChecked = false;
@@ -1338,6 +1359,9 @@ export class AppComponent {
       }
     })
   }
+  /**
+   * On Click "Want to help needy?"
+   */
   homepageButton2() {
     this.resetAllSelection();
     var value = 101; // People Needy Help
@@ -1349,9 +1373,9 @@ export class AppComponent {
           child.internalChecked = true;
           temp.push(child.value);
         });
-        setTimeout(()=>{
+        setTimeout(() => {
           this.TreeMenuItemsSelect(temp, ele);
-        },50)
+        }, 50)
       } else {
 
         if (ele[0]['value'] == value1) {
@@ -1374,6 +1398,10 @@ export class AppComponent {
 
     })
   }
+
+  /**
+   * On clikc "Want to know where you can get help?"
+   */
   homepageButton3() {
     this.resetAllSelection();
     var value = 121; // Volunteers near me
@@ -1423,7 +1451,29 @@ export class AppComponent {
 
     })
   }
+  
+  homeDirectSingle(child, items) {
+    this.defaultpage = 'LocalData';
+    this.searchLocation = false;
+    setTimeout(()=>{
+      // this.resetAllSelection();
+      // child.internalChecked = true;
+      // this.TreeMenuItemsSelect([child.value], items);
+      child.internalChecked = !child.internalChecked;
+      let temp = [];
+      items[0]['internalChildren'].forEach(element => {
+        if (element.internalChecked == true) {
+          temp.push(element.value);
+        }
+      });
+      this.TreeMenuItemsSelect(temp, items)
+    },1000)
+  }
 
+  /**
+   * On Lick Categories on Mobile view -- Home Page
+   * @param value 
+   */
   homeDirect(value) {
     this.resetAllSelection();
     console.log(value);
@@ -1446,6 +1496,9 @@ export class AppComponent {
     })
   }
 
+  /**
+   * On Click LocalData Menu on Mobile View
+   */
   pageLocaLData() {
     this.resetAllSelection();
     this.defaultSelectTrigger();
@@ -1454,28 +1507,92 @@ export class AppComponent {
   }
 
 
-  getcounts() {
-    this.MenuItems && this.MenuItems.forEach(val => {
-      var child = val[0]['internalChildren'].map(x => { return x.value });
-      let obj1 = {
-        menuData: [
+  tempListData = [
+    {
+      "wardName": "Jaya Nagar",
+      "total": 1,
+      "lng": 77.588648,
+      "cityName": "bengaluru",
+      "icon": "./assets/Icons/coronavirus-testingcentre.png",
+      "menuId": 93,
+      "id": 7616,
+      "type": "12",
+      "lat": 12.937328,
+
+      "name": "Neuberg Anand Reference Laboratory",
+      "address": "Aanand Tower, 54, Bowring Hospital Rd, Shivajinagar`, Bengaluru, Karnataka 560001",
+      "category": "Important Medical Services",
+      "phoneNum": "1800 425 1974",
+      "isFlagged": "0"
+    },
+    {
+      "total": 1,
+      "cityName": "bengaluru",
+      "lng": 77.601612,
+      "icon": "./assets/Icons/coronavirus-testingcentre.png",
+      "menuId": 93,
+      "id": 9839,
+      "type": "12",
+      "lat": 12.982099,
+
+      "name": "Neuberg Anand 2",
+      "address": "Aanand Tower, 54, Bowring Hospital Rd, Shivajinagar`, Bengaluru, Karnataka 560001",
+      "category": "Important Medical Services",
+      "phoneNum": "1800 425 1974",
+      "isFlagged": "0"
+    },
+  ];
+
+  CountsListArray = []
+  serviceCallAlCount = null;
+  getInMapLocation() {
+
+    this.commonService.getCord().subscribe(cordnates => {
+      this.NewObj.latitude = cordnates.data.lat;
+      this.NewObj.longitude = cordnates.data.lng;
+    });
+    this.CountsListArray = [];
+    let serviceList = this.MenuItems && this.MenuItems.map((items) => {
+      let submenus = items[0] && items[0]['internalChildren'].map(va => {
+        return va.value;
+      }).join();
+      let obj = {
+        "menuData": [
           {
-            "menuId": val[0].value || "",
-            "submenus": child.join() || ''
+            "submenus": submenus
           }
-        ]
+        ],
+        "latitude": this.NewObj.latitude,
+        "longitude": this.NewObj.longitude
       }
-      this.dataService.CollectionsDataES(obj1).subscribe(data => {
-        console.log(data);
-      }, (err) => {
-        console.log(err);
-      }, () => {
-        console.log('Completed');
-      });
+      console.log(obj);
+      return  this.dataService.getCountDataES(obj);
+    });
+
+    this.serviceCallAlCount ? this.serviceCallAlCount.unsubscribe() : null
+    this.serviceCallAlCount = forkJoin(serviceList).subscribe(data=>{
+      let temp = [];
+      data.forEach(val=>{
+        val['data'].forEach(element => {
+          temp.push(element);
+        });
+      })
+      this.CountsListArray = temp;
+    
+      this.CountsListArray.length && this.MenuItems.forEach(menu=>{
+        menu[0]['internalChildren'].forEach(element => {
+          let count = this.CountsListArray.filter(val => {
+            if (val.menuData == element.value.toString() ) { return val }
+          })
+          element['count'] = count[0]['count'];
+        });
+      })
+
+
+      console.log(this.MenuItems);
+
     })
-
   }
-
   //End Ra Custom Code
 
 

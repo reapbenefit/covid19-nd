@@ -87,64 +87,6 @@
             </div>
 
             <!-- Old Menu -->
-            <div *ngIf=" false">
-              <div class=" row margRight">
-                <div class="col-lg-12 col-md-12 col-xs-12">
-                  <input type="radio" id="Governance" name="optradio" (change)="radioType($event,'Governance')" /><span
-                    class="margLeft">Local Governance</span>
-                </div>
-              </div>
-              <div class="row margRight">
-                <div class="col-lg-12 col-md-12 col-xs-12">
-                  <input type="radio" id="Agencies" name="optradio" (change)="radioType($event,'Agencies')" /><span
-                    class="margLeft">Local Utilities</span>
-                </div>
-              </div>
-              <div class="row margRight">
-                <div class="col-lg-12 col-md-12 col-xs-12">
-                  <input type="radio" id="ICatagory" name="optradio"
-                    (change)="radioType($event,'Issues Categories')" /><span class="margLeft">Issues Categories</span>
-                </div>
-              </div>
-              <div class="row margRight" *ngFor="let category of categories">
-                <div class="col-lg-12 col-md-12 col-xs-12 padLeft">
-                  <input type="checkbox" [checked]="category.checked" (change)="SelectedCategory($event.target.value)"
-                    [value]="category.value" />
-                  <img src="{{category.ImgSrc}}" style="width: 20px;margin-left: 0.5rem;"><span class="margLeft"
-                    style="font-weight: 500;">{{category.value}}</span>
-                </div>
-              </div>
-              <div class="row margRight">
-                <div class="col-lg-12 col-md-12 col-xs-12">
-                  <input type="radio" id="DWCC" name="optradio" (change)="radioType($event,'DWCC')" /><span
-                    class="margLeft">Waste Collection Centers</span>
-                </div>
-              </div>
-              <div class="row margRight">
-                <div class="col-lg-12 col-md-12 col-xs-12">
-                  <input type="radio" id="Toilet" name="optradio" (change)="radioType($event,'Toilets')" /><span
-                    class="margLeft">Toilets</span>
-                </div>
-              </div>
-              <div class="row margRight">
-                <div class="col-lg-12 col-md-12 col-xs-12">
-                  <input type="radio" id="Campaigns" name="optradio" (change)="radioType($event,'Campaigns')" /><span
-                    class="margLeft">Campaigns</span>
-                </div>
-              </div>
-              <div class="row margRight">
-                <div class="col-lg-12 col-md-12 col-xs-12">
-                  <input type="radio" id="AQMcheck" name="optradio" (change)="radioType($event,'AQM')" /><span
-                    class="margLeft">Air Quality Monitors</span>
-                </div>
-              </div>
-              <div class="row" style="display: flex;justify-content: flex-end;padding-right: 1rem;">
-                <!-- <button class="btn btn-primary" (click)="showGraphs()" style="margin-left: 10px;width: 140px;height: 25px;padding-top: 0px;">
-      <span style="color:white;">Show/Hide Facts</span> -->
-                <!-- <span *ngIf="showgraphs" style="color:white;">Hide Facts</span> -->
-                <!-- </button> -->
-              </div>
-            </div>
             <div class="row"
               style="margin:0;display: flex;justify-content: center;color: white;align-items: flex-end;margin-top: 0.5rem;">
               <div class="col-lg-6 col-xs-12" style="display: flex;justify-content: center;">
@@ -211,13 +153,13 @@
         <div class="row">
           <div class="col-md-1">
             <div class="ra-logo">
-              <img src="./assets/Icons/reapbenefit.png">
+              <!-- <img src="./assets/Icons/reapbenefit.png"> -->
             </div>
           </div>
           <div class="col-md-3">
             <h5 class="web-title">Covid Neighbourhood Dashboard</h5>
           </div>
-          <div class="col-md-5">
+          <div class="col-md-4">
             <div class="ra-citysearch-web">
               <ngx-select-dropdown (change)="SelectCity($event)" [multiple]="false" [(ngModel)]="CitySelected"
                 [config]="configCity" [options]="cities"></ngx-select-dropdown>
@@ -230,29 +172,33 @@
               <i class="fa fa-search" id="SeachIcon" aria-hidden="true"></i>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <div class="links">
 
+              <a href="JavaScript:Void(0)" (click)="defaultpage = 'Home'">Home</a>
+              <a href="JavaScript:Void(0)" (click)="pageLocaLData()">Show Map</a>
               <a target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">Local Schemes</a>
               <!-- <a target="_blank" href="http://testnd.solveninja.org/assets/html/NDData.html" >Local Data</a> -->
-              <!-- <a target="_blank" href="http://internaldashboard.solveninja.org:4000/public/dashboard/07b9f145-5be8-4206-942e-7251e15791d9" >Analytics</a> -->
+              <a target="_blank"
+                href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba">Analytics</a>
               <a href="JavaScript:void(0)">
-                Participate
+                Contribute
                 <div class="onhover">
-                  <a href="JavaScript:void(0)" (click)="NeighbourhoodMultilingulSelfAssessment()">Multilingual Self Assessment</a>
-                  <a href="JavaScript:void(0)" (click)="NeighbourhoodForum()">Self Assessment </a>
+                  <a href="JavaScript:void(0)" (click)="NeighbourhoodMultilingulSelfAssessment()">Multilingual Self
+                    Assessment</a>
+                  <a target="_blank" href="https://covidselfcheck.app/">Self Assessment </a>
                   <a href="JavaScript:void(0)" (click)="NeighbourhoodData()">Social distancing </a>
                   <a href="JavaScript:void(0)" (click)="NeighbourhoodAnalytics()">Help The Needy </a>
                   <a href="JavaScript:void(0)" (click)="toVolunteer()">Volunteer </a>
                 </div>
               </a>
-              <a href="JavaScript:void(0)">
+              <!-- <a href="JavaScript:void(0)">
                 About Us
                 <div class="onhover">
                   <a href="JavaScript:void(0)" (click)="NeighbourhoodForum()">FAQ</a>
                   <a href="JavaScript:void(0)" (click)="NeighbourhoodData()">Feedback </a>
                 </div>
-              </a>
+              </a> -->
 
 
             </div>
@@ -260,127 +206,148 @@
         </div>
       </div>
 
-      <!-- ra-custom-categories  -->
-      <div class="ra-custom-categories">
-        <div class="category" style="display: none !important;">
-          <div class="" *ngFor="let menuItem of MenuItems;let menuIndex = index;">
-            <ngx-treeview [config]="configMenu" [items]="menuItem"
-              (selectedChange)="TreeMenuItemsSelect($event,menuItem)">
-            </ngx-treeview>
-          </div>
+      <div class="landing-page" [ngStyle]="{'display': (defaultpage == 'Home')? 'block': 'none'}"> 
+        <div class="banner">
+          <img src="../assets/Icons/solveninja-about.png" alt="">
         </div>
-
-        <!-- Custom google search -->
-        <div class="ra-custom-google" [ngClass]="{'collapseme': collapseGooglesearch}" *ngIf="false">
-
-          <div class="search">
-            <input type="text" placeholder="Search Location">
-            <span class="fa fa-search"></span>
-            <span class=""></span>
-          </div>
-          <div class="result" *ngIf="googleData?.length">
-            <div class="collapse-me" (click)="collapseGooglesearch = !collapseGooglesearch"
-              title="{{collapseGooglesearch ? 'Open': 'Close'}}">
-              <span class="fa fa-sort-desc" [ngClass]="{'openrotate': collapseGooglesearch}"></span>
-            </div>
-            <ul>
-              <li *ngFor="let item of googleData;let index = index">
-                <div class="lat-details">
-                  <h5>{{item.data.name}}</h5>
-                  <p>{{item.data.address}}</p>
-                </div>
-                <div class="lat-icons">
-                  <span class="fa fa fa-external-link-square"></span>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <!--End  Custom google search -->
-
-        <ul *ngFor="let menuItem of MenuItems;let menuIndex = index;" class="box">
-          <li class="first-child-section">
-            <div class="header-sec">
-              {{menuItem[0].text}}
-              <span class="count" *ngIf="getcounterCount(menuItem) != 0">{{getcounterCount(menuItem)}}</span>
-            </div>
-            <div class="body-sec">
-              <div *ngIf="menuItem[0]?.internalChildren && menuItem[0]?.internalChildren.length" class="child-box">
-                <span class="selection-cnt">
-                  <span class="" (click)="selectAll(menuItem)">Select</span> /
-                  <span class="" (click)="deselectAll(menuItem)">Deselect all</span>
-                </span>
-                <ul>
-                  <li class="child-list" *ngFor="let child of menuItem[0].internalChildren"
-                    (click)="singleselect(child, menuItem)">
-                    <span>{{child.text}}</span>
-                    <span *ngIf="child.internalChecked" class="fa fa-check"></span>
-                  </li>
-                </ul>
+        <div class="des-part" style="margin-bottom: 0px;">
+          <div class="row" style="position: relative;top: -95px;">
+            <div class="col-md-6" style="display: flex;flex-direction: column;margin: auto;">
+              <div class="web-big-button" style="margin: auto;">
+                <h3 class="text-center" style="font-weight: 300 !important;margin-bottom: 20px;">Join Hands With Us</h3>
+                <a href="JavaScript:void(0)" (click)="homepageButton2()">Want to help needy?</a>
+                <a href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where you can get help?</a>
               </div>
-
             </div>
-          </li>
-        </ul>
-
-      </div>
-      <!-- End ra-custom-categories  -->
-
-      <div class="row" style="color: blue;" *ngIf="false">
-        <div class="col-lg-1 col-xs-6 vercenter">
-          <button class="btn btn-primary" style="height: 25px;padding-top: 0;" (click)="closeSideNav()">
-            <i class="fa fa-chevron-left" aria-hidden="true"></i><i class="fa fa-chevron-right"
-              aria-hidden="true"></i></button>
-        </div>
-        <div class="col-lg-5" style="display: flex;justify-content: center;">
-          <span style="color: black;font-size: 18px;font-weight: 600;">Neighbourhood Dashboard</span>
-        </div>
-        <div class="col-lg-6 col-xs-12 pl-0 clearable">
-          <!-- <input placeholder="search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
-          class="form-control searchInput" #search [formControl]="searchControl" (input)="searchText($event)"
-          style="padding-right: 1.3rem;">
-        <i *ngIf="showClear" class="fa fa-times clearSearch cursor" (click)="ClearSearch()" aria-hidden="true"></i> -->
-          <div class="row" style="justify-content: flex-end;">
-            <div class="col-lg-4">
-              <button class="btn btn-primary" (click)="NeighbourhoodForum()"
-                style="width: 100%;height: 25px;padding: 0;background-color: #00695c !IMPORTANT;border-color: #88c03f !IMPORTANT;">
-                <span style="color:white;">Coronavirus Self Assessment</span>
-              </button>
-            </div>
-            <div class="col-lg-4">
-              <button class="btn btn-primary" (click)="NeighbourhoodData()"
-                style="width: 100%;height: 25px;padding: 0;background-color: #00695c !IMPORTANT;border-color: #88c03f !IMPORTANT;">
-                <!-- <span style="color:white;">Neighbourhood Data</span> -->
-                <span style="color:white;">Social distancing</span>
-              </button>
-            </div>
-            <div class="col-lg-4">
-              <button class="btn btn-primary" (click)="NeighbourhoodAnalytics()"
-                style="width: 100%;height: 25px;padding: 0;background-color: #00695c !IMPORTANT;border-color: #88c03f !IMPORTANT;">
-                <!-- <span style="color:white;">Neighbourhood Analytics</span> -->
-                <span style="color:white;">Help The Needy</span>
-              </button>
-            </div>
-            <div class="col-lg-4">
-              <button class="btn btn-primary" (click)="toVolunteer()"
-                style="width: 100%;height: 25px;padding: 0;background-color: #00695c !IMPORTANT;border-color: #88c03f !IMPORTANT;">
-                <!-- <span style="color:white;">Neighbourhood Analytics</span> -->
-                <span style="color:white;">Volunteer</span>
-              </button>
+            <div class="col-md-6">
+              <div class="web-view">
+                <h6 class="web-sub-title-home" >Data Found Near You
+                </h6>
+                <div class="web-hom-page-body" >
+                  <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
+                    <ng-template ngFor let-items [ngForOf]="menuItems[0]['internalChildren']">
+                      <div class="box" (click)="homeDirectSingle(items, menuItems)">
+                        <div class="title-b">{{items.text}}</div>
+                        <span class="count" *ngIf="items?.count != 0">{{items['count'] }}</span>
+                      </div>
+                    </ng-template>
+                  </ng-template>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <app-main-content [mapData]="mapData" [AQM]="AQM" [AQMGraphLoc]="AQMGraphLoc" [graphData]="graphData"
-        [graphDataStatus]="graphDataStatus" [showComp]="showComp" [compare]="compare" [showgraphs]="showgraphs"
-        [selIssCat]="selIssCat" (WardData)="WardData($event)" (hideGraphs)="hideGraphs($event)"
-        [WardDetails]="WardDetails" [showGovernance]="showGovernance" [wardAgencyList]="wardAgencyList"
-        [showAgencies]="showAgencies" [IssueData]="IssueData" [showIssues]="showIssues"></app-main-content>
-      <!-- <div class="row" style="margin: 0;">
-        <span><strong>Zoom Level:</strong> {{dataService.zoom}}</span>
-      </div> -->
 
+      <div [ngStyle]="{'display': (defaultpage == 'LocalData')? 'block': 'none'}" style="position: relative;top: 70px;">
+        <!-- ra-custom-categories  -->
+        <div class="ra-custom-categories">
+          <div class="category" style="display: none !important;">
+            <div class="" *ngFor="let menuItem of MenuItems;let menuIndex = index;">
+              <ngx-treeview [config]="configMenu" [items]="menuItem"
+                (selectedChange)="TreeMenuItemsSelect($event,menuItem)">
+              </ngx-treeview>
+            </div>
+          </div>
 
+          <!-- Custom google search -->
+          <div class="ra-custom-google" [ngClass]="{'collapseme': collapseGooglesearch}" *ngIf="false">
+
+            <div class="search">
+              <input type="text" placeholder="Search place">
+              <span class="fa fa-search"></span>
+              <span class=""></span>
+            </div>
+            <div class="result" *ngIf="tempListData?.length">
+              <div class="collapse-me" (click)="collapseGooglesearch = !collapseGooglesearch"
+                title="{{collapseGooglesearch ? 'Open': 'Close'}}">
+                <span class="fa fa-sort-desc" [ngClass]="{'openrotate': collapseGooglesearch}"></span>
+              </div>
+              <ul>
+                <li *ngFor="let item of tempListData;let index = index">
+
+                  <div class="lat-details">
+                    <h5>{{item.name}}</h5>
+                    <p>{{item.address}}</p>
+                  </div>
+                  <div class="lat-icons">
+                    <span class="fa fa-location-arrow" (click)="getInMapLocation(item)"></span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!--End  Custom google search -->
+        </div>
+        <div class="ra-custom-categories" style="right: 0px;margin: 10px;">
+          <ul *ngFor="let menuItem of MenuItems;let menuIndex = index;" class="box">
+            <li class="first-child-section">
+              <div class="header-sec">
+                {{menuItem[0].text}}
+                <span class="count" *ngIf="getcounterCount(menuItem) != 0">{{getcounterCount(menuItem)}}</span>
+              </div>
+              <div class="body-sec">
+                <div *ngIf="menuItem[0]?.internalChildren && menuItem[0]?.internalChildren.length" class="child-box">
+                  <span class="selection-cnt">
+                    <span class="" (click)="selectAll(menuItem)">Select</span> /
+                    <span class="" (click)="deselectAll(menuItem)">Deselect all</span>
+                  </span>
+                  <ul>
+                    <li class="child-list" *ngFor="let child of menuItem[0].internalChildren"
+                      (click)="singleselect(child, menuItem)">
+                      <span>{{child.text}}</span>
+                      <span *ngIf="child.internalChecked" class="fa fa-check"></span>
+                    </li>
+                  </ul>
+                </div>
+
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="lengents-details-wrapper" *ngIf="false">
+          <div class="lengents-details-box">
+            <div class="actions-ld">
+              <a href="JavaScript:Void(0)">Legends</a>
+              <a class="active" href="JavaScript:Void(0)">Details</a>
+            </div>
+            <div class="full-details">
+              <div class="ra-custom-google">
+
+                <div class="search">
+                  <input type="text" placeholder="Search place">
+                  <span class="fa fa-search"></span>
+                  <span class=""></span>
+                </div>
+                <div class="result" *ngIf="tempListData?.length">
+                  <div class="collapse-me" (click)="collapseGooglesearch = !collapseGooglesearch"
+                    title="{{collapseGooglesearch ? 'Open': 'Close'}}">
+                    <span class="fa fa-sort-desc" [ngClass]="{'openrotate': collapseGooglesearch}"></span>
+                  </div>
+                  <ul>
+                    <li *ngFor="let item of tempListData;let index = index">
+
+                      <div class="lat-details">
+                        <h5>{{item.name}}</h5>
+                        <p>{{item.address}}</p>
+                      </div>
+                      <div class="lat-icons">
+                        <span class="fa fa-location-arrow"></span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End ra-custom-categories  -->
+        <app-main-content [mapData]="mapData" [AQM]="AQM" [AQMGraphLoc]="AQMGraphLoc" [graphData]="graphData"
+          [graphDataStatus]="graphDataStatus" [showComp]="showComp" [compare]="compare" [showgraphs]="showgraphs"
+          [selIssCat]="selIssCat" (WardData)="WardData($event)" (hideGraphs)="hideGraphs($event)"
+          [WardDetails]="WardDetails" [showGovernance]="showGovernance" [wardAgencyList]="wardAgencyList"
+          [showAgencies]="showAgencies" [IssueData]="IssueData" [showIssues]="showIssues"></app-main-content>
+      </div>
 
 
 
@@ -570,10 +537,10 @@
   </div>
 
 
-  <div class="routing-section-localdata" style="position: relative;"
+  <div class="routing-section-localdata" style="position: relative;height: calc(100% - 52px);"
     [ngStyle]="{'display': (defaultpage == 'LocalData')? 'block': 'none'}">
     <!-- Page header -->
-    <div class="header header-fixed" >
+    <div class="header header-fixed">
       <div class="logo"></div>
       <div class="ra-title">
         <h5>Covid Neighbourhood</h5>
@@ -581,15 +548,15 @@
       </div>
       <div class="left-menu" id="current">
         <p>Current Location</p>
-        <h5 class="cur-lo">{{CitySelected?.cityName || 'Bangalore'}}</h5>
+        <h5 class="cur-lo">{{CitySelected?.cityName || 'Your Location'}}</h5>
       </div>
     </div>
     <div class="filter-menu-bar" id="location">
       <div class="filter-btn cat" (click)="filterSearch = !filterSearch;">
-        <span class="fa fa-filter"></span> LOCAL DATA
+        <span class="fa fa-filter"></span> Local Data
       </div>
       <div class="filter-btn loc" (click)="searchLocation = !searchLocation; openpopups = false">
-        <span class="fa fa-map-marker"></span> LOCATION
+        <span class="fa fa-map-marker"></span> Cities
       </div>
     </div>
     <div class="search-menu" [ngStyle]="{'display': searchLocation? 'block': 'none'}"
@@ -678,7 +645,30 @@
     <!-- Page Main -->
     <div class="page-content">
       <div class="map-section">
-        <!-- <div id="map"></div> -->
+        <div class="icons-details-g" *ngIf="false">
+          <div class="collapse-button" (click)="detail_legends = !detail_legends"><span class="fa fa-chevron-up"></span>
+          </div>
+          <div class="result-g" [ngClass]="{'collapseme': detail_legends}">
+            <div class="actiob-mode-dl">
+              <a href="JavaScript:void(0)">Legends</a>
+              <a class="active" href="JavaScript:void(0)">Details</a>
+            </div>
+            <div class="result-g-d">
+              <div class="filter-g">
+                <input type="text" placeholder="Search place">
+              </div>
+              <div class="result-g-box" *ngFor="let item of tempListData">
+                <div class="lat-details-g">
+                  <h5>{{item.name}}</h5>
+                  <p>{{item.address}}</p>
+                </div>
+                <div class="lat-icons-g">
+                  <span class="fa fa-location-arrow" (click)="getInMapLocation(item)"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <app-main-content [mapData]="mapData" [AQM]="AQM" [AQMGraphLoc]="AQMGraphLoc" [graphData]="graphData"
           [graphDataStatus]="graphDataStatus" [showComp]="showComp" [compare]="compare" [showgraphs]="showgraphs"
           [selIssCat]="selIssCat" (WardData)="WardData($event)" (hideGraphs)="hideGraphs($event)"
@@ -694,16 +684,17 @@
     [ngStyle]="{'display': (defaultpage == 'Home')? 'block': 'none'}">
 
     <div class="header header-fixed" style="z-index: 9 !important;">
-      <div class="logo"></div>
+      <div class="logo">
+      </div>
     </div>
 
     <div class="home-page-title" style="padding-top: 60px;">
       <h5 class="home-page-header-title text-center"
-        style="color: #96c953;font-size: 18px !important;margin-bottom: 12px;">
+        style="color: #5CDB95;font-size: 18px !important;margin-bottom: 12px;">
         Covid Neighbourhood Dashboard
       </h5>
       <ul class="bullet-points">
-        <li class="text-center">Join Hands With Us</li>
+        <li class="text-center" style="font-weight: 300;margin-bottom: 20px;">Join Hands With Us</li>
         <!-- <li>Supported successfully</li> -->
         <!-- <li>Medical facilities mapped</li>
         <li>People needing help, you represent facilities tool mapped</li>
@@ -712,23 +703,24 @@
         <li>Volunteers near you Mapped</li> -->
       </ul>
       <div class="action-button">
-        <a href="JavaScript:void(0)" (click)="homepageButton1()">Want Medical Help?</a>
+        <!-- <a href="JavaScript:void(0)" (click)="homepageButton1()">Want Medical Help?</a> -->
         <a href="JavaScript:void(0)" (click)="homepageButton2()">Want to help needy?</a>
         <a href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where you can get help?</a>
       </div>
     </div>
 
-    <ng-template [ngIf]="false">
-      <h6 class="sub-title-home" style="margin: 20px 25px 5px 20px">Find More</h6>
-      <div class="hom-page-body">
-        <div *ngFor="let menuItem of MenuItems;let menuIndex = index;" class="box"
-          (click)="homeDirect(menuItem[0].value)">
-          <div class="title-b">{{menuItem[0].text}}</div>
-          <span class="count"
-            *ngIf="menuItem[0]?.internalChildren?.length">{{menuItem[0]?.internalChildren?.length}}</span>
-        </div>
-      </div>
-    </ng-template>
+    <h6 class="sub-title-home" style="margin: 10px 12px;">Data Found Near You
+    </h6>
+    <div class="hom-page-body">
+      <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
+        <ng-template ngFor let-items [ngForOf]="menuItems[0]['internalChildren']">
+          <div *ngIf="items['count'] != 0" class="box" (click)="homeDirectSingle(items, menuItems)">
+            <div class="title-b">{{items.text}}</div>
+            <span class="count">{{items['count'] }}</span>
+          </div>
+        </ng-template>
+      </ng-template>
+    </div>
 
   </div>
 
@@ -744,24 +736,22 @@
       </span>
       <span class="title-f">Participate</span>
       <strong></strong></a> -->
-
-    <!-- <a href="JavaScript:void(0)" (click)="filterSearch = !filterSearch" class=""> -->
     <a href="JavaScript:void(0)" [ngClass]="{'active': defaultpage == 'LocalData'}" (click)="pageLocaLData()">
       <span class="icon fa fa-filter"></span>
-      <span class="title-f">Local Data</span>
+      <span class="title-f">Show Map</span>
       <strong></strong></a>
     <a target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">
       <span class="icon fa fa-comments"></span>
       <span class="title-f">Local Schemes</span>
       <strong></strong></a>
-    <!-- <a target="_blank"
-        href="http://internaldashboard.solveninja.org:4000/public/dashboard/07b9f145-5be8-4206-942e-7251e15791d9">
-        <span class="icon fa fa-bar-chart"></span>
-        <span class="title-f">Analytics</span>
-        <strong></strong></a> -->
+    <a target="_blank"
+      href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba">
+      <span class="icon fa fa-bar-chart"></span>
+      <span class="title-f">Analytics</span>
+      <strong></strong></a>
     <a (click)="menupopup = !menupopup" href="JavaScript:void(0)">
       <span class="icon fa fa-bars"></span>
-      <span class="title-f">More</span>
+      <span class="title-f">Contribute</span>
       <strong></strong></a>
 
 
@@ -781,13 +771,13 @@
       </div>
       <div class="content">
         <ul class="link-list">
-          <li><a style="color: #155724;" (click)="NeighbourhoodForum()">Self Assessment <i
+          <li><a style="color: #5cdb95" (click)="NeighbourhoodForum()">Self Assessment <i
                 class="fa fa-angle-right"></i> </a></li>
-          <li><a style="color: #155724;" (click)="NeighbourhoodData()">Social distancing <i
+          <li><a style="color: #5cdb95" (click)="NeighbourhoodData()">Social distancing <i
                 class="fa fa-angle-right"></i> </a></li>
-          <li><a style="color: #155724;" (click)="NeighbourhoodAnalytics()">Help The Needy <i
+          <li><a style="color: #5cdb95" (click)="NeighbourhoodAnalytics()">Help The Needy <i
                 class="fa fa-angle-right"></i> </a></li>
-          <li><a style="color: #155724;" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>
+          <li><a style="color: #5cdb95" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>
         </ul>
         <div class="clear"></div>
       </div>
@@ -804,19 +794,19 @@
       </div>
       <div class="content">
         <ul class="link-list">
-          <li><a style="color: #155724;" (click)="NeighbourhoodForum()">Self Assessment <i
+          <li><a style="color: #5cdb95" href="https://covidselfcheck.app/" target="_blank">Self Assessment <i
                 class="fa fa-angle-right"></i> </a>
           </li>
-          <li><a style="color: #155724;" (click)="NeighbourhoodData()">Social distancing <i
+          <li><a style="color: #5cdb95" (click)="NeighbourhoodData()">Social distancing <i
                 class="fa fa-angle-right"></i> </a>
           </li>
-          <li><a style="color: #155724;" (click)="NeighbourhoodAnalytics()">Help The Needy <i
+          <li><a style="color: #5cdb95" (click)="NeighbourhoodAnalytics()">Help The Needy <i
                 class="fa fa-angle-right"></i> </a>
           </li>
-          <li><a style="color: #155724;" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>
-          <li><a style="color: #155724;" href="">About Us <i class="fa fa-angle-right"></i> </a></li>
+          <li><a style="color: #5cdb95" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>
+          <!-- <li><a style="color: #155724;" href="">About Us <i class="fa fa-angle-right"></i> </a></li>
           <li><a style="color: #155724;" href="">FAQ<i class="fa fa-angle-right"></i> </a></li>
-          <li><a style="color: #155724;" href="">Feedback<i class="fa fa-angle-right"></i> </a></li>
+          <li><a style="color: #155724;" href="">Feedback<i class="fa fa-angle-right"></i> </a></li> -->
         </ul>
         <div class="clear"></div>
       </div>

@@ -83,6 +83,7 @@ export class DataService {
       return menuItems;
     }
     CollectionsDataES(obj) {
+        console.log(obj);
         let menuItems = this.getSubMenus(obj);
         let params = {
           menuData: menuItems,
@@ -92,6 +93,16 @@ export class DataService {
           bottomRightLon: "" + this.bottomRight.lng,
         };
         return this.httpClient.get(`${this.baseURLES}/places`, {params: params, headers: this.headers});
+    }
+    getCountDataES(obj) {
+        let menuItems = this.getSubMenus(obj);
+        let params = {
+          menuData: menuItems,
+            latitude: "" + obj.latitude,
+            longitude: "" + obj.longitude,
+          radius:'3km'
+        };
+        return this.httpClient.get(`${this.baseURLES}/categoryCounts`, {params: params, headers: this.headers});
     }
 
     CollectionsData(obj) {

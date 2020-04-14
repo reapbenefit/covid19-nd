@@ -82,7 +82,7 @@ div#page {
     display: inline-block;
     padding-right: 0px;
     position: relative;
-    top: 15px;
+    top: 12px;
     right: 1px;
     text-align: right !important;
 }
@@ -202,12 +202,27 @@ div#map {
     width: 95px;
     height: 39px;
     display: inline-block;
-    background-image: url("./assets/Icons/reapbenefit.png");
+    background-image: url("./assets/Icons/logo_m_white.png");
+    /* background-image: url("./assets/Icons/reapbenefit.jpg"); */
+    /* background-image: url("./assets/Icons/reapbenefit_old.png"); */
     background-size: cover;
     background-repeat: no-repeat;
     position: relative;
     top: 8px;
 }
+.landing-page .banner {
+    /* background-image: url("./assets/Icons/solveninja-about.png");
+    height: 450px;
+    background-size: cover; */
+    /* background-image: url("./assets/Icons/solveninja-about.png"); */
+    height: 500px;
+    width: 100%;
+}
+.banner img {
+    height: 100%;
+    width: 100%;
+}
+
 .coranaimg {
     height: 22px;
     width: 22px;
@@ -287,7 +302,7 @@ div#footer-menu a {
     flex-direction: column;
     text-align: center;
     padding: 7px 0;
-    margin: 0 10px;
+    margin: 0 8px;
     min-width: 50px;
     position: relative;
 }
@@ -297,7 +312,8 @@ div#footer-menu a span {
 div#footer-menu a span.icon {
     font-size: 22px;
     /* color: #249081; */
-    color: #96c953;
+    /* color: #96c953; */
+    color: #5cdb95;
 }
 div#footer-menu a span.title-f {
     font-weight: 500;
@@ -315,7 +331,6 @@ div#footer-menu a:hover {
 
 .page-content {
     box-shadow: 0 5px 30px 0 rgba(0, 0, 0, 0.11);
-    z-index: 90;
     height: 100%;
 }
 .page-content {
@@ -470,7 +485,7 @@ li.first-child-section-mobile .body-sec-mobile {
 
 /* Ra Custom Web */
 body {
-    background: #f0f7f7 !important;
+    /* background: #f0f7f7 !important; */
 }
 #content {
     width: 100vw !important;
@@ -481,7 +496,17 @@ body {
     position: relative;
 }
 .ra-header {
+    /* padding: 5px 10px;
+    background: #00df8e;
+    margin-bottom: 5px; */
     padding: 5px 10px;
+    background: #00df8e;
+    margin-bottom: 5px;
+    position: fixed;
+    top: 0px;
+    z-index: 999 !important;
+    left: 0;
+    right: 0;
 }
 .ra-locationsearch-web input {
     border-radius: 27px;
@@ -582,7 +607,8 @@ body {
     border-top: 0px !important;
 }
 .ra-header .links a {
-    color: #6c757d;
+    /* color: #6c757d; */
+    color: #fff;
     font-weight: 500;
     margin: 0 15px;
     font-size: 14px;
@@ -598,10 +624,26 @@ body {
 .ra-header .links a:hover {
     padding-bottom: 18px;
 }
+.landing-page .des-part:before {
+    height: 100px;
+    background: white;
+    display: block;
+    content: "";
+    transform: rotate(-2deg);
+    position: relative;
+    top: -22px;
+}
 .ra-logo {
     width: 110px;
-    height: 45px;
+    height: 57px;
     position: relative;
+    display: inline-block;
+    background-image: url("./assets/Icons/solveninja-logo-white.png");
+    /* background-image: url(./assets/Icons/reapbenefit_old.png); */
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    top: 0px;
 }
 
 .ra-logo img {
@@ -624,7 +666,7 @@ body {
     position: absolute;
     /* left: 0;
     top: 70px; */
-    z-index: 9999 !important;
+    z-index: 99 !important;
     margin-top: 2px;
 }
 .ra-custom-categories ul.box {
@@ -669,7 +711,7 @@ li.child-list .fa-check {
     color: #333 !important;
     position: absolute;
     top: 0;
-    left: 100%;
+    right: 100%;
     z-index: 9999 !important;
     width: 100%;
     height: auto;
@@ -729,7 +771,7 @@ span.selection-cnt {
 }
 
 .filter-menu-bar .filter-btn {
-    background: #f19001;
+    background: #FBB040;
     display: inline-block !important;
     border-radius: 10px;
     padding: 3px 14px;
@@ -760,7 +802,9 @@ span.selection-cnt {
     z-index: 9999;
     right: -19px;
     background: #fff;
-    border-top: 21px solid #f0f7f7;
+    /* border-top: 21px solid #f0f7f7; */
+    border-top: 31px solid #00df8e;
+    z-index: 99999 !important;
 }
 
 .ra-header .links a .onhover {
@@ -773,22 +817,24 @@ span.selection-cnt {
     padding: 5px 21px;
     text-align: right;
     margin: 0 auto;
+    color: #333;
 }
 .header .ra-title {
     display: inline-block;
     margin-left: 10px;
     position: relative;
-    top: 7px;
+    top: 2px;
 }
 
 .header .ra-title h5 {
     font-size: 12px;
     margin-bottom: 0px;
     font-weight: 500;
-    color: #4caf50;
+    color: #5cdb95;
 }
 .web-title {
-    color: #595959;
+    /* color: #595959; */
+    color: #fff;
     font-size: 18px;
     font-weight: 500;
     position: relative;
@@ -810,6 +856,7 @@ span.selection-cnt {
     }
     .col-md-1,
     .col-md-3,
+    .col-md-4,
     .col-md-5 {
         width: 100% !important;
         flex-basis: 100% !important;
@@ -835,18 +882,19 @@ span.selection-cnt {
     flex-direction: column;
     width: 420px;
     height: 100%;
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 .ra-custom-google.collapseme {
     margin-left: -420px;
 }
 
-.ra-custom-google .search{
+.ra-custom-google .search {
     flex: 0;
 }
 .ra-custom-google .result {
     flex: 1;
     position: relative;
+    border: 0px !important;
 }
 .ra-custom-google .search {
     background: #ffff;
@@ -881,7 +929,7 @@ span.selection-cnt {
     margin-top: 70px;
     overflow: auto;
     padding-bottom: 10px;
-    max-height: 81Vh;
+    max-height: 81vh;
     overflow: auto;
     margin-bottom: 0px;
 }
@@ -951,10 +999,8 @@ span.selection-cnt {
     margin: auto;
     color: #b9b9b9;
     font-size: 18px;
-    transition: all .2s ease-in-out .2s;
+    transition: all 0.2s ease-in-out 0.2s;
     transform: rotate(90deg) translateY(-2px);
-
-
 }
 span.fa.fa-sort-desc.openrotate {
     transform: rotate(-90deg) translateY(-3px);
@@ -995,7 +1041,7 @@ span.fa.fa-sort-desc.openrotate {
 .loader span {
     margin: auto;
     font-size: 22px !important;
-    color: #4CAF50;
+    color: #4caf50;
 }
 .hom-page-body {
     display: flex;
@@ -1004,7 +1050,7 @@ span.fa.fa-sort-desc.openrotate {
     justify-content: center;
 }
 .hom-page-body .box {
-    flex-basis: 45%;
+    flex-basis: 47%;
     margin-bottom: 10px;
     background: #fff;
     padding: 15px 10px;
@@ -1013,7 +1059,7 @@ span.fa.fa-sort-desc.openrotate {
     display: flex;
     flex-direction: column;
     border: 1px solid #dfdfdf;
-    box-shadow: 0px 2px 4px rgba(0,0,0, .1);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 .hom-page-body .box .title-b {
     flex: 1;
@@ -1048,17 +1094,201 @@ h6.sub-title-home {
     padding-bottom: 5px;
     text-transform: capitalize;
 }
-.action-button {
-
-}
 .action-button a {
     display: block;
     font-size: 14px;
-    background: #f19001;
+    /* background: #f19001; */
+    background: #5cdb95;
     padding: 5px 10px;
     border-radius: 20px;
     margin: 10px 5px;
     text-align: center;
+}
+.result-g.collapseme {
+    width: 0px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+.icons-details-g {
+    transition: all 0.3s;
+    position: absolute;
+    top: 50px;
+    height: calc(100% - 81px);
+    background: #fff !important;
+    z-index: 9;
+    margin: 20px;
+    margin-right: 0px;
+    margin-left: 40px;
+    right: 0;
+}
+
+.filter-g input {
+    width: 95%;
+    margin: auto;
+    border: 1px solid #dfdfdf;
+    border-radius: 5px;
+    height: 40px;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.filter-g {
+    display: flex;
+    margin: 10px auto;
+    flex: 0;
+}
+
+.result-g .result-g-box {
+    padding: 5px 20px;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #f2f2f2;
+}
+.actiob-mode-dl {
+    margin: 3px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.actiob-mode-dl a {
+    flex-basis: 49%;
+    text-align: center;
+    background: #f6f6f6;
+    padding: 10px;
+    border: 1px solid #dfdfdf;
+}
+.result-g {
+    flex: 1;
+    height: 88%;
+    overflow: auto;
+    position: relative;
+    border: 1px solid #dfdfdf;
+    margin: 3px 3px;
+    border-top: 0px;
+}
+.actiob-mode-dl a.active {
+    background: #fff;
+    border-bottom: 0px;
+}
+
+.lat-details-g h5 {
+    font-size: 14px;
+}
+
+.lat-details-g p {
+    font-size: 12px !important;
+}
+
+.lat-icons-g {
+    display: flex;
+    margin: auto;
+    margin-left: 5px;
+}
+
+.lat-icons-g span {
+    margin: auto;
+    color: #96c953;
+    font-weight: 600;
+    background: #000000;
+    padding: 4px 5px;
+    border-radius: 50px;
+    font-size: 14px;
+}
+.lengents-details-wrapper {
+    position: absolute;
+    z-index: 9999 !important;
+    margin-top: 2px;
+    right: 0px;
+    z-index: 9999 !important;
+    background: #fff;
+    width: 320px;
+    height: calc(100% - 68px);
+}
+.lengents-details-box {
+    position: relative;
+}
+
+.lengents-details-box .actions-ld {
+    position: absolute;
+    top: 0px;
+    left: -71px;
+}
+.lengents-details-box .actions-ld a.active {
+    background: #fff;
+    color: #333;
+}
+.lengents-details-box .actions-ld a {
+    background: #f19001;
+    padding: 8px;
+    margin-right: 10px;
+    color: #fff;
+    display: block;
+    margin-top: 10px;
+    border: 1px solid #fff;
+}
+
+.full-details {
+    overflow: auto;
+}
+.collapse-button {
+    position: absolute;
+    left: -34px;
+    background: #f19001;
+    padding: 6px 10px 10px 10px;
+    border: 1px solid #fff;
+    top: 32%;
+    color: #fff;
+}
+.collapse-button span {
+    transform: rotate(90deg);
+}
+.lengents-details-box .ra-custom-google {
+    width: 100% !important;
+}
+.web-big-button a {
+    /* background: #5CDB95; */
+    background: #fbb040;
+    padding: 8px 10px;
+    border-radius: 50px;
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+}
+h6.web-sub-title-home {
+    font-size: 28px;
+    font-weight: 300;
+    margin: 10px auto;
+    border-bottom: 1px solid #00df8e;
+    padding-bottom: 5px;
+    margin-right: 5%;
+}
+
+.web-hom-page-body .box {
+    border: 1px solid #dfdfdf;
+    background: #fff;
+    padding: 5px 41px 5px 10px;
+    margin: 5px;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 2px 2px 4px #dfdfdf;
+    border-radius: 20px;
+}
+
+.web-hom-page-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.web-hom-page-body .box span {
+    position: absolute;
+    right: 7px;
+    top: 9px;
+    background:#f2f2f2;
+    margin-left: 0;
 }
 /* End Google Search */
 
