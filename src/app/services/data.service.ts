@@ -100,7 +100,7 @@ export class DataService {
           menuData: menuItems,
             latitude: "" + obj.latitude,
             longitude: "" + obj.longitude,
-          radius:'3km'
+          radius:'30km'
         };
         return this.httpClient.get(`${this.baseURLES}/categoryCounts`, {params: params, headers: this.headers});
     }

@@ -795,7 +795,13 @@ export class AppComponent {
     this.dataService.getMenuList(obj).subscribe(data => {
       // console.log(JSON.stringify(data));
       var TempMenuData: any = data;
-      this.MenuData = TempMenuData.data;
+      var temp: any = TempMenuData.data.filter(val => {
+        if (val.menuId != 100) {
+          return val;
+        }
+      });
+      this.MenuData = temp;
+      console.log(this.MenuData);
       this.MenuItems = this.getMenuJSON(this.MenuData);
 
       // Default selection set
@@ -1467,7 +1473,7 @@ export class AppComponent {
         }
       });
       this.TreeMenuItemsSelect(temp, items)
-    },1000)
+    },500)
   }
 
   /**
@@ -1574,6 +1580,7 @@ export class AppComponent {
       let temp = [];
       data.forEach(val=>{
         val['data'].forEach(element => {
+
           temp.push(element);
         });
       })
