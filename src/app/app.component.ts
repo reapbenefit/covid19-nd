@@ -1,4 +1,4 @@
-import { Component, NgZone, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, NgZone, ViewChild, ElementRef, HostListener, Pipe } from '@angular/core';
 import { DataService } from './services/data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 // import { } from 'googlemaps';
@@ -29,7 +29,8 @@ export class AppComponent {
   menupopup = false;
   collapseGooglesearch = false;
   defaultpage = 'Home';
-  detail_legends = true;
+  detail_legends_collapse = true; // true means Collapse
+  legends_details = false; // false --> Details
 
 
   // @ViewChild('Governance') Governance: ElementRef;
@@ -152,16 +153,17 @@ export class AppComponent {
     });
   }
 
-  // For Mobile View
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.epicFunction();
-  }
+  /**
+   * Checking Tab, Mobile , Desktab view
+   */
   epicFunction() {
     const isMobile = this.deviceService.isMobile();
     const isTablet = this.deviceService.isTablet();
     const isDesktopDevice = this.deviceService.isDesktop();
     this.isMobile = isMobile;
+    if (!this.isMobile){
+      this.detail_legends_collapse = false;
+    }
 
     console.log(isMobile);  // returns if the device is a mobile device (android / iPhone / windows-phone etc)
     console.log(isTablet);  // returns if the device us a tablet (iPad etc)
@@ -379,7 +381,7 @@ export class AppComponent {
     this.formButtonClickEvent('Menu', 'City_Menu', 'City_Select', 'Select');
     this.defaultSelectTrigger();
     // get New count based on city changed
-    this.getInMapLocation();
+    this.getCountBased_On_Location();
 
   }
 
@@ -739,12 +741,16 @@ export class AppComponent {
   public WardSelected = [];
 
   getMenuJSON(data): TreeviewItem[] {
+    var icons = [];
     let childrenCategoryTemp = [];
     let childerenCatMain = [];
     var childrenCategory;
     data.forEach(element => {
       childrenCategory = new TreeviewItem({
-        text: element.name, value: element.menuId, collapsed: false, checked: false, children: [
+        text: element.name, 
+        value: element.menuId, 
+        collapsed: false,         
+        checked: false, children: [
           { text: 'a', value: 0 },
         ]
       });
@@ -752,8 +758,14 @@ export class AppComponent {
         var tempObj = {
           text: element.subMenus[mi].submenu,
           value: element.subMenus[mi].submenuId,
-          checked: false
+          checked: false,
+          name: 'ramesh',
         }
+        icons.push({
+          submenu: element.subMenus[mi].submenu,
+          icon: element.subMenus[mi].icon,
+          submenuId: element.subMenus[mi].submenuId
+        })
         childrenCategory.children.push(new TreeviewItem(tempObj));
         childrenCategory.internalChecked = false;
       }
@@ -762,6 +774,19 @@ export class AppComponent {
       childrenCategoryTemp.push(childrenCategory);
       childerenCatMain.push(childrenCategoryTemp);
     });
+    childerenCatMain.forEach(val => {
+      val[0] && val[0]['internalChildren'].length && val[0]['internalChildren'].forEach(element => {
+        icons.forEach(val=>{
+          if (element.value == val.submenuId){
+            element['icon'] = val.icon;
+            return false;
+          }
+        })
+
+      });
+    })
+
+
     return childerenCatMain;
   }
 
@@ -803,12 +828,13 @@ export class AppComponent {
       this.MenuData = temp;
       console.log(this.MenuData);
       this.MenuItems = this.getMenuJSON(this.MenuData);
+      console.log(this.MenuItems)
 
       // Default selection set
       setTimeout(() => {
         this.yourCurrentLocation();
-        this.getInMapLocation();
-      }, 500);
+        this.getCountBased_On_Location();
+      }, 50);
     });
     // this.dataService.AQMdata(obj).subscribe(data => {
     //   this.AQMDataLoad = data;
@@ -1159,7 +1185,17 @@ export class AppComponent {
     this.ServiceRequest ? this.ServiceRequest.unsubscribe() : null
     this.ServiceRequest = this.dataService.CollectionsDataES(obj).subscribe(data => {
       let resMap: any = data;
-      this.mapData = resMap.data;
+      
+
+      let newData = resMap.data.map(val=>{
+        val['number'] = val.data;
+        delete val['data'];
+        return  val; 
+      })
+      // this.mapData = resMap.data;
+      this.mapData = newData;
+      console.log(this.mapData);
+
     });
   }
 
@@ -1278,17 +1314,17 @@ export class AppComponent {
     //   });
     // }
 
-      this.SelectCity({
-        "value": {
-          "id": "1",
-          "cityName": "Bangalore Urban",
-          "lat": "12.9796734",
-          "lng": "77.5890556"
-        }
-      });
-      this.searchLocation = true;
-      this.defaultSelectTrigger();
-    
+    this.SelectCity({
+      "value": {
+        "id": "1",
+        "cityName": "Bangalore Urban",
+        "lat": "12.9796734",
+        "lng": "77.5890556"
+      }
+    });
+    this.searchLocation = true;
+    this.defaultSelectTrigger();
+
   }
   singleselect(child, items) {
     child.internalChecked = !child.internalChecked;
@@ -1457,23 +1493,22 @@ export class AppComponent {
 
     })
   }
-  
+
   homeDirectSingle(child, items) {
+    this.resetAllSelection();
     this.defaultpage = 'LocalData';
     this.searchLocation = false;
-    setTimeout(()=>{
-      // this.resetAllSelection();
-      // child.internalChecked = true;
-      // this.TreeMenuItemsSelect([child.value], items);
+
+    setTimeout(() => {
       child.internalChecked = !child.internalChecked;
       let temp = [];
-      items[0]['internalChildren'].forEach(element => {
+      items[0] && items[0]['internalChildren'] && items[0]['internalChildren'].forEach(element => {
         if (element.internalChecked == true) {
           temp.push(element.value);
         }
       });
       this.TreeMenuItemsSelect(temp, items)
-    },500)
+    }, 500)
   }
 
   /**
@@ -1513,6 +1548,28 @@ export class AppComponent {
   }
 
 
+  /**
+   * On click Legends 
+   */
+  legentsCLick(menuID) {
+    if (menuID) {
+      this.resetAllSelection();
+      this.MenuItems.forEach(ele => {
+        ele[0] && ele[0]['internalChildren'].forEach(child => {
+          if (child.value == menuID) {
+            child.internalChecked = true;
+            this.TreeMenuItemsSelect([child.value], ele);
+            this.detail_legends_collapse = true;
+          }
+        });
+      })
+    }
+  }
+
+  filterdetailsvalue = '';
+
+
+
   tempListData = [
     {
       "wardName": "Jaya Nagar",
@@ -1530,77 +1587,130 @@ export class AppComponent {
       "category": "Important Medical Services",
       "phoneNum": "1800 425 1974",
       "isFlagged": "0"
-    },
-    {
-      "total": 1,
-      "cityName": "bengaluru",
-      "lng": 77.601612,
-      "icon": "./assets/Icons/coronavirus-testingcentre.png",
-      "menuId": 93,
-      "id": 9839,
-      "type": "12",
-      "lat": 12.982099,
-
-      "name": "Neuberg Anand 2",
-      "address": "Aanand Tower, 54, Bowring Hospital Rd, Shivajinagar`, Bengaluru, Karnataka 560001",
-      "category": "Important Medical Services",
-      "phoneNum": "1800 425 1974",
-      "isFlagged": "0"
-    },
+    }
   ];
+
+  /**
+   * Zoom To selected Ocation place 
+   */
+  zoomToPlace(item){
+    
+  }
 
   CountsListArray = []
   serviceCallAlCount = null;
-  getInMapLocation() {
-
+  serviceReqcount = 0;
+  getCountBased_On_Location() {
     this.commonService.getCord().subscribe(cordnates => {
       this.NewObj.latitude = cordnates.data.lat;
       this.NewObj.longitude = cordnates.data.lng;
     });
-    this.CountsListArray = [];
-    let serviceList = this.MenuItems && this.MenuItems.map((items) => {
-      let submenus = items[0] && items[0]['internalChildren'].map(va => {
-        return va.value;
-      }).join();
-      let obj = {
+
+    let tempData = [];
+    this.MenuItems && this.MenuItems.map((items) => {
+      items[0] && items[0]['internalChildren'].forEach(element => {
+        tempData.push(element.value)
+      });
+    });
+    if (tempData.length) {
+      let tempObj = {
         "menuData": [
           {
-            "submenus": submenus
+            "submenus": tempData.join()
           }
         ],
         "latitude": this.NewObj.latitude,
         "longitude": this.NewObj.longitude
       }
-      console.log(obj);
-      return  this.dataService.getCountDataES(obj);
-    });
-
-    this.serviceCallAlCount ? this.serviceCallAlCount.unsubscribe() : null
-    this.serviceCallAlCount = forkJoin(serviceList).subscribe(data=>{
-      let temp = [];
-      data.forEach(val=>{
-        val['data'].forEach(element => {
-
-          temp.push(element);
-        });
-      })
-      this.CountsListArray = temp;
-    
-      this.CountsListArray.length && this.MenuItems.forEach(menu=>{
-        menu[0]['internalChildren'].forEach(element => {
-          let count = this.CountsListArray.filter(val => {
-            if (val.menuData == element.value.toString() ) { return val }
+      this.dataService.getCountDataES(tempObj).subscribe(res => {
+        this.serviceReqcount = 0;
+        if(res && res['data'].length){
+          this.CountsListArray = res['data'];
+          this.MenuItems.forEach(menu => {
+            menu[0]['internalChildren'].forEach(element => {
+              let count = this.CountsListArray.filter(val => {
+                if (val.menuData == element.value) { return val }
+              })
+              element['count'] = count[0]['count'];
+            });
           })
-          element['count'] = count[0]['count'];
-        });
+        }
+      }, err => {
+        if (this.serviceReqcount < 2) {
+          this.serviceReqcount = this.serviceReqcount + 1;
+          this.getCountBased_On_Location();
+        }
+        console.log(err);
+      }, () => {
+        console.log("Completed");
       })
+    }
 
+    
 
-      console.log(this.MenuItems);
-
-    })
   }
   //End Ra Custom Code
 
 
 }
+
+
+@Pipe({
+  name: 'filterUnique',
+  pure: false
+})
+export class FilterPipe {
+
+  transform(value: any, args?: any): any {
+
+    var finalData = [];
+    var finalKeys = [];
+    value.forEach(val => {
+      if (finalKeys.indexOf(val.menuId) == -1) {
+        finalKeys.push(val.menuId);
+        finalData.push({
+          menuId: val['menuId'],
+          icon: val['icon'] || '',
+          category: val['category'] || '',
+          subcategory: val['subcategory'] || '',
+          count: 0
+        });
+      }else{
+        // finalData.forEach(v=>{
+        //   if (v.menuId == val.menuId){
+        //     v['count'] = v['count'] + 1;
+        //     v['category'] = v['category'] || '';
+        //     v['subcategory'] = v['subcategory'] || '';
+        //   }
+        // })
+      }
+    })
+    return finalData;
+  }
+}
+@Pipe({
+  name: 'inputsearch',
+  pure: false
+})
+export class InputsearchPipe {
+
+  transform(value: any, args?: any): any {
+
+    var finalData = [];    
+    if (args !=''){
+      finalData = value.filter(val => {
+        if ((val.name.toLowerCase()).indexOf(args.toLowerCase()) != -1 || 
+            (val.subcategory.toLowerCase()).indexOf(args.toLowerCase()) != -1) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+    }else{
+      finalData = value;
+    }
+    return finalData;
+  }
+}
+
+

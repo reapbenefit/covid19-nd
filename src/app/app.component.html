@@ -164,7 +164,7 @@
               <ngx-select-dropdown (change)="SelectCity($event)" [multiple]="false" [(ngModel)]="CitySelected"
                 [config]="configCity" [options]="cities"></ngx-select-dropdown>
             </div>
-            <span style="font-size: 12px;margin: 0 8px;position: relative;top: 7px;">( OR )<span></span></span>
+            <span style="font-size: 10px;margin: 0 8px;position: relative;top: 7px;">( OR )<span></span></span>
             <div class="ra-locationsearch-web">
               <input placeholder="Select location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
                 class="searchInput" #search [formControl]="searchControl" (input)="searchText($event)"
@@ -175,8 +175,10 @@
           <div class="col-md-4">
             <div class="links">
 
-              <a href="JavaScript:Void(0)" (click)="defaultpage = 'Home'">Home</a>
-              <a href="JavaScript:Void(0)" (click)="pageLocaLData()">Show Map</a>
+              <a href="JavaScript:Void(0)" (click)="defaultpage = 'Home'"
+                [ngClass]="{'active': defaultpage == 'Home'}">Home</a>
+              <a href="JavaScript:Void(0)" (click)="pageLocaLData()"
+                [ngClass]="{'active': defaultpage == 'LocalData'}">Show Map</a>
               <a target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">Local Schemes</a>
               <!-- <a target="_blank" href="http://testnd.solveninja.org/assets/html/NDData.html" >Local Data</a> -->
               <a target="_blank"
@@ -206,7 +208,7 @@
         </div>
       </div>
 
-      <div class="landing-page" [ngStyle]="{'display': (defaultpage == 'Home')? 'block': 'none'}"> 
+      <div class="landing-page" [ngStyle]="{'display': (defaultpage == 'Home')? 'block': 'none'}">
         <div class="banner">
           <img src="../assets/Icons/solveninja-about.png" alt="">
         </div>
@@ -220,13 +222,14 @@
               </div>
             </div>
             <div class="col-md-6">
-              <div class="web-view">
-                <h6 class="web-sub-title-home" >Data Found Near You
-                </h6>
-                <div class="web-hom-page-body" >
+              <div class="web-view" style="margin-right: 20px;">
+                <h6 class="web-sub-title-home">Data Found Near You</h6>
+                <p style="font-size: 16px;color: #38a669;font-weight: 500;">While the total data includes information from 20+ cities, 40 schemes, 100,000+ people supported with partner NGOs,
+                150,000 people needing support, 50,000+ data points crowdsourced, the following data points exist 30 Km around you</p>
+                <div class="web-hom-page-body" *ngIf="CountsListArray?.length">
                   <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
                     <ng-template ngFor let-items [ngForOf]="menuItems[0]['internalChildren']">
-                      <div class="box" (click)="homeDirectSingle(items, menuItems)">
+                      <div class="box" (click)="homeDirectSingle(items, menuItems)" *ngIf="items?.count != 0">
                         <div class="title-b">{{items.text}}</div>
                         <span class="count" *ngIf="items?.count != 0">{{items['count'] }}</span>
                       </div>
@@ -239,7 +242,8 @@
         </div>
       </div>
 
-      <div [ngStyle]="{'display': (defaultpage == 'LocalData')? 'block': 'none'}" style="position: relative;top: 70px;">
+      <div [ngStyle]="{'display': (defaultpage == 'LocalData')? 'block': 'none'}" class="web-map-wrapper"
+        style="position: relative;top: 70px;">
         <!-- ra-custom-categories  -->
         <div class="ra-custom-categories">
           <div class="category" style="display: none !important;">
@@ -249,37 +253,8 @@
               </ngx-treeview>
             </div>
           </div>
-
-          <!-- Custom google search -->
-          <div class="ra-custom-google" [ngClass]="{'collapseme': collapseGooglesearch}" *ngIf="false">
-
-            <div class="search">
-              <input type="text" placeholder="Search place">
-              <span class="fa fa-search"></span>
-              <span class=""></span>
-            </div>
-            <div class="result" *ngIf="tempListData?.length">
-              <div class="collapse-me" (click)="collapseGooglesearch = !collapseGooglesearch"
-                title="{{collapseGooglesearch ? 'Open': 'Close'}}">
-                <span class="fa fa-sort-desc" [ngClass]="{'openrotate': collapseGooglesearch}"></span>
-              </div>
-              <ul>
-                <li *ngFor="let item of tempListData;let index = index">
-
-                  <div class="lat-details">
-                    <h5>{{item.name}}</h5>
-                    <p>{{item.address}}</p>
-                  </div>
-                  <div class="lat-icons">
-                    <span class="fa fa-location-arrow" (click)="getInMapLocation(item)"></span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <!--End  Custom google search -->
         </div>
-        <div class="ra-custom-categories" style="right: 0px;margin: 10px;">
+        <div class="ra-custom-categories" style="margin: 15px 10px;">
           <ul *ngFor="let menuItem of MenuItems;let menuIndex = index;" class="box">
             <li class="first-child-section">
               <div class="header-sec">
@@ -305,38 +280,77 @@
             </li>
           </ul>
         </div>
-        <div class="lengents-details-wrapper" *ngIf="false">
+        <div class="lengents-details-wrapper" [ngClass]="{'collapseme': detail_legends_collapse}">
           <div class="lengents-details-box">
-            <div class="actions-ld">
-              <a href="JavaScript:Void(0)">Legends</a>
-              <a class="active" href="JavaScript:Void(0)">Details</a>
+            <div class="collapse-button" [ngClass]="{'rotateleft': detail_legends_collapse}" (click)="detail_legends_collapse = !detail_legends_collapse"><span
+                class="fa fa-chevron-up"></span>
             </div>
             <div class="full-details">
+              <div class="actiob-mode-dl">
+                <a [ngClass]="{'active': !legends_details}" href="JavaScript:void(0)" (click)="legends_details = false">Details</a>
+                <a [ngClass]="{'active': legends_details}" href="JavaScript:void(0)" (click)="legends_details = true">Legends</a>
+              </div>
+              <div class="filter-g" *ngIf="!legends_details && mapData?.length">
+                <input type="text" placeholder="Search place" [(ngModel)]="filterdetailsvalue">
+              </div>
               <div class="ra-custom-google">
-
-                <div class="search">
-                  <input type="text" placeholder="Search place">
-                  <span class="fa fa-search"></span>
-                  <span class=""></span>
-                </div>
-                <div class="result" *ngIf="tempListData?.length">
-                  <div class="collapse-me" (click)="collapseGooglesearch = !collapseGooglesearch"
-                    title="{{collapseGooglesearch ? 'Open': 'Close'}}">
-                    <span class="fa fa-sort-desc" [ngClass]="{'openrotate': collapseGooglesearch}"></span>
+                <ng-template [ngIf]="legends_details">
+                  <div class="categories-box-g">  
+                    <ul class="webview-ra">
+                      <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
+                        <ng-template ngFor let-items [ngForOf]="menuItems[0]['internalChildren']">
+                          <li class="box" *ngIf="items.internalChecked">
+                            <!-- <h5>{{items.text}} {{items.count !=0? '('+items.count+')': ''}}</h5> -->
+                            <h5>{{items.text}}</h5>
+                            <ng-template [ngIf]="items.icon">
+                              <img [src]="items.icon" onerror="this.onerror=null; this.src='./assets/Icons/reapbenefit.jpg'"
+                                title="{{items.subcategory}}">
+                            </ng-template>
+                          </li>
+                        </ng-template>
+                      </ng-template>
+                      <li>
+                        No Categories Selected
+                      </li>
+                    </ul>
+                    <!-- <ul class="webview-ra">
+                      <li class="box" *ngFor="let items of mapData | filterUnique">
+                        <h5>{{items.subcategory}}</h5>
+                        <ng-template [ngIf]="items.icon">
+                          <img [src]="items.icon" onerror="this.onerror=null; this.src='./assets/Icons/reapbenefit.jpg'"
+                            title="{{items.subcategory}}">
+                        </ng-template>
+                      </li>
+                      <li>
+                        No Categories Selected
+                      </li>
+                    </ul> -->
                   </div>
-                  <ul>
-                    <li *ngFor="let item of tempListData;let index = index">
+                </ng-template>
+                <ng-template [ngIf]="!legends_details">
 
-                      <div class="lat-details">
-                        <h5>{{item.name}}</h5>
+                  <!-- <ng-template [ngIf]="!mapData?.length">
+                    <div class="loading-text-animation" *ngFor="let item of [1,2,3,4,5]">
+                      <div id="four"></div>
+                      <div id="five"></div>
+                      <div id="six"></div>
+                    </div>
+                  </ng-template> -->
+                  <ng-template [ngIf]="true">
+                    <div class="result-g-box" *ngFor="let item of mapData | inputsearch:filterdetailsvalue">
+                      <div class="lat-details-g">
+                        <h5 (click)="zoomToPlace(item)"><img class="title_icons" [src]="item.icon" alt="">{{item.name}}</h5>
                         <p>{{item.address}}</p>
+                        <!-- <span *ngIf="item?.number" class="cat">{{item.number}}</span> -->
+                        <!-- <span class="cat" *ngIf="item?.category">{{item.category}} &nbsp; / &nbsp;</span><span
+                                              class="sub_cat" *ngIf="item?.subcategory">{{item.subcategory}}</span> -->
                       </div>
-                      <div class="lat-icons">
-                        <span class="fa fa-location-arrow"></span>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
+                      <!-- <div class="lat-icons-g">
+                        <span class="fa fa-location-arrow" (click)="zoomToPlace(item)"></span>
+                      </div> -->
+                    </div>
+                  </ng-template>
+                </ng-template>
               </div>
             </div>
           </div>
@@ -351,7 +365,7 @@
 
 
 
-      <div *ngIf="dataService.zoom > 15"
+      <!-- <div *ngIf="dataService.zoom > 15"
         style="padding-top: 5px;margin: 0;height: 75px;position: absolute;bottom: 30px;background-color: white;width: calc(100% - 335px);overflow: auto;white-space: nowrap;">
         <div style="width: 100%;padding-left: 10px;text-decoration: underline;">
           <strong>Map Shortcuts</strong>
@@ -359,7 +373,7 @@
         <div style="padding: 0 1rem;display: inline;" *ngFor="let markerList of mapData;let ML = index;">
           <img [src]="markerList.icon" style="height: 40px;" (click)="markerListClick(markerList)">
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <div *ngIf="false">
@@ -572,12 +586,8 @@
           <ngx-select-dropdown (change)="SelectCity($event)" [multiple]="false" [(ngModel)]="CitySelected"
             [config]="configCity" [options]="cities"></ngx-select-dropdown>
         </div>
-        <span style="    text-align: center;
-          font-weight: 200;
-          font-size: 14px;
-          margin: 0px 0;
-          position: relative;
-          top: -3px;"> ( OR ) </span>
+        <span style="text-align: center;font-weight: 200;font-size: 14px;margin: 0px 0;position: relative;top: -3px;"> (
+          OR ) </span>
         <div class="map-wrapper">
           <label style="margin-bottom: 0px;font-size: 14px;">Select Location</label>
           <div class="map-location">
@@ -644,28 +654,78 @@
 
     <!-- Page Main -->
     <div class="page-content">
-      <div class="map-section">
-        <div class="icons-details-g" *ngIf="false">
-          <div class="collapse-button" (click)="detail_legends = !detail_legends"><span class="fa fa-chevron-up"></span>
+      <div class="map-section mobile-view">
+        <div class="icons-details-g">
+          <div class="collapse-button" style="top: 45% !important;" [ngClass]="{'rotateleft': detail_legends_collapse}" (click)="detail_legends_collapse = !detail_legends_collapse"><span
+              class="fa fa-chevron-up"></span>
           </div>
-          <div class="result-g" [ngClass]="{'collapseme': detail_legends}">
+          <div class="result-g" [ngClass]="{'collapseme': detail_legends_collapse}">
             <div class="actiob-mode-dl">
-              <a href="JavaScript:void(0)">Legends</a>
-              <a class="active" href="JavaScript:void(0)">Details</a>
+              <a [ngClass]="{'active': !legends_details}" href="JavaScript:void(0)" (click)="legends_details = false">Details</a>
+              <a [ngClass]="{'active': legends_details}" href="JavaScript:void(0)"
+                (click)="legends_details = true">Legends</a>
+            </div>
+            <div class="filter-g" *ngIf="!legends_details && mapData?.length">
+              <input type="text" placeholder="Search place" [(ngModel)]="filterdetailsvalue">
             </div>
             <div class="result-g-d">
-              <div class="filter-g">
-                <input type="text" placeholder="Search place">
-              </div>
-              <div class="result-g-box" *ngFor="let item of tempListData">
-                <div class="lat-details-g">
-                  <h5>{{item.name}}</h5>
-                  <p>{{item.address}}</p>
+              <ng-template [ngIf]="legends_details">
+                <div class="categories-box-g" style="padding-top: 10px;">
+
+
+                  <ul class="webview-ra">
+                    <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
+                      <ng-template ngFor let-items [ngForOf]="menuItems[0]['internalChildren']">
+                        <li class="box" *ngIf="items.internalChecked">
+                          <!-- <h5>{{items.text}} {{items.count !=0? '('+items.count+')': ''}}</h5> -->
+                          <h5>{{items.text}}</h5>
+                          <ng-template [ngIf]="items.icon">
+                            <img [src]="items.icon" onerror="this.onerror=null; this.src='./assets/Icons/reapbenefit.jpg'"
+                              title="{{items.subcategory}}">
+                          </ng-template>
+                        </li>
+                      </ng-template>
+                    </ng-template>
+                    <li>
+                      No Categories Selected
+                    </li>
+                  </ul>
+                  <!-- <ul>
+                    <li class="box" *ngFor="let items of mapData | filterUnique">
+                      <h5>{{items.subcategory}}</h5>
+                      <ng-template [ngIf]="items.icon">
+                        <img [src]="items.icon" onerror="this.onerror=null; this.src='./assets/Icons/reapbenefit.jpg'"
+                          title="{{items.subcategory}}">
+                      </ng-template>
+                    </li>
+                  </ul> -->
                 </div>
-                <div class="lat-icons-g">
-                  <span class="fa fa-location-arrow" (click)="getInMapLocation(item)"></span>
-                </div>
-              </div>
+              </ng-template>
+              <ng-template [ngIf]="!legends_details">
+
+                <!-- <ng-template [ngIf]="!mapData?.length">
+                  <div class="loading-text-animation" *ngFor="let item of [1,2,3,4,5]">
+                    <div id="four"></div>
+                    <div id="five"></div>
+                    <div id="six"></div>
+                  </div>
+                </ng-template> -->
+
+                <ng-template [ngIf]="true">
+                  <div class="result-g-box" *ngFor="let item of mapData | inputsearch:filterdetailsvalue">
+                    <div class="lat-details-g" >
+                      <h5 (click)="zoomToPlace(item)"><img class="title_icons" [src]="item.icon" alt="">{{item.name}}</h5>
+                      <p>{{item.address}}</p>
+                      <!-- <span *ngIf="item?.number" class="cat">{{item.number}}</span> -->
+                      <!-- <span class="cat" *ngIf="item?.category">{{item.category}} &nbsp; / &nbsp;</span><span
+                        class="sub_cat" *ngIf="item?.subcategory">{{item.subcategory}}</span> -->
+                    </div>
+                    <!-- <div class="lat-icons-g">
+                      <span class="fa fa-location-arrow" (click)="zoomToPlace(item)"></span>
+                    </div> -->
+                  </div>
+                </ng-template>
+              </ng-template>
             </div>
           </div>
         </div>
@@ -690,11 +750,11 @@
 
     <div class="home-page-title" style="padding-top: 60px;">
       <h5 class="home-page-header-title text-center"
-        style="color: #5CDB95;font-size: 18px !important;margin-bottom: 12px;">
+        style="color: #38a669;font-size: 18px !important;margin-bottom: 12px;">
         Covid Neighbourhood Dashboard
       </h5>
       <ul class="bullet-points">
-        <li class="text-center" style="font-weight: 300;margin-bottom: 20px;">Join Hands With Us</li>
+        <li class="text-center" style="font-weight: 300;margin-bottom: 20px;color: #38a669;">Join Hands With Us</li>
         <!-- <li>Supported successfully</li> -->
         <!-- <li>Medical facilities mapped</li>
         <li>People needing help, you represent facilities tool mapped</li>
@@ -708,10 +768,12 @@
         <a href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where you can get help?</a>
       </div>
     </div>
-
-    <h6 class="sub-title-home" style="margin: 12px 12px;text-align: center;font-size: 21px;">Data Found Near You
-    </h6>
-    <div class="hom-page-body">
+  
+    <h6 class="sub-title-home animated fadeIn" *ngIf="CountsListArray?.length" style="margin: 12px 12px;text-align: center;font-size: 21px;">Data Found Near You</h6>
+    <p class="animated fadeIn" *ngIf="CountsListArray?.length" style="font-size: 14px;color: #333;margin: 0 15px;margin-bottom: 15px;">While the total data
+      includes information from 20+ cities, 40 schemes, 100,000+ people supported with partner NGOs, 150,000 people needing
+      support, 50,000+ data points crowdsourced, the following data points exist 30 Km around you</p>
+    <div class="hom-page-body animated fadeIn" *ngIf="CountsListArray?.length">
       <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
         <ng-template ngFor let-items [ngForOf]="menuItems[0]['internalChildren']">
           <div *ngIf="items['count'] != 0" class="box" (click)="homeDirectSingle(items, menuItems)">
@@ -737,8 +799,12 @@
       <span class="title-f">Participate</span>
       <strong></strong></a> -->
     <a href="JavaScript:void(0)" [ngClass]="{'active': defaultpage == 'LocalData'}" (click)="pageLocaLData()">
-      <span class="icon fa fa-filter"></span>
+      <span class="icon fa fa-map-marker"></span>
       <span class="title-f">Show Map</span>
+      <strong></strong></a>
+    <a href="JavaScript:void(0)" (click)="filterSearch = !filterSearch; defaultpage = 'LocalData';">
+      <span class="icon fa fa-filter"></span>
+      <span class="title-f">Local Data</span>
       <strong></strong></a>
     <a target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">
       <span class="icon fa fa-comments"></span>
@@ -771,13 +837,13 @@
       </div>
       <div class="content">
         <ul class="link-list">
-          <li><a style="color: #5cdb95" (click)="NeighbourhoodForum()">Self Assessment <i
+          <li><a style="color: #38a669" (click)="NeighbourhoodForum()">Self Assessment <i class="fa fa-angle-right"></i>
+            </a></li>
+          <li><a style="color: #38a669" (click)="NeighbourhoodData()">Social distancing <i
                 class="fa fa-angle-right"></i> </a></li>
-          <li><a style="color: #5cdb95" (click)="NeighbourhoodData()">Social distancing <i
+          <li><a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Help The Needy <i
                 class="fa fa-angle-right"></i> </a></li>
-          <li><a style="color: #5cdb95" (click)="NeighbourhoodAnalytics()">Help The Needy <i
-                class="fa fa-angle-right"></i> </a></li>
-          <li><a style="color: #5cdb95" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>
+          <li><a style="color: #38a669" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>
         </ul>
         <div class="clear"></div>
       </div>
@@ -794,16 +860,16 @@
       </div>
       <div class="content">
         <ul class="link-list">
-          <li><a style="color: #5cdb95" href="https://covidselfcheck.app/" target="_blank">Self Assessment <i
+          <li><a style="color: #38a669" href="https://covidselfcheck.app/" target="_blank">Self Assessment <i
                 class="fa fa-angle-right"></i> </a>
           </li>
-          <li><a style="color: #5cdb95" (click)="NeighbourhoodData()">Social distancing <i
+          <li><a style="color: #38a669" (click)="NeighbourhoodData()">Social distancing <i
                 class="fa fa-angle-right"></i> </a>
           </li>
-          <li><a style="color: #5cdb95" (click)="NeighbourhoodAnalytics()">Help The Needy <i
+          <li><a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Help The Needy <i
                 class="fa fa-angle-right"></i> </a>
           </li>
-          <li><a style="color: #5cdb95" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>
+          <li><a style="color: #38a669" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>
           <!-- <li><a style="color: #155724;" href="">About Us <i class="fa fa-angle-right"></i> </a></li>
           <li><a style="color: #155724;" href="">FAQ<i class="fa fa-angle-right"></i> </a></li>
           <li><a style="color: #155724;" href="">Feedback<i class="fa fa-angle-right"></i> </a></li> -->
@@ -825,12 +891,12 @@
       </div>
       <div class="content">
         <ul class="link-list">
-          <li><a style="color: #155724;" target="_blank" href="https://discourse.solveninja.org/tags/">Forum <i
+          <li><a style="color: #38a669;" target="_blank" href="https://discourse.solveninja.org/tags/">Forum <i
                 class="fa fa-angle-right"></i> </a></li>
-          <li><a style="color: #155724;" target="_blank"
+          <li><a style="color: #38a669;" target="_blank"
               href="http://testnd.solveninja.org/assets/html/NDData.html">Data <i class="fa fa-angle-right"></i> </a>
           </li>
-          <li><a style="color: #155724;" target="_blank"
+          <li><a style="color: #38a669;" target="_blank"
               href="http://internaldashboard.solveninja.org:4000/public/dashboard/07b9f145-5be8-4206-942e-7251e15791d9">Analytics
               <i class="fa fa-angle-right"></i> </a></li>
         </ul>

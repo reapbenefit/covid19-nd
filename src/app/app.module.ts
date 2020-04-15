@@ -17,12 +17,17 @@ import { TreeviewModule } from 'ngx-treeview';
 import { GoogleAnalyticsService } from './services/google-analytics.service';
 import { environment } from './../environments/environment.prod'
 import { DeviceDetectorModule } from 'ngx-device-detector';
+import { from } from 'rxjs';
+import { FilterPipe } from './app.component';
+import { InputsearchPipe } from './app.component';
 @NgModule({
   declarations: [
     AppComponent,
     MainContentComponent,
     MapsComponentComponent,
-    GraphsComponent
+    GraphsComponent,
+    FilterPipe,
+    InputsearchPipe
   ],
   imports: [
     BrowserModule,

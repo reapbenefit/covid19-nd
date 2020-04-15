@@ -101,7 +101,7 @@ export class DataService {
             latitude: "" + obj.latitude,
             longitude: "" + obj.longitude,
           radius:'30km'
-        };
+        }; 
         return this.httpClient.get(`${this.baseURLES}/categoryCounts`, {params: params, headers: this.headers});
     }
 
