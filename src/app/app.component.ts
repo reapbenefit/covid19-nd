@@ -808,41 +808,45 @@ export class AppComponent {
     let obj = {
       "cityId": this.SelectedCity
     }
-    this.dataService.cityDetails().subscribe(data => {
-      var tempCityData: any = data;
-      this.cities = tempCityData.data;
-      this.CitiesList = JSON.stringify(tempCityData.data);
 
-      setTimeout(()=>{
+
+    forkJoin([this.dataService.cityDetails(), this.dataService.getMenuList(obj)]).subscribe(res=>{
+      if (res[0] && res[0]['data'] ){
+        var tempCityData: any = res[0];
+        this.cities = tempCityData.data;
+        this.CitiesList = JSON.stringify(tempCityData.data);
+        // this.CitySelected = this.cities[0];
+        // this.dataService.SelectedCity = this.cities[0].id;
+        // this.dataService.SelectCityID = this.cities[0].id;
+        // this.dataService.SelectedCityLat = this.cities[0].lat;
+        // this.dataService.SelectedCityLng = this.cities[0].lng;
+        // this.showMenuItems = true;
+        // this.Wards = [];
+        // if (this.CitySelected != undefined) {
+        //   this.dataService.wardDetails({ "cityId": this.CitySelected.id }).subscribe(data => {
+        //     var tempWardData: any = data;
+        //     this.Wards = tempWardData.data;
+        //   });
+        // }
+      }
+      if (res[1] && res[1]['data']) {
+        var TempMenuData: any = res[1];
+        var temp: any = TempMenuData.data.filter(val => {
+          if (val.menuId != 100) {
+            return val;
+          }
+        });
+        this.MenuData = temp;
+        this.MenuItems = this.getMenuJSON(this.MenuData);
+      }
+      
+    },err=>{
+      console.log(err);
+    },()=>{
+      console.log(this.cities);
         this.yourCurrentLocation();
-      },100)
-      // this.CitySelected = this.cities[0];
-      // this.dataService.SelectedCity = this.cities[0].id;
-      // this.dataService.SelectCityID = this.cities[0].id;
-      // this.dataService.SelectedCityLat = this.cities[0].lat;
-      // this.dataService.SelectedCityLng = this.cities[0].lng;
-      // this.showMenuItems = true;
-      // this.Wards = [];
-      // if (this.CitySelected != undefined) {
-      //   this.dataService.wardDetails({ "cityId": this.CitySelected.id }).subscribe(data => {
-      //     var tempWardData: any = data;
-      //     this.Wards = tempWardData.data;
-      //   });
-      // }
-    });
-    this.dataService.getMenuList(obj).subscribe(data => {
-      // console.log(JSON.stringify(data));
-      var TempMenuData: any = data;
-      var temp: any = TempMenuData.data.filter(val => {
-        if (val.menuId != 100) {
-          return val;
-        }
-      });
-      this.MenuData = temp;
-      console.log(this.MenuData);
-      this.MenuItems = this.getMenuJSON(this.MenuData);
-      console.log(this.MenuItems)
-    });
+    })
+
     // this.dataService.AQMdata(obj).subscribe(data => {
     //   this.AQMDataLoad = data;
     //   this.AQMDataLoad.data.sort(this.dynamicSort("name"));
@@ -1331,6 +1335,7 @@ export class AppComponent {
       }
     });
     setTimeout(()=>{
+      console.log(this.cities);
       this.CitySelected = this.cities[0];
     },10)
 
