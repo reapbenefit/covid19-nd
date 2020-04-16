@@ -236,11 +236,11 @@
                       <span class="count">40</span>
                     </div>
                     <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
-                      <div class="box" *ngIf="menuItems[0].value == 120">
+                      <div class="box animate" [ngClass]="{'animatebox': getoverrallrectangleCountData.length == 0}" *ngIf="menuItems[0].value == 120">
                         <div class="title-b">People supported with Partners</div>
                         <span class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
                       </div>
-                      <div class="box" *ngIf="menuItems[0].value == 101" style="order: 1">
+                      <div class="box animate" [ngClass]="{'animatebox': getoverrallrectangleCountData.length == 0}" *ngIf="menuItems[0].value == 101" style="order: 1">
                         <div class="title-b">People needing support</div>
                         <span class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
                       </div>
@@ -780,11 +780,11 @@
           <span class="count">40</span>
         </div>
         <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
-          <div class="box" *ngIf="menuItems[0].value == 120">
+          <div class="box animate" [ngClass]="{'animatebox': getoverrallrectangleCountData.length == 0}" *ngIf="menuItems[0].value == 120">
             <div class="title-b">People supported with Partners</div>
             <span class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
           </div>
-          <div class="box" *ngIf="menuItems[0].value == 101" style="order: 1">
+          <div class="box animate" [ngClass]="{'animatebox': getoverrallrectangleCountData.length == 0}" *ngIf="menuItems[0].value == 101" style="order: 1">
             <div class="title-b">People needing support</div>
             <span class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
           </div>

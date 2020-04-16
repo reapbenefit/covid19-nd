@@ -838,7 +838,7 @@ export class AppComponent {
         });
         this.MenuData = temp;
         this.MenuItems = this.getMenuJSON(this.MenuData);
-      }
+      }      
       
     },err=>{
       console.log(err);
@@ -1619,9 +1619,11 @@ export class AppComponent {
     console.log("one");
     let tempData = [];
     this.MenuItems && this.MenuItems.map((items) => {
-      items[0] && items[0]['internalChildren'].forEach(element => {
-        tempData.push(element.value)
-      });
+      if (items[0].value == '120' || items[0].value == '101'){
+        items[0] && items[0]['internalChildren'].forEach(element => {
+          tempData.push(element.value)
+        });
+      }
     });
     let tempObj = {
       "menuData": [
@@ -1648,8 +1650,10 @@ export class AppComponent {
             let overall_rec_count = responseData.filter(val => {
               if ((val.menuData).toString() == (element.value).toString()) { return val }
             })
-            element['overall_rec_count'] = overall_rec_count[0]['impact'];
-            overall_rec_count_total = overall_rec_count_total + parseInt(overall_rec_count[0]['impact'])
+            if (overall_rec_count[0]){
+              element['overall_rec_count'] = overall_rec_count[0]['impact'];
+              overall_rec_count_total = overall_rec_count_total + parseInt(overall_rec_count[0]['impact'])
+            }
           });
           menu[0]['overall_rec_count_total'] = overall_rec_count_total;
         })

@@ -306,6 +306,7 @@ div#footer-menu a {
     min-width: 50px;
     position: relative;
 }
+
 div#footer-menu a span {
     flex: 1;
 }
@@ -1345,6 +1346,11 @@ h6.web-sub-title-home {
     background: #f2f2f2;
     margin-left: 0;
 }
+.numberloader{
+        margin: 10px auto;
+    color: #38a669;
+    font-size: 19px;
+}
 .ngx-dropdown-container .ngx-dropdown-list-container ul.selected-items li {
     background-color: #38a669 !important;
 }
@@ -1525,6 +1531,23 @@ ul.webview-ra li:first-child {
 .static-point-section ul li.yourview-order-1 {order: 1}
 .static-point-section ul li.yourview-order-2 {order: 2}
 .static-point-section ul li.yourview-order-3 {order: 3}
+
+.animatebox{
+    order: 1;
+    animation-name: animate;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    background-color: #dfdfdf !important;
+}
+
+@keyframes animate {
+    from {transition:none;}
+    to {
+        background-color:#f6f7f8;
+        transition: all 0.3s ease-out;
+    }
+}
 
 /* End Google Search */
 
