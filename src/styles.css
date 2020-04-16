@@ -302,7 +302,7 @@ div#footer-menu a {
     flex-direction: column;
     text-align: center;
     padding: 7px 0;
-    margin: 0 8px;
+    margin: 0 3px;
     min-width: 50px;
     position: relative;
 }
@@ -1110,10 +1110,10 @@ h6.sub-title-home {
     font-weight: 500;
 }
 .result-g.collapseme {
-    width: 0px;
-    margin: 0;
-    padding: 0;
-    border: 0;
+    width: 0px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
 }
 .icons-details-g {
     transition: all 0.3s;
@@ -1142,15 +1142,14 @@ h6.sub-title-home {
 .filter-g {
     display: flex;
     margin: 10px auto;
-    flex: 0;
     width: 100%;
     padding: 1px 22px;
 }
 
 .result-g .result-g-box {
     padding: 5px 20px;
-    display: flex;
-    flex-direction: row;
+    display: block;
+    /* flex-direction: row; */
     border-bottom: 1px solid #f2f2f2;
 }
 .result-g-box .lat-details-g h5 {
@@ -1165,7 +1164,7 @@ h6.sub-title-home {
     top: -1px;
 }
 .result-g .result-g-box .lat-details-g {
-    flex: 1;
+
 }
 .actiob-mode-dl {
     margin: 3px 3px 0px 3px;
@@ -1188,10 +1187,13 @@ h6.sub-title-home {
     height: 88%;
     overflow: auto;
     position: relative;
-    border: 1px solid #dfdfdf;
+    /* border: 1px solid #dfdfdf; */
     margin: 3px 3px;
     border-top: 0px;
     border-bottom: 0px;
+}
+.collapseme {
+    width: 0px !important;
 }
 .actiob-mode-dl a.active {
     background: #fff;
@@ -1233,6 +1235,7 @@ h6.sub-title-home {
     width: 350px;
     height: calc(100% - 5px);
     transition: all 0.2s ease;
+    box-shadow: 2px 2px 4px #dfdfdf;
 }
 .lengents-details-wrapper.collapseme {
     width: 0px;
@@ -1390,29 +1393,28 @@ span.sub_cat {
     height: 100%;
 }
 .categories-box-g ul {
-        list-style: none;
+     list-style: none;
     padding: 0px;
     min-width: 258px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: wrap;
     margin: 10px auto;
     margin-left: 9px;
 }
-
+.categories-box-g ul li .jest-count {
+    display: inline-block;
+    text-align: right;
+    width: 15%;
+}
 .categories-box-g ul li {
     background: #fff;
     padding: 10px 10px;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
+    display: block;
     height: 100%;
     margin-bottom: 10px;
-    flex-basis: 49%;
-    min-height: 95px;
+    flex: 1;
+    min-height: 50px;
     border: 1px solid #dfdfdf;
-    box-shadow: 2px 2px 2px #f2f2f2;
+    box-shadow: 2px 2px 2px #f2f2f2 inset;
+    margin: 8px 10px;
 }
 .categories-box-g ul li img {
     width: 28px;
@@ -1427,6 +1429,14 @@ span.sub_cat {
 .categories-box-g ul li h5 {
     font-weight: 300 !important;
     font-size: 14px;
+    display: inline-block;
+    width: 85%;
+}
+.categories-box-g ul li h5 img {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    margin-right: 5px;
 }
 .result-g-box {
     display: flex;
@@ -1463,8 +1473,6 @@ span.sub_cat {
 .mobile-view .result-g-d {
     flex: 1;
     height: 100%;
-    display: flex;
-    flex-direction: column;
     overflow: auto;
 }
 .web-collapse {
@@ -1488,49 +1496,35 @@ ul.webview-ra li:last-child {
 ul.webview-ra li:first-child {
     display: flex;
 }
-.loading-text-animation {
-    position: relative;
-    margin: 10px 20px;
-    margin-bottom: 49px;
-}
-@keyframes animate {
-    from {
-        transition:none;
-    }
-    to {
-        background-color:#f6f7f8;
-        transition: all 0.3s ease-out;
-    }
+.static-point-section {
+    padding: 10px 10px 0px 10px;
 }
 
-#one,#two,#three,#four,#five,#six
-{
-  position:relative;
-  background-color: #CCC;
-  height: 10px;
-  animation-name: animate; 
-  animation-duration: 2s; 
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
+.static-point-section h5 {
+    font-weight: 400;
+    text-align: left;
+    text-transform: uppercase;
+    color: #38a669;
+    padding-left: 12%;
 }
-
-#four{
-  left:0px;
-  top:30px;
-  width: 80%;
+.static-point-section ul {
+    padding: 0px;
+    font-size: 14px;
+    padding-left: 29px;
+    list-style: none;
 }
-
-#five{
-  left:0px;
-  top:45px;
-  width: 63%;
+.static-point-section ul li {
+    padding: 5px 10px;
+    text-align: left;
 }
-
-#six{
-  left:0px;
-  top:60px;
-  width: 50%;
+.static-point-section ul {
+    display: flex;
+    flex-direction: column;
 }
+.static-point-section ul li.yourview-order-0 {order: 0}
+.static-point-section ul li.yourview-order-1 {order: 1}
+.static-point-section ul li.yourview-order-2 {order: 2}
+.static-point-section ul li.yourview-order-3 {order: 3}
 
 /* End Google Search */
 

@@ -181,16 +181,17 @@
                 [ngClass]="{'active': defaultpage == 'LocalData'}">Show Map</a>
               <a target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">Local Schemes</a>
               <!-- <a target="_blank" href="http://testnd.solveninja.org/assets/html/NDData.html" >Local Data</a> -->
-              <a target="_blank"
-                href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba">Analytics</a>
+              
               <a href="JavaScript:void(0)">
                 Contribute
                 <div class="onhover">
+                  <a target="_blank"
+                    href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba">Analytics</a>
                   <a href="JavaScript:void(0)" (click)="NeighbourhoodMultilingulSelfAssessment()">Multilingual Self
                     Assessment</a>
                   <a target="_blank" href="https://covidselfcheck.app/">Self Assessment </a>
                   <a href="JavaScript:void(0)" (click)="NeighbourhoodData()">Social distancing </a>
-                  <a href="JavaScript:void(0)" (click)="NeighbourhoodAnalytics()">Help The Needy </a>
+                  <a href="JavaScript:void(0)" (click)="NeighbourhoodAnalytics()">Help Those In Need </a>
                   <a href="JavaScript:void(0)" (click)="toVolunteer()">Volunteer </a>
                 </div>
               </a>
@@ -217,25 +218,36 @@
             <div class="col-md-6" style="display: flex;flex-direction: column;margin: auto;">
               <div class="web-big-button" style="margin: auto;">
                 <h3 class="text-center" style="font-weight: 300 !important;margin-bottom: 20px;">Join Hands With Us</h3>
-                <a href="JavaScript:void(0)" (click)="homepageButton2()">Want to help needy?</a>
+                <a href="JavaScript:void(0)" (click)="homepageButton2()">Help those in need</a>
                 <a href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where you can get help?</a>
               </div>
             </div>
             <div class="col-md-6">
               <div class="web-view" style="margin-right: 20px;">
                 <h6 class="web-sub-title-home">Data Found Near You</h6>
-                <p style="font-size: 16px;color: #38a669;font-weight: 500;">While the total data includes information from 20+ cities, 40 schemes, 100,000+ people supported with partner NGOs,
-                150,000 people needing support, 50,000+ data points crowdsourced, the following data points exist 30 Km around you</p>
-                <div class="web-hom-page-body" *ngIf="CountsListArray?.length">
-                  <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
-                    <ng-template ngFor let-items [ngForOf]="menuItems[0]['internalChildren']">
-                      <div class="box" (click)="homeDirectSingle(items, menuItems)" *ngIf="items?.count != 0">
-                        <div class="title-b">{{items.text}}</div>
-                        <span class="count" *ngIf="items?.count != 0">{{items['count'] }}</span>
+                <!-- Sub Categories count  Based on Selection-->
+                  <div class="hom-page-body animated fadeIn"  style="margin-left: 0px !important;">
+                    <div class="box">
+                      <div class="title-b">Cities</div>
+                      <span class="count">100</span>
+                    </div>
+                    <div class="box">
+                      <div class="title-b">Schemes</div>
+                      <span class="count">40</span>
+                    </div>
+                    <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
+                      <div class="box" *ngIf="menuItems[0].value == 120">
+                        <div class="title-b">People supported with Partners</div>
+                        <span class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
+                      </div>
+                      <div class="box" *ngIf="menuItems[0].value == 101" style="order: 1">
+                        <div class="title-b">People needing support</div>
+                        <span class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
                       </div>
                     </ng-template>
-                  </ng-template>
-                </div>
+                  </div>
+                <!-- End Sub Categories count  Based on Selection-->
+
               </div>
             </div>
           </div>
@@ -286,6 +298,17 @@
                 class="fa fa-chevron-up"></span>
             </div>
             <div class="full-details">
+              <div class="static-point-section">
+                <h5>In your view</h5>
+                <ul>
+                  <ng-template ngFor let-menuItems [ngForOf]="MenuItems" let-i="index">
+                    <li class="yourview-order-0" *ngIf="menuItems[0].value == 101">1.) Families needing help {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}</li>
+                    <li class="yourview-order-1" *ngIf="menuItems[0].value == 120">2.) Successfully Supported {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}</li>
+                    <li class="yourview-order-2" *ngIf="menuItems[0].value == 97">3.) Resources Close By {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}</li>
+                    <li class="yourview-order-3" *ngIf="menuItems[0].value == 121">4.) Volunteers Close By {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}</li>
+                  </ng-template>
+                </ul>
+              </div>
               <div class="actiob-mode-dl">
                 <a [ngClass]="{'active': !legends_details}" href="JavaScript:void(0)" (click)="legends_details = false">Details</a>
                 <a [ngClass]="{'active': legends_details}" href="JavaScript:void(0)" (click)="legends_details = true">Legends</a>
@@ -300,12 +323,9 @@
                       <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
                         <ng-template ngFor let-items [ngForOf]="menuItems[0]['internalChildren']">
                           <li class="box" *ngIf="items.internalChecked">
-                            <!-- <h5>{{items.text}} {{items.count !=0? '('+items.count+')': ''}}</h5> -->
-                            <h5>{{items.text}}</h5>
-                            <ng-template [ngIf]="items.icon">
-                              <img [src]="items.icon" onerror="this.onerror=null; this.src='./assets/Icons/reapbenefit.jpg'"
-                                title="{{items.subcategory}}">
-                            </ng-template>
+                            <h5><img [src]="items.icon" onerror="this.onerror=null; this.src='./assets/Icons/reapbenefit.jpg'"
+                              title="{{items.subcategory}}">{{items.text}}</h5>
+                            <div class="jest-count">{{items.count !=0? '('+items.count+')': ''}}</div>
                           </li>
                         </ng-template>
                       </ng-template>
@@ -313,29 +333,10 @@
                         No Categories Selected
                       </li>
                     </ul>
-                    <!-- <ul class="webview-ra">
-                      <li class="box" *ngFor="let items of mapData | filterUnique">
-                        <h5>{{items.subcategory}}</h5>
-                        <ng-template [ngIf]="items.icon">
-                          <img [src]="items.icon" onerror="this.onerror=null; this.src='./assets/Icons/reapbenefit.jpg'"
-                            title="{{items.subcategory}}">
-                        </ng-template>
-                      </li>
-                      <li>
-                        No Categories Selected
-                      </li>
-                    </ul> -->
                   </div>
                 </ng-template>
                 <ng-template [ngIf]="!legends_details">
 
-                  <!-- <ng-template [ngIf]="!mapData?.length">
-                    <div class="loading-text-animation" *ngFor="let item of [1,2,3,4,5]">
-                      <div id="four"></div>
-                      <div id="five"></div>
-                      <div id="six"></div>
-                    </div>
-                  </ng-template> -->
                   <ng-template [ngIf]="true">
                     <div class="result-g-box" *ngFor="let item of mapData | inputsearch:filterdetailsvalue">
                       <div class="lat-details-g">
@@ -345,9 +346,6 @@
                         <!-- <span class="cat" *ngIf="item?.category">{{item.category}} &nbsp; / &nbsp;</span><span
                                               class="sub_cat" *ngIf="item?.subcategory">{{item.subcategory}}</span> -->
                       </div>
-                      <!-- <div class="lat-icons-g">
-                        <span class="fa fa-location-arrow" (click)="zoomToPlace(item)"></span>
-                      </div> -->
                     </div>
                   </ng-template>
                 </ng-template>
@@ -603,7 +601,7 @@
         </div>
       </div>
     </div>
-    <div class="search-menu" *ngIf="filterSearch && showMenuItems" style="top: 56px;z-index: 99 !important;">
+    <div class="search-menu" *ngIf="filterSearch " style="top: 56px;z-index: 99 !important;">
       <div class="search-menu-box animated fadeInDown">
         <div class="clear-close">
           <span class="clo" (click)="filterSearch = false"><i class="fa fa-times-circle fa-2x"></i></span>
@@ -656,10 +654,24 @@
     <div class="page-content">
       <div class="map-section mobile-view">
         <div class="icons-details-g">
-          <div class="collapse-button" style="top: 45% !important;" [ngClass]="{'rotateleft': detail_legends_collapse}" (click)="detail_legends_collapse = !detail_legends_collapse"><span
+          <div class="collapse-button" style="top: 45% !important;" [ngClass]="{'rotateleft': detail_legends_collapse}" 
+            (click)="detail_legends_collapse = !detail_legends_collapse"><span
               class="fa fa-chevron-up"></span>
           </div>
           <div class="result-g" [ngClass]="{'collapseme': detail_legends_collapse}">
+
+            <div class="static-point-section">
+              <h5>In your view</h5>
+              <ul style="padding-left: 9px;">
+                <ng-template ngFor let-menuItems [ngForOf]="MenuItems" let-i="index">
+                  <li class="yourview-order-0" *ngIf="menuItems[0].value == 101">1.) Families needing help {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}</li>
+                  <li class="yourview-order-1" *ngIf="menuItems[0].value == 120">2.) Successfully Supported {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}</li>
+                  <li class="yourview-order-2" *ngIf="menuItems[0].value == 97">3.) Resources Close By {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}</li>
+                  <li class="yourview-order-3"  *ngIf="menuItems[0].value == 121">4.) Volunteers Close By {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}</li>
+                </ng-template>
+              </ul>
+            </div>
+
             <div class="actiob-mode-dl">
               <a [ngClass]="{'active': !legends_details}" href="JavaScript:void(0)" (click)="legends_details = false">Details</a>
               <a [ngClass]="{'active': legends_details}" href="JavaScript:void(0)"
@@ -671,18 +683,13 @@
             <div class="result-g-d">
               <ng-template [ngIf]="legends_details">
                 <div class="categories-box-g" style="padding-top: 10px;">
-
-
                   <ul class="webview-ra">
                     <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
                       <ng-template ngFor let-items [ngForOf]="menuItems[0]['internalChildren']">
                         <li class="box" *ngIf="items.internalChecked">
-                          <!-- <h5>{{items.text}} {{items.count !=0? '('+items.count+')': ''}}</h5> -->
-                          <h5>{{items.text}}</h5>
-                          <ng-template [ngIf]="items.icon">
-                            <img [src]="items.icon" onerror="this.onerror=null; this.src='./assets/Icons/reapbenefit.jpg'"
-                              title="{{items.subcategory}}">
-                          </ng-template>
+                          <h5><img [src]="items.icon" onerror="this.onerror=null; this.src='./assets/Icons/reapbenefit.jpg'"
+                              title="{{items.subcategory}}">{{items.text}}</h5>
+                          <div class="jest-count">{{items.count !=0? '('+items.count+')': ''}}</div>
                         </li>
                       </ng-template>
                     </ng-template>
@@ -690,27 +697,9 @@
                       No Categories Selected
                     </li>
                   </ul>
-                  <!-- <ul>
-                    <li class="box" *ngFor="let items of mapData | filterUnique">
-                      <h5>{{items.subcategory}}</h5>
-                      <ng-template [ngIf]="items.icon">
-                        <img [src]="items.icon" onerror="this.onerror=null; this.src='./assets/Icons/reapbenefit.jpg'"
-                          title="{{items.subcategory}}">
-                      </ng-template>
-                    </li>
-                  </ul> -->
                 </div>
               </ng-template>
               <ng-template [ngIf]="!legends_details">
-
-                <!-- <ng-template [ngIf]="!mapData?.length">
-                  <div class="loading-text-animation" *ngFor="let item of [1,2,3,4,5]">
-                    <div id="four"></div>
-                    <div id="five"></div>
-                    <div id="six"></div>
-                  </div>
-                </ng-template> -->
-
                 <ng-template [ngIf]="true">
                   <div class="result-g-box" *ngFor="let item of mapData | inputsearch:filterdetailsvalue">
                     <div class="lat-details-g" >
@@ -720,9 +709,6 @@
                       <!-- <span class="cat" *ngIf="item?.category">{{item.category}} &nbsp; / &nbsp;</span><span
                         class="sub_cat" *ngIf="item?.subcategory">{{item.subcategory}}</span> -->
                     </div>
-                    <!-- <div class="lat-icons-g">
-                      <span class="fa fa-location-arrow" (click)="zoomToPlace(item)"></span>
-                    </div> -->
                   </div>
                 </ng-template>
               </ng-template>
@@ -764,25 +750,47 @@
       </ul>
       <div class="action-button">
         <!-- <a href="JavaScript:void(0)" (click)="homepageButton1()">Want Medical Help?</a> -->
-        <a href="JavaScript:void(0)" (click)="homepageButton2()">Want to help needy?</a>
+        <a href="JavaScript:void(0)" (click)="homepageButton2()">Help those in need</a>
         <a href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where you can get help?</a>
       </div>
     </div>
   
     <h6 class="sub-title-home animated fadeIn" *ngIf="CountsListArray?.length" style="margin: 12px 12px;text-align: center;font-size: 21px;">Data Found Near You</h6>
-    <p class="animated fadeIn" *ngIf="CountsListArray?.length" style="font-size: 14px;color: #333;margin: 0 15px;margin-bottom: 15px;">While the total data
+    <!-- <p class="animated fadeIn" *ngIf="CountsListArray?.length" style="font-size: 14px;color: #333;margin: 0 15px;margin-bottom: 15px;">While the total data
       includes information from 20+ cities, 40 schemes, 100,000+ people supported with partner NGOs, 150,000 people needing
-      support, 50,000+ data points crowdsourced, the following data points exist 30 Km around you</p>
-    <div class="hom-page-body animated fadeIn" *ngIf="CountsListArray?.length">
-      <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
-        <ng-template ngFor let-items [ngForOf]="menuItems[0]['internalChildren']">
-          <div *ngIf="items['count'] != 0" class="box" (click)="homeDirectSingle(items, menuItems)">
-            <div class="title-b">{{items.text}}</div>
-            <span class="count">{{items['count'] }}</span>
+      support, 50,000+ data points crowdsourced, the following data points exist 30 Km around you</p> -->
+    <!-- Sub Categories count  Based on Selection-->
+      <!-- <div class="hom-page-body animated fadeIn" *ngIf="CountsListArray?.length">
+        <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
+          <ng-template ngFor let-items [ngForOf]="menuItems[0]['internalChildren']">
+            <div *ngIf="items['count'] != 0" class="box" (click)="homeDirectSingle(items, menuItems)">
+              <div class="title-b">{{items.text}}</div>
+              <span class="count">{{items['count'] }}</span>
+            </div>
+          </ng-template>
+        </ng-template>
+      </div> -->
+      <div class="hom-page-body animated fadeIn">
+        <div class="box">
+          <div class="title-b">Cities</div>
+          <span class="count">100</span>
+        </div>
+        <div class="box">
+          <div class="title-b">Schemes</div>
+          <span class="count">40</span>
+        </div>
+        <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
+          <div class="box" *ngIf="menuItems[0].value == 120">
+            <div class="title-b">People supported with Partners</div>
+            <span class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
+          </div>
+          <div class="box" *ngIf="menuItems[0].value == 101" style="order: 1">
+            <div class="title-b">People needing support</div>
+            <span class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
           </div>
         </ng-template>
-      </ng-template>
-    </div>
+      </div>
+    <!-- End Sub Categories count  Based on Selection-->
 
   </div>
 
@@ -810,11 +818,11 @@
       <span class="icon fa fa-comments"></span>
       <span class="title-f">Local Schemes</span>
       <strong></strong></a>
-    <a target="_blank"
+    <!-- <a target="_blank"
       href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba">
       <span class="icon fa fa-bar-chart"></span>
       <span class="title-f">Analytics</span>
-      <strong></strong></a>
+      <strong></strong></a> -->
     <a (click)="menupopup = !menupopup" href="JavaScript:void(0)">
       <span class="icon fa fa-bars"></span>
       <span class="title-f">Contribute</span>
@@ -841,7 +849,7 @@
             </a></li>
           <li><a style="color: #38a669" (click)="NeighbourhoodData()">Social distancing <i
                 class="fa fa-angle-right"></i> </a></li>
-          <li><a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Help The Needy <i
+          <li><a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Help Those In Need <i
                 class="fa fa-angle-right"></i> </a></li>
           <li><a style="color: #38a669" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>
         </ul>
@@ -860,13 +868,17 @@
       </div>
       <div class="content">
         <ul class="link-list">
+          <li><a style="color: #38a669" href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba" target="_blank">
+                Analytics<i
+                class="fa fa-angle-right"></i> </a>
+          </li>
           <li><a style="color: #38a669" href="https://covidselfcheck.app/" target="_blank">Self Assessment <i
                 class="fa fa-angle-right"></i> </a>
           </li>
           <li><a style="color: #38a669" (click)="NeighbourhoodData()">Social distancing <i
                 class="fa fa-angle-right"></i> </a>
           </li>
-          <li><a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Help The Needy <i
+          <li><a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Help Those In Need <i
                 class="fa fa-angle-right"></i> </a>
           </li>
           <li><a style="color: #38a669" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>

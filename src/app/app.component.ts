@@ -31,6 +31,7 @@ export class AppComponent {
   defaultpage = 'Home';
   detail_legends_collapse = true; // true means Collapse
   legends_details = false; // false --> Details
+  filterdetailsvalue = '';
 
 
   // @ViewChild('Governance') Governance: ElementRef;
@@ -140,17 +141,6 @@ export class AppComponent {
     private ngZone: NgZone,
     private commonService: CommonService,
     private googleAnalyticsService: GoogleAnalyticsService) {
-
-    this.subscription = this.commonService.getZoom().subscribe(message => {
-      // this.getDashboardData(this.dataService.catType);
-      this.NewObj.level = this.dataService.zoom;
-      this.CollectionsData(this.NewObj);
-    });
-    this.subscriptionWithCord = this.commonService.getCord().subscribe(cordnates => {
-      this.NewObj.latitude = cordnates.data.lat;
-      this.NewObj.longitude = cordnates.data.lng;
-      this.CollectionsData(this.NewObj);
-    });
   }
 
   /**
@@ -161,7 +151,7 @@ export class AppComponent {
     const isTablet = this.deviceService.isTablet();
     const isDesktopDevice = this.deviceService.isDesktop();
     this.isMobile = isMobile;
-    if (!this.isMobile){
+    if (!this.isMobile) {
       this.detail_legends_collapse = false;
     }
 
@@ -745,11 +735,11 @@ export class AppComponent {
     let childrenCategoryTemp = [];
     let childerenCatMain = [];
     var childrenCategory;
-    data.forEach(element => {
+    data && data.forEach(element => {
       childrenCategory = new TreeviewItem({
-        text: element.name, 
-        value: element.menuId, 
-        collapsed: false,         
+        text: element.name,
+        value: element.menuId,
+        collapsed: false,
         checked: false, children: [
           { text: 'a', value: 0 },
         ]
@@ -776,8 +766,8 @@ export class AppComponent {
     });
     childerenCatMain.forEach(val => {
       val[0] && val[0]['internalChildren'].length && val[0]['internalChildren'].forEach(element => {
-        icons.forEach(val=>{
-          if (element.value == val.submenuId){
+        icons.forEach(val => {
+          if (element.value == val.submenuId) {
             element['icon'] = val.icon;
             return false;
           }
@@ -791,7 +781,26 @@ export class AppComponent {
   }
 
   private CitiesList;
+
   ngOnInit() {
+
+    this.subscription = this.commonService.getZoom().subscribe(message => {
+      // this.getDashboardData(this.dataService.catType);
+      this.NewObj.level = this.dataService.zoom;
+      this.CollectionsData(this.NewObj);
+      setTimeout(() => {
+        this.getCountBased_On_Location();
+      }, 10);
+    });
+    this.subscriptionWithCord = this.commonService.getCord().subscribe(cordnates => {
+      this.NewObj.latitude = cordnates.data.lat;
+      this.NewObj.longitude = cordnates.data.lng;
+      this.CollectionsData(this.NewObj);
+      setTimeout(() => {
+        this.getCountBased_On_Location();
+      }, 10);
+    });
+
     // Find Device 
     this.epicFunction();
     // this.Wards = ward;
@@ -803,19 +812,23 @@ export class AppComponent {
       var tempCityData: any = data;
       this.cities = tempCityData.data;
       this.CitiesList = JSON.stringify(tempCityData.data);
-      this.CitySelected = this.cities[0];
-      this.dataService.SelectedCity = this.cities[0].id;
-      this.dataService.SelectCityID = this.cities[0].id;
-      this.dataService.SelectedCityLat = this.cities[0].lat;
-      this.dataService.SelectedCityLng = this.cities[0].lng;
-      this.showMenuItems = true;
-      this.Wards = [];
-      if (this.CitySelected != undefined) {
-        this.dataService.wardDetails({ "cityId": this.CitySelected.id }).subscribe(data => {
-          var tempWardData: any = data;
-          this.Wards = tempWardData.data;
-        });
-      }
+
+      setTimeout(()=>{
+        this.yourCurrentLocation();
+      },100)
+      // this.CitySelected = this.cities[0];
+      // this.dataService.SelectedCity = this.cities[0].id;
+      // this.dataService.SelectCityID = this.cities[0].id;
+      // this.dataService.SelectedCityLat = this.cities[0].lat;
+      // this.dataService.SelectedCityLng = this.cities[0].lng;
+      // this.showMenuItems = true;
+      // this.Wards = [];
+      // if (this.CitySelected != undefined) {
+      //   this.dataService.wardDetails({ "cityId": this.CitySelected.id }).subscribe(data => {
+      //     var tempWardData: any = data;
+      //     this.Wards = tempWardData.data;
+      //   });
+      // }
     });
     this.dataService.getMenuList(obj).subscribe(data => {
       // console.log(JSON.stringify(data));
@@ -829,12 +842,6 @@ export class AppComponent {
       console.log(this.MenuData);
       this.MenuItems = this.getMenuJSON(this.MenuData);
       console.log(this.MenuItems)
-
-      // Default selection set
-      setTimeout(() => {
-        this.yourCurrentLocation();
-        this.getCountBased_On_Location();
-      }, 50);
     });
     // this.dataService.AQMdata(obj).subscribe(data => {
     //   this.AQMDataLoad = data;
@@ -1185,12 +1192,12 @@ export class AppComponent {
     this.ServiceRequest ? this.ServiceRequest.unsubscribe() : null
     this.ServiceRequest = this.dataService.CollectionsDataES(obj).subscribe(data => {
       let resMap: any = data;
-      
 
-      let newData = resMap.data.map(val=>{
+
+      let newData = resMap.data.map(val => {
         val['number'] = val.data;
         delete val['data'];
-        return  val; 
+        return val;
       })
       // this.mapData = resMap.data;
       this.mapData = newData;
@@ -1284,15 +1291,16 @@ export class AppComponent {
   // Default Categories Seletion Value
   defaultCategoriesSelect = 92; //"People Needing Help" value is 101  
   defaultSelectTrigger() {
-    console.log("default");
     setTimeout(() => {
-      this.MenuItems.forEach(ele => {
+      this.MenuItems && this.MenuItems.forEach(ele => {
         if (ele[0]['value'] == this.defaultCategoriesSelect) {
           this.selectAll(ele);
         }
       })
     }, 1000)
   }
+
+  
   yourCurrentLocation() {
     // // setDefault select
 
@@ -1313,7 +1321,7 @@ export class AppComponent {
     //     console.log(this.dataService.SelectedCityLng);
     //   });
     // }
-
+    
     this.SelectCity({
       "value": {
         "id": "1",
@@ -1322,8 +1330,9 @@ export class AppComponent {
         "lng": "77.5890556"
       }
     });
-    this.searchLocation = true;
-    this.defaultSelectTrigger();
+    setTimeout(()=>{
+      this.CitySelected = this.cities[0];
+    },10)
 
   }
   singleselect(child, items) {
@@ -1566,10 +1575,6 @@ export class AppComponent {
     }
   }
 
-  filterdetailsvalue = '';
-
-
-
   tempListData = [
     {
       "wardName": "Jaya Nagar",
@@ -1593,14 +1598,138 @@ export class AppComponent {
   /**
    * Zoom To selected Ocation place 
    */
-  zoomToPlace(item){
-    
+  zoomToPlace(item) {
+
   }
 
+  /**
+   * get Overall Counts
+   * With 4  Lat and lng
+   * topLeftLat --- topLeftLon --- bottomRightLat --- bottomRightLon --- latitude --- longitude
+   */
+  overAll_Rec_serviceReqcount = 0;
+  getoverrallrectangleCounts_unsubscribe = null;
+  getoverrallrectangleCountData = [];
+  getoverrallrectangleCounts() {
+    console.log("one");
+    let tempData = [];
+    this.MenuItems && this.MenuItems.map((items) => {
+      items[0] && items[0]['internalChildren'].forEach(element => {
+        tempData.push(element.value)
+      });
+    });
+    let tempObj = {
+      "menuData": [
+        {
+          "submenus": tempData.join(),
+        }
+      ],
+      "topLeftLat": this.dataService.topLeft.lat,
+      "topLeftLon": this.dataService.topLeft.lng,
+      "bottomRightLat": this.dataService.bottomRight.lat,
+      "bottomRightLon": this.dataService.bottomRight.lng,
+      "latitude": this.dataService.bottomRight.lat,
+      "longitude": this.dataService.bottomRight.lng
+    }
+    this.getoverrallrectangleCounts_unsubscribe ? this.getoverrallrectangleCounts_unsubscribe.unsubscribe() : null;
+    this.getoverrallrectangleCounts_unsubscribe = this.dataService.getCategoryImpactsDataES(tempObj).subscribe(res => {
+      console.log(res['data']);
+      this.overAll_Rec_serviceReqcount = 0;
+      if (res && res['data'].length) {
+        var responseData = res['data'];
+        this.MenuItems.forEach(menu => {
+          let overall_rec_count_total = 0;
+          menu[0]['internalChildren'].forEach(element => {
+            let overall_rec_count = responseData.filter(val => {
+              if ((val.menuData).toString() == (element.value).toString()) { return val }
+            })
+            element['overall_rec_count'] = overall_rec_count[0]['impact'];
+            overall_rec_count_total = overall_rec_count_total + parseInt(overall_rec_count[0]['impact'])
+          });
+          menu[0]['overall_rec_count_total'] = overall_rec_count_total;
+        })
+        console.log(this.MenuItems);
+        this.getoverrallrectangleCountData = responseData;
+      }
+    }, err => {
+      if (this.overAll_Rec_serviceReqcount < 2) {
+        this.overAll_Rec_serviceReqcount = this.overAll_Rec_serviceReqcount + 1;
+        this.getoverrallrectangleCounts();
+      }
+      console.log(err);
+    }, () => {
+      console.log("Completed");
+    })
+
+  }
+
+
+  /**
+   * get Overall Counts
+   * No Lat and lng
+   */
+  overAll_serviceReqcount = 0;
+  getoverrallCounts_unsubscribe = null;
+  getoverrallCounts() {
+    let tempData = [];
+    this.MenuItems && this.MenuItems.map((items) => {
+      items[0] && items[0]['internalChildren'].forEach(element => {
+        tempData.push(element.value)
+      });
+    });
+    let tempObj = {
+      "menuData": [
+        {
+          "submenus": tempData.join()
+        }
+      ]
+    }
+    this.getoverrallCounts_unsubscribe ? this.getoverrallCounts_unsubscribe.unsubscribe() : null;
+    this.getoverrallCounts_unsubscribe = this.dataService.getCountAllDataES(tempObj).subscribe(res => {
+      console.log(res['data']);
+      this.overAll_serviceReqcount = 0;
+      if (res && res['data'].length) {
+        var responseData = res['data'];
+        this.MenuItems.forEach(menu => {
+          let overallcount_total = 0;
+          menu[0]['internalChildren'].forEach(element => {
+            let overallcount = responseData.filter(val => {
+              if ((val.menuData).toString() == (element.value).toString()) { return val }
+            })
+            element['overallcount'] = overallcount[0]['count'];
+            overallcount_total = overallcount_total + parseInt(overallcount[0]['count'])
+          });
+          menu[0]['overallcount_total'] = overallcount_total;
+        })
+        console.log(this.MenuItems);
+      }
+    }, err => {
+      if (this.overAll_serviceReqcount < 2) {
+        this.overAll_serviceReqcount = this.overAll_serviceReqcount + 1;
+        this.getoverrallCounts();
+      }
+      console.log(err);
+    }, () => {
+      console.log("Completed");
+    })
+
+  }
+
+
+  /**
+   * get Counts Based On Location
+   * with Current "Lat and Lng"
+   * call getoverrallCounts()
+   * call getoverrallrectangleCounts()
+   */
   CountsListArray = []
   serviceCallAlCount = null;
-  serviceReqcount = 0;
+  lat_ln_serviceReqcount = 0;
+  getCountBased_On_Location_unsubscribe = null;
   getCountBased_On_Location() {
+    this.getoverrallCounts();
+    this.getoverrallrectangleCounts();
+
     this.commonService.getCord().subscribe(cordnates => {
       this.NewObj.latitude = cordnates.data.lat;
       this.NewObj.longitude = cordnates.data.lng;
@@ -1622,22 +1751,23 @@ export class AppComponent {
         "latitude": this.NewObj.latitude,
         "longitude": this.NewObj.longitude
       }
-      this.dataService.getCountDataES(tempObj).subscribe(res => {
-        this.serviceReqcount = 0;
-        if(res && res['data'].length){
+      this.getCountBased_On_Location_unsubscribe ? this.getCountBased_On_Location_unsubscribe.unsubscribe() : null;
+      this.getCountBased_On_Location_unsubscribe = this.dataService.getCountDataES(tempObj).subscribe(res => {
+        this.lat_ln_serviceReqcount = 0;
+        if (res && res['data'].length) {
           this.CountsListArray = res['data'];
           this.MenuItems.forEach(menu => {
             menu[0]['internalChildren'].forEach(element => {
               let count = this.CountsListArray.filter(val => {
-                if (val.menuData == element.value) { return val }
+                if ((val.menuData).toString() == (element.value).toString()) { return val }
               })
               element['count'] = count[0]['count'];
             });
           })
         }
       }, err => {
-        if (this.serviceReqcount < 2) {
-          this.serviceReqcount = this.serviceReqcount + 1;
+        if (this.lat_ln_serviceReqcount < 2) {
+          this.lat_ln_serviceReqcount = this.lat_ln_serviceReqcount + 1;
           this.getCountBased_On_Location();
         }
         console.log(err);
@@ -1645,8 +1775,6 @@ export class AppComponent {
         console.log("Completed");
       })
     }
-
-    
 
   }
   //End Ra Custom Code
@@ -1675,7 +1803,7 @@ export class FilterPipe {
           subcategory: val['subcategory'] || '',
           count: 0
         });
-      }else{
+      } else {
         // finalData.forEach(v=>{
         //   if (v.menuId == val.menuId){
         //     v['count'] = v['count'] + 1;
@@ -1696,17 +1824,17 @@ export class InputsearchPipe {
 
   transform(value: any, args?: any): any {
 
-    var finalData = [];    
-    if (args !=''){
+    var finalData = [];
+    if (args != '') {
       finalData = value.filter(val => {
-        if ((val.name.toLowerCase()).indexOf(args.toLowerCase()) != -1 || 
-            (val.subcategory.toLowerCase()).indexOf(args.toLowerCase()) != -1) {
+        if ((val.name.toLowerCase()).indexOf(args.toLowerCase()) != -1 ||
+          (val.subcategory.toLowerCase()).indexOf(args.toLowerCase()) != -1) {
           return true;
         } else {
           return false;
         }
       })
-    }else{
+    } else {
       finalData = value;
     }
     return finalData;
