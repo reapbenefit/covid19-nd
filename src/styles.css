@@ -1533,7 +1533,6 @@ ul.webview-ra li:first-child {
 .static-point-section ul li.yourview-order-3 {order: 3}
 
 .animatebox{
-    order: 1;
     animation-name: animate;
     animation-duration: 2s;
     animation-iteration-count: infinite;
