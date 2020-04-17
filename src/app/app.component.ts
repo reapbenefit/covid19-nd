@@ -784,50 +784,36 @@ export class AppComponent {
 
   ngOnInit() {
 
-    this.subscription = this.commonService.getZoom().subscribe(message => {
-      // this.getDashboardData(this.dataService.catType);
-      this.NewObj.level = this.dataService.zoom;
-      this.CollectionsData(this.NewObj);
-      setTimeout(() => {
-        this.getCountBased_On_Location();
-      }, 10);
-    });
+    // Find Device 
+    this.epicFunction();
+
+    /**
+     * Get New coord's
+     */
     this.subscriptionWithCord = this.commonService.getCord().subscribe(cordnates => {
+      this.NewObj.level = this.dataService.zoom;
       this.NewObj.latitude = cordnates.data.lat;
       this.NewObj.longitude = cordnates.data.lng;
       this.CollectionsData(this.NewObj);
-      setTimeout(() => {
-        this.getCountBased_On_Location();
-      }, 10);
-    });
+    }, err => {
+      console.log(err);
+    }, () => {
+      this.getCountBased_On_Location();
+    })
 
-    // Find Device 
-    this.epicFunction();
-    // this.Wards = ward;
+    /**
+     * 1.) Get Cities service call
+     * 2.) Get getMenuList call
+     */
     this.Wards.sort(this.dynamicSort("name"));
     let obj = {
       "cityId": this.SelectedCity
     }
-
-
-    forkJoin([this.dataService.cityDetails(), this.dataService.getMenuList(obj)]).subscribe(res=>{
-      if (res[0] && res[0]['data'] ){
+    forkJoin([this.dataService.cityDetails(), this.dataService.getMenuList(obj)]).subscribe(res => {
+      if (res[0] && res[0]['data']) {
         var tempCityData: any = res[0];
         this.cities = tempCityData.data;
         this.CitiesList = JSON.stringify(tempCityData.data);
-        // this.CitySelected = this.cities[0];
-        // this.dataService.SelectedCity = this.cities[0].id;
-        // this.dataService.SelectCityID = this.cities[0].id;
-        // this.dataService.SelectedCityLat = this.cities[0].lat;
-        // this.dataService.SelectedCityLng = this.cities[0].lng;
-        // this.showMenuItems = true;
-        // this.Wards = [];
-        // if (this.CitySelected != undefined) {
-        //   this.dataService.wardDetails({ "cityId": this.CitySelected.id }).subscribe(data => {
-        //     var tempWardData: any = data;
-        //     this.Wards = tempWardData.data;
-        //   });
-        // }
       }
       if (res[1] && res[1]['data']) {
         var TempMenuData: any = res[1];
@@ -838,13 +824,11 @@ export class AppComponent {
         });
         this.MenuData = temp;
         this.MenuItems = this.getMenuJSON(this.MenuData);
-      }      
-      
-    },err=>{
+      }
+    }, err => {
       console.log(err);
-    },()=>{
-      console.log(this.cities);
-        this.yourCurrentLocation();
+    }, () => {
+      this.yourCurrentLocation();
     })
 
     // this.dataService.AQMdata(obj).subscribe(data => {
@@ -1304,7 +1288,7 @@ export class AppComponent {
     }, 1000)
   }
 
-  
+
   yourCurrentLocation() {
     // // setDefault select
 
@@ -1312,20 +1296,18 @@ export class AppComponent {
     //   navigator.geolocation.getCurrentPosition(position => {
     //     this.dataService.SelectedCityLat = position.coords.latitude;
     //     this.dataService.SelectedCityLng = position.coords.longitude;
-    //     this.SelectCity({
-    //       "value": {
-    //         "cityName": "Your Location Location",
-    //         "lat": this.dataService.SelectedCityLat,
-    //         "lng": this.dataService.SelectedCityLng
-    //       }
-    //     });
-    //     this.searchLocation = true;
-    //     this.defaultSelectTrigger();
+    //     // this.SelectCity({
+    //     //   "value": {
+    //     //     "cityName": "Your Location Location",
+    //     //     "lat": this.dataService.SelectedCityLat,
+    //     //     "lng": this.dataService.SelectedCityLng
+    //     //   }
+    //     // });
     //     console.log(this.dataService.SelectedCityLat);
     //     console.log(this.dataService.SelectedCityLng);
     //   });
     // }
-    
+
     this.SelectCity({
       "value": {
         "id": "1",
@@ -1334,10 +1316,10 @@ export class AppComponent {
         "lng": "77.5890556"
       }
     });
-    setTimeout(()=>{
+    setTimeout(() => {
       console.log(this.cities);
       this.CitySelected = this.cities[0];
-    },10)
+    }, 10)
 
   }
   singleselect(child, items) {
@@ -1365,6 +1347,7 @@ export class AppComponent {
     });
     this.TreeMenuItemsSelect([], items)
   }
+
   /**
    * Get count of subcategories count 
    * @param items 
@@ -1387,7 +1370,6 @@ export class AppComponent {
       });
     });
     this.NewObj['menuData'] = [];
-
   }
 
   /**
@@ -1508,23 +1490,6 @@ export class AppComponent {
     })
   }
 
-  homeDirectSingle(child, items) {
-    this.resetAllSelection();
-    this.defaultpage = 'LocalData';
-    this.searchLocation = false;
-
-    setTimeout(() => {
-      child.internalChecked = !child.internalChecked;
-      let temp = [];
-      items[0] && items[0]['internalChildren'] && items[0]['internalChildren'].forEach(element => {
-        if (element.internalChecked == true) {
-          temp.push(element.value);
-        }
-      });
-      this.TreeMenuItemsSelect(temp, items)
-    }, 500)
-  }
-
   /**
    * On Lick Categories on Mobile view -- Home Page
    * @param value 
@@ -1616,10 +1581,9 @@ export class AppComponent {
   getoverrallrectangleCounts_unsubscribe = null;
   getoverrallrectangleCountData = [];
   getoverrallrectangleCounts() {
-    console.log("one");
     let tempData = [];
     this.MenuItems && this.MenuItems.map((items) => {
-      if (items[0].value == '120' || items[0].value == '101'){
+      if (items[0].value == '120' || items[0].value == '101') {
         items[0] && items[0]['internalChildren'].forEach(element => {
           tempData.push(element.value)
         });
@@ -1638,6 +1602,7 @@ export class AppComponent {
       "latitude": this.dataService.bottomRight.lat,
       "longitude": this.dataService.bottomRight.lng
     }
+    console.log(tempObj);
     this.getoverrallrectangleCounts_unsubscribe ? this.getoverrallrectangleCounts_unsubscribe.unsubscribe() : null;
     this.getoverrallrectangleCounts_unsubscribe = this.dataService.getCategoryImpactsDataES(tempObj).subscribe(res => {
       console.log(res['data']);
@@ -1650,7 +1615,7 @@ export class AppComponent {
             let overall_rec_count = responseData.filter(val => {
               if ((val.menuData).toString() == (element.value).toString()) { return val }
             })
-            if (overall_rec_count[0]){
+            if (overall_rec_count[0]) {
               element['overall_rec_count'] = overall_rec_count[0]['impact'];
               overall_rec_count_total = overall_rec_count_total + parseInt(overall_rec_count[0]['impact'])
             }
@@ -1737,7 +1702,9 @@ export class AppComponent {
   getCountBased_On_Location_unsubscribe = null;
   getCountBased_On_Location() {
     this.getoverrallCounts();
-    this.getoverrallrectangleCounts();
+    setTimeout(() => { // Time to get Boundiries , dut to map loading slow
+      this.getoverrallrectangleCounts();
+    }, 1000);
 
     this.commonService.getCord().subscribe(cordnates => {
       this.NewObj.latitude = cordnates.data.lat;
@@ -1787,7 +1754,6 @@ export class AppComponent {
 
   }
   //End Ra Custom Code
-
 
 }
 
