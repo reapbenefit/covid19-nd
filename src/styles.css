@@ -1747,6 +1747,7 @@ span.sub_cat {
     flex-direction: row;
     display: -webkit-box; */
   padding: 10px 25px 0px 25px;
+  border-bottom: 1px solid #f2f2f2;
 }
 
 .result-g-box .lat-details-g p {
