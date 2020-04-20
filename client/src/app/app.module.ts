@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,6 +20,7 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
 import { from } from 'rxjs';
 import { FilterPipe } from './app.component';
 import { InputsearchPipe } from './app.component';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,9 +47,13 @@ import { InputsearchPipe } from './app.component';
       libraries: ['geometry', 'places'],
       apiKey: environment.maps_api_key
     }),
-    DeviceDetectorModule.forRoot()
+    DeviceDetectorModule.forRoot(),
+    KeycloakAngularModule,
   ],
-  providers: [CommonService, GoogleAnalyticsService],
+  providers: [
+    CommonService, 
+    GoogleAnalyticsService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

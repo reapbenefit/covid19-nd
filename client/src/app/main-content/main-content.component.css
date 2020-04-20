@@ -1,0 +1,80 @@
+.center{
+    height: calc(100vh - 70px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid lightgray;
+    box-shadow: 1px 2px lightgrey;
+    overflow: hidden;
+}
+.graph{
+    height: calc(100vh - 310px);
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;    
+    border: 1px solid lightgray;
+    border-top: hidden;
+    box-shadow: 1px 2px lightgrey;
+    overflow: hidden;
+}
+.Showgraph{
+    width: 100%;
+    position: absolute;
+    /* top: calc(100vh - 300px); */
+    background: white;
+    bottom:0px;
+    z-index: 100;
+}
+@media only screen and (max-width: 450px) {
+  .Showgraph {
+    width: 94%;
+  }
+}
+.green{
+  background-color: #88c03e !important;
+}
+
+.closeBorder{
+  border: 1px solid lightgray;
+  border-bottom: hidden;
+}
+
+/* Info Window */
+.infoWindow{
+  border: 1px solid lightgray;
+  background-color: white;
+  min-height: 300px;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute;
+  bottom: 0;    
+  z-index: 999;
+  width: 100%;
+  margin: 0;
+  padding: 0.5rem;
+}
+.infoClose{
+    display: flex;
+    margin-bottom: 8px;
+    justify-content: flex-end;
+    border-bottom: 1px solid lightgray;
+}
+.displayCenter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.issues .table {
+  margin: 0;
+}
+.issues .table td{
+  padding: 0;
+}
+.governance .table td{
+  padding: 0;
+  padding-left: 1rem;
+}
+.agencies .table td{
+  padding: 0;
+}

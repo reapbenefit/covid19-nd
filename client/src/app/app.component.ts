@@ -1,4 +1,4 @@
-import { Component, NgZone, ViewChild, ElementRef, HostListener, Pipe } from '@angular/core';
+import { Component, NgZone, ViewChild, ElementRef, HostListener, Pipe, ApplicationRef } from '@angular/core';
 import { DataService } from './services/data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 // import { } from 'googlemaps';
@@ -9,11 +9,9 @@ import { CommonService } from './services/common.service';
 import { ward } from './services/wards';
 import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
 import { GoogleAnalyticsService } from './services/google-analytics.service';
-
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 declare const google: any;
-
 import { DeviceDetectorService } from 'ngx-device-detector';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -30,7 +28,7 @@ export class AppComponent {
   collapseGooglesearch = false;
   defaultpage = 'Home';
   detail_legends_collapse = true; // true means Collapse
-  legends_details = false; // false --> Details
+  legends_details = true; // false --> Details
   filterdetailsvalue = '';
 
 
@@ -140,6 +138,7 @@ export class AppComponent {
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private commonService: CommonService,
+    private KeycloakService: KeycloakService,
     private googleAnalyticsService: GoogleAnalyticsService) {
   }
 
@@ -783,6 +782,9 @@ export class AppComponent {
   private CitiesList;
 
   ngOnInit() {
+
+    // Login User
+      this.LoginUserInfo();
 
     // Find Device 
     this.epicFunction();
@@ -1704,13 +1706,12 @@ export class AppComponent {
     this.getoverrallCounts();
     setTimeout(() => { // Time to get Boundiries , dut to map loading slow
       this.getoverrallrectangleCounts();
-    }, 1000);
+    }, 500);
 
     this.commonService.getCord().subscribe(cordnates => {
       this.NewObj.latitude = cordnates.data.lat;
       this.NewObj.longitude = cordnates.data.lng;
     });
-
     let tempData = [];
     this.MenuItems && this.MenuItems.map((items) => {
       items[0] && items[0]['internalChildren'].forEach(element => {
@@ -1727,9 +1728,11 @@ export class AppComponent {
         "latitude": this.NewObj.latitude,
         "longitude": this.NewObj.longitude
       }
+      console.log(tempObj);
       this.getCountBased_On_Location_unsubscribe ? this.getCountBased_On_Location_unsubscribe.unsubscribe() : null;
       this.getCountBased_On_Location_unsubscribe = this.dataService.getCountDataES(tempObj).subscribe(res => {
         this.lat_ln_serviceReqcount = 0;
+        console.log(res);
         if (res && res['data'].length) {
           this.CountsListArray = res['data'];
           this.MenuItems.forEach(menu => {
@@ -1754,6 +1757,32 @@ export class AppComponent {
 
   }
   //End Ra Custom Code
+
+  userName = '';
+  userRole = [];
+  LoginUserInfo() {
+    this.dataService.getUserInfo().subscribe(res=>{
+      console.log(res);
+      if (res['data'] && res['data']){
+        this.userName = res['data']['username'];
+        this.userRole = res['data']['userrole'] && res['data']['userrole']['roles'] || [];
+        if (window.localStorage.getItem('page')){
+          window.localStorage.setItem('page', this.defaultpage);
+        }
+      }
+    },(err)=>{
+      console.log(err);
+    },()=>{
+      console.log("User Info!")
+    })
+  }
+  userLogin(){
+    window.localStorage.setItem('page', this.defaultpage);
+    window.location.replace('/home');
+  }
+  LogoutMe(){
+    window.location.replace('/logout');
+  }
 
 }
 
@@ -1802,8 +1831,11 @@ export class InputsearchPipe {
     var finalData = [];
     if (args != '') {
       finalData = value.filter(val => {
-        if ((val.name.toLowerCase()).indexOf(args.toLowerCase()) != -1 ||
-          (val.subcategory.toLowerCase()).indexOf(args.toLowerCase()) != -1) {
+        if ((val['name'] != undefined ? val['name'].toLowerCase() : '').indexOf(args.toLowerCase()) != -1 ||
+          ((val['subcategory'] != undefined ? val['subcategory'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
+          (val['category'] != undefined ? val['category'].toLowerCase() : '').indexOf(args.toLowerCase()) != -1 ||
+          (val['address'] != undefined ? val['address'].toLowerCase() : '').indexOf(args.toLowerCase()) != -1
+        ) {
           return true;
         } else {
           return false;

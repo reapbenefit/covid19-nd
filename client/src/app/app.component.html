@@ -181,9 +181,8 @@
                 [ngClass]="{'active': defaultpage == 'LocalData'}">Show Map</a>
               <a target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">Local Schemes</a>
               <!-- <a target="_blank" href="http://testnd.solveninja.org/assets/html/NDData.html" >Local Data</a> -->
-              
               <a href="JavaScript:void(0)">
-                Contribute
+                <span class="headerlink">Contribute <span class="arrowme fa fa-angle-down"></span></span>
                 <div class="onhover">
                   <a target="_blank"
                     href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba">Analytics</a>
@@ -193,6 +192,13 @@
                   <a href="JavaScript:void(0)" (click)="NeighbourhoodData()">Social distancing </a>
                   <a href="JavaScript:void(0)" (click)="NeighbourhoodAnalytics()">Help Those In Need </a>
                   <a href="JavaScript:void(0)" (click)="toVolunteer()">Volunteer </a>
+                </div>
+              </a>
+              <a href="JavaScript:Void(0)" *ngIf="!userName" (click)="userLogin()">Login</a>
+              <a href="JavaScript:Void(0)" *ngIf="userName">
+                <span class="headerlink Loged-inuser-web">Hi {{userName}}<span class="arrowme fa fa-angle-down"></span></span>
+                <div class="onhover" style="width: 144px !important;">
+                  <a href="JavaScript:void(0)" (click)="LogoutMe()">Logout </a>
                 </div>
               </a>
               <!-- <a href="JavaScript:void(0)">
@@ -310,8 +316,8 @@
                 </ul>
               </div>
               <div class="actiob-mode-dl">
-                <a [ngClass]="{'active': !legends_details}" href="JavaScript:void(0)" (click)="legends_details = false">Details</a>
                 <a [ngClass]="{'active': legends_details}" href="JavaScript:void(0)" (click)="legends_details = true">Legends</a>
+                <a [ngClass]="{'active': !legends_details}" href="JavaScript:void(0)" (click)="legends_details = false">Details</a>
               </div>
               <div class="filter-g" *ngIf="!legends_details && mapData?.length">
                 <input type="text" placeholder="Search place" [(ngModel)]="filterdetailsvalue">
@@ -322,7 +328,7 @@
                     <ul class="webview-ra">
                       <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
                         <ng-template ngFor let-items [ngForOf]="menuItems[0]['internalChildren']">
-                          <li class="box " *ngIf="items.internalChecked">
+                          <li class="box " *ngIf="items.internalChecked && items.count !=0 && items.count != undefined">
                             <h5><img [src]="items.icon" onerror="this.onerror=null; this.src='./assets/Icons/reapbenefit.jpg'"
                               title="{{items.subcategory}}">{{items.text}}</h5>
                             <div class="jest-count">{{(items.count !=0 && items.count != undefined)? '('+items.count+')': ''}}</div>
@@ -342,9 +348,16 @@
                       <div class="lat-details-g animated fadeInDown">
                         <h5 (click)="zoomToPlace(item)"><img class="title_icons" [src]="item.icon" alt="">{{item.name}}</h5>
                         <p>{{item.address}}</p>
-                        <!-- <span *ngIf="item?.number" class="cat">{{item.number}}</span> -->
-                        <!-- <span class="cat" *ngIf="item?.category">{{item.category}} &nbsp; / &nbsp;</span><span
-                                              class="sub_cat" *ngIf="item?.subcategory">{{item.subcategory}}</span> -->
+
+                        <div class="moredetails">
+                          <p *ngIf="item?.cityName"><b>City :</b> {{item?.cityName}}</p>
+                          <p *ngIf="item?.wardName"><b>Ward :</b> {{item?.wardName}}</p>
+                          <p *ngIf="item?.category"><b>Category :</b> {{item?.category}}</p>
+                          <p *ngIf="item?.subcategory"><b>Subcategory :</b> {{item?.subcategory}}</p>
+                          <p *ngIf="item?.lat"><b>Latitude :</b> {{item?.lat}}</p>
+                          <p *ngIf="item?.lng"><b>Longitude :</b> {{item?.lng}}</p>
+                        </div>
+
                       </div>
                     </div>
                     <div class="result-g-box">
@@ -675,9 +688,8 @@
             </div>
 
             <div class="actiob-mode-dl">
+              <a [ngClass]="{'active': legends_details}" href="JavaScript:void(0)" (click)="legends_details = true">Legends</a>
               <a [ngClass]="{'active': !legends_details}" href="JavaScript:void(0)" (click)="legends_details = false">Details</a>
-              <a [ngClass]="{'active': legends_details}" href="JavaScript:void(0)"
-                (click)="legends_details = true">Legends</a>
             </div>
             <div class="filter-g" *ngIf="!legends_details && mapData?.length">
               <input type="text" placeholder="Search place" [(ngModel)]="filterdetailsvalue">
@@ -688,7 +700,7 @@
                   <ul class="webview-ra">
                     <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
                       <ng-template ngFor let-items [ngForOf]="menuItems[0]['internalChildren']">
-                        <li class="box" *ngIf="items.internalChecked">
+                        <li class="box" *ngIf="items.internalChecked && items.count !=0 && items.count != undefined">
                           <h5><img [src]="items.icon" onerror="this.onerror=null; this.src='./assets/Icons/reapbenefit.jpg'"
                               title="{{items.subcategory}}">{{items.text}}</h5>
                           <div class="jest-count">{{(items.count !=0 && items.count != undefined)? '('+items.count+')': ''}}</div>
@@ -707,9 +719,15 @@
                     <div class="lat-details-g animated fadeInDown">
                       <h5 (click)="zoomToPlace(item)"><img class="title_icons" [src]="item.icon" alt="">{{item.name}}</h5>
                       <p>{{item.address}}</p>
-                      <!-- <span *ngIf="item?.number" class="cat">{{item.number}}</span> -->
-                      <!-- <span class="cat" *ngIf="item?.category">{{item.category}} &nbsp; / &nbsp;</span><span
-                        class="sub_cat" *ngIf="item?.subcategory">{{item.subcategory}}</span> -->
+
+                      <div class="moredetails">
+                        <p *ngIf="item?.cityName"><b>City :</b> {{item?.cityName}}</p>
+                        <p *ngIf="item?.wardName"><b>Ward :</b> {{item?.wardName}}</p>
+                        <p *ngIf="item?.category"><b>Category :</b> {{item?.category}}</p>
+                        <p *ngIf="item?.subcategory"><b>Subcategory :</b> {{item?.subcategory}}</p>
+                        <p *ngIf="item?.lat"><b>Latitude :</b> {{item?.lat}}</p>
+                        <p *ngIf="item?.lng"><b>Longitude :</b> {{item?.lng}}</p>
+                      </div>
                     </div>
                   </div>
                   <div class="result-g-box">
@@ -858,11 +876,22 @@
   <div class="ra-custom-popup" *ngIf="menupopup">
     <div class="animated bounceInUp menu-popups  menu-active">
       <div class="menu-title">
-        <a href="#" style="top: -9px;right: -4px;" class="close-menu" (click)="menupopup = false"><i
-            class="fa fa-times-circle"></i></a>
+        <h1 *ngIf="userName" class="popup-user-images"><span class="fa fa-user-circle-o"></span>
+          <p class="color-highlight" style="
+            margin-left: 9px;
+            display: inline-block;
+            position: relative;
+            top: -11px;
+            text-transform: capitalize;
+            font-size: 16px !important;">Hi {{userName}} </p>
+        </h1>
+        <a href="#" class="close-menu" [ngStyle]="{'top': userName? '10px' : '-14px', 'right': userName? '10px' :' -6px' }" (click)="menupopup = false"><i class="fa fa-times-circle"></i></a>
       </div>
       <div class="content">
         <ul class="link-list">
+          <li (click)="userLogin()" *ngIf="!userName">
+            <a style="color: #38a669">Login <i class="fa fa-angle-right"></i></a>
+          </li>
           <li><a style="color: #38a669" href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba" target="_blank">
                 Analytics<i
                 class="fa fa-angle-right"></i> </a>
@@ -877,6 +906,9 @@
                 class="fa fa-angle-right"></i> </a>
           </li>
           <li><a style="color: #38a669" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>
+          <li *ngIf="userName" (click)="LogoutMe()">
+            <a style="color: #38a669">Logout <i class="fa fa-angle-right"></i></a>
+          </li>
         </ul>
         <div class="clear"></div>
       </div>

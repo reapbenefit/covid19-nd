@@ -202,14 +202,14 @@ export class MapsComponentComponent implements OnInit {
   }
 
   boundsChange(bounds: LatLngBounds) {
-    console.log(this.dataService.topLeft);
+    // console.log(this.dataService.topLeft);
     // The Elastic query likes the rectangle to be specified with top-left and
     // bottom-right, hence converting NorthEast/SouthWest to the same.
     let topLeft = {lat: bounds.getNorthEast().lat(), lng: bounds.getSouthWest().lng()}
     let bottomRight = {lat: bounds.getSouthWest().lat(), lng: bounds.getNorthEast().lng()}
     this.dataService.topLeft = topLeft;
     this.dataService.bottomRight = bottomRight;
-    console.log(this.dataService.topLeft);
+    // console.log(this.dataService.topLeft);
   }
 
   zoomChange(event) {
