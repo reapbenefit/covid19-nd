@@ -1,0 +1,17 @@
+agm-map {
+  height: 300px;
+}
+.searchInput{
+      z-index: 1;
+    top: 0;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    left: 35%;
+    width: 400px;
+}
+
+.fa-flag{
+  color: #dc3545;
+  font-size: 16px;
+}
