@@ -1927,9 +1927,7 @@ ul.webview-ra li:first-child {
   display: block;
 }
 .moredetails {
-  margin-top: 5px;
-  border-top: 1px dotted #f2f2f2;
-  padding-top: 10px;
+  
 }
 .moredetails b {
   font-weight: 500;
@@ -1966,6 +1964,22 @@ h1.popup-user-images {
     transform: rotate(180deg);
     transition: all .3s ease;
 }
+
+/* Map Popup Box */
+.agm-info-window-content table tbody tr td {
+    /* border: 1px solid #dfdfdf; */
+    padding: 8px 5px;
+    vertical-align: top;
+}
+.agm-info-window-content table tbody tr td:last-child {
+    max-width: 400px;
+}
+.agm-info-window-content table tbody tr td:first-child {
+    text-align: right;
+}
+/* end Map Popup Box */
+
+
 /* End Google Search */
 
 /* End Custom Code Ramesh */

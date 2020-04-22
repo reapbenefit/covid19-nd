@@ -12,6 +12,7 @@ export class MainContentComponent implements OnInit {
 
   @ViewChild('bar') bar: ElementRef;
   @ViewChild('pie') pie: ElementRef;
+  @ViewChild('mapcomref') mapcomref;
 
   @Input() mapData;
   @Input() graphData;

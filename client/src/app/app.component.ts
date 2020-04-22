@@ -784,7 +784,7 @@ export class AppComponent {
   ngOnInit() {
 
     // Login User
-      this.LoginUserInfo();
+    this.LoginUserInfo();
 
     // Find Device 
     this.epicFunction();
@@ -1570,8 +1570,12 @@ export class AppComponent {
   /**
    * Zoom To selected Ocation place 
    */
-  zoomToPlace(item) {
 
+  @ViewChild('mapref') mapref;
+  zoomToPlace(item, i) {
+    // if (this.mapref && this.mapref.mapcomref) {
+    //   this.mapref.mapcomref.select_marker(item);      
+    // }
   }
 
   /**
@@ -1761,26 +1765,26 @@ export class AppComponent {
   userName = '';
   userRole = [];
   LoginUserInfo() {
-    this.dataService.getUserInfo().subscribe(res=>{
+    this.dataService.getUserInfo().subscribe(res => {
       console.log(res);
-      if (res['data'] && res['data']){
+      if (res['data'] && res['data']) {
         this.userName = res['data']['username'];
         this.userRole = res['data']['userrole'] && res['data']['userrole']['roles'] || [];
-        if (window.localStorage.getItem('page')){
+        if (window.localStorage.getItem('page')) {
           window.localStorage.setItem('page', this.defaultpage);
         }
       }
-    },(err)=>{
+    }, (err) => {
       console.log(err);
-    },()=>{
+    }, () => {
       console.log("User Info!")
     })
   }
-  userLogin(){
+  userLogin() {
     window.localStorage.setItem('page', this.defaultpage);
     window.location.replace('/home');
   }
-  LogoutMe(){
+  LogoutMe() {
     window.location.replace('/logout');
   }
 
@@ -1830,14 +1834,18 @@ export class InputsearchPipe {
 
     var finalData = [];
     if (args != '') {
-      finalData = value.filter(val => {
+      finalData = value.filter((val, index) => {
         if ((val['name'] != undefined ? val['name'].toLowerCase() : '').indexOf(args.toLowerCase()) != -1 ||
+          ((val['address'] != undefined ? val['address'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
+          ((val['category'] != undefined ? val['category'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
           ((val['subcategory'] != undefined ? val['subcategory'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
-          (val['category'] != undefined ? val['category'].toLowerCase() : '').indexOf(args.toLowerCase()) != -1 ||
-          (val['address'] != undefined ? val['address'].toLowerCase() : '').indexOf(args.toLowerCase()) != -1
+          ((val['cityName'] != undefined ? val['cityName'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
+          ((val['wardName'] != undefined ? val['wardName'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1
         ) {
+          val['index'] = index;
           return true;
         } else {
+          val['index'] = index;
           return false;
         }
       })

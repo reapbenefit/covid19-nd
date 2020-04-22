@@ -13,6 +13,7 @@ import geoJson from '../../assets/SampleGeoJson.json';
 export class MapsComponentComponent implements OnInit {
 
   @ViewChild('infoWindow') infoWindow: ElementRef
+  @ViewChild('gm') gmmm: ElementRef
 
   @Input() MapData;
   @Output() wardDetails = new EventEmitter();
@@ -93,6 +94,7 @@ export class MapsComponentComponent implements OnInit {
 
   public previous;
   select_marker(data) {
+    console.log(this.gmmm);
     if (this.previous_info_window == null)
       this.previous_info_window = data;
     else {
@@ -169,6 +171,7 @@ export class MapsComponentComponent implements OnInit {
   }
 
   mapClicked(event) {
+    
     this.lat = event.coords.lat;
     this.lng = event.coords.lng;
     let obj = {

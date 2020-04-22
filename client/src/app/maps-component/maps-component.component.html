@@ -1,5 +1,6 @@
 <!-- <agm-map #gm [latitude]="lat" [longitude]="lng" [usePanning]="true" [streetViewControl]="false" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="true" (mapClick)="mapClicked($event)" (centerChange)="centerChange($event)"> -->
-<agm-map #gm [latitude]="lat" [longitude]="lng" [usePanning]="true" [streetViewControl]="false" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="true" (mapClick)="mapClicked($event)" (centerChange)="centerChange($event)" (zoomChange)="zoomChange($event)" (boundsChange)="boundsChange($event)">
+<agm-map #gm [latitude]="lat" [longitude]="lng" [usePanning]="true" [streetViewControl]="false" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="true" 
+(mapClick)="mapClicked($event)" (centerChange)="centerChange($event)" (zoomChange)="zoomChange($event)" (boundsChange)="boundsChange($event)">
   <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m, i)" [latitude]="m.lat" [longitude]="m.lng"
     [label]="m.label" [markerDraggable]="m.draggable" (dragEnd)="markerDragEnd(m, $event)" [iconUrl]="m.icon" (markerClick)="select_marker(infoWindow)">
     <agm-info-window #infoWindow >
@@ -22,33 +23,37 @@
           </ul>
         </strong>
       </div>
-      <div *ngIf="locationDetails.ward_id != '' && locationDetails.ward_id != undefined"><strong>Ward ID:&nbsp;</strong><span>{{locationDetails.ward_id}}</span><br></div>
-      <div *ngIf="locationDetails.wardName != '' && locationDetails.wardName != undefined"><strong>Ward Name:&nbsp;</strong><span *ngIf="locationDetails.wardName != ''">{{locationDetails.wardName}}</span><span *ngIf="locationDetails.wardName == ''">NA</span></div>
-      <div *ngIf="locationDetails.name != '' && locationDetails.name != undefined"><strong>Name:&nbsp;</strong><span>{{locationDetails.name}}</span><br></div>
-      <div *ngIf="locationDetails.type != '' && locationDetails.type != undefined"><strong>Type:&nbsp;</strong><span>{{locationDetails.type}}</span><br></div>
-      <div *ngIf="locationDetails.streetName != '' && locationDetails.streetName != undefined"><strong>streetName:&nbsp;</strong><span>{{locationDetails.streetName}}</span> </div>
-      <div *ngIf="locationDetails.address != '' && locationDetails.address != undefined"><strong>Address:&nbsp;</strong><span>{{locationDetails.address}}</span><br></div>
-      <div *ngIf="locationDetails.contactNum != '' && locationDetails.contactNum != undefined"><strong>Contact:&nbsp;</strong><span>{{locationDetails.contactNum}}</span><br></div>
-      <div *ngIf="locationDetails.manager_name != '' && locationDetails.manager_name != undefined"><strong>Manager Name:&nbsp;</strong><span>{{locationDetails.manager_name}}</span><br></div>
-      <div *ngIf="locationDetails.facility_type != '' && locationDetails.facility_type != undefined"><strong>Facility Type:&nbsp;</strong><span>{{locationDetails.facility_type}}</span></div>
-      <div *ngIf="locationDetails.category != '' && locationDetails.category != undefined"><strong>Category:&nbsp;</strong><span>{{locationDetails.category}}</span> </div>
-      <div *ngIf="locationDetails.status != '' && locationDetails.status != undefined"><strong>Status:&nbsp;</strong><span>{{locationDetails.status}}</span> </div>
-      <div *ngIf="locationDetails.provider_website != '' && locationDetails.provider_website != undefined"><strong>Website:&nbsp;</strong><span>{{locationDetails.provider_website}}</span><br></div>
-      <div *ngIf="locationDetails.gents != '' && locationDetails.gents != undefined"><strong>Gents:&nbsp;</strong><span>{{locationDetails.gents}}</span> </div>
-      <div *ngIf="locationDetails.ladies != '' && locationDetails.ladies != undefined"><strong>Ladies:&nbsp;</strong><span>{{locationDetails.ladies}}</span></div>
-      <div *ngIf="locationDetails.zone != '' && locationDetails.zone != undefined"><strong>Zone:&nbsp;</strong><span>{{locationDetails.zone}}</span></div>
-      <div *ngIf="locationDetails.source != '' && locationDetails.source != undefined"><strong>Source:&nbsp;</strong><span>{{locationDetails.source}}</span></div>
-      <div *ngIf="locationDetails.constituency != '' && locationDetails.constituency != undefined"><strong>Constituency:&nbsp;</strong><span>{{locationDetails.constituency}}</span></div>
-      <div *ngIf="locationDetails.party != '' && locationDetails.party != undefined"><strong>Party:&nbsp;</strong><span>{{locationDetails.party}}</span></div>
-      <div *ngIf="locationDetails.cityName != '' && locationDetails.cityName != undefined"><strong>City Name:&nbsp;</strong><span>{{locationDetails.cityName}}</span></div>
-      <div *ngIf="locationDetails.email != '' && locationDetails.email != undefined"><strong>Email:&nbsp;</strong><span>{{locationDetails.email}}</span></div>
-      <div *ngIf="locationDetails.description != '' && locationDetails.description != undefined"><strong>Description:&nbsp;</strong><span>{{locationDetails.description}}</span></div>
-      <div *ngIf="locationDetails.campaignEnd != '' && locationDetails.campaignEnd != undefined"><strong>Campaign End:&nbsp;</strong><span>{{locationDetails.campaignEnd}}</span></div>
-      <div *ngIf="locationDetails.url != '' && locationDetails.url != undefined"><strong>URL:&nbsp;</strong><a (click)="openURL(locationDetails.url)" style="color: blue;cursor: pointer;">{{locationDetails.url}}</a></div>
-      <div *ngIf="locationDetails.DateOfCompliant != '' && locationDetails.DateOfCompliant != undefined"><strong>Date Of Compliant:&nbsp;</strong><span>{{locationDetails.DateOfCompliant}}</span></div>
-      <div *ngIf="locationDetails.complaintNumber != '' && locationDetails.complaintNumber != undefined"><strong>Complaint Number:&nbsp;</strong><span>{{locationDetails.complaintNumber}}</span></div>
-      <div *ngIf="locationDetails.NoOfLikes != '' && locationDetails.NoOfLikes != undefined"><strong>No Of Likes:&nbsp;</strong><span>{{locationDetails.NoOfLikes}}</span></div>
-      <div *ngIf="locationDetails.wards != '' && locationDetails.wards != undefined"><strong>Wards:&nbsp;</strong><span>{{locationDetails.wards}}</span></div>
+      <table>
+        <tbody>
+          <tr *ngIf="locationDetails.ward_id != '' && locationDetails.ward_id != undefined"><td><strong>Ward ID:&nbsp;</strong></td><td><span>{{locationDetails.ward_id}}</span></td></tr>
+          <tr *ngIf="locationDetails.wardName != '' && locationDetails.wardName != undefined"><td><strong>Ward Name:&nbsp;</strong></td><td><span *ngIf="locationDetails.wardName != ''">{{locationDetails.wardName}}</span><span *ngIf="locationDetails.wardName == ''">NA</span></td></tr>
+          <tr *ngIf="locationDetails.name != '' && locationDetails.name != undefined"><td><strong>Name:&nbsp;</strong></td><td><span>{{locationDetails.name}}</span></td></tr>
+          <tr *ngIf="locationDetails.type != '' && locationDetails.type != undefined"><td><strong>Type:&nbsp;</strong></td><td><span>{{locationDetails.type}}</span></td></tr>
+          <tr *ngIf="locationDetails.streetName != '' && locationDetails.streetName != undefined"><td><strong>streetName:&nbsp;</strong></td><td><span>{{locationDetails.streetName}}</span></td></tr>
+          <tr *ngIf="locationDetails.address != '' && locationDetails.address != undefined"><td><strong>Address:&nbsp;</strong></td><td><span>{{locationDetails.address}}</span></td></tr>
+          <tr *ngIf="locationDetails.contactNum != '' && locationDetails.contactNum != undefined"><td><strong>Contact:&nbsp;</strong></td><td><span>{{locationDetails.contactNum}}</span></td></tr>
+          <tr *ngIf="locationDetails.manager_name != '' && locationDetails.manager_name != undefined"><td><strong>Manager Name:&nbsp;</strong></td><td><span>{{locationDetails.manager_name}}</span></td></tr>
+          <tr *ngIf="locationDetails.facility_type != '' && locationDetails.facility_type != undefined"><td><strong>Facility Type:&nbsp;</strong></td><td><span>{{locationDetails.facility_type}}</span></td></tr>
+          <tr *ngIf="locationDetails.category != '' && locationDetails.category != undefined"><td><strong>Category:&nbsp;</strong></td><td><span>{{locationDetails.category}}</span></td> </tr>
+          <tr *ngIf="locationDetails.status != '' && locationDetails.status != undefined"><td><strong>Status:&nbsp;</strong></td><td><span>{{locationDetails.status}}</span></td> </tr>
+          <tr *ngIf="locationDetails.provider_website != '' && locationDetails.provider_website != undefined"><td><strong>Website:&nbsp;</strong></td><td><span>{{locationDetails.provider_website}}</span></td></tr>
+          <tr *ngIf="locationDetails.gents != '' && locationDetails.gents != undefined"><td><strong>Gents:&nbsp;</strong></td><td><span>{{locationDetails.gents}}</span></td> </tr>
+          <tr *ngIf="locationDetails.ladies != '' && locationDetails.ladies != undefined"><td><strong>Ladies:&nbsp;</strong></td><td><span>{{locationDetails.ladies}}</span></td></tr>
+          <tr *ngIf="locationDetails.zone != '' && locationDetails.zone != undefined"><td><strong>Zone:&nbsp;</strong></td><td><span>{{locationDetails.zone}}</span></td></tr>
+          <tr *ngIf="locationDetails.source != '' && locationDetails.source != undefined"><td><strong>Source:&nbsp;</strong></td><td><span>{{locationDetails.source}}</span></td></tr>
+          <tr *ngIf="locationDetails.constituency != '' && locationDetails.constituency != undefined"><td><strong>Constituency:&nbsp;</strong></td><td><span>{{locationDetails.constituency}}</span></td></tr>
+          <tr *ngIf="locationDetails.party != '' && locationDetails.party != undefined"><td><strong>Party:&nbsp;</strong></td><td><span>{{locationDetails.party}}</span></td></tr>
+          <tr *ngIf="locationDetails.cityName != '' && locationDetails.cityName != undefined"><td><strong>City Name:&nbsp;</strong></td><td><span>{{locationDetails.cityName}}</span></td></tr>
+          <tr *ngIf="locationDetails.email != '' && locationDetails.email != undefined"><td><strong>Email:&nbsp;</strong></td><td><span>{{locationDetails.email}}</span></td></tr>
+          <tr *ngIf="locationDetails.description != '' && locationDetails.description != undefined"><td><strong>Description:&nbsp;</strong></td><td><span>{{locationDetails.description}}</span></td></tr>
+          <tr *ngIf="locationDetails.campaignEnd != '' && locationDetails.campaignEnd != undefined"><td><strong>Campaign End:&nbsp;</strong></td><td><span>{{locationDetails.campaignEnd}}</span></td></tr>
+          <tr *ngIf="locationDetails.url != '' && locationDetails.url != undefined"><td><strong>URL:&nbsp;</strong></td><td><a (click)="openURL(locationDetails.url)" style="color: blue;cursor: pointer;">{{locationDetails.url}}</a></tr>
+          <tr *ngIf="locationDetails.DateOfCompliant != '' && locationDetails.DateOfCompliant != undefined"><td><strong>Date Of Compliant:&nbsp;</strong></td><td><span>{{locationDetails.DateOfCompliant}}</span></td></tr>
+          <tr *ngIf="locationDetails.complaintNumber != '' && locationDetails.complaintNumber != undefined"><td><strong>Complaint Number:&nbsp;</strong></td><td><span>{{locationDetails.complaintNumber}}</span></td></tr>
+          <tr *ngIf="locationDetails.NoOfLikes != '' && locationDetails.NoOfLikes != undefined"><td><strong>No Of Likes:&nbsp;</strong></td><td><span>{{locationDetails.NoOfLikes}}</span></td></tr>
+          <tr *ngIf="locationDetails.wards != '' && locationDetails.wards != undefined"><td><strong>Wards:&nbsp;</strong></td><td><span>{{locationDetails.wards}}</span></td></tr>
+      </tbody>
+      </table>
       <div class="row" *ngIf="zoom >= 16" style="margin: 0px;padding-top: 0.5rem;justify-content: flex-end;">
         <i  class="fa fa-flag" aria-hidden="true"  (click)="badData(m)"></i>
         <!-- <button (click)="badData(m)" class="btn btn-primary" style="color: #fff;background-color: #dc3545;border-color: #dc3545;height: 25px;font-size: 12px;">
