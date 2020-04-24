@@ -26,7 +26,6 @@ body {
   }
 }
 
-
 /* Custom Code Ramesh */
 html {
   height: 100%;
@@ -943,7 +942,7 @@ span.selection-cnt {
   border-top: 10px solid #00df8e;
   z-index: 99999 !important;
   -webkit-box-shadow: 0px 2px 2px #dfdfdf;
-          box-shadow: 0px 2px 2px #dfdfdf;
+  box-shadow: 0px 2px 2px #dfdfdf;
 }
 
 .ra-header .links a .onhover {
@@ -1966,9 +1965,9 @@ h1.popup-user-images {
 
 .ra-header .links a:hover .arrowme {
   -webkit-transform: rotate(180deg);
-          transform: rotate(180deg);
-  -webkit-transition: all .3s ease;
-  transition: all .3s ease;
+  transform: rotate(180deg);
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 /* Map Popup Box */
@@ -1988,20 +1987,19 @@ h1.popup-user-images {
 
 .plus-menu-ra {
   position: absolute;
-  bottom: 10px;
-  left: 5px;
+  bottom: 30px;
+  left: 16px;
   z-index: 96;
 }
 
 .plus-menu-ra .fa-plus-circle {
-  padding: 8px;
-  background: #fbb040;
-  border-radius: 50px;
-  font-size: 23px;
-  color: #fff;
-  cursor: pointer;
-  -webkit-box-shadow: 1px 1px 0px grey;
-          box-shadow: 1px 1px 0px grey;
+  padding: 9px 11px;
+    background: red;
+    border-radius: 50px;
+    font-size: 28px;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 1px 1px 0px grey;
 }
 
 .plus-menu-ra .menub-box {
@@ -2009,29 +2007,29 @@ h1.popup-user-images {
 }
 
 .plus-menu-ra .menub-box ul {
-  -webkit-transition: -webkit-clip-path .5s ease;
-  transition: -webkit-clip-path .5s ease;
-  transition: clip-path .5s ease;
-  transition: clip-path .5s ease, -webkit-clip-path .5s ease;
+  -webkit-transition: -webkit-clip-path 0.5s ease;
+  transition: -webkit-clip-path 0.5s ease;
+  transition: clip-path 0.5s ease;
+  transition: clip-path 0.5s ease, -webkit-clip-path 0.5s ease;
   border-radius: 5px;
   position: absolute;
   background: #fff;
-  bottom: 28px;
-  left: 14px;
+  bottom: 33px;
+  left: 1px;
   list-style: none;
   padding: 0px;
   width: 0px;
   visibility: hidden;
   -webkit-clip-path: circle(0px at bottom left);
-          clip-path: circle(0px at bottom left);
+  clip-path: circle(0px at bottom left);
   -webkit-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-          box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .plus-menu-ra .menub-box ul.active {
   -webkit-clip-path: circle(100%);
-          clip-path: circle(100%);
-  width: 200px !important;
+  clip-path: circle(100%);
+  width: 250px !important;
   visibility: visible !important;
 }
 
@@ -2065,11 +2063,11 @@ ul.web-big-button-icon-list {
   display: flex;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
   -webkit-box-pack: space-evenly;
-      -ms-flex-pack: space-evenly;
-          justify-content: space-evenly;
+  -ms-flex-pack: space-evenly;
+  justify-content: space-evenly;
 }
 
 ul.web-big-button-icon-list li {

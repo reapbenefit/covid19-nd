@@ -189,7 +189,11 @@
               <a href="JavaScript:void(0)">
                 <span class="headerlink">Contribute <span class="arrowme fa fa-angle-down"></span></span>
                 <div class="onhover">
-                  
+
+                  <li>
+                    <a  href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">Join Local Support Network</a>
+                  </li>
+
                   <a *ngIf="(activeRole.indexOf('NGOUser') !=-1 || activeRole.indexOf('NGOTeam') !=-1 || activeRole.indexOf('NGOAdmin') !=-1)"
                     target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">Local Schemes</a>
 
@@ -439,10 +443,15 @@
           </div>
         </div>
         <!-- End ra-custom-categories  -->
-        <div class="plus-menu-ra">
+        <div class="plus-menu-ra" style="left: 59px;bottom: 50px;">
           <span class="fa fa-plus-circle" (click)="leftaddmenu = !leftaddmenu"></span>
           <div class="menub-box">
             <ul [ngClass]="{'active': leftaddmenu}">
+              <li>
+                <a style="color: #38a669" target="_blank" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ">
+                  Join Local Support Network <i class="fa fa-angle-right"></i>
+                </a>
+              </li>
               <li>
                 <a style="color: #38a669" (click)="NeighbourhoodData()">Social distancing <i class="fa fa-angle-right"></i></a>
               </li>
@@ -859,6 +868,10 @@
           <span class="fa fa-plus-circle" (click)="leftaddmenu = !leftaddmenu"></span>
           <div class="menub-box">
               <ul [ngClass]="{'active': leftaddmenu}">
+                <li><a style="color: #38a669" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">
+                    Join Local Support Network
+                    <i class="fa fa-angle-right"></i> </a>
+                </li>
                 <li>
                   <a style="color: #38a669" (click)="NeighbourhoodData()">Social distancing <i class="fa fa-angle-right"></i></a>
                 </li>
@@ -1088,6 +1101,10 @@
             <a style="color: #38a669">Login <i class="fa fa-angle-right"></i></a>
           </li>
 
+          <li><a style="color: #38a669" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">Join Local Support Network
+              <i class="fa fa-angle-right"></i> </a>
+          </li>
+
           <li
             *ngIf="(activeRole.indexOf('NGOUser') !=-1 || activeRole.indexOf('NGOTeam') !=-1 || activeRole.indexOf('NGOAdmin') !=-1)">
             <a style="color: #38a669" href="https://discourse.solveninja.org/tag/local-schemes" target="_blank">
@@ -1100,6 +1117,7 @@
               target="_blank">
               Analytics<i class="fa fa-angle-right"></i> </a>
           </li>
+
           <li><a style="color: #38a669" href="https://covidselfcheck.app/" target="_blank">Self Assessment <i
                 class="fa fa-angle-right"></i> </a>
           </li>
