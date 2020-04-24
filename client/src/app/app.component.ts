@@ -1764,15 +1764,24 @@ export class AppComponent {
 
   userName = '';
   userRole = [];
+  activeRole = [];
   LoginUserInfo() {
     this.dataService.getUserInfo().subscribe(res => {
       console.log(res);
       if (res['data'] && res['data']) {
+        console.log(res['data']);
         this.userName = res['data']['username'];
         this.userRole = res['data']['userrole'] && res['data']['userrole']['roles'] || [];
         if (window.localStorage.getItem('page')) {
           window.localStorage.setItem('page', this.defaultpage);
         }
+        if (this.userRole.length) {
+          this.activeRole = this.userRole;
+        }
+        console.log({
+          userName: this.userName,
+          userRole: this.userRole
+        });
       }
     }, (err) => {
       console.log(err);
@@ -1786,6 +1795,9 @@ export class AppComponent {
   }
   LogoutMe() {
     window.location.replace('/logout');
+    this.userName = '';
+    this.userRole = [];
+    this.activeRole = [];
   }
 
 }
@@ -1853,6 +1865,50 @@ export class InputsearchPipe {
       finalData = value;
     }
     return finalData;
+  }
+}
+@Pipe({
+  name: 'ratotalcounts',
+  pure: false
+})
+export class RaTotalCounts {
+
+  transform(data: any, args?: any): any {
+
+    // console.log(data);
+    // console.log(args);
+
+    if (args == 'NGOTeam' && data && data.length) {
+      var count = 0;
+      for (var i = 0; i < data.length; i++) {
+        if (data[i][0].value == 101) {
+          data[i][0].internalChildren.forEach(val => {
+            if ([118, 136, 123, 132].indexOf(val.value) != -1) {
+              count = count + val.overall_rec_count;
+            }
+          })
+          break;
+        }
+      }
+      return count? `(${count.toString()})` : '';
+    } else if (args == 'NGOAdmin' && data && data.length) {
+      var count = 0;
+      for (var i = 0; i < data.length; i++) {
+        if (data[i][0].value == 101) {
+          // console.log(data[i][0]);
+          data[i][0].internalChildren.forEach(val => {
+            if ([135, 134].indexOf(val.value) != -1) {
+              count = count + val.overall_rec_count;
+            }
+          })
+          break;
+        }
+      }
+      return count? `(${count.toString()})`: '';
+    } else {
+      return '';
+    }
+
   }
 }
 

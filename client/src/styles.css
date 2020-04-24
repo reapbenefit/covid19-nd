@@ -26,6 +26,7 @@ body {
   }
 }
 
+
 /* Custom Code Ramesh */
 html {
   height: 100%;
@@ -718,7 +719,7 @@ body {
   color: #fff;
   font-weight: 500;
   margin: 0 10px;
-  font-size: 14px;
+  font-size: 13px;
   position: relative;
   margin-left: 0px !important;
 }
@@ -941,7 +942,8 @@ span.selection-cnt {
   /* border-top: 21px solid #f0f7f7; */
   border-top: 10px solid #00df8e;
   z-index: 99999 !important;
-  box-shadow: 0px 2px 2px #dfdfdf;
+  -webkit-box-shadow: 0px 2px 2px #dfdfdf;
+          box-shadow: 0px 2px 2px #dfdfdf;
 }
 
 .ra-header .links a .onhover {
@@ -1020,10 +1022,6 @@ span.selection-cnt {
     top: 195px !important;
     display: block !important;
   }
-
-
-  
-
 }
 
 /* Ra Custom Web */
@@ -1331,6 +1329,7 @@ h6.sub-title-home {
 }
 
 .result-g.collapseme {
+  display: none !important;
   width: 0px !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -1569,8 +1568,9 @@ h6.sub-title-home {
   padding: 8px 10px;
   border-radius: 50px;
   display: block;
-  text-align: center;
+  /* text-align: center; */
   margin-bottom: 10px;
+  padding-left: 20px;
 }
 
 h6.web-sub-title-home {
@@ -1926,22 +1926,23 @@ ul.webview-ra li:first-child {
 .result-g-box:first-child {
   display: block;
 }
-.moredetails {
-  
-}
+
 .moredetails b {
   font-weight: 500;
   margin-right: 3px;
 }
+
 .result-g-box p {
   color: #333 !important;
 }
+
 .ra-header .links a .headerlink {
   font-weight: 500;
   font-size: 14px;
   white-space: nowrap;
   margin-left: 10px;
 }
+
 .ra-header .links a .arrowme {
   font-weight: 600 !important;
   font-size: 17px;
@@ -1949,37 +1950,151 @@ ul.webview-ra li:first-child {
   position: relative;
   top: 2px;
 }
+
 span.Loged-inuser-web {
   position: relative;
 }
+
 h1.popup-user-images .fa-user-circle-o {
-    font-size: 50px;
-    color: #38a669;
+  font-size: 50px;
+  color: #38a669;
 }
 
 h1.popup-user-images {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
+
 .ra-header .links a:hover .arrowme {
-    transform: rotate(180deg);
-    transition: all .3s ease;
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+  -webkit-transition: all .3s ease;
+  transition: all .3s ease;
 }
 
 /* Map Popup Box */
 .agm-info-window-content table tbody tr td {
-    /* border: 1px solid #dfdfdf; */
-    padding: 8px 5px;
-    vertical-align: top;
+  /* border: 1px solid #dfdfdf; */
+  padding: 8px 5px;
+  vertical-align: top;
 }
+
 .agm-info-window-content table tbody tr td:last-child {
-    max-width: 400px;
+  max-width: 400px;
 }
+
 .agm-info-window-content table tbody tr td:first-child {
-    text-align: right;
+  text-align: right;
 }
+
+.plus-menu-ra {
+  position: absolute;
+  bottom: 10px;
+  left: 5px;
+  z-index: 96;
+}
+
+.plus-menu-ra .fa-plus-circle {
+  padding: 8px;
+  background: #fbb040;
+  border-radius: 50px;
+  font-size: 23px;
+  color: #fff;
+  cursor: pointer;
+  -webkit-box-shadow: 1px 1px 0px grey;
+          box-shadow: 1px 1px 0px grey;
+}
+
+.plus-menu-ra .menub-box {
+  position: relative;
+}
+
+.plus-menu-ra .menub-box ul {
+  -webkit-transition: -webkit-clip-path .5s ease;
+  transition: -webkit-clip-path .5s ease;
+  transition: clip-path .5s ease;
+  transition: clip-path .5s ease, -webkit-clip-path .5s ease;
+  border-radius: 5px;
+  position: absolute;
+  background: #fff;
+  bottom: 28px;
+  left: 14px;
+  list-style: none;
+  padding: 0px;
+  width: 0px;
+  visibility: hidden;
+  -webkit-clip-path: circle(0px at bottom left);
+          clip-path: circle(0px at bottom left);
+  -webkit-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.plus-menu-ra .menub-box ul.active {
+  -webkit-clip-path: circle(100%);
+          clip-path: circle(100%);
+  width: 200px !important;
+  visibility: visible !important;
+}
+
+.plus-menu-ra .menub-box ul li {
+  border-bottom: 1px solid #f2f2f2;
+  cursor: pointer;
+}
+
+.plus-menu-ra .menub-box ul li a {
+  display: block;
+  width: 100%;
+  position: relative;
+  padding: 9px 20px 9px 10px;
+}
+
+.plus-menu-ra .menub-box ul li a i {
+  position: absolute;
+  right: 12px;
+  top: 14px;
+}
+
+ul.web-big-button-icon-list {
+  list-style: none;
+  padding: 0px;
+  margin-bottom: 25px !important;
+  display: block;
+  width: 100%;
+  margin-left: auto !important;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+ul.web-big-button-icon-list li {
+  display: inline-block;
+  text-align: center;
+  margin: 0 9px;
+  cursor: pointer;
+}
+
+ul.web-big-button-icon-list li a {
+  display: block;
+}
+
+ul.web-big-button-icon-list li i {
+  display: block;
+  font-size: 42px;
+  color: #fbb040;
+}
+
+ul.web-big-button-icon-list li span {
+  font-weight: 500;
+  /* text-decoration: underline; */
+}
+
 /* end Map Popup Box */
-
-
 /* End Google Search */
-
 /* End Custom Code Ramesh */
+/*# sourceMappingURL=style.css.map */

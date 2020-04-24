@@ -179,21 +179,37 @@
                 [ngClass]="{'active': defaultpage == 'Home'}">Home</a>
               <a href="JavaScript:Void(0)" (click)="pageLocaLData()"
                 [ngClass]="{'active': defaultpage == 'LocalData'}">Show Map</a>
-              <a target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">Local Schemes</a>
-              <!-- <a target="_blank" href="http://testnd.solveninja.org/assets/html/NDData.html" >Local Data</a> -->
+
+              <a *ngIf="!(activeRole.indexOf('NGOUser') !=-1 || activeRole.indexOf('NGOTeam') !=-1 || activeRole.indexOf('NGOAdmin') !=-1)"
+                target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">Local Schemes</a>
+
+              <a *ngIf="(activeRole.indexOf('NGOAdmin') !=-1)" target="_blank"
+                href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba">Analytics</a>
+
               <a href="JavaScript:void(0)">
                 <span class="headerlink">Contribute <span class="arrowme fa fa-angle-down"></span></span>
                 <div class="onhover">
-                  <a target="_blank"
+                  
+                  <a *ngIf="(activeRole.indexOf('NGOUser') !=-1 || activeRole.indexOf('NGOTeam') !=-1 || activeRole.indexOf('NGOAdmin') !=-1)"
+                    target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">Local Schemes</a>
+
+                  <a *ngIf="!(activeRole.indexOf('NGOAdmin') !=-1)" target="_blank"
                     href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba">Analytics</a>
+
                   <a href="JavaScript:void(0)" (click)="NeighbourhoodMultilingulSelfAssessment()">Multilingual Self
                     Assessment</a>
                   <a target="_blank" href="https://covidselfcheck.app/">Self Assessment </a>
+
                   <a href="JavaScript:void(0)" (click)="NeighbourhoodData()">Social distancing </a>
-                  <a href="JavaScript:void(0)" (click)="NeighbourhoodAnalytics()">Help Those In Need </a>
-                  <a href="JavaScript:void(0)" (click)="toVolunteer()">Volunteer </a>
+
+                  <a 
+                    href="JavaScript:void(0)" (click)="NeighbourhoodAnalytics()">Help Those In Need </a>
+                  <a 
+                    href="JavaScript:void(0)" (click)="toVolunteer()">Volunteer </a>
+
                 </div>
               </a>
+
               <a href="JavaScript:Void(0)" *ngIf="!userName" (click)="userLogin()">Login</a>
               <a href="JavaScript:Void(0)" *ngIf="userName">
                 <span class="headerlink Loged-inuser-web">Hi {{userName}}<span
@@ -202,14 +218,6 @@
                   <a href="JavaScript:void(0)" (click)="LogoutMe()">Logout </a>
                 </div>
               </a>
-              <!-- <a href="JavaScript:void(0)">
-                About Us
-                <div class="onhover">
-                  <a href="JavaScript:void(0)" (click)="NeighbourhoodForum()">FAQ</a>
-                  <a href="JavaScript:void(0)" (click)="NeighbourhoodData()">Feedback </a>
-                </div>
-              </a> -->
-
 
             </div>
           </div>
@@ -224,9 +232,32 @@
           <div class="row" style="position: relative;top: -95px;">
             <div class="col-md-6" style="display: flex;flex-direction: column;margin: auto;">
               <div class="web-big-button" style="margin: auto;">
-                <h3 class="text-center" style="font-weight: 300 !important;margin-bottom: 20px;">Join Hands With Us</h3>
-                <a href="JavaScript:void(0)" (click)="homepageButton2()">Help those in need</a>
-                <a href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where you can get help?</a>
+                <h3 class="text-center" style="font-weight: 300 !important;margin-bottom: 20px;margin-left: -10px;">Join Hands With Us</h3>
+
+                <ul class="web-big-button-icon-list">
+                  <li>
+                    <div (click)="NeighbourhoodData()">
+                      <i class="fa fa-home"></i> 
+                      <span>Social distancing </span>
+                    </div>
+                  </li>
+                  <li>
+                    <div (click)="NeighbourhoodAnalytics()">
+                      <i class="fa fa-handshake-o"></i> 
+                      <span>Refer a Needy</span>
+                    </div>
+                  </li>
+                  <li>
+                    <div (click)="toVolunteer()">
+                      <i class="fa fa-hand-paper-o"></i> 
+                      <span>Volunteer </span>
+                    </div>
+                  </li>
+                </ul>
+
+                <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton2()">Help those in need</a>
+                <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where you can get help?</a>
+
               </div>
             </div>
             <div class="col-md-6">
@@ -312,19 +343,35 @@
               <div class="static-point-section">
                 <h5>In your view</h5>
                 <ul>
-                  <ng-template ngFor let-menuItems [ngForOf]="MenuItems" let-i="index">
-                    <li class="yourview-order-0" *ngIf="menuItems[0].value == 101">1.) Families needing help
-                      {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+
+                  <ng-template [ngIf]="userName && activeRole.indexOf('NGOTeam') !=-1">
+                    <li class="yourview-order-0">
+                      Relief requested {{ MenuItems | ratotalcounts: 'NGOTeam'}}
                     </li>
-                    <li class="yourview-order-1" *ngIf="menuItems[0].value == 120">2.) Successfully Supported
-                      {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+                  </ng-template>
+
+                  <ng-template [ngIf]="userName && activeRole.indexOf('NGOAdmin') !=-1">
+                    <li class="yourview-order-0">
+                      Relief requested {{ MenuItems | ratotalcounts: 'NGOAdmin' }}
                     </li>
-                    <li class="yourview-order-2" *ngIf="menuItems[0].value == 97">3.) Resources Close By
-                      {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
-                    </li>
-                    <li class="yourview-order-3" *ngIf="menuItems[0].value == 121">4.) Volunteers Close By
-                      {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
-                    </li>
+                  </ng-template>
+
+                  <ng-template [ngIf]="!(activeRole.indexOf('NGOTeam') !=-1 ||  activeRole.indexOf('NGOAdmin') !=-1 )">
+
+                    <ng-template ngFor let-menuItems [ngForOf]="MenuItems" let-i="index">
+                      <li class="yourview-order-0" *ngIf="menuItems[0].value == 101">Families needing help
+                        {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+                      </li>
+                      <li class="yourview-order-1" *ngIf="menuItems[0].value == 120">Successfully Supported
+                        {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+                      </li>
+                      <li class="yourview-order-2" *ngIf="menuItems[0].value == 97">Resources Close By
+                        {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
+                      </li>
+                      <li class="yourview-order-3" *ngIf="menuItems[0].value == 121">Volunteers Close By
+                        {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
+                      </li>
+                    </ng-template>
                   </ng-template>
                 </ul>
               </div>
@@ -361,9 +408,12 @@
                 <ng-template [ngIf]="!legends_details">
 
                   <ng-template [ngIf]="true">
-                    <div class="result-g-box " *ngFor="let item of mapData | inputsearch:filterdetailsvalue; let i = index">
-                      <div style="cursor: pointer;" class="lat-details-g animated fadeInDown" (click)="item[collapse] = !item[collapse]">
-                        <h5 (click)="zoomToPlace(item, i)"><img class="title_icons" [src]="item.icon" alt="">{{item.name}}
+                    <div class="result-g-box "
+                      *ngFor="let item of mapData | inputsearch:filterdetailsvalue; let i = index">
+                      <div style="cursor: pointer;" class="lat-details-g animated fadeInDown"
+                        (click)="item[collapse] = !item[collapse]">
+                        <h5 (click)="zoomToPlace(item, i)"><img class="title_icons" [src]="item.icon"
+                            alt="">{{item.name}}
                         </h5>
                         <p>{{item.address}}</p>
                       </div>
@@ -389,6 +439,23 @@
           </div>
         </div>
         <!-- End ra-custom-categories  -->
+        <div class="plus-menu-ra">
+          <span class="fa fa-plus-circle" (click)="leftaddmenu = !leftaddmenu"></span>
+          <div class="menub-box">
+            <ul [ngClass]="{'active': leftaddmenu}">
+              <li>
+                <a style="color: #38a669" (click)="NeighbourhoodData()">Social distancing <i class="fa fa-angle-right"></i></a>
+              </li>
+              <li>
+                <a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Refer a Needy <i class="fa fa-angle-right"></i>
+                </a>
+              </li>
+              <li>
+                <a style="color: #38a669" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a>
+              </li>
+            </ul>
+          </div>
+        </div>
         <app-main-content #mapref [mapData]="mapData" [AQM]="AQM" [AQMGraphLoc]="AQMGraphLoc" [graphData]="graphData"
           [graphDataStatus]="graphDataStatus" [showComp]="showComp" [compare]="compare" [showgraphs]="showgraphs"
           [selIssCat]="selIssCat" (WardData)="WardData($event)" (hideGraphs)="hideGraphs($event)"
@@ -695,19 +762,34 @@
             <div class="static-point-section">
               <h5>In your view</h5>
               <ul style="padding-left: 9px;">
-                <ng-template ngFor let-menuItems [ngForOf]="MenuItems" let-i="index">
-                  <li class="yourview-order-0" *ngIf="menuItems[0].value == 101">1.) Families needing help
-                    {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+                <ng-template [ngIf]="userName && activeRole.indexOf('NGOTeam') !=-1">
+                  <li class="yourview-order-0">
+                    Relief requested {{ MenuItems | ratotalcounts: 'NGOTeam'}}
                   </li>
-                  <li class="yourview-order-1" *ngIf="menuItems[0].value == 120">2.) Successfully Supported
-                    {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+                </ng-template>
+                
+                <ng-template [ngIf]="userName && activeRole.indexOf('NGOAdmin') !=-1">
+                  <li class="yourview-order-0">
+                    Relief requested {{ MenuItems | ratotalcounts: 'NGOAdmin' }}
                   </li>
-                  <li class="yourview-order-2" *ngIf="menuItems[0].value == 97">3.) Resources Close By
-                    {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
-                  </li>
-                  <li class="yourview-order-3" *ngIf="menuItems[0].value == 121">4.) Volunteers Close By
-                    {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
-                  </li>
+                </ng-template>
+                
+                <ng-template [ngIf]="!(activeRole.indexOf('NGOTeam') !=-1 ||  activeRole.indexOf('NGOAdmin') !=-1 )">
+                
+                  <ng-template ngFor let-menuItems [ngForOf]="MenuItems" let-i="index">
+                    <li class="yourview-order-0" *ngIf="menuItems[0].value == 101">Families needing help
+                      {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+                    </li>
+                    <li class="yourview-order-1" *ngIf="menuItems[0].value == 120">Successfully Supported
+                      {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+                    </li>
+                    <li class="yourview-order-2" *ngIf="menuItems[0].value == 97">Resources Close By
+                      {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
+                    </li>
+                    <li class="yourview-order-3" *ngIf="menuItems[0].value == 121">Volunteers Close By
+                      {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
+                    </li>
+                  </ng-template>
                 </ng-template>
               </ul>
             </div>
@@ -744,8 +826,10 @@
               </ng-template>
               <ng-template [ngIf]="!legends_details">
                 <ng-template [ngIf]="true">
-                  <div class="result-g-box" *ngFor="let item of mapData | inputsearch:filterdetailsvalue; let i = index">
-                    <div style="cursor: pointer;" class="lat-details-g animated fadeInDown" (click)="item[collapse] = !item[collapse]">
+                  <div class="result-g-box"
+                    *ngFor="let item of mapData | inputsearch:filterdetailsvalue; let i = index">
+                    <div style="cursor: pointer;" class="lat-details-g animated fadeInDown"
+                      (click)="item[collapse] = !item[collapse]">
                       <h5 (click)="zoomToPlace(item, i)"><img class="title_icons" [src]="item.icon" alt="">{{item.name}}
                       </h5>
                       <p>{{item.address}}</p>
@@ -760,7 +844,7 @@
                         <p *ngIf="item?.lng"><b>Longitude :</b> {{item?.lng}}</p>
                       </div>
                     </div>
-                    
+
                   </div>
                   <div class="result-g-box">
                     <p>No Data Found</p>
@@ -768,6 +852,24 @@
                 </ng-template>
               </ng-template>
             </div>
+          </div>
+        </div>
+
+        <div class="plus-menu-ra">
+          <span class="fa fa-plus-circle" (click)="leftaddmenu = !leftaddmenu"></span>
+          <div class="menub-box">
+              <ul [ngClass]="{'active': leftaddmenu}">
+                <li>
+                  <a style="color: #38a669" (click)="NeighbourhoodData()">Social distancing <i class="fa fa-angle-right"></i></a>
+                </li>
+                <li>
+                  <a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Refer a Needy <i class="fa fa-angle-right"></i>
+                  </a>
+                </li>
+                <li>
+                  <a style="color: #38a669" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a>
+                </li>
+              </ul>
           </div>
         </div>
         <app-main-content #mapref [mapData]="mapData" [AQM]="AQM" [AQMGraphLoc]="AQMGraphLoc" [graphData]="graphData"
@@ -802,6 +904,26 @@
         <li>Resource like canteens, PDS-Rations, Shops mapped</li>
         <li>Shops near you mapped</li>
         <li>Volunteers near you Mapped</li> -->
+      </ul>
+      <ul class="web-big-button-icon-list">
+        <li>
+          <div (click)="NeighbourhoodData()">
+            <i class="fa fa-home"></i>
+            <span>Social distancing </span>
+          </div>
+        </li>
+        <li>
+          <div (click)="NeighbourhoodAnalytics()">
+            <i class="fa fa-handshake-o"></i>
+            <span>Refer a Needy</span>
+          </div>
+        </li>
+        <li>
+          <div (click)="toVolunteer()">
+            <i class="fa fa-hand-paper-o"></i>
+            <span>Volunteer </span>
+          </div>
+        </li>
       </ul>
       <div class="action-button">
         <!-- <a href="JavaScript:void(0)" (click)="homepageButton1()">Want Medical Help?</a> -->
@@ -864,19 +986,29 @@
       <span class="icon fa fa-filter"></span>
       <span class="title-f">Local Data</span>
       <strong></strong></a>
-    <a target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">
+
+    <a *ngIf="!(activeRole.indexOf('NGOUser') !=-1 || activeRole.indexOf('NGOTeam') !=-1 || activeRole.indexOf('NGOAdmin') !=-1)"
+      target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">
       <span class="icon fa fa-comments"></span>
       <span class="title-f">Local Schemes</span>
       <strong></strong></a>
-    <!-- <a target="_blank"
+
+    <a *ngIf="(activeRole.indexOf('NGOAdmin') !=-1)" target="_blank"
       href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba">
       <span class="icon fa fa-bar-chart"></span>
       <span class="title-f">Analytics</span>
-      <strong></strong></a> -->
+      <strong></strong></a>
+
     <a (click)="menupopup = !menupopup" href="JavaScript:void(0)">
       <span class="icon fa fa-bars"></span>
       <span class="title-f">Contribute</span>
       <strong></strong></a>
+
+    <!-- <a *ngIf="(activeRole.indexOf('NGOUser') !=-1 || activeRole.indexOf('NGOTeam') !=-1)" href="JavaScript:void(0)"
+      (click)="addmenu = true">
+      <span class="icon fa fa-plus-circle"></span>
+      <span class="title-f">Add</span>
+      <strong></strong></a> -->
 
 
     <div class="clear"></div>
@@ -910,6 +1042,28 @@
   <!-- End Participate Menu -->
 
   <!-- More Menu -->
+  <div class="ra-custom-popup" *ngIf="addmenu">
+    <div class="animated bounceInUp menu-popups  menu-active">
+      <div class="menu-title">
+        <a href="#" class="close-menu" style="top: -15px !important;right: -4px !important" (click)="addmenu = false"><i
+            class="fa fa-times-circle"></i></a>
+      </div>
+      <div class="content">
+        <ul class="link-list">
+          <li *ngIf="(activeRole.indexOf('NGOUser') !=-1 || activeRole.indexOf('NGOTeam') !=-1)">
+            <a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Help Those In Need <i
+                class="fa fa-angle-right"></i> </a>
+          </li>
+          <li *ngIf="(activeRole.indexOf('NGOUser') !=-1 || activeRole.indexOf('NGOTeam') !=-1)">
+            <a style="color: #38a669" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>
+        </ul>
+        <div class="clear"></div>
+      </div>
+    </div>
+  </div>
+  <!-- More Menu -->
+
+  <!-- More Menu -->
   <div class="ra-custom-popup" *ngIf="menupopup">
     <div class="animated bounceInUp menu-popups  menu-active">
       <div class="menu-title">
@@ -928,10 +1082,20 @@
       </div>
       <div class="content">
         <ul class="link-list">
+
+
           <li (click)="userLogin()" *ngIf="!userName">
             <a style="color: #38a669">Login <i class="fa fa-angle-right"></i></a>
           </li>
-          <li><a style="color: #38a669"
+
+          <li
+            *ngIf="(activeRole.indexOf('NGOUser') !=-1 || activeRole.indexOf('NGOTeam') !=-1 || activeRole.indexOf('NGOAdmin') !=-1)">
+            <a style="color: #38a669" href="https://discourse.solveninja.org/tag/local-schemes" target="_blank">
+              Local Schemes<i class="fa fa-angle-right"></i> </a>
+          </li>
+
+          <li *ngIf="!(activeRole.indexOf('NGOAdmin') !=-1)">
+            <a style="color: #38a669"
               href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba"
               target="_blank">
               Analytics<i class="fa fa-angle-right"></i> </a>
@@ -939,13 +1103,16 @@
           <li><a style="color: #38a669" href="https://covidselfcheck.app/" target="_blank">Self Assessment <i
                 class="fa fa-angle-right"></i> </a>
           </li>
-          <li><a style="color: #38a669" (click)="NeighbourhoodData()">Social distancing <i
-                class="fa fa-angle-right"></i> </a>
+
+          <li>
+            <a style="color: #38a669" href="JavaScript:void(0)" (click)="NeighbourhoodData()">Social distancing <i class="fa fa-angle-right"></i></a>
           </li>
-          <li><a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Help Those In Need <i
-                class="fa fa-angle-right"></i> </a>
+          <li>
+            <a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Help Those In Need <i class="fa fa-angle-right"></i> </a>
           </li>
-          <li><a style="color: #38a669" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>
+          <li>
+            <a style="color: #38a669" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>
+
           <li *ngIf="userName" (click)="LogoutMe()">
             <a style="color: #38a669">Logout <i class="fa fa-angle-right"></i></a>
           </li>
@@ -955,30 +1122,5 @@
     </div>
   </div>
   <!-- More Menu -->
-
-  <div class="ra-custom-popup" *ngIf="openpopups1">
-    <div class="animated bounceInUp menu-popups  menu-active">
-      <div class="menu-title">
-        <h1 class="popup-title">External Links</h1>
-        <p class="color-highlight">
-
-        </p>
-        <a href="#" class="close-menu" (click)="openpopups1 = false"><i class="fa fa-times-circle"></i></a>
-      </div>
-      <div class="content">
-        <ul class="link-list">
-          <li><a style="color: #38a669;" target="_blank" href="https://discourse.solveninja.org/tags/">Forum <i
-                class="fa fa-angle-right"></i> </a></li>
-          <li><a style="color: #38a669;" target="_blank"
-              href="http://testnd.solveninja.org/assets/html/NDData.html">Data <i class="fa fa-angle-right"></i> </a>
-          </li>
-          <li><a style="color: #38a669;" target="_blank"
-              href="http://internaldashboard.solveninja.org:4000/public/dashboard/07b9f145-5be8-4206-942e-7251e15791d9">Analytics
-              <i class="fa fa-angle-right"></i> </a></li>
-        </ul>
-        <div class="clear"></div>
-      </div>
-    </div>
-  </div>
 
 </div>
