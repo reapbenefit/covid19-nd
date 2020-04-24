@@ -1366,7 +1366,7 @@ export class AppComponent {
    * Reset All Selected Options from Tree
    */
   resetAllSelection() {
-    this.MenuItems.forEach(ele => {
+    this.MenuItems && this.MenuItems.forEach(ele => {
       ele[0]['internalChildren'].forEach(element => {
         element.internalChecked = false;
       });
