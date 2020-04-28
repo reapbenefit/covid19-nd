@@ -8,8 +8,13 @@ import {
   NbRequestPasswordComponent,
   NbResetPasswordComponent,
 } from '@nebular/auth';
+import { LoginkeycloakComponent } from './loginkeycloak/loginkeycloak.component';
 
 export const routes: Routes = [
+  {
+    path: "loginkeycloak",
+    component: LoginkeycloakComponent,
+  },
   {
     path: 'pages',
     loadChildren: () => import('./pages/pages.module')
@@ -19,10 +24,6 @@ export const routes: Routes = [
     path: 'auth',
     component: NbAuthComponent,
     children: [
-      {
-        path: '',
-        component: NbLoginComponent,
-      },
       {
         path: 'login',
         component: NbLoginComponent,
@@ -45,8 +46,8 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: '', redirectTo: 'pages', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages' },
+  { path: '', redirectTo: 'loginkeycloak', pathMatch: 'full'},
+  { path: '**', redirectTo: 'loginkeycloak' },
 ];
 
 const config: ExtraOptions = {

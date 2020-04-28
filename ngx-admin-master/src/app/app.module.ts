@@ -13,6 +13,8 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {AdminService} from './service/admin.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+
 import {
   NbChatModule,
   NbDatepickerModule,
@@ -23,13 +25,15 @@ import {
   NbWindowModule,
 } from '@nebular/theme';
 import { PublicFormComponent } from './public-form/public-form.component';
-
+import { LoginkeycloakComponent } from './loginkeycloak/loginkeycloak.component';
 @NgModule({
-  declarations: [AppComponent, PublicFormComponent],
+  declarations: [AppComponent, PublicFormComponent, LoginkeycloakComponent],
+  
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    FormsModule,
     AppRoutingModule,
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
