@@ -11,6 +11,7 @@ import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import {AdminService} from './service/admin.service';
 import {
   NbChatModule,
   NbDatepickerModule,
@@ -40,6 +41,7 @@ import {
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
   ],
+  providers :[AdminService],
   bootstrap: [AppComponent],
 })
 export class AppModule {

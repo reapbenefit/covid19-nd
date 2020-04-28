@@ -18,7 +18,7 @@ console.log(err);
 
 
 app.get('/', (req, resp)=>{
-connection.query("SELECT * FROM bng_food", (error, rows, fields) => {
+connection.query("SELECT * FROM public_data_place_org_table", (error, rows, fields) => {
     if(error){
         console.log('error');
     }
