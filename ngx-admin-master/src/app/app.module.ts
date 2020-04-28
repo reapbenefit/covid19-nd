@@ -12,6 +12,7 @@ import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {AdminService} from './service/admin.service';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
   NbChatModule,
   NbDatepickerModule,
@@ -21,9 +22,10 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
+import { PublicFormComponent } from './public-form/public-form.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, PublicFormComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -40,6 +42,7 @@ import {
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
+    ReactiveFormsModule
   ],
   providers :[AdminService],
   bootstrap: [AppComponent],
