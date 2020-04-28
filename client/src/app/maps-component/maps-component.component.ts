@@ -47,6 +47,16 @@ export class MapsComponentComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.dataService.SelectedCityLat = position.coords.latitude;
+        this.dataService.SelectedCityLng = position.coords.longitude;
+        this.lat = position.coords.latitude;
+        this.lng = position.coords.longitude;
+      });
+    }
+
     this.locationDetails = {
       "id": '',
       "ward_id": '',

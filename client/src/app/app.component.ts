@@ -781,6 +781,8 @@ export class AppComponent {
 
   private CitiesList;
 
+  dragchanges = [];
+
   ngOnInit() {
 
     // Login User
@@ -792,15 +794,21 @@ export class AppComponent {
     /**
      * Get New coord's
      */
-    this.subscriptionWithCord = this.commonService.getCord().subscribe(cordnates => {
+    this.subscriptionWithCord = this.commonService.getCord().subscribe((cordnates) => {
       this.NewObj.level = this.dataService.zoom;
       this.NewObj.latitude = cordnates.data.lat;
       this.NewObj.longitude = cordnates.data.lng;
-      this.CollectionsData(this.NewObj);
+      
+      this.dragchanges.push(this.NewObj)
+      setTimeout(()=>{
+        console.log("start");
+        console.log(this.dragchanges[this.dragchanges.length - 1]);
+        this.CollectionsData(this.NewObj);
+      },5000);
+          
     }, err => {
       console.log(err);
     }, () => {
-      this.getCountBased_On_Location();
     })
 
     /**
@@ -950,11 +958,11 @@ export class AppComponent {
           this.NewObj.menuData[menuIndex].submenus = event.join(',');
         }
       }
-      this.NewObj.cityId = this.dataService.SelectCityID;
-      this.NewObj.wardId = this.wardSelected == undefined ? 0 : this.wardSelected;
+      // this.NewObj.cityId = this.dataService.SelectCityID;
+      // this.NewObj.wardId = this.wardSelected == undefined ? 0 : this.wardSelected;
       this.NewObj.level = this.dataService.zoom;
-      this.NewObj.latitude = Number(this.dataService.SelectedCityLat);
-      this.NewObj.longitude = Number(this.dataService.SelectedCityLng);
+      this.NewObj.latitude = Number(this.NewObj.latitude);
+      this.NewObj.longitude = Number(this.NewObj.longitude);
       console.log(this.NewObj);
       this.CollectionsData(this.NewObj);
     } else {
@@ -1175,6 +1183,7 @@ export class AppComponent {
     this.CollectionsData(this.NewObj);
   }
 
+  // It will change for Each drag on map 
   public ServiceRequest = null;
   googleData = [];
   CollectionsData(obj) {
@@ -1192,7 +1201,7 @@ export class AppComponent {
       // this.mapData = resMap.data;
       this.mapData = newData;
       console.log(this.mapData);
-
+      this.getCountBased_On_Location();
     });
   }
 
@@ -1294,33 +1303,33 @@ export class AppComponent {
   yourCurrentLocation() {
     // // setDefault select
 
-    // if ("geolocation" in navigator) {
-    //   navigator.geolocation.getCurrentPosition(position => {
-    //     this.dataService.SelectedCityLat = position.coords.latitude;
-    //     this.dataService.SelectedCityLng = position.coords.longitude;
-    //     // this.SelectCity({
-    //     //   "value": {
-    //     //     "cityName": "Your Location Location",
-    //     //     "lat": this.dataService.SelectedCityLat,
-    //     //     "lng": this.dataService.SelectedCityLng
-    //     //   }
-    //     // });
-    //     console.log(this.dataService.SelectedCityLat);
-    //     console.log(this.dataService.SelectedCityLng);
-    //   });
-    // }
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.dataService.SelectedCityLat = position.coords.latitude;
+        this.dataService.SelectedCityLng = position.coords.longitude;
+        this.SelectCity({
+          "value": {
+            "cityName": "Your Location Location",
+            "lat": this.dataService.SelectedCityLat,
+            "lng": this.dataService.SelectedCityLng
+          }
+        });
+        console.log(this.dataService.SelectedCityLat);
+        console.log(this.dataService.SelectedCityLng);
+      });
+    }
 
-    this.SelectCity({
-      "value": {
-        "id": "1",
-        "cityName": "Bangalore Urban",
-        "lat": "12.9796734",
-        "lng": "77.5890556"
-      }
-    });
+    // this.SelectCity({
+    //   "value": {
+    //     "id": "1",
+    //     "cityName": "Bangalore Urban",
+    //     "lat": "12.9796734",
+    //     "lng": "77.5890556"
+    //   }
+    // });
     setTimeout(() => {
       console.log(this.cities);
-      this.CitySelected = this.cities[0];
+      // this.CitySelected = this.cities[0];
     }, 10)
 
   }
@@ -1706,22 +1715,30 @@ export class AppComponent {
   serviceCallAlCount = null;
   lat_ln_serviceReqcount = 0;
   getCountBased_On_Location_unsubscribe = null;
+  getoverrallCountser_call = 0;
+  
   getCountBased_On_Location() {
-    this.getoverrallCounts();
+    if (this.getoverrallCountser_call == 0) {
+      this.getoverrallCounts();
+      this.getoverrallCountser_call = 1;
+    }
     setTimeout(() => { // Time to get Boundiries , dut to map loading slow
       this.getoverrallrectangleCounts();
     }, 500);
 
-    this.commonService.getCord().subscribe(cordnates => {
-      this.NewObj.latitude = cordnates.data.lat;
-      this.NewObj.longitude = cordnates.data.lng;
-    });
     let tempData = [];
     this.MenuItems && this.MenuItems.map((items) => {
       items[0] && items[0]['internalChildren'].forEach(element => {
         tempData.push(element.value)
       });
     });
+
+    this.subscriptionWithCord = this.commonService.getCord().subscribe(cordnates => {
+      this.NewObj.level = this.dataService.zoom;
+      this.NewObj.latitude = cordnates.data.lat;
+      this.NewObj.longitude = cordnates.data.lng;
+    });
+
     if (tempData.length) {
       let tempObj = {
         "menuData": [
@@ -1890,7 +1907,7 @@ export class RaTotalCounts {
           break;
         }
       }
-      return count? `(${count.toString()})` : '';
+      return count ? `(${count.toString()})` : '';
     } else if (args == 'NGOAdmin' && data && data.length) {
       var count = 0;
       for (var i = 0; i < data.length; i++) {
@@ -1904,7 +1921,7 @@ export class RaTotalCounts {
           break;
         }
       }
-      return count? `(${count.toString()})`: '';
+      return count ? `(${count.toString()})` : '';
     } else {
       return '';
     }
