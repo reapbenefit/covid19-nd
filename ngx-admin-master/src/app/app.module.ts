@@ -6,7 +6,10 @@ import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import {AdminService} from './service/admin.service';
+
 import {
   NbChatModule,
   NbDatepickerModule,
@@ -18,11 +21,11 @@ import {
 } from '@nebular/theme';
 import { LoginkeycloakComponent } from './loginkeycloak/loginkeycloak.component';
 
+
+
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginkeycloakComponent
-  ],
+  declarations: [AppComponent, LoginkeycloakComponent],
+
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -40,7 +43,9 @@ import { LoginkeycloakComponent } from './loginkeycloak/loginkeycloak.component'
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
+    ReactiveFormsModule
   ],
+  providers :[AdminService],
   bootstrap: [AppComponent],
 })
 export class AppModule {
