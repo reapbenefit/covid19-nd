@@ -1,8 +1,3 @@
-/**
- * @license
- * Copyright Akveo. All Rights Reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- */
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
@@ -26,6 +21,11 @@ import {
 } from '@nebular/theme';
 import { LoginkeycloakComponent } from './loginkeycloak/loginkeycloak.component';
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 7e6a30ef7a0df490d909ebf077adaead1ecdaf53
 @NgModule({
   declarations: [AppComponent, LoginkeycloakComponent],
 
