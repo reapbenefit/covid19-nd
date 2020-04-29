@@ -41,6 +41,7 @@ router.get('/', (req, res) => {
 
 //User Form Submit
 router.post('/user-form-submit', (req,res)=> {
+    console.log(req.body);
     res.send({
         msg:'Received'
     })
