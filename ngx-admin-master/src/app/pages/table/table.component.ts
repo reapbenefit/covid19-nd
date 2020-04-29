@@ -20,8 +20,8 @@ rowData = [
     { make: 'Porsche', model: 'Boxter', price: 72000 }
 ];
 
+
   ngOnInit(): void {
-    
   }
 
 }
