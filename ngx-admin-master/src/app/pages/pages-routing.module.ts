@@ -5,6 +5,7 @@ import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
+import { PublicFormComponent } from './public-form/public-form.component';
 
 const routes: Routes = [{
   path: '',
@@ -16,7 +17,11 @@ const routes: Routes = [{
     },
     {
       path: 'iot-dashboard',
-      component: DashboardComponent,
+      component: PublicFormComponent,
+    },
+    {
+      path: 'public-form',
+      component: PublicFormComponent
     },
     {
       path: 'layout',
