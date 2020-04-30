@@ -33,17 +33,25 @@ var responseObj = {
 app.use('/', router);
 
 // Test Router
-router.get('/', (req, res) => {
-    res.send({
-        msg: 'Hi There!'
-    });
-});
+// router.get('/', (req, res) => {
+//     res.send({
+//         msg: 'Hi There!'
+//     });
+// });
 
 //User Form Submit
 router.post('/user-form-submit', (req,res)=> {
-    res.send({
-        msg:'Received'
-    })
+    let formData = req.body;
+    console.log(formData);
+    // connection.query('INSERT INTO  public_data_place_org_table SET ?',formData, (err, resp) =>{
+    //         if(err){
+    //             res.send(err);
+    //         }
+    //         else{
+    //             console.log(resp.insertID);
+    //             res.send(resp);
+    //         }
+    // });
 });
 
 router.get('/get-public-table', (req,res)=>{
@@ -55,14 +63,14 @@ router.get('/get-public-table', (req,res)=>{
         else{
             res.send(rows);
         }
-    })
+    });
 
 
 })
 
 //type localhost:8080 in browser to make a query
 app.get('/', (req, res)=>{
-connection.query("SELECT DISTINCT place_org_subcategory FROM public_data_place_org_table WHERE place_org_category = 'Service'", (error, rows, fields) => {
+connection.query("SELECT DISTINCT place_org_address FROM public_data_place_org_table WHERE city_id='1'", (error, rows, fields) => {
     if(error){
         console.log('error');
     }
