@@ -10,6 +10,7 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { PublicFormComponent } from './public-form/public-form.component';
 import { TableComponent } from './table/table.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 @NgModule({
   imports: [
@@ -19,7 +20,9 @@ import { TableComponent } from './table/table.component';
     DashboardModule,
     ECommerceModule,
     MiscellaneousModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AgGridModule.withComponents([])
+
   ],
   declarations: [
     PagesComponent,

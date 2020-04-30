@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import {AdminService} from './service/admin.service';
+import {AgGridModule} from 'ag-grid-angular';
 
 import {
   NbChatModule,
@@ -20,12 +21,8 @@ import {
   NbWindowModule,
 } from '@nebular/theme';
 import { LoginkeycloakComponent } from './loginkeycloak/loginkeycloak.component';
+import { TableComponent } from './pages/table/table.component';
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 7e6a30ef7a0df490d909ebf077adaead1ecdaf53
 @NgModule({
   declarations: [AppComponent, LoginkeycloakComponent],
 
@@ -46,7 +43,8 @@ import { LoginkeycloakComponent } from './loginkeycloak/loginkeycloak.component'
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AgGridModule.withComponents([TableComponent])
   ],
   providers :[AdminService],
   bootstrap: [AppComponent],
