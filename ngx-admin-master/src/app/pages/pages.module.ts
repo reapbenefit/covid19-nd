@@ -11,6 +11,7 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { PublicFormComponent } from './public-form/public-form.component';
 import { TableComponent } from './table/table.component';
 import { AgGridModule } from 'ag-grid-angular';
+import {AdminService} from '../service/admin.service';
 
 @NgModule({
   imports: [

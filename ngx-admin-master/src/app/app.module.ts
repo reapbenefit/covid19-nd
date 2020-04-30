@@ -8,8 +8,8 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import {AdminService} from './service/admin.service';
-import {AgGridModule} from 'ag-grid-angular';
+import { AdminService } from './service/admin.service';
+import { AgGridModule } from 'ag-grid-angular';
 
 import {
   NbChatModule,
@@ -44,7 +44,7 @@ import { TableComponent } from './pages/table/table.component';
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
     ReactiveFormsModule,
-    AgGridModule.withComponents([TableComponent])
+    AgGridModule.withComponents([])
   ],
   providers :[AdminService],
   bootstrap: [AppComponent],

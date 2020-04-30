@@ -1,26 +1,3 @@
-<<<<<<< HEAD
-var express = require('express');
-var mysql = require('mysql');
-var app = express();
-var connection = mysql.createConnection({
-host:'devlp.solveninja.org',
-user:'curiouscat',
-password:'S0lvesm@lld3ntbig',
-database:'theapp'
-});
-
-connection.connect( (err) =>{
-    if(err){
-console.log(err);
-    } else{
-        console.log('Connected');
-    }
-});
-
-
-app.get('/', (req, resp)=>{
-connection.query("SELECT * FROM bng_food", (error, rows, fields) => {
-=======
 const express = require('express');
 const app = express();
 const router = express.Router();
@@ -86,7 +63,6 @@ router.get('/get-public-table', (req,res)=>{
 //type localhost:8080 in browser to make a query
 app.get('/', (req, res)=>{
 connection.query("SELECT DISTINCT place_org_subcategory FROM public_data_place_org_table WHERE place_org_category = 'Service'", (error, rows, fields) => {
->>>>>>> 1bff2e374ff161d5888edb670f2ed3508bee1cda
     if(error){
         console.log('error');
     }
@@ -96,9 +72,6 @@ connection.query("SELECT DISTINCT place_org_subcategory FROM public_data_place_o
 })
 });
 
-<<<<<<< HEAD
-app.listen(1300);
-=======
 app.listen(8080 ,() =>{
     console.log('\n\n');
     console.log('***********************');
@@ -112,7 +85,3 @@ app.listen(8080 ,() =>{
             }
         });
 });
-
-
->>>>>>> 1bff2e374ff161d5888edb670f2ed3508bee1cda
-

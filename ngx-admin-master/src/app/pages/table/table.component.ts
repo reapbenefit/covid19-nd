@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AdminService } from '../../service/admin.service';
 
 @Component({
   selector: 'ngx-table',
@@ -10,14 +11,17 @@ export class TableComponent implements OnInit {
   public gridApi;
   public gridColumnApi;
   public columnDefs;
-  public rowData;
+  public rowDat = [];
+  public rowData = [];
   public editType;
   public editingRowIndex;
   public components;
+  public errorMsg = "";
+  public rowList;
 
-  constructor(){
+  constructor(private _adminService: AdminService){
     this.columnDefs = [
-              {headerName: 'Place_Org_Name', field: 'place_org_name', editable: true, cellRenderer: "singleClickEditRenderer"},
+              {headerName: 'Place_Org_Name', field: 'place_org_name', editable: true, cellRenderer: "singleClickEditRenderer", width: 300},
               {headerName: 'Place_Org_Address', field: 'place_org_address', editable: true},
               {headerName: 'Place_Org_Lat', field: 'place_org_lat', editable: true},
               {headerName: 'Place_Org_Long', field: 'place_org_long', editable: true},
@@ -25,32 +29,11 @@ export class TableComponent implements OnInit {
               {headerName: 'Place_Org_Subcategory', field: 'place_org_subcategory', filter: 'agTextColumnFilter', sortable: true, editable: true},
               {headerName: 'Ward_ID', field: 'ward_id', filter: 'agNumberColumnFilter', sortable: true, editable: true},
               {headerName: 'City_ID', field: 'city_id', editable: true},
-              {headerName: 'Place_Org_Number', field: 'place_org_name', editable: true},
+              {headerName: 'Place_Org_Number', field: 'place_org_number', editable: true},
               {headerName: 'Info', field: 'info', filter: 'agTextColumnFilter', sortable: true, editable: true},
               {headerName: 'Impact', field: 'impact', editable: true},
 
     ];
-
-    this.rowData = [
-          {place_org_name: 'Dry', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry ', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-          {place_org_name: 'Dry Waste Collection Center (DWCC), Ward 73', place_org_address: 'Behind Electric Crematorium, Near to BMTC bus Depot Summanahalli Junction, Bengalore', place_org_lat: 12.959872, place_org_long: 77.552091, place_org_category: 'Amenities', place_org_subcategory: 'Waste - DryWasteCollectionCentre', ward_id: 174, city_id: 1, info: null, impact: null},
-        ];
 
     this.editType = "fullRow";
     this.components = { singleClickEditRenderer: getRenderer() };
@@ -78,9 +61,51 @@ export class TableComponent implements OnInit {
   
 
   ngOnInit(): void {
-  }
+    /** 
+    this._adminService.getPublicTableData().subscribe(data => this.rowDat = data, error => this.errorMsg = error);
 
+    console.log("hi");
+    for(var i = 0, len = this.rowDat.length; i< len; i++)
+    {
+      console.log(i);
+      /**let temp = {place_org_name: this.rowDat[i].place_org_name,
+      place_org_address: this.rowDat[i].place_org_address,
+      place_org_lat: this.rowDat[i].place_org_lat,
+      place_org_long: this.rowDat[i].place_org_long,
+      place_org_category: this.rowDat[i].place_org_category,
+      place_org_subcategory: this.rowDat[i].place_org_subcategory,
+      ward_id: this.rowDat[i].ward_id,
+      city_id: this.rowDat[i].city_id,
+      place_org_number: this.rowDat[i].place_org_number,
+      info: this.rowDat[i].info,
+      impact: this.rowDat[i].impact**/
+    
+    //console.log(temp);
+    //this.rowData.push(temp);
+    
+   // console.log(this.rowData);**/
+   this._adminService.getPublicTableData().subscribe(response => {
+    this.rowData = [],
+    this.rowList = response;
+    this.rowList.forEach(item => {
+      this.rowData.push({
+        place_org_name: item.place_org_name,
+        place_org_address: item.place_org_address,
+        place_org_lat: item.place_org_lat,
+        place_org_long: item.place_org_long,
+        place_org_category: item.place_org_category,
+        place_org_subcategory: item.place_org_subcategory,
+        ward_id: item.ward_id,
+        city_id: item.city_id,
+        place_org_number: item.place_org_number,
+        info: item.info,
+        impact: item.impact
+      })
+    });
+    });
+  }
 }
+
 
 function getRenderer() {
   function CellRenderer() {}

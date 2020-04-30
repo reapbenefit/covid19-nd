@@ -3,23 +3,29 @@
       Overview
     </h1>
   </div>
+<!--
+  <ul>
+    <li *ngFor="let row of rowData">{{row.place_org_name}}</li>
+</ul>-->
+  <ag-grid-angular
 
-<ag-grid-angular
+  style = "width: 150%; height: 1500px;"
+  class = "ag-theme-balham"
+  
+  [rowData] = "rowData"
+  [columnDefs] = "columnDefs"
+  
+  [floatingFilter] = "true"
+  [suppressClickEdit]="true"
+  [components]="components"
+  
+  [pagination] = "true"
+  [paginationPageSize] = "100"
+  
+  [editType]="editType"
+  (gridReady)="onGridReady($event)"
+  
+  >
+  </ag-grid-angular>
 
-style = "width: 150%; height: 1500px;"
-class = "ag-theme-balham"
-
-[rowData] = "rowData"
-[columnDefs] = "columnDefs"
-
-[suppressClickEdit]="true"
-[components]="components"
-
-[pagination] = "true"
-[paginationPageSize] = "5"
-
-[editType]="editType"
-(gridReady)="onGridReady($event)"
-
->
-</ag-grid-angular>
+{{errorMsg}}
