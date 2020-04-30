@@ -16,12 +16,12 @@
             <div class="col md-6">
                 <div class="form-group">
                     <label for="name">Conatct Number</label>
-                    <input type="text" class="form-control" formControlName="place_org_number" />
+                    <input type="text" class="form-control" formControlName="place_org_number" maxlength="10">
                     <p class='text-invalid'
                         *ngIf="public_data.get('place_org_number').touched && !public_data.get('place_org_number').valid">
                         Please Enter Contact Number</p>
                 </div>
-              
+
             </div>
         </div>
         <div class="row">

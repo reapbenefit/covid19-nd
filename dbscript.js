@@ -43,6 +43,9 @@ app.use('/', router);
 router.post('/user-form-submit', (req,res)=> {
     let formData = req.body;
     console.log(formData);
+    res.send({
+                msg: 'Success!'
+            });
     // connection.query('INSERT INTO  public_data_place_org_table SET ?',formData, (err, resp) =>{
     //         if(err){
     //             res.send(err);

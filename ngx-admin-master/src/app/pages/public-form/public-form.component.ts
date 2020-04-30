@@ -36,7 +36,7 @@ export class PublicFormComponent implements OnInit {
     ac_id: new FormControl(''),
     city_id : new FormControl('', Validators.required),
     place_org_person_incharge: new FormControl(''),
-    place_org_number: new FormControl('',[Validators.required,Validators.maxLength(10)]),
+    place_org_number: new FormControl('',[Validators.required,Validators.minLength(10)]),
     place_org_jurisdiction: new FormControl(''),
     info : new FormControl('', Validators.required),
     impact: new FormControl(''),
@@ -51,7 +51,9 @@ export class PublicFormComponent implements OnInit {
     });
     this.AdminService.publicDataFormSubmit(this.public_data.value).subscribe((response)=>{
       console.log(response);
+      this.public_data.reset();
     });
+    
   }
 
     // get Users Location
