@@ -15,7 +15,7 @@ export class PublicFormComponent implements OnInit {
   ward = ['Ward_1', 'Ward_2', 'Ward_3'];
   latitude: any;
   longitude: any;
-  displayModal = false;
+ 
 
   constructor(private AdminService: AdminService) { }
 
