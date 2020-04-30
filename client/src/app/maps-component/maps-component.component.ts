@@ -4,6 +4,7 @@ import { DataService } from '../services/data.service';
 import { CommonService } from '../services/common.service';
 import { GoogleAnalyticsService } from '../services/google-analytics.service';
 import geoJson from '../../assets/SampleGeoJson.json';
+import { Subscription, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-maps-component',
@@ -47,6 +48,21 @@ export class MapsComponentComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    /**
+     * UserName and Role Subscribe based on  
+     * App.compoenent.ts file 
+     */
+    this.subscriptionWithUserName = this.commonService.getusername().subscribe(res => {
+      console.log(res);
+      this.userName = res.data;
+      // Get All givenList
+      this.getUserAssignedList();
+    })
+    this.subscriptionWithUserRole = this.commonService.getUserrole().subscribe(res => {
+      console.log(res);
+      this.userRole = res.data;
+    })
 
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(position => {
@@ -162,6 +178,7 @@ export class MapsComponentComponent implements OnInit {
   public locationDetails;
   public responceData;
   clickedMarker(marker, index: number, data) {
+    console.log(marker);
     let obj;
     obj = {
       "type": Number(marker.type),
@@ -170,10 +187,13 @@ export class MapsComponentComponent implements OnInit {
       "wardId": Number(this.dataService.wardSelectedID),
       "city": Number(this.dataService.SelectCityID)
     }
+
     this.dataService.getCorrLocDetails(obj).subscribe(data => {
       console.log(data);
       this.responceData = data;
       if (this.responceData != null) {
+        this.responceData.data['menuId'] = marker['menuId'] ? marker['menuId']: 0;
+        this.responceData.data['id'] = marker['id'] ? marker['id']: 0;
         this.locationDetails = this.responceData.data;
       }
       // this.select_marker(data);
@@ -243,5 +263,181 @@ export class MapsComponentComponent implements OnInit {
   openURL(URL) {
     window.open(URL);
   }
+
+
+  /**
+   * Save User Info
+   * type :'assign' or 'given
+   */
+  loaderAction = false;//Assign Me
+  userName = '';
+  userRole =  [];
+  subscriptionWithUserRole: Subscription;
+  subscriptionWithUserName: Subscription;
+  
+  /**
+   * Get Given List
+   */
+  user_given_list = [];
+  user_given_listArray = [];
+  getUserAssignedList() {
+
+    this.getAllassignedList();
+    var obj = {
+      username: this.userName
+    }
+    this.dataService.getUserAssignedList(obj).subscribe(res => {
+      console.log(res);
+      if (res && res['status'] == 'success') {
+        this.user_given_list = res['data'];
+        this.user_given_listArray = this.user_given_list.map(val => {
+          return val['place_org_id'];
+        })
+        console.log(this.user_given_listArray);
+      }
+    }, err => {
+      console.log(err);
+    }, () => {
+      console.log("getGiven completed");
+    })
+  }
+
+  /**
+   * Save user Info for 
+   * start asigning User
+   */
+  validateMobileNumber() {
+    
+    if (parseInt(this.mobilenumber) != NaN && this.mobilenumber.toString().length < 13) {
+      this.startAssignMe(this.user_Assign_Type, this.user_Assign_data);
+      this.numberPopup = false;
+    } else {
+      alert("Enter valied Number");
+    }
+  }
+
+  numberPopup = false;
+  mobilenumber;
+  food_ration_asked = [118, 136]; //Assign Me
+  food_ration_assigned = [123, 132]; //Assign Me
+
+  user_Assign_Type;
+  user_Assign_data;
+
+  assignme(type, data) {
+    this.user_Assign_Type = type;
+    this.user_Assign_data = data;
+    this.numberPopup = true;
+  }
+
+  startAssignMe(type, data) {
+    this.loaderAction = true;
+    console.log({
+      type: type,
+      data: data,
+      username: this.userName,
+      userrole: this.userRole,
+      number: this.mobilenumber
+    })
+    let obj = {
+      type: type,
+      data: data,
+      username: this.userName,
+      userrole: this.userRole,
+      number: this.mobilenumber
+    }
+    this.dataService.assignme(obj).subscribe(res => {
+      console.log(res);
+      if (res && res['assigned'] == true) {
+        alert("Sorry Already action taken by someone.")
+      } else if (res && res['status'] == 'success') {
+        // Get All givenList
+        alert("Assigned successfully");
+        this.getUserAssignedList();
+      } else {
+        alert(res['message']);
+      }
+
+    }, err => {
+      console.log(err);
+    }, () => {
+      this.loaderAction = false;
+      console.log("Service completed");
+    })
+  }
+
+  /**
+   * Close Action
+   * @param type 
+   * @param data 
+   */
+  givenbyme(type, data) {
+    this.loaderAction = true;
+    console.log({
+      type: type,
+      data: data,
+      username: this.userName,
+      userrole: this.userRole
+    })
+    let obj = {
+      type: type,
+      data: data,
+      username: this.userName,
+      userrole: this.userRole
+    }
+    this.dataService.givenbyme(obj).subscribe(res => {
+      console.log(res);
+      if (res && res['status'] == 'success') {
+        alert("Data saved successfuly");
+        this.getUserAssignedList();
+      } else {
+        alert(res['message']);
+      }
+
+    }, err => {
+      console.log(err);
+    }, () => {
+      this.loaderAction = false;
+      console.log("Service completed");
+    })
+  }
+
+
+  /**
+   * Get All Assigned User
+   */
+  allAssignedList = [];
+  getAllassignedList() {
+    this.loaderAction = true;
+    console.log({
+      username: this.userName,
+      userrole: this.userRole
+    })
+    let obj = {
+      username: this.userName,
+      userrole: this.userRole
+    }
+    this.dataService.getAllassignedList(obj).subscribe(res => {
+      console.log(res);
+      if (res && res['status'] == 'success') {
+        this.allAssignedList = res['data'].map(val => {
+          return val['place_org_id'];
+        })
+        console.log(this.allAssignedList);
+      } else {
+        console.log(res);
+      }
+
+    }, err => {
+      console.log(err);
+    }, () => {
+      this.loaderAction = false;
+      console.log("Service completed");
+    })
+  }
+
+
+
+
 }
 

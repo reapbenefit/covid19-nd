@@ -1832,7 +1832,7 @@ ul.webview-ra li:first-child {
   text-align: left;
   text-transform: uppercase;
   color: #38a669;
-  padding-left: 12%;
+  padding-left: 10%;
 }
 
 .static-point-section ul {
@@ -1990,17 +1990,17 @@ h1.popup-user-images {
   position: absolute;
   bottom: 30px;
   left: 16px;
-  z-index: 96;
+  z-index: 95;
 }
 
 .plus-menu-ra .fa-plus-circle {
   padding: 9px 11px;
-    background: red;
-    border-radius: 50px;
-    font-size: 28px;
-    color: #fff;
-    cursor: pointer;
-    box-shadow: 1px 1px 0px grey;
+  background: red;
+  border-radius: 50px;
+  font-size: 28px;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 1px 1px 0px grey;
 }
 
 .plus-menu-ra .menub-box {
@@ -2091,6 +2091,93 @@ ul.web-big-button-icon-list li i {
 ul.web-big-button-icon-list li span {
   font-weight: 500;
   /* text-decoration: underline; */
+}
+
+a.user-action-a-a {
+    background: #fbb040;
+    padding: 2px 10px;
+    border-radius: 4px;
+    vertical-align: middle;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: capitalize;
+    display: block;
+    width: 110px;
+    text-align: center;
+    margin: 10px 0;
+    cursor: pointer;
+}
+a.user-action-a-a i {
+    margin-right: 5px !important;
+}
+.isDisabled {
+  display: inline-block;  /* For IE11/ MS Edge bug */
+  pointer-events: none;
+  text-decoration: none;
+  cursor: not-allowed;
+}
+
+.mobilenumber-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #0000007d;
+    z-index: 9999999 !important;
+    display: flex;
+}
+
+.mobilenumber-popup {}
+
+.mobilenumber-popup .nubmer-box {
+    margin: auto;
+    background: #ffff !important;
+    padding: 20px;
+    border: 1px solid #dfdfdf;
+}
+
+.mobilenumber-popup .nubmer-box h5 {
+    border-bottom: 1px solid #7defc5;
+    padding-bottom: 4px;
+    position: relative;
+}
+
+.mobilenumber-popup .nubmer-box .body-mobile ul {
+    list-style: none;
+    padding: 0px;
+}
+
+.mobilenumber-popup .nubmer-box .body-mobile ul li {
+    display: inline-block;
+}
+
+.mobilenumber-popup .nubmer-box .body-mobile ul li input {
+    border: 1px solid #dfdfdf;
+    border-radius: 6px;
+    height: 34px;
+    width: 200px;
+    padding: 5px 5px;
+}
+
+.mobilenumber-popup .nubmer-box .body-mobile {
+    margin: 15px !important;
+}
+
+.mobilenumber-popup .nubmer-box .body-mobile ul li a {
+    background: #FF9800;
+    padding: 7px 10px;
+    border-radius: 5px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.mobilenumber-popup .nubmer-box h5 span {
+    position: absolute;
+    right: 0px;
+    top: 3px;
+    color: red;
+    cursor: pointer;
 }
 
 /* end Map Popup Box */

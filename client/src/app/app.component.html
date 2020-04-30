@@ -160,16 +160,18 @@
             <h5 class="web-title">Covid Neighbourhood Dashboard</h5>
           </div>
           <div class="col-md-4">
-            <div class="ra-citysearch-web">
-              <ngx-select-dropdown (change)="SelectCity($event)" [multiple]="false" [(ngModel)]="CitySelected"
-                [config]="configCity" [options]="cities"></ngx-select-dropdown>
-            </div>
-            <span style="font-size: 10px;margin: 0 8px;position: relative;top: 7px;">( OR )<span></span></span>
-            <div class="ra-locationsearch-web">
-              <input placeholder="Select location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
-                class="searchInput" #search [formControl]="searchControl" (input)="searchText($event)"
-                style="padding-right: 1.3rem;">
-              <i class="fa fa-search" id="SeachIcon" aria-hidden="true"></i>
+            <div [ngStyle]="{'visibility': defaultpage == 'LocalData'? 'visible': 'hidden'}">
+              <div class="ra-citysearch-web">
+                <ngx-select-dropdown (change)="SelectCity($event)" [multiple]="false" [(ngModel)]="CitySelected"
+                  [config]="configCity" [options]="cities"></ngx-select-dropdown>
+              </div>
+              <span style="font-size: 10px;margin: 0 8px;position: relative;top: 7px;">( OR )<span></span></span>
+              <div class="ra-locationsearch-web">
+                <input placeholder="Select location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
+                  class="searchInput" #search [formControl]="searchControl" (input)="searchText($event)"
+                  style="padding-right: 1.3rem;">
+                <i class="fa fa-search" id="SeachIcon" aria-hidden="true"></i>
+              </div>
             </div>
           </div>
           <div class="col-md-4">
@@ -191,7 +193,7 @@
                 <div class="onhover">
 
                   <li>
-                    <a  href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">Join Local Support Network</a>
+                    <a href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">Join Local Support Network</a>
                   </li>
 
                   <a *ngIf="(activeRole.indexOf('NGOUser') !=-1 || activeRole.indexOf('NGOTeam') !=-1 || activeRole.indexOf('NGOAdmin') !=-1)"
@@ -206,10 +208,8 @@
 
                   <a href="JavaScript:void(0)" (click)="NeighbourhoodData()">Social distancing </a>
 
-                  <a 
-                    href="JavaScript:void(0)" (click)="NeighbourhoodAnalytics()">Help Those In Need </a>
-                  <a 
-                    href="JavaScript:void(0)" (click)="toVolunteer()">Volunteer </a>
+                  <a href="JavaScript:void(0)" (click)="NeighbourhoodAnalytics()">Help Those In Need </a>
+                  <a href="JavaScript:void(0)" (click)="toVolunteer()">Volunteer </a>
 
                 </div>
               </a>
@@ -236,31 +236,34 @@
           <div class="row" style="position: relative;top: -95px;">
             <div class="col-md-6" style="display: flex;flex-direction: column;margin: auto;">
               <div class="web-big-button" style="margin: auto;">
-                <h3 class="text-center" style="font-weight: 300 !important;margin-bottom: 20px;margin-left: -10px;">Join Hands With Us</h3>
+                <h3 class="text-center" style="font-weight: 300 !important;margin-bottom: 20px;margin-left: -10px;">Join
+                  Hands With Us</h3>
 
                 <ul class="web-big-button-icon-list">
                   <li>
                     <div (click)="NeighbourhoodData()">
-                      <i class="fa fa-home"></i> 
+                      <i class="fa fa-home"></i>
                       <span>Social distancing </span>
                     </div>
                   </li>
                   <li>
                     <div (click)="NeighbourhoodAnalytics()">
-                      <i class="fa fa-handshake-o"></i> 
+                      <i class="fa fa-handshake-o"></i>
                       <span>Refer a Needy</span>
                     </div>
                   </li>
                   <li>
                     <div (click)="toVolunteer()">
-                      <i class="fa fa-hand-paper-o"></i> 
+                      <i class="fa fa-hand-paper-o"></i>
                       <span>Volunteer </span>
                     </div>
                   </li>
                 </ul>
 
-                <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton2()">Help those in need</a>
-                <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where you can get help?</a>
+                <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton2()">Help those in
+                  need</a>
+                <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where
+                  you can get help?</a>
 
               </div>
             </div>
@@ -378,17 +381,19 @@
                     </ng-template>
                   </ng-template>
                 </ul>
+
               </div>
               <div class="actiob-mode-dl">
                 <a [ngClass]="{'active': legends_details}" href="JavaScript:void(0)"
                   (click)="legends_details = true">Legends</a>
                 <a [ngClass]="{'active': !legends_details}" href="JavaScript:void(0)"
-                  (click)="legends_details = false">Details</a>
+                  (click)="legends_details = false; detail_list_number = 100">Details</a>
               </div>
               <div class="filter-g" *ngIf="!legends_details && mapData?.length">
                 <input type="text" placeholder="Search place" [(ngModel)]="filterdetailsvalue">
               </div>
-              <div class="ra-custom-google">
+              <div class="ra-custom-google"
+                (scroll)="detail_list_number = (mapData?.length >= detail_list_number)? (detail_list_number + 100): (detail_list_number)">
                 <ng-template [ngIf]="legends_details">
                   <div class="categories-box-g">
                     <ul class="webview-ra">
@@ -401,7 +406,7 @@
                             <div class="jest-count">
                               {{(items.count !=0 && items.count != undefined)? '('+items.count+')': ''}}</div>
                           </li>
-                        </ng-template>
+                        </ng-template> 
                       </ng-template>
                       <li>
                         No Categories Selected
@@ -412,8 +417,8 @@
                 <ng-template [ngIf]="!legends_details">
 
                   <ng-template [ngIf]="true">
-                    <div class="result-g-box "
-                      *ngFor="let item of mapData | inputsearch:filterdetailsvalue; let i = index">
+                    <div class="result-g-box {{ i }}"
+                      *ngFor="let item of mapData | inputsearch:filterdetailsvalue | slice:0:detail_list_number; let i = index">
                       <div style="cursor: pointer;" class="lat-details-g animated fadeInDown"
                         (click)="item[collapse] = !item[collapse]">
                         <h5 (click)="zoomToPlace(item, i)"><img class="title_icons" [src]="item.icon"
@@ -429,8 +434,18 @@
                           <p *ngIf="item?.subcategory"><b>Subcategory :</b> {{item?.subcategory}}</p>
                           <p *ngIf="item?.lat"><b>Latitude :</b> {{item?.lat}}</p>
                           <p *ngIf="item?.lng"><b>Longitude :</b> {{item?.lng}}</p>
+                          <p *ngIf="item?.lng"><b>Id :</b> {{item?.id}}</p>
                         </div>
                       </div>
+
+                      <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a" (click)="assignme('assign', item)"
+                        *ngIf="food_ration_asked.indexOf(item.menuId) != -1 && userName && allAssignedList.indexOf(item?.id) == -1 ">
+                        <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i> Assign Me
+                      </a>
+                      <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a" (click)="givenbyme('given', item)"
+                        *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
+                        <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Given
+                      </a>
 
                     </div>
                     <div class="result-g-box">
@@ -453,10 +468,12 @@
                 </a>
               </li>
               <li>
-                <a style="color: #38a669" (click)="NeighbourhoodData()">Social distancing <i class="fa fa-angle-right"></i></a>
+                <a style="color: #38a669" (click)="NeighbourhoodData()">Social distancing <i
+                    class="fa fa-angle-right"></i></a>
               </li>
               <li>
-                <a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Refer a Needy <i class="fa fa-angle-right"></i>
+                <a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Refer a Needy <i
+                    class="fa fa-angle-right"></i>
                 </a>
               </li>
               <li>
@@ -744,7 +761,7 @@
                     <ul>
                       <li class="child-list-mobile" *ngFor="let child of menuItem[0].internalChildren"
                         (click)="singleselect(child, menuItem)" [ngClass]="{'checked': child.internalChecked}">
-                        <span>{{child.text}}</span>
+                        <span>{{child.text}} </span>
                       </li>
                     </ul>
                   </div>
@@ -769,22 +786,22 @@
           <div class="result-g" [ngClass]="{'collapseme': detail_legends_collapse}">
 
             <div class="static-point-section">
-              <h5>In your view</h5>
+              <h5>In your view {{detail_list_number}}</h5>
               <ul style="padding-left: 9px;">
                 <ng-template [ngIf]="userName && activeRole.indexOf('NGOTeam') !=-1">
                   <li class="yourview-order-0">
                     Relief requested {{ MenuItems | ratotalcounts: 'NGOTeam'}}
                   </li>
                 </ng-template>
-                
+
                 <ng-template [ngIf]="userName && activeRole.indexOf('NGOAdmin') !=-1">
                   <li class="yourview-order-0">
                     Relief requested {{ MenuItems | ratotalcounts: 'NGOAdmin' }}
                   </li>
                 </ng-template>
-                
+
                 <ng-template [ngIf]="!(activeRole.indexOf('NGOTeam') !=-1 ||  activeRole.indexOf('NGOAdmin') !=-1 )">
-                
+
                   <ng-template ngFor let-menuItems [ngForOf]="MenuItems" let-i="index">
                     <li class="yourview-order-0" *ngIf="menuItems[0].value == 101">Families needing help
                       {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
@@ -803,16 +820,18 @@
               </ul>
             </div>
 
+
             <div class="actiob-mode-dl">
               <a [ngClass]="{'active': legends_details}" href="JavaScript:void(0)"
                 (click)="legends_details = true">Legends</a>
               <a [ngClass]="{'active': !legends_details}" href="JavaScript:void(0)"
-                (click)="legends_details = false">Details</a>
+                (click)="legends_details = false; detail_list_number = 100">Details</a>
             </div>
             <div class="filter-g" *ngIf="!legends_details && mapData?.length">
               <input type="text" placeholder="Search place" [(ngModel)]="filterdetailsvalue">
             </div>
-            <div class="result-g-d">
+            <div class="result-g-d"
+              (scroll)="detail_list_number = (mapData?.length >= detail_list_number)? (detail_list_number + 100): (detail_list_number)">
               <ng-template [ngIf]="legends_details">
                 <div class="categories-box-g" style="padding-top: 10px;">
                   <ul class="webview-ra">
@@ -835,8 +854,8 @@
               </ng-template>
               <ng-template [ngIf]="!legends_details">
                 <ng-template [ngIf]="true">
-                  <div class="result-g-box"
-                    *ngFor="let item of mapData | inputsearch:filterdetailsvalue; let i = index">
+                  <div class="result-g-box {{i}}"
+                    *ngFor="let item of mapData | inputsearch:filterdetailsvalue | slice:0:detail_list_number; let i = index">
                     <div style="cursor: pointer;" class="lat-details-g animated fadeInDown"
                       (click)="item[collapse] = !item[collapse]">
                       <h5 (click)="zoomToPlace(item, i)"><img class="title_icons" [src]="item.icon" alt="">{{item.name}}
@@ -854,6 +873,15 @@
                       </div>
                     </div>
 
+                    <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a" (click)="assignme('assign', item)"
+                      *ngIf="food_ration_asked.indexOf(item.menuId) != -1 && userName && allAssignedList.indexOf(item?.id) ==-1 ">
+                      <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i> Assign Me
+                    </a>
+                    <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a" (click)="givenbyme('given', item)"
+                      *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
+                      <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Given
+                    </a>
+
                   </div>
                   <div class="result-g-box">
                     <p>No Data Found</p>
@@ -867,22 +895,24 @@
         <div class="plus-menu-ra">
           <span class="fa fa-plus-circle" (click)="leftaddmenu = !leftaddmenu"></span>
           <div class="menub-box">
-              <ul [ngClass]="{'active': leftaddmenu}">
-                <li><a style="color: #38a669" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">
-                    Join Local Support Network
-                    <i class="fa fa-angle-right"></i> </a>
-                </li>
-                <li>
-                  <a style="color: #38a669" (click)="NeighbourhoodData()">Social distancing <i class="fa fa-angle-right"></i></a>
-                </li>
-                <li>
-                  <a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Refer a Needy <i class="fa fa-angle-right"></i>
-                  </a>
-                </li>
-                <li>
-                  <a style="color: #38a669" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a>
-                </li>
-              </ul>
+            <ul [ngClass]="{'active': leftaddmenu}">
+              <li><a style="color: #38a669" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">
+                  Join Local Support Network
+                  <i class="fa fa-angle-right"></i> </a>
+              </li>
+              <li>
+                <a style="color: #38a669" (click)="NeighbourhoodData()">Social distancing <i
+                    class="fa fa-angle-right"></i></a>
+              </li>
+              <li>
+                <a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Refer a Needy <i
+                    class="fa fa-angle-right"></i>
+                </a>
+              </li>
+              <li>
+                <a style="color: #38a669" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a>
+              </li>
+            </ul>
           </div>
         </div>
         <app-main-content #mapref [mapData]="mapData" [AQM]="AQM" [AQMGraphLoc]="AQMGraphLoc" [graphData]="graphData"
@@ -1101,7 +1131,8 @@
             <a style="color: #38a669">Login <i class="fa fa-angle-right"></i></a>
           </li>
 
-          <li><a style="color: #38a669" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">Join Local Support Network
+          <li><a style="color: #38a669" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">Join Local Support
+              Network
               <i class="fa fa-angle-right"></i> </a>
           </li>
 
@@ -1123,10 +1154,12 @@
           </li>
 
           <li>
-            <a style="color: #38a669" href="JavaScript:void(0)" (click)="NeighbourhoodData()">Social distancing <i class="fa fa-angle-right"></i></a>
+            <a style="color: #38a669" href="JavaScript:void(0)" (click)="NeighbourhoodData()">Social distancing <i
+                class="fa fa-angle-right"></i></a>
           </li>
           <li>
-            <a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Help Those In Need <i class="fa fa-angle-right"></i> </a>
+            <a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Help Those In Need <i
+                class="fa fa-angle-right"></i> </a>
           </li>
           <li>
             <a style="color: #38a669" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a></li>
@@ -1142,3 +1175,24 @@
   <!-- More Menu -->
 
 </div>
+
+
+
+<div class="mobilenumber-popup" *ngIf="numberPopup">
+  <div class="nubmer-box animated fadeInDown">
+    <h5>Enter Mobile Number <span class="fa fa-times" (click)="numberPopup = false" style="font-size: 18px;"></span></h5>
+    
+    <div class="body-mobile">
+      <ul>
+        <li>
+          <input type="number"  min="0" max="10" [(ngModel)]="mobilenumber" placeholder="XXX XXX XXXX" pattern="[789][0-9]{9}">
+        </li>
+        <li>
+          <a (click)="validateMobileNumber()">Submit</a>
+        </li>
+      </ul>
+    </div>
+    
+  </div>
+</div>
+

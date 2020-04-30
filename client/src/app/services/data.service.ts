@@ -133,6 +133,34 @@ export class DataService {
         return this.httpClient.get(`/api/v1/user/data/read`, { headers: this.headers });
     }
 
+    /**
+     * @param obj Get All Given for Logged In User
+     */
+    assignme(obj) {
+        return this.httpClient.post(`/assignme`, obj, { headers: this.headers });
+    }
+    
+    /**
+     * @param obj Get All Given for Logged In User
+     */
+    givenbyme(obj) {
+        return this.httpClient.post(`/givenbyme`, obj, { headers: this.headers });
+    }
+
+    /**
+     * @param obj Save User for Assign / Given
+     */
+    getUserAssignedList(obj) {
+        return this.httpClient.post(`/getassignedlist`, obj, { headers: this.headers });
+    }
+    
+    /**
+     * @param obj Get getAllassignedList
+     */
+    getAllassignedList(obj) {
+        return this.httpClient.post(`/getAllassignedList`, obj, { headers: this.headers });
+    }
+
     CollectionsData(obj) {
         return this.httpClient.post(`${this.baseURLCOVID}/neighbourHood/controller.php`, obj, { headers: this.headers });
     }

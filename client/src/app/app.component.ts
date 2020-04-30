@@ -30,6 +30,7 @@ export class AppComponent {
   detail_legends_collapse = true; // true means Collapse
   legends_details = true; // false --> Details
   filterdetailsvalue = '';
+  loaderAction = false;
 
 
   // @ViewChild('Governance') Governance: ElementRef;
@@ -339,7 +340,7 @@ export class AppComponent {
       this.WardSelected = undefined;
       this.dataService.wardDetails({ "cityId": this.SelectedCity }).subscribe(data => {
         var tempWardData: any = data;
-        this.Wards = tempWardData.data;
+        this.Wards = tempWardData['data'] ? tempWardData.data : [];
         this.ShowWardSelect = false;
         setTimeout(() => {
           this.ShowWardSelect = true;
@@ -370,7 +371,7 @@ export class AppComponent {
     this.formButtonClickEvent('Menu', 'City_Menu', 'City_Select', 'Select');
     this.defaultSelectTrigger();
     // get New count based on city changed
-    this.getCountBased_On_Location();
+    this.getCountBased_On_Location(this.NewObj);
 
   }
 
@@ -798,14 +799,14 @@ export class AppComponent {
       this.NewObj.level = this.dataService.zoom;
       this.NewObj.latitude = cordnates.data.lat;
       this.NewObj.longitude = cordnates.data.lng;
-      
+
       this.dragchanges.push(this.NewObj)
-      setTimeout(()=>{
+      setTimeout(() => {
         console.log("start");
         console.log(this.dragchanges[this.dragchanges.length - 1]);
         this.CollectionsData(this.NewObj);
-      },5000);
-          
+      }, 5000);
+
     }, err => {
       console.log(err);
     }, () => {
@@ -1201,7 +1202,7 @@ export class AppComponent {
       // this.mapData = resMap.data;
       this.mapData = newData;
       console.log(this.mapData);
-      this.getCountBased_On_Location();
+      this.getCountBased_On_Location(obj);
     });
   }
 
@@ -1716,8 +1717,20 @@ export class AppComponent {
   lat_ln_serviceReqcount = 0;
   getCountBased_On_Location_unsubscribe = null;
   getoverrallCountser_call = 0;
-  
-  getCountBased_On_Location() {
+  detail_list_number = 100;
+  getCountBased_On_Location(obj?: any) {
+    console.log(obj);
+    if (obj && obj['latitude'] && obj['longitude']) {
+      this.NewObj.latitude = obj['latitude'];
+      this.NewObj.longitude = obj['longitude'];
+    } else {
+      this.subscriptionWithCord = this.commonService.getCord().subscribe(cordnates => {
+        this.NewObj.level = this.dataService.zoom;
+        this.NewObj.latitude = cordnates.data.lat;
+        this.NewObj.longitude = cordnates.data.lng;
+      });
+    }
+
     if (this.getoverrallCountser_call == 0) {
       this.getoverrallCounts();
       this.getoverrallCountser_call = 1;
@@ -1731,12 +1744,6 @@ export class AppComponent {
       items[0] && items[0]['internalChildren'].forEach(element => {
         tempData.push(element.value)
       });
-    });
-
-    this.subscriptionWithCord = this.commonService.getCord().subscribe(cordnates => {
-      this.NewObj.level = this.dataService.zoom;
-      this.NewObj.latitude = cordnates.data.lat;
-      this.NewObj.longitude = cordnates.data.lng;
     });
 
     if (tempData.length) {
@@ -1753,6 +1760,7 @@ export class AppComponent {
       this.getCountBased_On_Location_unsubscribe ? this.getCountBased_On_Location_unsubscribe.unsubscribe() : null;
       this.getCountBased_On_Location_unsubscribe = this.dataService.getCountDataES(tempObj).subscribe(res => {
         this.lat_ln_serviceReqcount = 0;
+        this.detail_list_number = 100;
         console.log(res);
         if (res && res['data'].length) {
           this.CountsListArray = res['data'];
@@ -1777,8 +1785,14 @@ export class AppComponent {
     }
 
   }
-  //End Ra Custom Code
 
+
+
+
+  /**
+   * Get Logged In Usre Info
+   * userName:string and Roles[]
+   */
   userName = '';
   userRole = [];
   activeRole = [];
@@ -1795,10 +1809,18 @@ export class AppComponent {
         if (this.userRole.length) {
           this.activeRole = this.userRole;
         }
+
+        this.commonService.setusername(this.userName);
+        this.commonService.setUserrole(this.userRole);
+
         console.log({
           userName: this.userName,
           userRole: this.userRole
         });
+
+        // Get All givenList
+        this.getUserAssignedList();
+
       }
     }, (err) => {
       console.log(err);
@@ -1815,7 +1837,174 @@ export class AppComponent {
     this.userName = '';
     this.userRole = [];
     this.activeRole = [];
+    this.commonService.setusername('');
+    this.commonService.setUserrole([]);
   }
+
+
+  /**
+   * Get Given List
+   */
+  user_given_list = [];
+  user_given_listArray = [];
+  getUserAssignedList() {
+
+    this.getAllassignedList();
+    var obj = {
+      username: this.userName
+    }
+    this.dataService.getUserAssignedList(obj).subscribe(res => {
+      console.log(res);
+      if (res && res['status'] == 'success') {
+        this.user_given_list = res['data'];
+        this.user_given_listArray = this.user_given_list.map(val => {
+          return val['place_org_id'];
+        })
+        console.log(this.user_given_listArray);
+      }
+    }, err => {
+      console.log(err);
+    }, () => {
+      console.log("getGiven completed");
+    })
+  }
+
+  /**
+   * Save user Info for 
+   * start asigning User
+   */
+  validateMobileNumber() {
+    if (parseInt(this.mobilenumber) != NaN && this.mobilenumber.toString().length < 13 ){
+      this.startAssignMe(this.user_Assign_Type, this.user_Assign_data);
+      this.numberPopup = false;
+    } else {
+      alert("Enter valied Number");
+    }
+  }
+
+  numberPopup = false;
+  mobilenumber;
+  food_ration_asked = [118, 136]; //Assign Me
+  food_ration_assigned = [123, 132]; //Assign Me
+
+  user_Assign_Type;
+  user_Assign_data;
+  
+  assignme(type, data) {
+    this.user_Assign_Type = type;
+    this.user_Assign_data = data;
+    this.numberPopup = true;
+  }
+
+  startAssignMe(type, data){
+    this.loaderAction = true;
+    console.log({
+      type: type,
+      data: data,
+      username: this.userName,
+      userrole: this.userRole,
+      number: this.mobilenumber
+    })
+    let obj = {
+      type: type,
+      data: data,
+      username: this.userName,
+      userrole: this.userRole,
+      number: this.mobilenumber
+    }
+    this.dataService.assignme(obj).subscribe(res => {
+      console.log(res);
+      if (res && res['assigned'] == true){
+        alert("Sorry Already action taken by someone.")
+      }else if(res && res['status'] == 'success'){
+        // Get All givenList
+        alert("Assigned successfully");
+        this.getUserAssignedList();
+      }else{
+        alert(res['message']);
+      }
+
+    },err=>{
+      console.log(err);
+    },()=>{
+        this.loaderAction = false;
+      console.log("Service completed");
+    }) 
+  }
+
+  /**
+   * Close Action
+   * @param type 
+   * @param data 
+   */
+  givenbyme(type, data) {
+    this.loaderAction = true;
+    console.log({
+      type: type,
+      data: data,
+      username: this.userName,
+      userrole: this.userRole
+    })
+    let obj = {
+      type: type,
+      data: data,
+      username: this.userName,
+      userrole: this.userRole
+    }
+    this.dataService.givenbyme(obj).subscribe(res => {
+      console.log(res);
+      if (res && res['status'] == 'success') {
+        alert("Data saved successfuly");
+        this.getUserAssignedList();
+      } else {
+        alert(res['message']);
+      }
+
+    }, err => {
+      console.log(err);
+    }, () => {
+      this.loaderAction = false;
+      console.log("Service completed");
+    })
+  }
+
+
+  /**
+   * Get All Assigned User
+   */
+  allAssignedList = [];
+  getAllassignedList() {
+    this.loaderAction = true;
+    console.log({
+      username: this.userName,
+      userrole: this.userRole
+    })
+    let obj = {
+      username: this.userName,
+      userrole: this.userRole
+    }
+    this.dataService.getAllassignedList(obj).subscribe(res => {
+      console.log(res);
+      if (res && res['status'] == 'success') {
+        this.allAssignedList = res['data'].map(val => {
+          return val['place_org_id'];
+        })
+        console.log(this.allAssignedList);
+      } else {
+        console.log(res);
+      }
+
+    }, err => {
+      console.log(err);
+    }, () => {
+      this.loaderAction = false;
+      console.log("Service completed");
+    })
+  }
+
+
+
+
 
 }
 

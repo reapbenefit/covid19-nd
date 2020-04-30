@@ -52,6 +52,21 @@
           <tr *ngIf="locationDetails.complaintNumber != '' && locationDetails.complaintNumber != undefined"><td><strong>Complaint Number:&nbsp;</strong></td><td><span>{{locationDetails.complaintNumber}}</span></td></tr>
           <tr *ngIf="locationDetails.NoOfLikes != '' && locationDetails.NoOfLikes != undefined"><td><strong>No Of Likes:&nbsp;</strong></td><td><span>{{locationDetails.NoOfLikes}}</span></td></tr>
           <tr *ngIf="locationDetails.wards != '' && locationDetails.wards != undefined"><td><strong>Wards:&nbsp;</strong></td><td><span>{{locationDetails.wards}}</span></td></tr>
+          
+
+          <tr *ngIf="userName && locationDetails.menuId && locationDetails.id">
+            <td></td>
+            <td *ngIf="food_ration_asked.indexOf(locationDetails.menuId) != -1 && userName && allAssignedList.indexOf(locationDetails?.id) ==-1 ">
+              <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a" (click)="assignme('assign', locationDetails)">
+                <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i> Assign Me
+              </a>
+            </td>
+            <td *ngIf="user_given_listArray.indexOf(locationDetails?.id) != -1 && userName">
+              <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a" (click)="givenbyme('given', locationDetails)">
+                <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Given
+              </a>
+            </td>
+          </tr>
       </tbody>
       </table>
       <div class="row" *ngIf="zoom >= 16" style="margin: 0px;padding-top: 0.5rem;justify-content: flex-end;">
@@ -64,3 +79,22 @@
   <agm-data-layer [geoJson]="geoJson" [style]="styleFunc" (layerClick)="onClick($event)"></agm-data-layer>
 </agm-map>
 
+<div class="mobilenumber-popup" *ngIf="numberPopup">
+  <div class="nubmer-box animated fadeInDown">
+    <h5>Enter Mobile Number <span class="fa fa-times" (click)="numberPopup = false" style="font-size: 18px;"></span>
+    </h5>
+
+    <div class="body-mobile">
+      <ul>
+        <li>
+          <input type="number" min="0" max="10" [(ngModel)]="mobilenumber" placeholder="XXX XXX XXXX"
+            pattern="[789][0-9]{9}">
+        </li>
+        <li>
+          <a (click)="validateMobileNumber()">Submit</a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</div>

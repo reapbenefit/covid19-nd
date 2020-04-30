@@ -28,4 +28,22 @@ export class CommonService {
         return this.subjectCord.asObservable();
     }
 
+
+    private username = new Subject<any>();
+    private userRole = new Subject<any>();
+    setusername(user){
+        this.username.next({ data: user });
+    }
+    getusername(){
+        return this.username.asObservable();
+    }
+
+    setUserrole(role){
+        this.userRole.next({ data: role });
+    }
+    getUserrole(){
+        return this.userRole.asObservable();
+    }
+
+
 }
