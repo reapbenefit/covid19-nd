@@ -73,7 +73,7 @@ router.get('/get-public-table', (req,res)=>{
 
 //type localhost:8080 in browser to make a query
 app.get('/', (req, res)=>{
-connection.query("SELECT DISTINCT place_org_address FROM public_data_place_org_table WHERE city_id='1'", (error, rows, fields) => {
+connection.query("SELECT DISTINCT place_org_subcategory FROM public_data_place_org_table WHERE place_org_category = 'Service'", (error, rows, fields) => {
     if(error){
         console.log('error');
     }
