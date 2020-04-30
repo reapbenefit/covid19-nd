@@ -16,7 +16,7 @@ const routes: Routes = [{
       component: ECommerceComponent,
     },
     {
-      path: 'iot-dashboard',
+      path: 'VolunteerForm',
       component: PublicFormComponent,
     },
     {
