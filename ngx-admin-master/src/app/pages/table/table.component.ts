@@ -21,7 +21,7 @@ export class TableComponent implements OnInit {
 
   constructor(private _adminService: AdminService){
     this.columnDefs = [
-              {headerName: 'Place_Org_Name', field: 'place_org_name', editable: true, cellRenderer: "singleClickEditRenderer", width: 300},
+              {headerName: 'Place_Org_Name', field: 'place_org_name', editable: true, width: 300},
               {headerName: 'Place_Org_Address', field: 'place_org_address', editable: true},
               {headerName: 'Place_Org_Lat', field: 'place_org_lat', editable: true},
               {headerName: 'Place_Org_Long', field: 'place_org_long', editable: true},
@@ -61,29 +61,7 @@ export class TableComponent implements OnInit {
   
 
   ngOnInit(): void {
-    /** 
-    this._adminService.getPublicTableData().subscribe(data => this.rowDat = data, error => this.errorMsg = error);
 
-    console.log("hi");
-    for(var i = 0, len = this.rowDat.length; i< len; i++)
-    {
-      console.log(i);
-      /**let temp = {place_org_name: this.rowDat[i].place_org_name,
-      place_org_address: this.rowDat[i].place_org_address,
-      place_org_lat: this.rowDat[i].place_org_lat,
-      place_org_long: this.rowDat[i].place_org_long,
-      place_org_category: this.rowDat[i].place_org_category,
-      place_org_subcategory: this.rowDat[i].place_org_subcategory,
-      ward_id: this.rowDat[i].ward_id,
-      city_id: this.rowDat[i].city_id,
-      place_org_number: this.rowDat[i].place_org_number,
-      info: this.rowDat[i].info,
-      impact: this.rowDat[i].impact**/
-    
-    //console.log(temp);
-    //this.rowData.push(temp);
-    
-   // console.log(this.rowData);**/
    this._adminService.getPublicTableData().subscribe(response => {
     this.rowData = [],
     this.rowList = response;
