@@ -54,19 +54,35 @@
           <tr *ngIf="locationDetails.wards != '' && locationDetails.wards != undefined"><td><strong>Wards:&nbsp;</strong></td><td><span>{{locationDetails.wards}}</span></td></tr>
           
 
-          <tr *ngIf="userName && locationDetails.menuId && locationDetails.id">
-            <td></td>
-            <td *ngIf="food_ration_asked.indexOf(locationDetails.menuId) != -1 && userName && allAssignedList.indexOf(locationDetails?.id) ==-1 ">
-              <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a" (click)="assignme('assign', locationDetails)">
-                <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i> Assign Me
-              </a>
-            </td>
-            <td *ngIf="user_given_listArray.indexOf(locationDetails?.id) != -1 && userName">
-              <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a" (click)="givenbyme('given', locationDetails)">
-                <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Given
-              </a>
-            </td>
-          </tr>
+          <ng-template [ngIf]="!locationDetails['numberPopup']">
+            <tr *ngIf="userName && locationDetails.menuId && locationDetails.id">
+              <td></td>
+              <td *ngIf="food_ration_asked.indexOf(locationDetails.menuId) != -1 && userName && allAssignedList.indexOf(locationDetails?.id) ==-1 ">
+                <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a" (click)="assignme('assign', locationDetails)">
+                  <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i> Assign Me
+                </a>
+              </td>
+              <td *ngIf="user_given_listArray.indexOf(locationDetails?.id) != -1 && userName">
+                <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a" (click)="givenbyme('given', locationDetails)">
+                  <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as Given
+                </a>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template [ngIf]="locationDetails['numberPopup']">
+            <tr>
+              <td></td>
+              <td>
+                <div class="user-action-ass-given">
+                  <input class="" type="number" min="0" max="10" [(ngModel)]="locationDetails['raphonenumber']" placeholder="Mobile Number">
+                  <a class="user-action-a-a" (click)="validateMobileNumber(locationDetails['raphonenumber'], locationDetails)">Submit</a>
+                  <a class="user-action-a-a red" (click)="locationDetails['numberPopup'] = false">Cancel</a>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+
       </tbody>
       </table>
       <div class="row" *ngIf="zoom >= 16" style="margin: 0px;padding-top: 0.5rem;justify-content: flex-end;">
@@ -79,7 +95,7 @@
   <agm-data-layer [geoJson]="geoJson" [style]="styleFunc" (layerClick)="onClick($event)"></agm-data-layer>
 </agm-map>
 
-<div class="mobilenumber-popup" *ngIf="numberPopup">
+<!-- <div class="mobilenumber-popup" *ngIf="numberPopup">
   <div class="nubmer-box animated fadeInDown">
     <h5>Enter Mobile Number <span class="fa fa-times" (click)="numberPopup = false" style="font-size: 18px;"></span>
     </h5>
@@ -97,4 +113,4 @@
     </div>
 
   </div>
-</div>
+</div> -->

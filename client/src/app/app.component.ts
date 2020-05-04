@@ -28,7 +28,7 @@ export class AppComponent {
   collapseGooglesearch = false;
   defaultpage = 'Home';
   detail_legends_collapse = true; // true means Collapse
-  legends_details = true; // false --> Details
+  legends_details = 'legends'; // false --> Details
   filterdetailsvalue = '';
   loaderAction = false;
 
@@ -1849,7 +1849,9 @@ export class AppComponent {
   user_given_listArray = [];
   getUserAssignedList() {
 
+    this.GettotalClosedAsignment();
     this.getAllassignedList();
+
     var obj = {
       username: this.userName
     }
@@ -1873,17 +1875,15 @@ export class AppComponent {
    * Save user Info for 
    * start asigning User
    */
-  validateMobileNumber() {
-    if (parseInt(this.mobilenumber) != NaN && this.mobilenumber.toString().length < 13 ){
-      this.startAssignMe(this.user_Assign_Type, this.user_Assign_data);
-      this.numberPopup = false;
+  validateMobileNumber(number, item) {
+    if (parseInt(number) != NaN && number.toString().length < 13 ){
+      this.startAssignMe(this.user_Assign_Type, this.user_Assign_data, number);
+      item['numberPopup'] = false;
     } else {
       alert("Enter valied Number");
     }
   }
 
-  numberPopup = false;
-  mobilenumber;
   food_ration_asked = [118, 136]; //Assign Me
   food_ration_assigned = [123, 132]; //Assign Me
 
@@ -1891,26 +1891,26 @@ export class AppComponent {
   user_Assign_data;
   
   assignme(type, data) {
+    data['numberPopup'] = true;
     this.user_Assign_Type = type;
     this.user_Assign_data = data;
-    this.numberPopup = true;
   }
 
-  startAssignMe(type, data){
+  startAssignMe(type, data, number){
     this.loaderAction = true;
     console.log({
       type: type,
       data: data,
       username: this.userName,
       userrole: this.userRole,
-      number: this.mobilenumber
+      number: number
     })
     let obj = {
       type: type,
       data: data,
       username: this.userName,
       userrole: this.userRole,
-      number: this.mobilenumber
+      number: number
     }
     this.dataService.assignme(obj).subscribe(res => {
       console.log(res);
@@ -2001,6 +2001,36 @@ export class AppComponent {
       console.log("Service completed");
     })
   }
+  
+  /**
+   * Get total Closed Asignment based on User
+   */
+  total_cosed_Asss = 0;
+  GettotalClosedAsignment() {
+    console.log({
+      username: this.userName,
+      userrole: this.userRole
+    })
+    let obj = {
+      username: this.userName,
+      userrole: this.userRole
+    }
+    this.dataService.GettotalClosedAsignmentUser(obj).subscribe(res => {
+      console.log(res);
+      if (res && res['status'] == 'success') {
+        this.total_cosed_Asss  = res['data'].length;
+        console.log(this.allAssignedList);
+      } else {
+        console.log(res);
+      }
+
+    }, err => {
+      console.log(err);
+    }, () => {
+      this.loaderAction = false;
+      console.log("Service completed");
+    })
+  }
 
 
 
@@ -2058,7 +2088,7 @@ export class InputsearchPipe {
           ((val['category'] != undefined ? val['category'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
           ((val['subcategory'] != undefined ? val['subcategory'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
           ((val['cityName'] != undefined ? val['cityName'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
-          ((val['wardName'] != undefined ? val['wardName'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1
+          ((val['wardName'] != undefined ? val['wardName'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 
         ) {
           val['index'] = index;
           return true;

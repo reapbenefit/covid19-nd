@@ -69,6 +69,10 @@ export class DataService {
         return this.httpClient.post(`${this.baseURLCOVID}/neighbourHood/getDetailData.php`, obj, { headers: this.headers });
     }
 
+    /**
+     * @param obj Get MenuList
+     */
+    MenuList= [];
     getMenuList(obj) {
         return this.httpClient.post(`${this.baseURLCOVID}/neighbourHood/getMenuItems.php`, obj, { headers: this.headers });
     }
@@ -159,6 +163,13 @@ export class DataService {
      */
     getAllassignedList(obj) {
         return this.httpClient.post(`/getAllassignedList`, obj, { headers: this.headers });
+    }
+    
+    /**
+     * @param obj Get GettotalClosedAsignment
+     */
+    GettotalClosedAsignmentUser(obj) {
+        return this.httpClient.post(`/getTotalClosedUser`, obj, { headers: this.headers });
     }
 
     CollectionsData(obj) {

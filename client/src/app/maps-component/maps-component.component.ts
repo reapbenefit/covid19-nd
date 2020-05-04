@@ -194,6 +194,9 @@ export class MapsComponentComponent implements OnInit {
       if (this.responceData != null) {
         this.responceData.data['menuId'] = marker['menuId'] ? marker['menuId']: 0;
         this.responceData.data['id'] = marker['id'] ? marker['id']: 0;
+        if (marker['subcategory']){
+          this.responceData.data['subcategory'] = marker['subcategory'];
+        }
         this.locationDetails = this.responceData.data;
       }
       // this.select_marker(data);
@@ -306,11 +309,11 @@ export class MapsComponentComponent implements OnInit {
    * Save user Info for 
    * start asigning User
    */
-  validateMobileNumber() {
+  validateMobileNumber(number, item) {
     
-    if (parseInt(this.mobilenumber) != NaN && this.mobilenumber.toString().length < 13) {
-      this.startAssignMe(this.user_Assign_Type, this.user_Assign_data);
-      this.numberPopup = false;
+    if (parseInt(number) != NaN && number.toString().length < 13) {
+      this.startAssignMe(this.user_Assign_Type, this.user_Assign_data, number);
+      item['numberPopup'] = false;
     } else {
       alert("Enter valied Number");
     }
@@ -325,26 +328,27 @@ export class MapsComponentComponent implements OnInit {
   user_Assign_data;
 
   assignme(type, data) {
+    data['numberPopup'] = true;
     this.user_Assign_Type = type;
     this.user_Assign_data = data;
-    this.numberPopup = true;
+    
   }
 
-  startAssignMe(type, data) {
+  startAssignMe(type, data, number) {
     this.loaderAction = true;
     console.log({
       type: type,
       data: data,
       username: this.userName,
       userrole: this.userRole,
-      number: this.mobilenumber
+      number: number
     })
     let obj = {
       type: type,
       data: data,
       username: this.userName,
       userrole: this.userRole,
-      number: this.mobilenumber
+      number: number
     }
     this.dataService.assignme(obj).subscribe(res => {
       console.log(res);

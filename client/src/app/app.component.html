@@ -384,17 +384,25 @@
 
               </div>
               <div class="actiob-mode-dl">
-                <a [ngClass]="{'active': legends_details}" href="JavaScript:void(0)"
-                  (click)="legends_details = true">Legends</a>
-                <a [ngClass]="{'active': !legends_details}" href="JavaScript:void(0)"
-                  (click)="legends_details = false; detail_list_number = 100">Details</a>
+                <a [ngClass]="{'active': legends_details == 'legends'}" href="JavaScript:void(0)"
+                  (click)="legends_details = 'legends'">Legends</a>
+                <a [ngClass]="{'active': legends_details == 'details'}" href="JavaScript:void(0)"
+                  (click)="legends_details = 'details'; detail_list_number = 100">Details</a>
+                
+                  <a *ngIf="userName" [ngClass]="{'active': legends_details == 'mylist'}" href="JavaScript:void(0)" 
+                  (click)="legends_details = 'mylist'; detail_list_number = 100">My Lists</a>
               </div>
-              <div class="filter-g" *ngIf="!legends_details && mapData?.length">
+              <div class="filter-g" *ngIf="legends_details == 'details' && mapData?.length">
                 <input type="text" placeholder="Search place" [(ngModel)]="filterdetailsvalue">
               </div>
+
+              <h5 *ngIf="legends_details == 'mylist' && userName"  class="ass-closed-count">Assignments closed <span> ({{total_cosed_Asss}})</span></h5>
+              <h5 *ngIf="legends_details == 'mylist' && userName"  class="ass-closed-count">Pending Assignments <span> </span></h5>
+
               <div class="ra-custom-google"
                 (scroll)="detail_list_number = (mapData?.length >= detail_list_number)? (detail_list_number + 100): (detail_list_number)">
-                <ng-template [ngIf]="legends_details">
+                
+                <ng-template [ngIf]="legends_details =='legends'">
                   <div class="categories-box-g">
                     <ul class="webview-ra">
                       <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
@@ -414,11 +422,11 @@
                     </ul>
                   </div>
                 </ng-template>
-                <ng-template [ngIf]="!legends_details">
 
+                <ng-template [ngIf]="legends_details =='details'">
                   <ng-template [ngIf]="true">
                     <div class="result-g-box {{ i }}"
-                      *ngFor="let item of mapData | inputsearch:filterdetailsvalue | slice:0:detail_list_number; let i = index">
+                      *ngFor="let item of mapData | inputsearch:filterdetailsvalue; let i = index">
                       <div style="cursor: pointer;" class="lat-details-g animated fadeInDown"
                         (click)="item[collapse] = !item[collapse]">
                         <h5 (click)="zoomToPlace(item, i)"><img class="title_icons" [src]="item.icon"
@@ -438,15 +446,59 @@
                         </div>
                       </div>
 
-                      <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a" (click)="assignme('assign', item)"
-                        *ngIf="food_ration_asked.indexOf(item.menuId) != -1 && userName && allAssignedList.indexOf(item?.id) == -1 ">
-                        <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i> Assign Me
-                      </a>
-                      <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a" (click)="givenbyme('given', item)"
-                        *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
-                        <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Given
-                      </a>
+                      <div class="user-action" *ngIf="!item['numberPopup']">
+                        <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a" (click)="assignme('assign', item)"
+                          *ngIf="food_ration_asked.indexOf(item.menuId) != -1 && userName && allAssignedList.indexOf(item?.id) == -1 ">
+                          <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i> Assign Me
+                        </a>
+                        <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a" (click)="givenbyme('given', item)"
+                          *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
+                          <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as Given
+                        </a>
+                      </div>
+                      <ng-template [ngIf]="item['numberPopup']">
+                        <div class="user-action-ass-given">
+                          <input class="" type="number" min="0" max="10" [(ngModel)]="item['raphonenumber']" placeholder="Mobile Number">
+                          <a class="user-action-a-a" (click)="validateMobileNumber(item['raphonenumber'], item)">Submit</a>
+                          <a class="user-action-a-a red" (click)="item['numberPopup'] = false">Cancel</a>
+                        </div>
+                      </ng-template>
 
+                    </div>
+                    <div class="result-g-box">
+                      <p>No Data Found</p>
+                    </div>
+                  </ng-template>
+                </ng-template>
+                
+                <ng-template [ngIf]="legends_details =='mylist'">
+                  <ng-template [ngIf]="true">
+                    <div class="result-g-box {{ i }}" [ngClass]="{'displaynone': !(user_given_listArray.indexOf(item?.id) != -1 && userName)}"
+                      *ngFor="let item of mapData; let i = index">
+                      <div style="cursor: pointer;" class="lat-details-g animated fadeInDown"
+                        (click)="item[collapse] = !item[collapse]">
+                        <h5 (click)="zoomToPlace(item, i)"><img class="title_icons" [src]="item.icon"
+                            alt="">{{item.name}}
+                        </h5>
+                        <p>{{item.address}}</p>
+                      </div>
+                      <div class="lat-details-g moredetails" style="overflow: hidden">
+                        <div class="animated fadeIn" *ngIf="item[collapse]">
+                          <p *ngIf="item?.cityName"><b>City :</b> {{item?.cityName}}</p>
+                          <p *ngIf="item?.wardName"><b>Ward :</b> {{item?.wardName}}</p>
+                          <p *ngIf="item?.category"><b>Category :</b> {{item?.category}}</p>
+                          <p *ngIf="item?.subcategory"><b>Subcategory :</b> {{item?.subcategory}}</p>
+                          <p *ngIf="item?.lat"><b>Latitude :</b> {{item?.lat}}</p>
+                          <p *ngIf="item?.lng"><b>Longitude :</b> {{item?.lng}}</p>
+                          <p *ngIf="item?.lng"><b>Id :</b> {{item?.id}}</p>
+                        </div>
+                      </div>
+                      <div class="user-action" *ngIf="!item['numberPopup']">
+                        <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a" (click)="givenbyme('given', item)"
+                          *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
+                          <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as Given
+                        </a>
+                      </div>
                     </div>
                     <div class="result-g-box">
                       <p>No Data Found</p>
@@ -822,17 +874,25 @@
 
 
             <div class="actiob-mode-dl">
-              <a [ngClass]="{'active': legends_details}" href="JavaScript:void(0)"
-                (click)="legends_details = true">Legends</a>
-              <a [ngClass]="{'active': !legends_details}" href="JavaScript:void(0)"
-                (click)="legends_details = false; detail_list_number = 100">Details</a>
+              <a [ngClass]="{'active': legends_details == 'legends'}" href="JavaScript:void(0)"
+                (click)="legends_details = 'legends'">Legends</a>
+              <a [ngClass]="{'active': legends_details == 'details'}" href="JavaScript:void(0)"
+                (click)="legends_details = 'details'; detail_list_number = 100">Details</a>
+              
+              <a *ngIf="userName" [ngClass]="{'active': legends_details == 'mylist'}" href="JavaScript:void(0)"
+                  (click)="legends_details = 'mylist'; detail_list_number = 100">My Lists</a>
             </div>
-            <div class="filter-g" *ngIf="!legends_details && mapData?.length">
+            <div class="filter-g" *ngIf="legends_details == 'details' && mapData?.length">
               <input type="text" placeholder="Search place" [(ngModel)]="filterdetailsvalue">
             </div>
+            
+            <h5 *ngIf="legends_details == 'mylist' && userName" class="ass-closed-count">Assignments closed <span>
+                ({{total_cosed_Asss}})</span></h5>
+            <h5 *ngIf="legends_details == 'mylist' && userName" class="ass-closed-count">Pending Assignments <span> </span></h5>
+
             <div class="result-g-d"
               (scroll)="detail_list_number = (mapData?.length >= detail_list_number)? (detail_list_number + 100): (detail_list_number)">
-              <ng-template [ngIf]="legends_details">
+              <ng-template [ngIf]="legends_details == 'legends'">
                 <div class="categories-box-g" style="padding-top: 10px;">
                   <ul class="webview-ra">
                     <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
@@ -852,10 +912,11 @@
                   </ul>
                 </div>
               </ng-template>
-              <ng-template [ngIf]="!legends_details">
+
+              <ng-template [ngIf]="legends_details == 'details'">
                 <ng-template [ngIf]="true">
                   <div class="result-g-box {{i}}"
-                    *ngFor="let item of mapData | inputsearch:filterdetailsvalue | slice:0:detail_list_number; let i = index">
+                    *ngFor="let item of mapData | inputsearch:filterdetailsvalue; let i = index">
                     <div style="cursor: pointer;" class="lat-details-g animated fadeInDown"
                       (click)="item[collapse] = !item[collapse]">
                       <h5 (click)="zoomToPlace(item, i)"><img class="title_icons" [src]="item.icon" alt="">{{item.name}}
@@ -873,15 +934,60 @@
                       </div>
                     </div>
 
-                    <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a" (click)="assignme('assign', item)"
-                      *ngIf="food_ration_asked.indexOf(item.menuId) != -1 && userName && allAssignedList.indexOf(item?.id) ==-1 ">
-                      <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i> Assign Me
-                    </a>
-                    <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a" (click)="givenbyme('given', item)"
-                      *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
-                      <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Given
-                    </a>
+                    <div class="user-action" *ngIf="!item['numberPopup']">
+                      <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a"
+                        (click)="assignme('assign', item)"
+                        *ngIf="food_ration_asked.indexOf(item.menuId) != -1 && userName && allAssignedList.indexOf(item?.id) == -1 ">
+                        <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i> Assign Me
+                      </a>
+                      <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a"
+                        (click)="givenbyme('given', item)" *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
+                        <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as Given
+                      </a>
+                    </div>
+                    <ng-template [ngIf]="item['numberPopup']">
+                      <div class="user-action-ass-given">
+                        <input class="" type="number" min="0" max="10" [(ngModel)]="item['raphonenumber']" placeholder="Mobile Number">
+                        <a class="user-action-a-a" (click)="validateMobileNumber(item['raphonenumber'], item)">Submit</a>
+                        <a class="user-action-a-a red" (click)="item['numberPopup'] = false">Cancel</a>
+                      </div>
+                    </ng-template>
 
+                  </div>
+                  <div class="result-g-box">
+                    <p>No Data Found</p>
+                  </div>
+                </ng-template>
+              </ng-template>
+
+              <ng-template [ngIf]="legends_details =='mylist'">
+                <ng-template [ngIf]="true">
+                  <div class="result-g-box {{ i }}"
+                    [ngClass]="{'displaynone': !(user_given_listArray.indexOf(item?.id) != -1 && userName)}"
+                    *ngFor="let item of mapData; let i = index">
+                    <div style="cursor: pointer;" class="lat-details-g animated fadeInDown"
+                      (click)="item[collapse] = !item[collapse]">
+                      <h5 (click)="zoomToPlace(item, i)"><img class="title_icons" [src]="item.icon" alt="">{{item.name}}
+                      </h5>
+                      <p>{{item.address}}</p>
+                    </div>
+                    <div class="lat-details-g moredetails" style="overflow: hidden">
+                      <div class="animated fadeIn" *ngIf="item[collapse]">
+                        <p *ngIf="item?.cityName"><b>City :</b> {{item?.cityName}}</p>
+                        <p *ngIf="item?.wardName"><b>Ward :</b> {{item?.wardName}}</p>
+                        <p *ngIf="item?.category"><b>Category :</b> {{item?.category}}</p>
+                        <p *ngIf="item?.subcategory"><b>Subcategory :</b> {{item?.subcategory}}</p>
+                        <p *ngIf="item?.lat"><b>Latitude :</b> {{item?.lat}}</p>
+                        <p *ngIf="item?.lng"><b>Longitude :</b> {{item?.lng}}</p>
+                        <p *ngIf="item?.lng"><b>Id :</b> {{item?.id}}</p>
+                      </div>
+                    </div>
+                    <div class="user-action" *ngIf="!item['numberPopup']">
+                      <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a"
+                        (click)="givenbyme('given', item)" *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
+                        <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as Given
+                      </a>
+                    </div>
                   </div>
                   <div class="result-g-box">
                     <p>No Data Found</p>
@@ -1178,7 +1284,7 @@
 
 
 
-<div class="mobilenumber-popup" *ngIf="numberPopup">
+<!-- <div class="mobilenumber-popup" *ngIf="numberPopup">
   <div class="nubmer-box animated fadeInDown">
     <h5>Enter Mobile Number <span class="fa fa-times" (click)="numberPopup = false" style="font-size: 18px;"></span></h5>
     
@@ -1194,5 +1300,5 @@
     </div>
     
   </div>
-</div>
+</div> -->
 

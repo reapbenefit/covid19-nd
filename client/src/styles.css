@@ -2101,12 +2101,33 @@ a.user-action-a-a {
     font-size: 14px;
     font-weight: 400;
     text-transform: capitalize;
-    display: block;
-    width: 110px;
+    /* display: block; */
+    display: inline-block;
+    width: auto;
+    max-width: 140px;
     text-align: center;
-    margin: 10px 0;
+    margin: 0px 0 10px 0;
     cursor: pointer;
 }
+.user-action-ass-given input {
+    border: 1px solid #dfdfdf;
+    border-radius: 5px;
+    display: inline-block;
+    flex: 1;
+    height: 30px;
+    margin-right: 10px;
+    font-size: 14px;
+    padding: 5px;
+    min-width: 100px;
+
+}
+.user-action-ass-given {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
 a.user-action-a-a i {
     margin-right: 5px !important;
 }
@@ -2127,8 +2148,6 @@ a.user-action-a-a i {
     z-index: 9999999 !important;
     display: flex;
 }
-
-.mobilenumber-popup {}
 
 .mobilenumber-popup .nubmer-box {
     margin: auto;
@@ -2179,6 +2198,41 @@ a.user-action-a-a i {
     color: red;
     cursor: pointer;
 }
+
+
+.user-action-ass-given button {
+    background: #fbb040;
+}
+
+.user-action-ass-given a {
+    height: 30px;
+    display: inline-block;
+    margin-right: 5px;
+    line-height: 1.7 !important;
+}
+.user-action-ass-given a.red {
+    background: red;
+    color: #fff !important;
+}
+.displaynone{
+  display: none !important;
+}
+h5.ass-closed-count {
+    font-size: 16px;
+    color: #6c757d;
+    margin: 10px 21px;
+    position: relative;
+}
+h5.ass-closed-count {
+    border-bottom: 1px solid #f2f2f2;
+    padding-bottom: 5px;
+}
+
+h5.ass-closed-count span {
+    position: absolute;
+    right: 0px;
+}
+
 
 /* end Map Popup Box */
 /* End Google Search */
