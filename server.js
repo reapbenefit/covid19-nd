@@ -658,8 +658,8 @@ app.post('/getTotalClosedUser', async (req, res) => {
 
         if (req.body && req.body['username'] && req.body['username'] != null) {
             var username = req.body.username;
-
             // var query = `SELECT * FROM public_data_place_org_table  WHERE place_org_id = '136005' `; 
+
             var query = `SELECT * FROM self_solve WHERE assigned_to = '${username}' AND closed_by IS NOT NULL`;
 
             await connection.query(query, function (err, rows) {
@@ -676,16 +676,19 @@ app.post('/getTotalClosedUser', async (req, res) => {
 
 
             // var form_data = {
-            //     closed_by: null,
-            //     closed_at: null
+            //     closed_by: "testngoadmin",
+            //     closed_at: new Date(),
+            //     assigned_to: "testngoadmin",
+            //     assigned_timestamp: new Date(),
+            //     place_org_id: 136005
             // }
-            // connection.query('UPDATE self_solve SET ? WHERE place_org_id = 136005', form_data, function (err, ss) {
+            // connection.query('UPDATE self_solve SET ? WHERE id = 57', form_data, function (err, ss) {
             //     if (err) {
             //         console.log("Error On update");
             //         result = { "status": 'fail', "message": `Error on Updates${err}` };
             //         res.send(result);
             //     } else {
-            //         // updateMainTable();
+            //         console.log(ss);
             //         result = { "status": 'success', "message": "data Updated successfully" };
             //         res.send(result);
             //     }

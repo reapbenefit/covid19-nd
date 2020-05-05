@@ -106,12 +106,12 @@ export class DataService {
         let menuItems = this.getSubMenus(obj);
         let params = {
             menuData: menuItems,
-            topLeftLat: "" + obj.topLeftLat,
-            topLeftLon: "" + obj.topLeftLon,
-            bottomRightLat: "" + obj.bottomRightLat,
-            bottomRightLon: "" + obj.bottomRightLon,
-            latitude: "" + obj.latitude,
-            longitude: "" + obj.longitude
+            // topLeftLat: "" + obj.topLeftLat,
+            // topLeftLon: "" + obj.topLeftLon,
+            // bottomRightLat: "" + obj.bottomRightLat,
+            // bottomRightLon: "" + obj.bottomRightLon,
+            // latitude: "" + obj.latitude,
+            // longitude: "" + obj.longitude
         };
         console.log(params);
         return this.httpClient.get(`${this.baseURLES}/categoryImpacts`, { params: params, headers: this.headers });
