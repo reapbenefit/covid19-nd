@@ -82,6 +82,18 @@
               </td>
             </tr>
           </ng-template>
+          
+          <ng-template [ngIf]="locationDetails['closed_by']">
+            <tr>
+              <td></td>
+              <td>
+                <div class="closedby_user" style="margin: 0px !important;">
+                  <div><span class="bold">Closed By: </span>{{locationDetails?.closed_by}}</div>
+                  <div><span>{{locationDetails?.closed_at | date:'dd-MM-y h:mm'}}</span></div>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
 
       </tbody>
       </table>

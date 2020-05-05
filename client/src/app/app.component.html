@@ -446,6 +446,11 @@
                         </div>
                       </div>
 
+                      <div class="closedby_user" *ngIf="item?.closed_by">
+                        <div><span class="bold">Closed By: </span>{{item?.closed_by}}</div>
+                        <div><span>{{item?.closed_at | date:'dd-MM-y h:mm'}}</span></div>
+                      </div>
+
                       <div class="user-action" *ngIf="!item['numberPopup']">
                         <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a" (click)="assignme('assign', item)"
                           *ngIf="food_ration_asked.indexOf(item.menuId) != -1 && userName && allAssignedList.indexOf(item?.id) == -1 ">
@@ -932,6 +937,11 @@
                         <p *ngIf="item?.lat"><b>Latitude :</b> {{item?.lat}}</p>
                         <p *ngIf="item?.lng"><b>Longitude :</b> {{item?.lng}}</p>
                       </div>
+                    </div>
+
+                    <div class="closedby_user" *ngIf="item?.closed_by">
+                      <div><span class="bold">Closed By: </span>{{item?.closed_by}}</div>
+                      <div><span>{{item?.closed_at | date:'dd-MM-y h:mm'}}</span></div>
                     </div>
 
                     <div class="user-action" *ngIf="!item['numberPopup']">
