@@ -9,7 +9,7 @@
 </ul>-->
   <ag-grid-angular
 
-  style = "width: 150%; height: 1500px;"
+  style = "width: 150%; height: 1000px;"
   class = "ag-theme-balham"
   
   [rowData] = "rowData"
@@ -17,15 +17,20 @@
   
   [floatingFilter] = "true"
   [suppressClickEdit]="true"
-  [components]="components"
+
+  [frameworkComponents]="frameworkComponents"
   
   [pagination] = "true"
-  [paginationPageSize] = "100"
+  [paginationPageSize] = "20"
   
   [editType]="editType"
   (gridReady)="onGridReady($event)"
   
   >
   </ag-grid-angular>
+  {{errorMsg}}
 
-{{errorMsg}}
+<h4>Row data from button 1: </h4>
+<pre>{{rowDataClicked1 | json}}</pre>
+
+

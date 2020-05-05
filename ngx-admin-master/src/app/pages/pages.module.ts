@@ -12,6 +12,7 @@ import { PublicFormComponent } from './public-form/public-form.component';
 import { TableComponent } from './table/table.component';
 import { AgGridModule } from 'ag-grid-angular';
 import {AdminService} from '../service/admin.service';
+import { EditButtonComponent } from '../edit-button/edit-button.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import {AdminService} from '../service/admin.service';
   declarations: [
     PagesComponent,
     PublicFormComponent,
-    TableComponent
+    TableComponent, 
+    EditButtonComponent
   ],
 })
 export class PagesModule {

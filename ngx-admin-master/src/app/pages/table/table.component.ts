@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../service/admin.service';
+import { EditButtonComponent } from '../../edit-button/edit-button.component'; 
 
 @Component({
   selector: 'ngx-table',
@@ -18,28 +19,40 @@ export class TableComponent implements OnInit {
   public components;
   public errorMsg = "";
   public rowList;
+  public frameworkComponents: any;
+  rowDataClicked1 = {};
 
   constructor(private _adminService: AdminService){
+    this.frameworkComponents = {
+      buttonRenderer: EditButtonComponent,
+    }
+
     this.columnDefs = [
-              {headerName: 'Place_Org_Name', field: 'place_org_name', editable: true, width: 300},
-              {headerName: 'Place_Org_Address', field: 'place_org_address', editable: true},
-              {headerName: 'Place_Org_Lat', field: 'place_org_lat', editable: true},
-              {headerName: 'Place_Org_Long', field: 'place_org_long', editable: true},
-              {headerName: 'Place_Org_Category', field: 'place_org_category', filter: 'agTextColumnFilter', sortable: true, editable: true},
-              {headerName: 'Place_Org_Subcategory', field: 'place_org_subcategory', filter: 'agTextColumnFilter', sortable: true, editable: true},
-              {headerName: 'Ward_ID', field: 'ward_id', filter: 'agNumberColumnFilter', sortable: true, editable: true},
-              {headerName: 'City_ID', field: 'city_id', editable: true},
-              {headerName: 'Place_Org_Number', field: 'place_org_number', editable: true},
-              {headerName: 'Info', field: 'info', filter: 'agTextColumnFilter', sortable: true, editable: true},
-              {headerName: 'Impact', field: 'impact', editable: true},
+              {headerName: 'Name', field: 'place_org_name', editable: true, width: 300, pinned: 'left'},
+              {headerName: 'Address', field: 'place_org_address', editable: true, width: 300, pinned: 'left'},
+              {headerName: 'Category', field: 'place_org_category', filter: 'agTextColumnFilter', width: 300, sortable: true, editable: true},
+              {headerName: 'Subcategory', field: 'place_org_subcategory', filter: 'agTextColumnFilter', width: 300, sortable: true, editable: true},
+              {headerName: 'Ward ID', field: 'ward_id', filter: 'agNumberColumnFilter',width: 300, sortable: true, editable: true},
+              {headerName: 'City ID', field: 'city_id', width: 300, editable: true},
+              {headerName: 'Organization Number', field: 'place_org_number', width: 300, editable: true},
+              {headerName: 'Info', field: 'info', filter: 'agTextColumnFilter', width: 300, sortable: true, editable: true},
+              {headerName: 'Impact', field: 'impact', width: 300, editable: true, filter: 'agTextColumnFilter', sortable: true},
+              {headerName: 'Action', field: 'action', width: 200, cellRenderer: 'buttonRenderer', cellRendererParams: {
+                onClick: this.onBtnClick1.bind(this),
+                label: 'Edit'
+              }}
 
     ];
 
     this.editType = "fullRow";
-    this.components = { singleClickEditRenderer: getRenderer() };
+    //this.components = { singleClickEditRenderer: getRenderer() };
 
   }
 
+  onBtnClick1(e) {
+    this.rowDataClicked1 = e.rowData;
+    //
+  }
   onCellClicked($event){
     // check whether the current row is already opened in edit or not
     if(this.editingRowIndex != $event.rowIndex) {
@@ -69,8 +82,6 @@ export class TableComponent implements OnInit {
       this.rowData.push({
         place_org_name: item.place_org_name,
         place_org_address: item.place_org_address,
-        place_org_lat: item.place_org_lat,
-        place_org_long: item.place_org_long,
         place_org_category: item.place_org_category,
         place_org_subcategory: item.place_org_subcategory,
         ward_id: item.ward_id,
@@ -117,6 +128,16 @@ function getRenderer() {
     this.eButton.removeEventListener("click", this.buttonClickListener);
   };
   return CellRenderer;
+}
+
+function editClicked(){
+  window.alert("edit clicked: ");
+}
+
+function editCellRendererFunc(params) {
+  params.$scope.editClicked = editClicked;
+  //return '<button ng-click="ageClicked(data.age)" ng-bind="data.age"></button>';
+  return '<button ng-click="editClicked()">Edit</button>';
 }
 
 

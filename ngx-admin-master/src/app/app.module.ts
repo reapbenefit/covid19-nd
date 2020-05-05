@@ -22,6 +22,7 @@ import {
 } from '@nebular/theme';
 import { LoginkeycloakComponent } from './loginkeycloak/loginkeycloak.component';
 import { TableComponent } from './pages/table/table.component';
+//import { EditButtonComponent } from './edit-button/edit-button.component';
 
 @NgModule({
   declarations: [AppComponent, LoginkeycloakComponent],
