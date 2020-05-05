@@ -284,7 +284,7 @@ app.post('/assignme', async (req, res) => {
                         return finalName;
                         break;
                     case 'food-assigned':
-                        finalName = 'Food - Given';
+                        finalName = 'Food - Assigned';
                         return finalName;
                         break;
                     case 'rations-asked':
@@ -292,7 +292,7 @@ app.post('/assignme', async (req, res) => {
                         return finalName;
                         break;
                     case 'rations-assigned':
-                        finalName = 'Rations-Given';
+                        finalName = 'Rations - Assigned';
                         return finalName;
                         break;
                     default:
@@ -301,27 +301,35 @@ app.post('/assignme', async (req, res) => {
                 }
             }
 
-
+            var retrylevel = 0;
             async function updateMainTable() {
-                var finalName = getmatchingName();
-                if (finalName != '' && place_org_id == 136005) {
+                var finalName = await getmatchingName();
+                if (finalName != '') {
                     var form_data = {
                         place_org_subcategory: finalName
                     }
                     await connection.query('UPDATE public_data_place_org_table SET ? WHERE place_org_id = ' + place_org_id, form_data, function (err, ss) {
                         if (err) {
                             console.log("Error On update");
-                            result = { "status": 'fail', "message": `Error on Updates${err}` };
-                            res.send(result);
+                            console.log(err);
+                            if (retrylevel < 3) {
+                                retrylevel = retrylevel + 1;
+                                updateMainTable();
+                            } else {
+                                result = { "status": 'fail', "message": `Error on Updates M: ${err}` };
+                                res.send(result);
+                            }
                         } else {
-                            result = { "status": 'success', "message": "data Updated successfully" };
+                            retrylevel = 0;
+                            result = { "status": 'success', "message": "data Updated successfully M" };
                             res.send(result);
                         }
                     })
-                }else{
-                    result = { "status": 'success', "message": "subCategory not matched" };
+                } else {
+                    result = { "status": 'success', "message": "subCategory not matched M" };
                     res.send(result);
                 }
+
             }
 
 
@@ -329,7 +337,7 @@ app.post('/assignme', async (req, res) => {
             connection.query('SELECT * FROM self_solve WHERE place_org_id = ' + place_org_id, function (err, rows, fields) {
                 if (err) {
                     console.log(err);
-                    result = { "status": 'fail', "message": `Error on Updates${err}` };
+                    result = { "status": 'fail', "message": `Error on Updates : ${err}` };
                     res.send(result);
                 } else {
                     console.log(rows);
@@ -341,17 +349,13 @@ app.post('/assignme', async (req, res) => {
                             if (err) {
                                 console.log("Insearting Error");
                                 console.log(err);
-                                result = { "status": 'fail', "message": `insearting error ${err}` };
+                                result = { "status": 'fail', "message": `insearting error S: ${err}` };
                                 res.send(result);
                             } else {
                                 console.log(ss);
                                 console.log(ff);
-                                console.log("Insearted succesfluuy");
-
+                                console.log("Insearted succesfluuy S");
                                 updateMainTable();
-
-                                // result = { "status": 'success', "message": "Insearted Successfully" };
-                                // res.send(result);
                             }
                         });
                     } else {
@@ -441,25 +445,32 @@ app.post('/givenbyme', async (req, res) => {
                 }
             }
 
-
-            async function updateMainTable()  {
-                var finalName = getmatchingName();
-                if (finalName != '' && place_org_id == 136005) {
+            var retrylevel = 0;
+            async function updateMainTable() {
+                var finalName = await getmatchingName();
+                if (finalName != '') {
                     var form_data = {
                         place_org_subcategory: finalName
                     }
                     await connection.query('UPDATE public_data_place_org_table SET ? WHERE place_org_id = ' + place_org_id, form_data, function (err, ss) {
                         if (err) {
                             console.log("Error On update");
-                            result = { "status": 'fail', "message": `Error on Updates${err}` };
-                            res.send(result);
+                            console.log(err);
+                            if (retrylevel < 3) {
+                                retrylevel = retrylevel + 1;
+                                updateMainTable();
+                            } else {
+                                result = { "status": 'fail', "message": `Error on Updates M: ${err}` };
+                                res.send(result);
+                            }
                         } else {
-                            result = { "status": 'success', "message": "data Updated successfully" };
+                            retrylevel = 0;
+                            result = { "status": 'success', "message": "data Updated successfully M" };
                             res.send(result);
                         }
                     })
                 } else {
-                    result = { "status": 'success', "message": "subCategory not matched" };
+                    result = { "status": 'success', "message": "subCategory not matched M" };
                     res.send(result);
                 }
             }
@@ -474,7 +485,7 @@ app.post('/givenbyme', async (req, res) => {
             connection.query('UPDATE self_solve SET ? WHERE place_org_id = ' + place_org_id, form_data, function (err, ss) {
                 if (err) {
                     console.log("Error On update");
-                    result = { "status": 'fail', "message": `Error on Updates${err}` };
+                    result = { "status": 'fail', "message": `Error on Updates S: ${err}` };
                     res.send(result);
                 } else {
                     updateMainTable();
@@ -647,10 +658,10 @@ app.post('/getTotalClosedUser', async (req, res) => {
 
         if (req.body && req.body['username'] && req.body['username'] != null) {
             var username = req.body.username;
-            
+
             // var query = `SELECT * FROM public_data_place_org_table  WHERE place_org_id = '136005' `; 
             var query = `SELECT * FROM self_solve WHERE assigned_to = '${username}' AND closed_by IS NOT NULL`;
-            
+
             await connection.query(query, function (err, rows) {
                 if (err) {
                     console.log(err);
@@ -664,7 +675,7 @@ app.post('/getTotalClosedUser', async (req, res) => {
             });
 
 
-            // form_data = {
+            // var form_data = {
             //     closed_by: null,
             //     closed_at: null
             // }
