@@ -1,0 +1,139 @@
+<div style="text-align:center">
+    <h1>
+      Overview
+    </h1>
+  </div>
+<!--
+  <ul>
+    <li *ngFor="let row of rowData">{{row.place_org_name}}</li>
+</ul>-->
+  <ag-grid-angular
+
+  style = "width: 125%; height: 650px;"
+  class = "ag-theme-balham"
+  
+  [rowData] = "rowData"
+  [columnDefs] = "columnDefs"
+  
+  [floatingFilter] = "true"
+  [suppressClickEdit]="true"
+
+  [frameworkComponents]="frameworkComponents"
+  
+  [pagination] = "true"
+  [paginationPageSize] = "20"
+  
+  [editType]="editType"
+  (gridReady)="onGridReady($event)"
+  
+  >
+  </ag-grid-angular>
+  {{errorMsg}}
+
+<h4>Row data from button 1: </h4>
+<pre>{{rowDatafromCell | json}}</pre>
+
+<div class="modal" id="myModal" [style.display]="displayEditModal ? 'block' : 'none'" *ngIf='rowDatafromCell'>
+  <div class="modal-dialog modal-lg modal-edit">
+    <div class="modal-content border">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h6 class="modal-title"><strong>Edit Row</strong></h6>
+        <button type="button" class="close" data-dismiss="modal" (click)="hideModal()">
+          <span style="color:red;">&times;</span>
+        </button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form [formGroup]="editForm" (ngSubmit)="onEditFormSubmit()">
+          <div class="row">
+            <div class="col md-6 form-group">
+              <label>
+                Org Name
+              </label>
+              <input type="text" formControlName="name" class="form-control" readonly>
+              <span *ngIf="editForm.get('name').touched && !editForm.get('name').valid" class="invalid">Please enter
+                valid Org Name</span>
+            </div>
+            <div class="col md-6 form-group">
+              <label>
+                Org Address
+              </label>
+              <input type="text" formControlName="address" class="form-control" readonly>
+              <span *ngIf="editForm.get('address').touched && !editForm.get('address').valid" class="invalid">Please
+                enter valid Org Address</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col md-6 form-group">
+              <label>
+                Category
+              </label>
+              <input type="text" formControlName="category" class="form-control">
+              <span *ngIf="editForm.get('category').touched && !editForm.get('category').valid" class="invalid">Please enter
+                valid category</span>
+            </div>
+            <div class="col md-6 form-group">
+              <label>
+                Subcategory
+              </label>
+              <input type="text" formControlName="subcategory" class="form-control">
+              <span *ngIf="editForm.get('subcategory').touched && !editForm.get('subcategory').valid"
+                class="invalid">Please enter valid subcategory</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col md-6 form-group">
+              <label>
+                Ward ID
+              </label>
+              <input type="text" formControlName="ward_id" class="form-control">
+              <span *ngIf="editForm.get('ward_id').touched && !editForm.get('ward_id').valid"
+                class="invalid">Please enter valid ward ID</span>
+            </div>
+            <div class="col md-6 form-group">
+              <label>
+                City ID
+              </label>
+              <input type="text" formControlName="city_id" class="form-control">
+              <span *ngIf="editForm.get('city_id').touched && !editForm.get('city_id').valid"
+                class="invalid">Please enter valid city ID</span>
+            </div><div class="col md-6 form-group">
+              <label>
+                Org Number
+              </label>
+              <input type="text" formControlName="org_number" class="form-control">
+              <span *ngIf="editForm.get('org_number').touched && !editForm.get('org_number').valid"
+                class="invalid">Please enter valid Org number</span>
+            </div>
+            <div class="col md-6 form-group">
+              <label>
+                Info
+              </label>
+              <input type="text" formControlName="info" class="form-control">
+              <span *ngIf="editForm.get('info').touched && !editForm.get('info').valid"
+                class="invalid">Please enter valid info</span>
+            </div>
+            <div class="col md-6 form-group">
+              <label>
+                Impact
+              </label>
+              <input type="number" formControlName="impact" class="form-control">
+              <span *ngIf="editForm.get('impact').touched && !editForm.get('impact').valid"
+                class="invalid">Please enter valid impact</span>
+            </div>
+
+          </div>
+          <div class="row">
+            <button type="submit" [disabled]="!editForm.valid" class="btn" style="margin:auto;">Submit</button>
+            <span *ngIf="!editForm.valid"
+                class="invalid">Please enter valid form fields</span>
+          </div>
+          <!-- Modal footer -->
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,114 @@
+<div class="container">
+
+    <h5>User Details Form</h5>
+    <form [formGroup]="public_data" (ngSubmit)='onFormSubmit()'>
+        <div class="row">
+            <div class="col md-6">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" formControlName="place_org_name" />
+                    <p class='text-invalid'
+                        *ngIf="public_data.get('place_org_name').touched && !public_data.get('place_org_name').valid">
+                        Please Enter Name</p>
+                </div>
+            </div>
+
+            <div class="col md-6">
+                <div class="form-group">
+                    <label for="name">Conatct Number</label>
+                    <input type="text" class="form-control" formControlName="place_org_number" maxlength="10">
+                    <p class='text-invalid'
+                        *ngIf="public_data.get('place_org_number').touched && !public_data.get('place_org_number').valid">
+                        Please Enter Contact Number</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" class="form-control" formControlName="place_org_address" />
+                    <p class='text-invalid'
+                        *ngIf="public_data.get('place_org_address').touched && !public_data.get('place_org_address').valid">
+                        Please Enter Address</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col">
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select class="form-control" formControlName="place_org_category">
+                        <option *ngFor="let c of category" [value]="c">{{c}}</option>
+                    </select>
+                    <p class='text-invalid'
+                        *ngIf="public_data.get('place_org_category').touched && !public_data.get('place_org_category').valid">
+                        Please Choose Category</p>
+                </div>
+
+            </div>
+            <div class="col">
+
+                <div class="form-group">
+                    <label for="sub_category">Sub Category</label>
+                    <select class="form-control" formControlName="place_org_sub_category">
+                        <option *ngFor="let sc of category" [value]="sc">{{sc}}</option>
+                    </select>
+                    <p class='text-invalid'
+                        *ngIf="public_data.get('place_org_sub_category').touched && !public_data.get('place_org_sub_category').valid">
+                        Please Choose Sub Category</p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <select class="form-control" formControlName="city_id">
+                        <option *ngFor="let c of city" [value]="c">{{c}}</option>
+                    </select>
+                    <p class='text-invalid'
+                        *ngIf="public_data.get('city_id').touched && !public_data.get('city_id').valid">Please Enter
+                        City</p>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <label for="ward">Ward</label>
+                    <select class="form-control" formControlName="ward_id">
+                        <option *ngFor="let w of ward" [value]="w">{{w}}</option>
+                    </select>
+                    <p class='text-invalid'
+                        *ngIf="public_data.get('ward_id').touched && !public_data.get('ward_id').valid">Please Enter
+                        Ward</p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="info">Info</label>
+                    <input type="text" class="form-control" formControlName="info" />
+                    <p class='text-invalid' *ngIf="public_data.get('info').touched && !public_data.get('info').valid">
+                        Please
+                        Enter Information</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <button type="submit" [disabled]="!public_data.valid" class="btn btn-success"
+                style="margin:auto;">Submit</button>
+        </div>
+    </form>
+
+</div>
