@@ -30,6 +30,8 @@
     "postinstall": "ngcc --properties es2015 es5 browser module main --first-only --create-ivy-entry-points"
   },
   "dependencies": {
+    "@ag-grid-community/all-modules": "^23.0.2",
+    "@ag-grid-community/angular": "^23.0.3",
     "@agm/core": "^1.1.0",
     "@akveo/ng2-completer": "^9.0.1",
     "@angular/animations": "^9.0.4",
@@ -48,6 +50,8 @@
     "@nebular/security": "5.0.0",
     "@nebular/theme": "5.0.0",
     "@swimlane/ngx-charts": "^13.0.2",
+    "ag-grid-angular": "^23.0.3",
+    "ag-grid-community": "^23.0.2",
     "angular2-chartjs": "0.4.1",
     "bootstrap": "^4.3.1",
     "chart.js": "2.7.1",
@@ -86,6 +90,7 @@
     "@compodoc/compodoc": "1.0.1",
     "@fortawesome/fontawesome-free": "^5.2.0",
     "@types/d3-color": "1.0.5",
+    "@types/googlemaps": "^3.39.4",
     "@types/jasmine": "2.5.54",
     "@types/jasminewd2": "2.0.3",
     "@types/leaflet": "1.2.3",

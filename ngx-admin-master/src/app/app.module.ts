@@ -1,8 +1,3 @@
-/**
- * @license
- * Copyright Akveo. All Rights Reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- */
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
@@ -13,8 +8,11 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+
 import {AdminService} from './service/admin.service';
 import { AgmCoreModule } from '@agm/core';
+import { AgGridModule } from 'ag-grid-angular';
+
 
 import {
   NbChatModule,
@@ -26,6 +24,9 @@ import {
   NbWindowModule,
 } from '@nebular/theme';
 import { LoginkeycloakComponent } from './loginkeycloak/loginkeycloak.component';
+import { TableComponent } from './pages/table/table.component';
+//import { EditButtonComponent } from './edit-button/edit-button.component';
+
 @NgModule({
   declarations: [AppComponent, LoginkeycloakComponent],
 
@@ -50,7 +51,8 @@ import { LoginkeycloakComponent } from './loginkeycloak/loginkeycloak.component'
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AgGridModule.withComponents([])
   ],
   providers :[AdminService],
   bootstrap: [AppComponent],

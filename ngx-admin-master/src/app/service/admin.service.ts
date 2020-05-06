@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Category } from '../pages/public-form/public-form.category';
 import { subCategory } from '../pages/public-form/public-form.subcategory';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { IAdmin } from './IAdmin';
+import { Observable } from 'rxjs/observable';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
 
 
 @Injectable({
@@ -21,10 +25,13 @@ export class AdminService {
   publicDataFormSubmit(formResponse) {
     return this.httpClient.post(this.nodeAppUrl + 'user-form-submit', formResponse, this.nodeJsHttpHeaders);
   }
+  getPublicTableData(): Observable<IAdmin[]> {
+    return this.httpClient.get<IAdmin[]>(this.nodeAppUrl + 'get-public-table', this.nodeJsHttpHeaders).catch(this.errorHandler);
+  }
 
-   //public_data_place_org_table Data Fetch Function
-  getPublicTableData() {
-    return this.httpClient.get(this.nodeAppUrl + 'get-public-table', this.nodeJsHttpHeaders);
+  errorHandler(error: HttpErrorResponse){
+    return Observable.throw(error.message || "Server Error");
+
   }
 
   //Function to Fetch Ward ID using Lat and Long - Works for Lat and Long info available in API (Bangalore)

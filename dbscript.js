@@ -48,7 +48,7 @@ router.post('/user-form-submit', (req,res)=> {
 
 router.get('/get-public-table', (req,res)=>{
 
-    connection.query("SELECT * FROM public_data_place_org_table", (error, rows, fields) => {
+    connection.query("SELECT * FROM bng_food", (error, rows, fields) => {
         if(error){
             console.log('error');
         }
@@ -57,7 +57,20 @@ router.get('/get-public-table', (req,res)=>{
         }
     });
 
+
+});
+
+//type localhost:8080 in browser to make a query
+app.get('/', (req, res)=>{
+connection.query("select * from bng_food ", (error, rows, fields) => {
+    if(error){
+        console.log('error');
+    }
+    else{
+        console.log(rows);
+    }
 })
+});
 
 app.listen(8080 ,() =>{
     console.log('\n\n');
@@ -72,6 +85,3 @@ app.listen(8080 ,() =>{
             }
         });
 });
-
-
-

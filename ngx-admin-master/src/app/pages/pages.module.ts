@@ -12,6 +12,10 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { PublicFormComponent } from './public-form/public-form.component';
 import { LocationPickerComponent } from './location-picker/location-picker.component';
+import { TableComponent } from './table/table.component';
+import { AgGridModule } from 'ag-grid-angular';
+import {AdminService} from '../service/admin.service';
+import { EditButtonComponent } from '../edit-button/edit-button.component';
 
 
 @NgModule({
@@ -23,15 +27,21 @@ import { LocationPickerComponent } from './location-picker/location-picker.compo
     ECommerceModule,
     MiscellaneousModule,
     ReactiveFormsModule,
+
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCsr7zA9xdgcj4GFj69--1--CvBVlVX_Xs',
       libraries: ['places']
-    })
+    }),
+    AgGridModule.withComponents([])
+
   ],
   declarations: [
     PagesComponent,
     PublicFormComponent,
-    LocationPickerComponent
+    LocationPickerComponent,
+    TableComponent, 
+    EditButtonComponent
+
   ],
 })
 export class PagesModule {
