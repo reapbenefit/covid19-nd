@@ -1,6 +1,6 @@
 <div class="container">
 
-    <h1>User Details Form</h1>
+    <h5>User Details Form</h5>
     <form [formGroup]="public_data" (ngSubmit)='onFormSubmit()'>
         <div class="row">
             <div class="col md-6">
@@ -15,6 +15,18 @@
 
             <div class="col md-6">
                 <div class="form-group">
+                    <label for="name">Conatct Number</label>
+                    <input type="text" class="form-control" formControlName="place_org_number" maxlength="10">
+                    <p class='text-invalid'
+                        *ngIf="public_data.get('place_org_number').touched && !public_data.get('place_org_number').valid">
+                        Please Enter Contact Number</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
                     <label for="address">Address</label>
                     <input type="text" class="form-control" formControlName="place_org_address" />
                     <p class='text-invalid'
@@ -22,6 +34,7 @@
                         Please Enter Address</p>
                 </div>
             </div>
+
         </div>
 
         <div class="row">
@@ -54,6 +67,17 @@
 
 
         <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <select class="form-control" formControlName="city_id">
+                        <option *ngFor="let c of city" [value]="c">{{c}}</option>
+                    </select>
+                    <p class='text-invalid'
+                        *ngIf="public_data.get('city_id').touched && !public_data.get('city_id').valid">Please Enter
+                        City</p>
+                </div>
+            </div>
 
             <div class="col">
                 <div class="form-group">
@@ -64,17 +88,6 @@
                     <p class='text-invalid'
                         *ngIf="public_data.get('ward_id').touched && !public_data.get('ward_id').valid">Please Enter
                         Ward</p>
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label for="city">City</label>
-                    <select class="form-control" formControlName="city_id">
-                        <option *ngFor="let c of city" [value]="c">{{c}}</option>
-                    </select>
-                    <p class='text-invalid'
-                        *ngIf="public_data.get('city_id').touched && !public_data.get('city_id').valid">Please Enter
-                        City</p>
                 </div>
             </div>
         </div>

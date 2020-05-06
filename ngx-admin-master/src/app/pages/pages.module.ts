@@ -9,6 +9,10 @@ import { ECommerceModule } from './e-commerce/e-commerce.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { PublicFormComponent } from './public-form/public-form.component';
+import { TableComponent } from './table/table.component';
+import { AgGridModule } from 'ag-grid-angular';
+import {AdminService} from '../service/admin.service';
+import { EditButtonComponent } from '../edit-button/edit-button.component';
 
 @NgModule({
   imports: [
@@ -18,11 +22,15 @@ import { PublicFormComponent } from './public-form/public-form.component';
     DashboardModule,
     ECommerceModule,
     MiscellaneousModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AgGridModule.withComponents([])
+
   ],
   declarations: [
     PagesComponent,
-    PublicFormComponent
+    PublicFormComponent,
+    TableComponent, 
+    EditButtonComponent
   ],
 })
 export class PagesModule {

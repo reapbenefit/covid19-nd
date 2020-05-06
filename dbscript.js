@@ -41,21 +41,32 @@ app.use('/', router);
 
 //User Form Submit
 router.post('/user-form-submit', (req,res)=> {
+    let formData = req.body;
+    console.log(formData);
     res.send({
-        msg:'Received'
-    })
+                msg: 'Success!'
+            });
+    // connection.query('INSERT INTO  public_data_place_org_table SET ?',formData, (err, resp) =>{
+    //         if(err){
+    //             res.send(err);
+    //         }
+    //         else{
+    //             console.log(resp.insertID);
+    //             res.send(resp);
+    //         }
+    // });
 });
 
 router.get('/get-public-table', (req,res)=>{
 
-    connection.query("SELECT * FROM public_data_place_org_table", (error, rows, fields) => {
+    connection.query("SELECT * FROM bng_food", (error, rows, fields) => {
         if(error){
             console.log('error');
         }
         else{
             res.send(rows);
         }
-    })
+    });
 
 
 })
@@ -88,13 +99,14 @@ router.get('/get-food-stats', (req,res)=>{
 
 //type localhost:8080 in browser to make a query
 app.get('/', (req, res)=>{
-    connection.query("select * from self_solve", (error, rows, fields) => {
-        if(error){
-            console.log('error');
-        }
-        else{
-            console.log(rows);
-        }
+    
+connection.query("select * from bng_food ", (error, rows, fields) => {
+    if(error){
+        console.log('error');
+    }
+    else{
+        console.log(rows);
+    }
 })
 });
 
@@ -111,6 +123,3 @@ app.listen(8080 ,() =>{
             }
         });
 });
-
-
-
