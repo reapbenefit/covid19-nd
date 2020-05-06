@@ -12,8 +12,8 @@ const expressSanitizer = require('express-sanitizer');
 const _ = require('underscore');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
-
-
+const axios = require('axios');
+const delay = require('await-delay');
 // creating session objec to store user sessions in cookie
 var memoryStore = new session.MemoryStore();
 // var keycloak = new Keycloak({ store: memoryStore });
@@ -55,6 +55,7 @@ app.get('/api/v1/user/data/read', keycloak.checkSso(), (req, res) => {
     // console.log('////////////////////');
     console.log(req);
     console.log(req.kauth.grant.access_token.content);
+    console.log(req.kauth.grant.access_token.content.groups);
     let response = {};
     response.data = {};
     response.data.name = req.kauth.grant.access_token.content.name;
@@ -201,19 +202,14 @@ function sanitize_input(req, input_object) {
  * table : self-solve
  */
 const mysql = require('mysql');
-const connection = mysql.createConnection({
+var connection = mysql.createPool({
+    connectionLimit: 100,
     host: 'devlp.solveninja.org',
     user: 'curiouscat',
     password: 'S0lvesm@lld3ntbig',
     database: 'theapp'
 });
-connection.connect(function (error) {
-    if (!!error) {
-        console.log(error);
-    } else {
-        console.log('Connected..!!');
-    }
-});
+
 
 /**
  * Assign User to take action
@@ -308,7 +304,7 @@ app.post('/assignme', async (req, res) => {
                     var form_data = {
                         place_org_subcategory: finalName
                     }
-                    await connection.query('UPDATE public_data_place_org_table SET ? WHERE place_org_id = ' + place_org_id, form_data, function (err, ss) {
+                    connection.query('UPDATE public_data_place_org_table SET ? WHERE place_org_id = ' + place_org_id, form_data, function (err, ss) {
                         if (err) {
                             console.log("Error On update");
                             console.log(err);
@@ -331,8 +327,6 @@ app.post('/assignme', async (req, res) => {
                 }
 
             }
-
-
 
             connection.query('SELECT * FROM self_solve WHERE place_org_id = ' + place_org_id, function (err, rows, fields) {
                 if (err) {
@@ -452,7 +446,7 @@ app.post('/givenbyme', async (req, res) => {
                     var form_data = {
                         place_org_subcategory: finalName
                     }
-                    await connection.query('UPDATE public_data_place_org_table SET ? WHERE place_org_id = ' + place_org_id, form_data, function (err, ss) {
+                    connection.query('UPDATE public_data_place_org_table SET ? WHERE place_org_id = ' + place_org_id, form_data, function (err, ss) {
                         if (err) {
                             console.log("Error On update");
                             console.log(err);
@@ -460,6 +454,9 @@ app.post('/givenbyme', async (req, res) => {
                                 retrylevel = retrylevel + 1;
                                 updateMainTable();
                             } else {
+
+
+
                                 result = { "status": 'fail', "message": `Error on Updates M: ${err}` };
                                 res.send(result);
                             }
@@ -484,13 +481,12 @@ app.post('/givenbyme', async (req, res) => {
             }
             connection.query('UPDATE self_solve SET ? WHERE place_org_id = ' + place_org_id, form_data, function (err, ss) {
                 if (err) {
+                    console.log(err);
                     console.log("Error On update");
                     result = { "status": 'fail', "message": `Error on Updates S: ${err}` };
                     res.send(result);
                 } else {
                     updateMainTable();
-                    // result = { "status": 'success', "message": "data Updated successfully" };
-                    // res.send(result);
                 }
             })
 
@@ -507,6 +503,7 @@ app.post('/givenbyme', async (req, res) => {
  * get All Assigned List based n User
  */
 app.post('/getassignedlist', async (req, res) => {
+
 
     console.log(req.body);
     const errors = validationResult(req);
@@ -566,6 +563,7 @@ app.post('/getassignedlist', async (req, res) => {
  * get All Assigned List
  */
 app.post('/getAllassignedList', async (req, res) => {
+
 
     console.log(req.body);
     const errors = validationResult(req);
@@ -658,11 +656,11 @@ app.post('/getTotalClosedUser', async (req, res) => {
 
         if (req.body && req.body['username'] && req.body['username'] != null) {
             var username = req.body.username;
-            // var query = `SELECT * FROM public_data_place_org_table  WHERE place_org_id = '136005' `; 
+            // var query = `SELECT * FROM public_data_place_org_table  WHERE place_org_id = '55721' `; 
 
             var query = `SELECT * FROM self_solve WHERE assigned_to = '${username}' AND closed_by IS NOT NULL`;
 
-            await connection.query(query, function (err, rows) {
+            connection.query(query, function (err, rows) {
                 if (err) {
                     console.log(err);
                     result = { "status": 'fail', "message": `data not fount ${err}` };
@@ -674,31 +672,103 @@ app.post('/getTotalClosedUser', async (req, res) => {
                 }
             });
 
-
-            // var form_data = {
-            //     closed_by: "testngoadmin",
-            //     closed_at: new Date(),
-            //     assigned_to: "testngoadmin",
-            //     assigned_timestamp: new Date(),
-            //     place_org_id: 136005
-            // }
-            // connection.query('UPDATE self_solve SET ? WHERE id = 57', form_data, function (err, ss) {
-            //     if (err) {
-            //         console.log("Error On update");
-            //         result = { "status": 'fail', "message": `Error on Updates${err}` };
-            //         res.send(result);
-            //     } else {
-            //         console.log(ss);
-            //         result = { "status": 'success', "message": "data Updated successfully" };
-            //         res.send(result);
-            //     }
-            // })
-
-
         } else {
             result = { "status": 'fail', "message": 'Username Not Availabel' };
             res.send(result);
         }
+
+    }
+
+});
+
+/**
+ * getTotalClosedUser count based on UserName
+ */
+app.get('/testconnect', async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(422).json({ errors: errors.array() });
+        return;
+    }
+
+    try {
+        var tempReq = JSON.parse(JSON.stringify(req.params));
+    }
+    catch (err) {
+        var tempReq = Object.assign({}, req.params)
+        winston.info("Error parsing input");
+    }
+
+    // Sanitize User input to avoid xss attacks or mongo injection
+    await sanitize_input(req, req.params).then(function (sanitized_output) {
+        req.params = sanitized_output;
+    });
+
+    var result = {};
+    if (!(_.isEqual(tempReq, req.params))) {
+        res.status(403);
+        result = { "status": 'fail', 'message': 'Error! The input is corrupted.' };
+        res.send(result);
+    } else {
+
+        var query = `SELECT * FROM self_solve`;
+        connection.query(query, function (err, rows) {
+            if (err) {
+                console.log(err);
+                result = { "status": 'fail', "message": `data not fount ${err}` };
+                res.send(result);
+            } else {
+                console.log(rows);
+                result = { "status": 'success', "data": rows };
+                res.send(result);
+            }
+        });
+
+
+
+
+        // var request = {
+        //     params: {
+        //         place_org_id: 136005,
+        //         closed_at: new Date(),
+        //         closed_by: 'testngouser'
+        //     }
+        // }
+        // axios.post('https://es.solveninja.org/updatePlaceClosed?place_org_id=136005&closed_at=2020-05-06&closed_by=testngouser')
+        //         .then(function (response) {
+        //             // handle success
+        //             console.log(response);
+        //         })
+        //         .catch(function (error) {
+        //             // handle error
+        //             console.log(error);
+        //         })
+        //         .then(function () {
+        //             // always executed
+        //             result = { "status": 'success', "data": 'test' };
+        //             res.send(result);
+        //         });
+
+
+        // var form_data = {
+        //     closed_by: "testngoadmin",
+        //     closed_at: new Date(),
+        //     assigned_to: "testngoadmin",
+        //     assigned_timestamp: new Date(),
+        //     place_org_id: 136005
+        // }
+        // connection.query('show tables', function (err, ss) {
+        //     if (err) {
+        //         console.log("Error On update");
+        //         result = { "status": 'fail', "message": `Error on Updates${err}` };
+        //         res.send(result);
+        //     } else {
+        //         console.log(ss);
+        //         result = { "status": 'success', "message": "data Updated successfully" };
+        //         res.send(result);
+        //     }
+        // })
 
     }
 
