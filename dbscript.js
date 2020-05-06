@@ -56,10 +56,19 @@ router.get('/get-public-table', (req,res)=>{
             res.send(rows);
         }
     });
-
-
 });
 
+router.get('/individual-details', (req,res)=>{
+
+    connection.query("SELECT * FROM bng_food LIMIT 20", (error, rows, fields) => {
+        if(error){
+            console.log('error');
+        }
+        else{
+            res.send(rows);
+        }
+    });
+});
 //type localhost:8080 in browser to make a query
 app.get('/', (req, res)=>{
 connection.query("select * from bng_food ", (error, rows, fields) => {
