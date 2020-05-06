@@ -1,0 +1,25 @@
+  <div class="modal" id="myModal" [style.display]="displayLocationModal ? 'block' : 'none'">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content border">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h6 class="modal-title"><strong>Pick Location</strong></h6>
+                <button type="button" class="close" data-dismiss="modal" (click)="hideModal()">
+                    <span style="color:red;">&times;</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <!--Google Map Locator Module-->
+                <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+                    <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
+                      (dragEnd)="markerDragEnd($event)"></agm-marker>
+                  </agm-map>
+            </div>
+            <!--Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal" (click)="hideModal()">Confirm</button>
+              </div>
+        </div>
+    </div>
+</div>
