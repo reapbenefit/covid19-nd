@@ -37,9 +37,10 @@ export class TableComponent implements OnInit {
               {headerName: 'Organization Number', field: 'place_org_number', width: 300, editable: true},
               {headerName: 'Info', field: 'info', filter: 'agTextColumnFilter', width: 300, sortable: true, editable: true},
               {headerName: 'Impact', field: 'impact', width: 300, editable: true, filter: 'agTextColumnFilter', sortable: true},
-              {headerName: 'Action', field: 'action', width: 200, cellRenderer: 'buttonRenderer', cellRendererParams: {
+              {headerName: 'Action', field: 'action', width: 200, pinned: 'right' , cellRenderer: 'buttonRenderer', cellRendererParams: {
                 onClick: this.onBtnClick1.bind(this),
-                label: 'Edit'
+                label: 'Edit',
+                
               }}
 
     ];
@@ -51,6 +52,7 @@ export class TableComponent implements OnInit {
 
   onBtnClick1(e) {
     this.rowDataClicked1 = e.rowData;
+
     //
   }
   onCellClicked($event){
