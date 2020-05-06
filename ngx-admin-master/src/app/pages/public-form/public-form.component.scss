@@ -10,3 +10,13 @@
     color: red;
     text-align: center;
   }
+
+  .modal-dialog {
+    position: absolute;
+    top: 30%;
+    right: 0px;
+    bottom: 0px;
+    left: 250px;
+    overflow: auto;
+    overflow-y: auto;
+  }
