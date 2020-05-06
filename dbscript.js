@@ -41,9 +41,20 @@ app.use('/', router);
 
 //User Form Submit
 router.post('/user-form-submit', (req,res)=> {
+    let formData = req.body;
+    console.log(formData);
     res.send({
-        msg:'Received'
-    })
+                msg: 'Success!'
+            });
+    // connection.query('INSERT INTO  public_data_place_org_table SET ?',formData, (err, resp) =>{
+    //         if(err){
+    //             res.send(err);
+    //         }
+    //         else{
+    //             console.log(resp.insertID);
+    //             res.send(resp);
+    //         }
+    // });
 });
 
 router.get('/get-public-table', (req,res)=>{
@@ -55,7 +66,7 @@ router.get('/get-public-table', (req,res)=>{
         else{
             res.send(rows);
         }
-    })
+    });
 
 
 })
