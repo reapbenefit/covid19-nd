@@ -21,6 +21,14 @@ export class AdminService {
   getPublicTableData() {
     return this.httpClient.get(this.nodeAppUrl + 'get-public-table', this.nodeJsHttpHeaders);
   }
+
+  getcasestats() {
+    return this.httpClient.get(this.nodeAppUrl + 'get-case-stats', this.nodeJsHttpHeaders);
+  }
+
+  getfoodstats() {
+    return this.httpClient.get(this.nodeAppUrl + 'get-food-stats', this.nodeJsHttpHeaders);
+  }
 }
 
 

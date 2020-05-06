@@ -1,8 +1,6 @@
 import { AfterViewInit, Component, Input, OnChanges, OnDestroy } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 import { takeWhile } from 'rxjs/operators';
-
-import { ProfitChart } from '../../../../@core/data/profit-chart';
 import { LayoutService } from '../../../../@core/utils/layout.service';
 
 @Component({
@@ -15,7 +13,7 @@ import { LayoutService } from '../../../../@core/utils/layout.service';
 export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   @Input()
-  profitChartData: ProfitChart;
+   foodstatData;
 
   private alive = true;
 
@@ -33,7 +31,7 @@ export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges
 
   ngOnChanges(): void {
     if (this.echartsIntance) {
-      this.updateProfitChartOptions(this.profitChartData);
+      this.updateProfitChartOptions(this.foodstatData);
     }
   }
 
@@ -68,7 +66,7 @@ export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges
       xAxis: [
         {
           type: 'category',
-          data: this.profitChartData.chartLabel,
+          data: this.foodstatData.chartLabel,
           axisTick: {
             alignWithLabel: true,
           },
@@ -119,7 +117,7 @@ export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges
               }]),
             },
           },
-          data: this.profitChartData.data[0],
+          data: this.foodstatData.data[0],
         },
         {
           name: 'Payment',
@@ -136,7 +134,7 @@ export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges
               }]),
             },
           },
-          data: this.profitChartData.data[1],
+          data: this.foodstatData.data[1],
         },
         {
           name: 'All orders',
@@ -153,20 +151,20 @@ export class ProfitChartComponent implements AfterViewInit, OnDestroy, OnChanges
               }]),
             },
           },
-          data: this.profitChartData.data[2],
+          data: this.foodstatData.data[2],
         },
       ],
     };
   }
 
-  updateProfitChartOptions(profitChartData: ProfitChart) {
+  updateProfitChartOptions(foodstatData) {
     const options = this.options;
-    const series = this.getNewSeries(options.series, profitChartData.data);
+    const series = this.getNewSeries(options.series, foodstatData.data);
 
     this.echartsIntance.setOption({
       series: series,
       xAxis: {
-        data: this.profitChartData.chartLabel,
+        data: this.foodstatData.chartLabel,
       },
     });
   }

@@ -33,11 +33,11 @@ var responseObj = {
 app.use('/', router);
 
 // Test Router
-router.get('/', (req, res) => {
-    res.send({
-        msg: 'Hi There!'
-    });
-});
+// router.get('/', (req, res) => {
+//     res.send({
+//         msg: 'Hi There!'
+//     });
+// });
 
 //User Form Submit
 router.post('/user-form-submit', (req,res)=> {
@@ -60,15 +60,41 @@ router.get('/get-public-table', (req,res)=>{
 
 })
 
+router.get('/get-case-stats', (req,res)=>{
+
+    connection.query("SELECT * FROM self_solve", (error, rows, fields) => {
+        if(error){
+            console.log('error');
+        }
+        else{
+            res.send(rows);
+        }
+    })
+
+})
+
+router.get('/get-food-stats', (req,res)=>{
+
+    connection.query("SELECT * FROM bng_food", (error, rows, fields) => {
+        if(error){
+            console.log('error');
+        }
+        else{
+            res.send(rows);
+        }
+    })
+
+})
+
 //type localhost:8080 in browser to make a query
 app.get('/', (req, res)=>{
-connection.query("SELECT DISTINCT place_org_subcategory FROM public_data_place_org_table WHERE place_org_category = 'Service'", (error, rows, fields) => {
-    if(error){
-        console.log('error');
-    }
-    else{
-        console.log(rows);
-    }
+    connection.query("select * from self_solve", (error, rows, fields) => {
+        if(error){
+            console.log('error');
+        }
+        else{
+            console.log(rows);
+        }
 })
 });
 

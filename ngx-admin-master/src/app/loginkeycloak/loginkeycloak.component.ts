@@ -12,7 +12,7 @@ export class LoginkeycloakComponent implements OnInit {
   password: string = '';
   loginerr = false;
   startSpinner = false;
-
+  clicked = false;
   constructor(private router: Router) { }
 
   ngOnInit() {
@@ -25,7 +25,6 @@ export class LoginkeycloakComponent implements OnInit {
       else
        this.loginerr = true;
 
-     
   }
 
 }
