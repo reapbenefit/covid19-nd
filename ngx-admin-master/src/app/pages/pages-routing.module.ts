@@ -20,6 +20,10 @@ const routes: Routes = [{
       path: 'VolunteerForm',
       component: PublicFormComponent,
     },
+    {
+      path: 'NGOTable',
+      component: TableComponent,
+    },
 
     {
       path: 'layout',

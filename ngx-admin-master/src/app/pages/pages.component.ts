@@ -39,7 +39,7 @@ export class PagesComponent {
         {
           title: 'NGO',
           icon: 'home-outline',
-          link: '/pages/iot-dashboard',
+          link: '/pages/NGOTable',
         }
        
       ];
@@ -62,7 +62,7 @@ export class PagesComponent {
         {
           title: 'NGO',
           icon: 'home-outline',
-          link: '/pages/iot-dashboard',
+          link: '/pages/NGOTable',
         }
        
       ];
