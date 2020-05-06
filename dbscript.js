@@ -44,14 +44,14 @@ router.post('/user-form-submit', (req,res)=> {
     let formData = req.body;
     console.log(formData);
     res.send({
-                msg: 'Success!'
+                msg: 'Hi There!',
+                insertId: 64,
             });
-    // connection.query('INSERT INTO  public_data_place_org_table SET ?',formData, (err, resp) =>{
+    // connection.query(`INSERT INTO public_data_place_org_table (place_org_id,place_org_name,place_org_address,place_org_lat,place_org_long,pol_locale_id,place_org_category,place_org_subcategory,ward_id,ac_id,city_id,place_org_person_incharge,place_org_number,place_org_jurisdiction,info,impact,flagged_as_erronous,logical_delete) VALUES ("${formData.place_org_id}","${formData.place_org_name}","${formData.place_org_address}","${formData.place_org_lat}","${formData.place_org_long}","${formData.pol_locale_id}","${formData.place_org_category}","${formData.place_org_subcategory}","${formData.ward_id}","${formData.ac_id}","${formData.city_id}",NULL,"${formData.place_org_number}","${formData.place_org_jurisdiction}","${formData.info}",NULL,"0","0")`, (err, resp) =>{
     //         if(err){
     //             res.send(err);
     //         }
     //         else{
-    //             console.log(resp.insertID);
     //             res.send(resp);
     //         }
     // });
@@ -73,15 +73,26 @@ router.get('/get-public-table', (req,res)=>{
 
 //type localhost:8080 in browser to make a query
 app.get('/', (req, res)=>{
-connection.query("SELECT DISTINCT place_org_subcategory FROM public_data_place_org_table WHERE place_org_category = 'Service'", (error, rows, fields) => {
+connection.query('SELECT * FROM public_data_place_org_table WHERE place_org_name ="Cisco"', (error, rows, fields) => {
     if(error){
-        console.log('error');
+        console.log(error);
     }
     else{
         console.log(rows);
     }
 })
 });
+
+router.get('/d', (req, res)=>{
+    connection.query('DELETE FROM public_data_place_org_table WHERE place_org_name ="Cisco"', (error, rows, fields) => {
+        if(error){
+            console.log(error);
+        }
+        else{
+            console.log(rows);
+        }
+    })
+    });
 
 app.listen(8080 ,() =>{
     console.log('\n\n');
@@ -99,3 +110,6 @@ app.listen(8080 ,() =>{
 
 
 
+//SELECT DISTINCT place_org_subcategory FROM public_data_place_org_table WHERE place_org_category = 'Service'
+//DELETE FROM public_data_place_org_table WHERE place_org_name ="Cisco"
+//SELECT * FROM public_data_place_org_table WHERE place_org_name ="Cisco"
