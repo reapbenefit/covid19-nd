@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 import { delay, takeWhile } from 'rxjs/operators';
 import { LayoutService } from '../../../../@core/utils/layout.service';
@@ -15,15 +15,18 @@ import { LayoutService } from '../../../../@core/utils/layout.service';
     </div>
   `,
 })
-export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges {
+export class OrdersChartComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
 
-  @Input()
-  casestatData;
+  @Input() casestatData;
 
   private alive = true;
 
   echartsIntance: any;
   option: any;
+
+  ngOnInit(){
+    // console.log('CASESTAT',this.casestatData)
+  }
 
 
   ngOnChanges(): void {
@@ -34,7 +37,6 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
 
   constructor(private theme: NbThemeService,
               private layoutService: LayoutService) {
-                console.log('CASESTAT',this.casestatData)
     this.layoutService.onSafeChangeLayoutSize()
       .pipe(
         takeWhile(() => this.alive),
