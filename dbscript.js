@@ -48,7 +48,7 @@ router.post('/user-form-submit', (req,res)=> {
 
 router.get('/get-public-table', (req,res)=>{
 
-    connection.query("SELECT * FROM bng_food", (error, rows, fields) => {
+    connection.query("SELECT * FROM public_data_place_org_table", (error, rows, fields) => {
         if(error){
             console.log('error');
         }
@@ -69,6 +69,31 @@ router.get('/individual-details', (req,res)=>{
         }
     });
 });
+
+
+//Edit Form Submit
+router.post('/edit-form-submit', (req,res)=> {
+    let formData = req.body;
+    console.log(formData);
+
+
+    connection.query(`update public_data_place_org_table set place_org_category = "${formData.category}", place_org_subcategory = "${formData.subcategory}", ward_id = "${formData.ward_id}", city_id = "${formData.city_id}", place_org_number = "${formData.org_number}", info = "${formData.info}", impact = "${formData.impact}" where place_org_id = "${formData.org_id}"`, (error, rows, fields) => {
+        if(error){
+            res.send({
+                msg: 'Error'
+            });
+            console.log(error);
+        }
+        else{
+            res.send({
+                msg: 'Success'
+            });
+            console.log(rows);
+        }
+    })
+
+});
+
 //type localhost:8080 in browser to make a query
 app.get('/', (req, res)=>{
 connection.query("select * from bng_food ", (error, rows, fields) => {

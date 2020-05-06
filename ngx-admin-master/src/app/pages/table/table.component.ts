@@ -19,7 +19,7 @@ export class TableComponent implements OnInit {
   public editingRowIndex;
   public components;
   public errorMsg = "";
-  public rowList;
+  public rowList = [];
   public frameworkComponents: any;
   rowDatafromCell = {};
   displayEditModal: any = false;
@@ -28,17 +28,16 @@ export class TableComponent implements OnInit {
   displayModal: any = false;
 
   editForm = new FormGroup({
-    name: new FormControl('', Validators.required),
-    address: new FormControl('',
-      [Validators.required,
-      Validators.pattern(/^(([1-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){2}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/)]),
-    category: new FormControl('', Validators.required),
-    subcategory: new FormControl('', Validators.required),
-    ward_id: new FormControl('', Validators.required),
-    city_id: new FormControl('', Validators.required),
-    org_number: new FormControl('', Validators.required),
-    info: new FormControl('', Validators.required),
-    impact: new FormControl('', Validators.required),
+    org_id: new FormControl(),
+    name: new FormControl(),
+    address: new FormControl(),
+    category: new FormControl(null, Validators.required),
+    subcategory: new FormControl(null, Validators.required),
+    ward_id: new FormControl(),
+    city_id: new FormControl(),
+    org_number: new FormControl(),
+    info: new FormControl(),
+    impact: new FormControl(),
   });
 
   constructor(private _adminService: AdminService){
@@ -47,7 +46,8 @@ export class TableComponent implements OnInit {
     }
 
     this.columnDefs = [
-              {headerName: 'Name', field: 'name', width: 300, pinned: 'left'},
+              {headerName: 'Org ID', field: 'org_id', width: 300, pinned: 'left', hide: true},
+              {headerName: 'Name', field: 'name', width: 300, pinned: 'left', sortable: true, filter: 'agTextColumnFilter'},
               {headerName: 'Address', field: 'address', width: 300, pinned: 'left'},
               {headerName: 'Category', field: 'category', filter: 'agTextColumnFilter', width: 300, sortable: true},
               {headerName: 'Subcategory', field: 'subcategory', filter: 'agTextColumnFilter', width: 300, sortable: true},
@@ -55,7 +55,7 @@ export class TableComponent implements OnInit {
               {headerName: 'City ID', field: 'city_id', width: 300},
               {headerName: 'Organization Number', field: 'org_number', width: 300},
               {headerName: 'Info', field: 'info', filter: 'agTextColumnFilter', width: 300, sortable: true},
-              {headerName: 'Impact', field: 'impact', width: 300, filter: 'agTextColumnFilter', sortable: true},
+              {headerName: 'Impact', field: 'impact', width: 300, filter: 'agNumberColumnFilter', sortable: true},
               {headerName: 'Action', field: 'action', width: 200, editable: false, pinned: 'right', cellRenderer: 'buttonRenderer', cellRendererParams: {
                 onClick: this.onBtnClick1.bind(this),
                 label: 'Edit',
@@ -73,6 +73,7 @@ export class TableComponent implements OnInit {
     this.rowDatafromCell = e.rowData;
     console.log(e.rowData.ward_id);
     this.editForm.patchValue({
+      org_id: e.rowData.org_id,
       name: e.rowData.name,
       address: e.rowData.address,
       category: e.rowData.category,
@@ -94,15 +95,21 @@ export class TableComponent implements OnInit {
   }
 
   onEditFormSubmit() {
+
+    console.log("called");
     if (this.formCheck === this.editForm.value) {
+      console.log("go 1");
       this.displayEditModal = false;
     } else {
-    /*  this._adminService.editRowDB(this.editForm.value).subscribe(response => {
-        if (response['status'] === 'Success') {
+      console.log("go 2");
+      console.log(this.editForm.value);
+      
+      this._adminService.EditFormSubmit(this.editForm.value).subscribe(response => {
+        if (response['msg'] === 'Success') {
           this.displayEditModal = false;
           this.getDBData();
         }
-      });*/
+      });
     }
   }
 
@@ -127,11 +134,13 @@ export class TableComponent implements OnInit {
 
   getDBData()
   {
+    console.log("hello");
     this._adminService.getPublicTableData().subscribe(response => {
-      this.rowData = [],
+      this.rowData = [];
       this.rowList = response;
       this.rowList.forEach(item => {
         this.rowData.push({
+          org_id: item.place_org_id,
           name: item.place_org_name,
           address: item.place_org_address,
           category: item.place_org_category,
@@ -141,7 +150,7 @@ export class TableComponent implements OnInit {
           org_number: item.place_org_number,
           info: item.info,
           impact: item.impact
-        })
+        });
       });
       });
 
@@ -151,6 +160,7 @@ export class TableComponent implements OnInit {
   ngOnInit(): void {
 
     this.getDBData();
+    console.log(this.rowData);
 
   }
 }

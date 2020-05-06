@@ -71,7 +71,7 @@
               <label>
                 Category
               </label>
-              <input type="number" formControlName="category" class="form-control">
+              <input type="text" formControlName="category" class="form-control">
               <span *ngIf="editForm.get('category').touched && !editForm.get('category').valid" class="invalid">Please enter
                 valid category</span>
             </div>
@@ -120,7 +120,7 @@
               <label>
                 Impact
               </label>
-              <input type="text" formControlName="impact" class="form-control">
+              <input type="number" formControlName="impact" class="form-control">
               <span *ngIf="editForm.get('impact').touched && !editForm.get('impact').valid"
                 class="invalid">Please enter valid impact</span>
             </div>
@@ -128,6 +128,8 @@
           </div>
           <div class="row">
             <button type="submit" [disabled]="!editForm.valid" class="btn" style="margin:auto;">Submit</button>
+            <span *ngIf="!editForm.valid"
+                class="invalid">Please enter valid form fields</span>
           </div>
           <!-- Modal footer -->
         </form>

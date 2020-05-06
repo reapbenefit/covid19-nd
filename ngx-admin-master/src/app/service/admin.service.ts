@@ -29,6 +29,11 @@ export class AdminService {
   getIndividualsdata() {
     return this.httpClient.get(this.nodeAppUrl + 'individual-details', this.nodeJsHttpHeaders);
   }
+  EditFormSubmit(formResponse) {
+    console.log(formResponse);
+    return this.httpClient.post(this.nodeAppUrl + 'edit-form-submit', formResponse, this.nodeJsHttpHeaders);
+  }
+
   getPublicTableData(): Observable<IAdmin[]> {
     return this.httpClient.get<IAdmin[]>(this.nodeAppUrl + 'get-public-table', this.nodeJsHttpHeaders).catch(this.errorHandler);
   }

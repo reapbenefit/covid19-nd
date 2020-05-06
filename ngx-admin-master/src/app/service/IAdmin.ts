@@ -14,7 +14,7 @@ export interface IAdmin{
     place_org_number: string,
     place_org_jurisdiction: string,
     info: string,
-    impact: string
+    impact: number,
     flagged_as_erronous: boolean,
     logical_delete: boolean
 }
