@@ -30,6 +30,7 @@
     "postinstall": "ngcc --properties es2015 es5 browser module main --first-only --create-ivy-entry-points"
   },
   "dependencies": {
+    "@agm/core": "^1.1.0",
     "@akveo/ng2-completer": "^9.0.1",
     "@angular/animations": "^9.0.4",
     "@angular/cdk": "^9.1.2",
@@ -85,7 +86,6 @@
     "@compodoc/compodoc": "1.0.1",
     "@fortawesome/fontawesome-free": "^5.2.0",
     "@types/d3-color": "1.0.5",
-    "@types/googlemaps": "^3.39.3",
     "@types/jasmine": "2.5.54",
     "@types/jasminewd2": "2.0.3",
     "@types/leaflet": "1.2.3",
