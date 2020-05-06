@@ -12,8 +12,13 @@
     <ngx-traffic-reveal-card></ngx-traffic-reveal-card>
   </div-->
 
-  <div class="col-xxl-7">
-    <ngx-ecommerce-charts></ngx-ecommerce-charts>
+  <div class="col-xl-6">
+    <nb-card>
+      <nb-card-header>Orders</nb-card-header>
+      <nb-card-body>
+        <chart type="line" [data]="data" [options]="options"></chart>
+      </nb-card-body>
+    </nb-card>
   </div>
 
 <!--div class="row">
