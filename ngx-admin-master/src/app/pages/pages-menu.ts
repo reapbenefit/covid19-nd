@@ -8,12 +8,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
     home: true,
   },
   {
-    title: 'NGO',
+    title: 'Volunteer',
     icon: 'home-outline',
-    link: '/pages/iot-dashboard',
+    link: '/pages/VolunteerForm',
   },
   {
-    title: 'Volunteers',
+    title: 'NGO',
     icon: 'home-outline',
     link: '/pages/iot-dashboard',
   }

@@ -22,13 +22,13 @@ export class AdminService {
   publicDataFormSubmit(formResponse) {
     return this.httpClient.post(this.nodeAppUrl + 'user-form-submit', formResponse, this.nodeJsHttpHeaders);
   }
-
   getPublicTableData(): Observable<IAdmin[]> {
     return this.httpClient.get<IAdmin[]>(this.nodeAppUrl + 'get-public-table', this.nodeJsHttpHeaders).catch(this.errorHandler);
   }
 
   errorHandler(error: HttpErrorResponse){
     return Observable.throw(error.message || "Server Error");
+
   }
 }
 

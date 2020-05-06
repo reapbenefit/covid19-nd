@@ -17,13 +17,10 @@ const routes: Routes = [{
       component: ECommerceComponent,
     },
     {
-      path: 'iot-dashboard',
-      component: TableComponent,
+      path: 'VolunteerForm',
+      component: PublicFormComponent,
     },
-    {
-      path: 'public-form',
-      component: PublicFormComponent
-    },
+
     {
       path: 'layout',
       loadChildren: () => import('./layout/layout.module')
