@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import {UserRoleService} from '../user-role.service'
 import { MENU_ITEMS } from './pages-menu';
 
 @Component({
@@ -13,6 +13,75 @@ import { MENU_ITEMS } from './pages-menu';
   `,
 })
 export class PagesComponent {
+  menu:any;
+  constructor(private userroleservice:UserRoleService)
+  {
 
-  menu = MENU_ITEMS;
+  }
+  ngOnInit()
+  {
+    var UserRole=this.userroleservice.getUserRole();
+    if(UserRole=="admin")
+    {
+      this.menu=[
+        {
+          title: 'Home',
+          icon: 'shopping-cart-outline',
+          link: '/pages/dashboard',
+          home: true,
+        },
+        {
+          title: 'Volunteer',
+          icon: 'home-outline',
+          link: '/pages/VolunteerForm',
+        },
+      
+        {
+          title: 'NGO',
+          icon: 'home-outline',
+          link: '/pages/iot-dashboard',
+        }
+       
+      ];
+    }
+    else if(UserRole=="supadmin")
+    {
+      this.menu=[
+        {
+          title: 'Home',
+          icon: 'shopping-cart-outline',
+          link: '/pages/dashboard',
+          home: true,
+        },
+        {
+          title: 'Volunteer',
+          icon: 'home-outline',
+          link: '/pages/VolunteerForm',
+        },
+      
+        {
+          title: 'NGO',
+          icon: 'home-outline',
+          link: '/pages/iot-dashboard',
+        }
+       
+      ];
+    }
+    if(UserRole=="user")
+    {
+      this.menu=[
+        {
+          title: 'Home',
+          icon: 'shopping-cart-outline',
+          link: '/pages/dashboard',
+          home: true,
+        },
+        {
+          title: 'Volunteer',
+          icon: 'home-outline',
+          link: '/pages/VolunteerForm',
+        },
+      ];
+    }
+  }
 }
