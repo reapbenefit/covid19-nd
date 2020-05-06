@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../service/admin.service';
-import { EditButtonComponent } from '../../edit-button/edit-button.component'; 
+import { EditButtonComponent } from '../../edit-button/edit-button.component';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'ngx-table',
@@ -20,7 +21,25 @@ export class TableComponent implements OnInit {
   public errorMsg = "";
   public rowList;
   public frameworkComponents: any;
-  rowDataClicked1 = {};
+  rowDatafromCell = {};
+  displayEditModal: any = false;
+  formCheck: any;
+  modalConfig: any;
+  displayModal: any = false;
+
+  editForm = new FormGroup({
+    name: new FormControl('', Validators.required),
+    address: new FormControl('',
+      [Validators.required,
+      Validators.pattern(/^(([1-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){2}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/)]),
+    category: new FormControl('', Validators.required),
+    subcategory: new FormControl('', Validators.required),
+    ward_id: new FormControl('', Validators.required),
+    city_id: new FormControl('', Validators.required),
+    org_number: new FormControl('', Validators.required),
+    info: new FormControl('', Validators.required),
+    impact: new FormControl('', Validators.required),
+  });
 
   constructor(private _adminService: AdminService){
     this.frameworkComponents = {
@@ -28,16 +47,16 @@ export class TableComponent implements OnInit {
     }
 
     this.columnDefs = [
-              {headerName: 'Name', field: 'place_org_name', editable: true, width: 300, pinned: 'left'},
-              {headerName: 'Address', field: 'place_org_address', editable: true, width: 300, pinned: 'left'},
-              {headerName: 'Category', field: 'place_org_category', filter: 'agTextColumnFilter', width: 300, sortable: true, editable: true},
-              {headerName: 'Subcategory', field: 'place_org_subcategory', filter: 'agTextColumnFilter', width: 300, sortable: true, editable: true},
-              {headerName: 'Ward ID', field: 'ward_id', filter: 'agNumberColumnFilter',width: 300, sortable: true, editable: true},
-              {headerName: 'City ID', field: 'city_id', width: 300, editable: true},
-              {headerName: 'Organization Number', field: 'place_org_number', width: 300, editable: true},
-              {headerName: 'Info', field: 'info', filter: 'agTextColumnFilter', width: 300, sortable: true, editable: true},
-              {headerName: 'Impact', field: 'impact', width: 300, editable: true, filter: 'agTextColumnFilter', sortable: true},
-              {headerName: 'Action', field: 'action', width: 200, pinned: 'right', cellRenderer: 'buttonRenderer', cellRendererParams: {
+              {headerName: 'Name', field: 'name', width: 300, pinned: 'left'},
+              {headerName: 'Address', field: 'address', width: 300, pinned: 'left'},
+              {headerName: 'Category', field: 'category', filter: 'agTextColumnFilter', width: 300, sortable: true},
+              {headerName: 'Subcategory', field: 'subcategory', filter: 'agTextColumnFilter', width: 300, sortable: true},
+              {headerName: 'Ward ID', field: 'ward_id', filter: 'agNumberColumnFilter',width: 300, sortable: true},
+              {headerName: 'City ID', field: 'city_id', width: 300},
+              {headerName: 'Organization Number', field: 'org_number', width: 300},
+              {headerName: 'Info', field: 'info', filter: 'agTextColumnFilter', width: 300, sortable: true},
+              {headerName: 'Impact', field: 'impact', width: 300, filter: 'agTextColumnFilter', sortable: true},
+              {headerName: 'Action', field: 'action', width: 200, editable: false, pinned: 'right', cellRenderer: 'buttonRenderer', cellRendererParams: {
                 onClick: this.onBtnClick1.bind(this),
                 label: 'Edit',
                 
@@ -45,16 +64,48 @@ export class TableComponent implements OnInit {
 
     ];
 
-    this.editType = "fullRow";
+  //  this.editType = "fullRow";
     //this.components = { singleClickEditRenderer: getRenderer() };
 
   }
 
   onBtnClick1(e) {
-    this.rowDataClicked1 = e.rowData;
+    this.rowDatafromCell = e.rowData;
+    console.log(e.rowData.ward_id);
+    this.editForm.patchValue({
+      name: e.rowData.name,
+      address: e.rowData.address,
+      category: e.rowData.category,
+      subcategory: e.rowData.subcategory,
+      ward_id: e.rowData.ward_id,
+      city_id: e.rowData.city_id,
+      org_number: e.rowData.org_number,
+      info: e.rowData.info,
+      impact: e.rowData.impact
+    });
 
-    //
+    this.formCheck = this.editForm.value;
+    this.displayEditModal = true;
   }
+
+  hideModal() {
+    this.displayModal = false;
+    this.displayEditModal = false;
+  }
+
+  onEditFormSubmit() {
+    if (this.formCheck === this.editForm.value) {
+      this.displayEditModal = false;
+    } else {
+    /*  this._adminService.editRowDB(this.editForm.value).subscribe(response => {
+        if (response['status'] === 'Success') {
+          this.displayEditModal = false;
+          this.getDBData();
+        }
+      });*/
+    }
+  }
+
   onCellClicked($event){
     // check whether the current row is already opened in edit or not
     if(this.editingRowIndex != $event.rowIndex) {
@@ -73,27 +124,34 @@ export class TableComponent implements OnInit {
 
     params.api.sizeColumnsToFit();
   }
+
+  getDBData()
+  {
+    this._adminService.getPublicTableData().subscribe(response => {
+      this.rowData = [],
+      this.rowList = response;
+      this.rowList.forEach(item => {
+        this.rowData.push({
+          name: item.place_org_name,
+          address: item.place_org_address,
+          category: item.place_org_category,
+          subcategory: item.place_org_subcategory,
+          ward_id: item.ward_id,
+          city_id: item.city_id,
+          org_number: item.place_org_number,
+          info: item.info,
+          impact: item.impact
+        })
+      });
+      });
+
+  }
   
 
   ngOnInit(): void {
 
-   this._adminService.getPublicTableData().subscribe(response => {
-    this.rowData = [],
-    this.rowList = response;
-    this.rowList.forEach(item => {
-      this.rowData.push({
-        place_org_name: item.place_org_name,
-        place_org_address: item.place_org_address,
-        place_org_category: item.place_org_category,
-        place_org_subcategory: item.place_org_subcategory,
-        ward_id: item.ward_id,
-        city_id: item.city_id,
-        place_org_number: item.place_org_number,
-        info: item.info,
-        impact: item.impact
-      })
-    });
-    });
+    this.getDBData();
+
   }
 }
 
