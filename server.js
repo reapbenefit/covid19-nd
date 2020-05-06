@@ -454,9 +454,6 @@ app.post('/givenbyme', async (req, res) => {
                                 retrylevel = retrylevel + 1;
                                 updateMainTable();
                             } else {
-
-
-
                                 result = { "status": 'fail', "message": `Error on Updates M: ${err}` };
                                 res.send(result);
                             }
@@ -725,9 +722,6 @@ app.get('/testconnect', async (req, res) => {
             }
         });
 
-
-
-
         // var request = {
         //     params: {
         //         place_org_id: 136005,
@@ -800,19 +794,3 @@ app.listen(3000, function () {
 // TABLE_CATALOG: "def"
 // TABLE_NAME: "public_data_place_org_table"
 // TABLE_SCHEMA: "theapp"
-
-// form_data = {
-//     closed_by: null,
-//     closed_at: null
-// }
-// connection.query('UPDATE self_solve SET ? WHERE place_org_id = 136005', form_data, function (err, ss) {
-//     if (err) {
-//         console.log("Error On update");
-//         result = { "status": 'fail', "message": `Error on Updates${err}` };
-//         res.send(result);
-//     } else {
-//         // updateMainTable();
-//         result = { "status": 'success', "message": "data Updated successfully" };
-//         res.send(result);
-//     }
-// })
