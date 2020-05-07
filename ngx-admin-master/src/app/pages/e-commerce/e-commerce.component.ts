@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NbThemeService, NbColorHelper } from '@nebular/theme';
 import {AdminService} from '../../service/admin.service'
+import { stringify } from '@angular/compiler/src/util';
 @Component({
   selector: 'ngx-ecommerce',
   templateUrl: './e-commerce.component.html',
@@ -8,59 +9,70 @@ import {AdminService} from '../../service/admin.service'
 export class ECommerceComponent {
   data: any;
   options: any;
-  casestats: any;
   linedata: any;
   lineoptions: any;
-  xaxislabel = [];
-  yaxislabel = [];
-  yaxislabel1 = [];
   themeSubscription: any;
   constructor(private theme: NbThemeService,private adminservice:AdminService) {
+
     this.adminservice.getcasestats().subscribe(data =>{
       console.log(data);
 
       this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
 
-        this.casestats = Object.keys(data);
+        var casestats = Object.keys(data);
 
         const colors: any = config.variables;
         const chartjs: any = config.variables.chartjs;
 
-        for(var i=0;i<this.casestats.length;i++)
+        var xaxislabel = [];
+        var yaxislabel = [];
+        var yaxislabel1 = [];
+
+        for(var i=0 ; i<casestats.length;i++)
         { 
           if(data[i]["assigned_timestamp"]){
-          if(this.xaxislabel.includes(data[i]["assigned_timestamp"].substr(5,5)))
-          {
-            if(data[i]["closed_at"] == null)
-             this.yaxislabel[i]++;
+            if(xaxislabel.includes(data[i]["assigned_timestamp"].substr(5,5)))
+            {
+              if(data[i]["closed_at"])
+              {
+                if(!xaxislabel.includes(data[i]["closed_at"].substr(5,5)))
+                  xaxislabel.push(data[i]["closed_at"].substr(5,5));
+
+                  ++yaxislabel[xaxislabel.indexOf([data[i]["closed_at"].substr(5,5)])];
+              }
+              else
+                ++yaxislabel1[xaxislabel.indexOf([data[i]["assigned_timestamp"].substr(5,5)])];
+            }
             else
-             this.yaxislabel1[i]++;
-          }
-          else
-          {
-            this.xaxislabel.push(data[i]["assigned_timestamp"].substr(5,5));
-            this.yaxislabel[i]=0;
-            this.yaxislabel1[i]=0;
-            if(data[i]["closed_at"] == null)
-             this.yaxislabel[i]++;
-            else
-             this.yaxislabel1[i]++;
-          }
+            {
+              xaxislabel.push(data[i]["assigned_timestamp"].substr(5,5));
+              if(data[i]["closed_at"])
+              {
+                if(!xaxislabel.includes(data[i]["closed_at"].substr(5,5)))
+                  xaxislabel.push(data[i]["closed_at"].substr(5,5));
+
+                ++yaxislabel[xaxislabel.indexOf([data[i]["closed_at"].substr(5,5)])];
+              }
+              else
+                ++yaxislabel1[xaxislabel.indexOf([data[i]["assigned_timestamp"].substr(5,5)])];
+            }
          }
         }
+
         this.linedata = {
-          labels: this.xaxislabel,
+          labels: xaxislabel,
           datasets: [
             {
-            data: this.yaxislabel1,
+            data: yaxislabel,
             label: 'Completed',
             backgroundColor: NbColorHelper.hexToRgbA(colors.primaryLight, 0.8),
             },
             {
-              data: this.yaxislabel,
+            data:yaxislabel1,
             label: 'Pending',
-            backgroundColor: NbColorHelper.hexToRgbA(colors.primaryLight, 0.8),
-            }]
+            backgroundColor: NbColorHelper.hexToRgbA(colors.danger, 0.8),
+            }
+          ]
         };
 
         this.options = {

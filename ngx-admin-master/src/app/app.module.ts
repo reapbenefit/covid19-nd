@@ -8,8 +8,11 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { AdminService } from './service/admin.service';
+
+import {AdminService} from './service/admin.service';
+import { AgmCoreModule } from '@agm/core';
 import { AgGridModule } from 'ag-grid-angular';
+
 
 import {
   NbChatModule,
@@ -41,6 +44,10 @@ import { TableComponent } from './pages/table/table.component';
     NbToastrModule.forRoot(),
     NbChatModule.forRoot({
       messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
+    }),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCsr7zA9xdgcj4GFj69--1--CvBVlVX_Xs',
+      libraries: ['places']
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),

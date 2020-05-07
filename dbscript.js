@@ -32,34 +32,23 @@ var responseObj = {
 
 app.use('/', router);
 
-// Test Router
-// router.get('/', (req, res) => {
-//     res.send({
-//         msg: 'Hi There!'
-//     });
-// });
-
-//User Form Submit
+//public_data_place_org_table Form Submit
 router.post('/user-form-submit', (req,res)=> {
     let formData = req.body;
     console.log(formData);
-    res.send({
-                msg: 'Success!'
-            });
-    // connection.query('INSERT INTO  public_data_place_org_table SET ?',formData, (err, resp) =>{
-    //         if(err){
-    //             res.send(err);
-    //         }
-    //         else{
-    //             console.log(resp.insertID);
-    //             res.send(resp);
-    //         }
-    // });
+    connection.query(`INSERT INTO public_data_place_org_table (place_org_id,place_org_name,place_org_address,place_org_lat,place_org_long,pol_locale_id,place_org_category,place_org_subcategory,ward_id,ac_id,city_id,place_org_person_incharge,place_org_number,place_org_jurisdiction,info,impact,flagged_as_erronous,logical_delete) VALUES ("${formData.place_org_id}","${formData.place_org_name}","${formData.place_org_address}","${formData.place_org_lat}","${formData.place_org_long}",NULL,"${formData.place_org_category}","${formData.place_org_subcategory}","${formData.ward_id}","${formData.ac_id}","${formData.city_id}",NULL,"${formData.place_org_number}","${formData.place_org_jurisdiction}","${formData.info}",NULL,"0","0")`, (err, resp) =>{
+            if(err){
+                res.send(err);
+            }
+            else{
+                res.send(resp);
+            }
+    });
 });
 
 router.get('/get-public-table', (req,res)=>{
 
-    connection.query("SELECT * FROM bng_food", (error, rows, fields) => {
+    connection.query("SELECT * FROM public_data_place_org_table", (error, rows, fields) => {
         if(error){
             console.log('error');
         }
@@ -69,7 +58,31 @@ router.get('/get-public-table', (req,res)=>{
     });
 
 
-})
+});
+
+
+//Edit Form Submit
+router.post('/edit-form-submit', (req,res)=> {
+    let formData = req.body;
+    console.log(formData);
+
+
+    connection.query(`update public_data_place_org_table set place_org_category = "${formData.category}", place_org_subcategory = "${formData.subcategory}", ward_id = "${formData.ward_id}", city_id = "${formData.city_id}", place_org_number = "${formData.org_number}", info = "${formData.info}", impact = "${formData.impact}" where place_org_id = "${formData.org_id}"`, (error, rows, fields) => {
+        if(error){
+            res.send({
+                msg: 'Error'
+            });
+            console.log(error);
+        }
+        else{
+            res.send({
+                msg: 'Success'
+            });
+            console.log(rows);
+        }
+    })
+
+});
 
 router.get('/get-case-stats', (req,res)=>{
 
