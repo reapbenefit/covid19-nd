@@ -22,15 +22,6 @@ export class ECommerceChartsPanelComponent implements OnInit {
   ngOnInit() {
     this.alive = false;
 
-    this.adminservice.getcasestats().subscribe(res => {
-      console.log('Response for case stats', res);
-      this.casestat = res;
-    },err => console.log('err',err));
-
-    this.adminservice.getfoodstats().subscribe(res => {
-      console.log('Response for food stats',res);
-      this.foodstat = res;
-    },err => console.log('Err',err));
   }
 
   @ViewChild('CaseChart', {static: true}) caseChart: OrdersChartComponent;

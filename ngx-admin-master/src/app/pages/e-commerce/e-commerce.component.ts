@@ -9,55 +9,71 @@ import { stringify } from '@angular/compiler/src/util';
 export class ECommerceComponent {
   data: any;
   options: any;
+  casestats: any;
   linedata: any;
   lineoptions: any;
   themeSubscription: any;
   constructor(private theme: NbThemeService,private adminservice:AdminService) {
 
     this.adminservice.getcasestats().subscribe(data =>{
-      console.log(data);
 
       this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
 
-        var casestats = Object.keys(data);
+        this.casestats = data;
 
         const colors: any = config.variables;
         const chartjs: any = config.variables.chartjs;
 
         var xaxislabel = [];
-        var yaxislabel = [];
-        var yaxislabel1 = [];
+        var yaxislabel = [0,0,0,0,0];
+        var yaxislabel1 = [0,0,0,0,0,0];
 
-        for(var i=0 ; i<casestats.length;i++)
-        { 
-          if(data[i]["assigned_timestamp"]){
-            if(xaxislabel.includes(data[i]["assigned_timestamp"].substr(5,5)))
+       this.casestats.forEach(ele => {
+         console.log('element',ele)
+       if(ele){
+        if(ele["assigned_timestamp"]){
+          if(xaxislabel.includes(ele["assigned_timestamp"].substr(5,5)))
+          {
+            // console.log('ss',ss)
+            if(ele["closed_at"])
             {
-              if(data[i]["closed_at"])
-              {
-                if(!xaxislabel.includes(data[i]["closed_at"].substr(5,5)))
-                  xaxislabel.push(data[i]["closed_at"].substr(5,5));
+              const ss = xaxislabel.indexOf(ele["closed_at"].substr(5,5));
+              if(!xaxislabel.includes(ele["closed_at"].substr(5,5)))
+                xaxislabel.push(ele["closed_at"].substr(5,5));
 
-                  ++yaxislabel[xaxislabel.indexOf([data[i]["closed_at"].substr(5,5)])];
-              }
-              else
-                ++yaxislabel1[xaxislabel.indexOf([data[i]["assigned_timestamp"].substr(5,5)])];
+              yaxislabel[ss] += 1;
+              console.log('ss1',ss)
             }
-            else
+            else{
+              const ss = xaxislabel.indexOf(ele["assigned_timestamp"].substr(5,5));
+              yaxislabel1[ss] += 1;
+              console.log('ss2',ss)
+            }
+          }
+          else
+          {
+            xaxislabel.push(ele["assigned_timestamp"].substr(5,5));
+            if(ele["closed_at"])
             {
-              xaxislabel.push(data[i]["assigned_timestamp"].substr(5,5));
-              if(data[i]["closed_at"])
-              {
-                if(!xaxislabel.includes(data[i]["closed_at"].substr(5,5)))
-                  xaxislabel.push(data[i]["closed_at"].substr(5,5));
+              const ss = xaxislabel.indexOf(ele["closed_at"].substr(5,5));
+              if(!xaxislabel.includes(ele["closed_at"].substr(5,5)))
+                xaxislabel.push(ele["closed_at"].substr(5,5));
 
-                ++yaxislabel[xaxislabel.indexOf([data[i]["closed_at"].substr(5,5)])];
-              }
-              else
-                ++yaxislabel1[xaxislabel.indexOf([data[i]["assigned_timestamp"].substr(5,5)])];
+              yaxislabel[ss] += 1;
+              console.log('ss3',ss)
             }
-         }
-        }
+            else{
+              const ss = xaxislabel.indexOf(ele["assigned_timestamp"].substr(5,5));
+              yaxislabel1[ss] += 1;
+              console.log('ss4',ss)
+            }
+          }
+       }}
+       });
+
+       console.log('yaxislabel',yaxislabel)
+       console.log('yaxislabel1',yaxislabel1)
+
 
         this.linedata = {
           labels: xaxislabel,
@@ -74,40 +90,7 @@ export class ECommerceComponent {
             }
           ]
         };
-
-        this.options = {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            xAxes: [
-              {
-                gridLines: {
-                  display: true,
-                  color: chartjs.axisLineColor,
-                },
-                ticks: {
-                  fontColor: chartjs.textColor,
-                },
-              },
-            ],
-            yAxes: [
-              {
-                gridLines: {
-                  display: true,
-                  color: chartjs.axisLineColor,
-                },
-                ticks: {
-                  fontColor: chartjs.textColor,
-                },
-              },
-            ],
-          },
-          legend: {
-            labels: {
-              fontColor: chartjs.textColor,
-            },
-          },
-        };
+        
         this.lineoptions = {
           maintainAspectRatio: false,
           responsive: true,
