@@ -12,6 +12,7 @@ export class LoginkeycloakComponent implements OnInit {
   password: string = '';
   loginerr = false;
   startSpinner = false;
+  clicked = false;
 
   constructor(private router: Router,private User:UserRoleService) { }
 
@@ -40,7 +41,6 @@ export class LoginkeycloakComponent implements OnInit {
         this.loginerr = true;
       }
 
-     
   }
 
 }

@@ -1,74 +1,48 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { takeWhile } from 'rxjs/operators';
 
-import { OrdersChartComponent } from './charts/orders-chart.component';
-import { ProfitChartComponent } from './charts/profit-chart.component';
-import { OrdersChart } from '../../../@core/data/orders-chart';
-import { ProfitChart } from '../../../@core/data/profit-chart';
-import { OrderProfitChartSummary, OrdersProfitChartData } from '../../../@core/data/orders-profit-chart';
+import { AdminService } from '../../../service/admin.service';
+import { OrdersChartComponent } from './charts/case-chart.component';
+import { ProfitChartComponent } from './charts/food-chart.component';
 
 @Component({
   selector: 'ngx-ecommerce-charts',
   styleUrls: ['./charts-panel.component.scss'],
   templateUrl: './charts-panel.component.html',
 })
-export class ECommerceChartsPanelComponent implements OnDestroy {
+export class ECommerceChartsPanelComponent implements OnInit {
 
   private alive = true;
-
-  chartPanelSummary: OrderProfitChartSummary[];
   period: string = 'week';
-  ordersChartData: OrdersChart;
-  profitChartData: ProfitChart;
+  casestat: any;
+  foodstat:any;
 
-  @ViewChild('ordersChart', { static: true }) ordersChart: OrdersChartComponent;
-  @ViewChild('profitChart', { static: true }) profitChart: ProfitChartComponent;
+  constructor(private adminservice: AdminService) {}
 
-  constructor(private ordersProfitChartService: OrdersProfitChartData) {
-    this.ordersProfitChartService.getOrderProfitChartSummary()
-      .pipe(takeWhile(() => this.alive))
-      .subscribe((summary) => {
-        this.chartPanelSummary = summary;
-      });
+  ngOnInit() {
+    this.alive = false;
 
-    this.getOrdersChartData(this.period);
-    this.getProfitChartData(this.period);
   }
+
+  @ViewChild('CaseChart', {static: true}) caseChart: OrdersChartComponent;
+  @ViewChild('FoodChart', {static: true}) foodChart: ProfitChartComponent;
 
   setPeriodAndGetChartData(value: string): void {
     if (this.period !== value) {
       this.period = value;
     }
 
-    this.getOrdersChartData(value);
-    this.getProfitChartData(value);
+    // this.getCaseChartData(value);
+    // this.getFoodChartData(value);
   }
 
   changeTab(selectedTab) {
     if (selectedTab.tabTitle === 'Profit') {
-      this.profitChart.resizeChart();
+      this.caseChart.resizeChart();
     } else {
-      this.ordersChart.resizeChart();
+      this.foodChart.resizeChart();
     }
   }
 
-  getOrdersChartData(period: string) {
-    this.ordersProfitChartService.getOrdersChartData(period)
-      .pipe(takeWhile(() => this.alive))
-      .subscribe(ordersChartData => {
-        this.ordersChartData = ordersChartData;
-      });
-  }
-
-  getProfitChartData(period: string) {
-    this.ordersProfitChartService.getProfitChartData(period)
-      .pipe(takeWhile(() => this.alive))
-      .subscribe(profitChartData => {
-        this.profitChartData = profitChartData;
-      });
-  }
-
-  ngOnDestroy() {
-    this.alive = false;
-  }
+  
 }
