@@ -56,8 +56,18 @@ router.get('/get-public-table', (req,res)=>{
             res.send(rows);
         }
     });
+});
 
+router.get('/individual-details', (req,res)=>{
 
+    connection.query("SELECT * FROM bng_food LIMIT 20", (error, rows, fields) => {
+        if(error){
+            console.log('error');
+        }
+        else{
+            res.send(rows);
+        }
+    });
 });
 
 

@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { NbThemeService, NbColorHelper } from '@nebular/theme';
 import {AdminService} from '../../service/admin.service'
-import { stringify } from '@angular/compiler/src/util';
+
 @Component({
   selector: 'ngx-ecommerce',
   templateUrl: './e-commerce.component.html',
 })
+
 export class ECommerceComponent {
   data: any;
   options: any;
@@ -13,6 +14,10 @@ export class ECommerceComponent {
   linedata: any;
   lineoptions: any;
   themeSubscription: any;
+  bardata: any;
+  baroptions: any;
+  themeSubscription1: any;
+
   constructor(private theme: NbThemeService,private adminservice:AdminService) {
 
     this.adminservice.getcasestats().subscribe(data =>{
@@ -29,12 +34,11 @@ export class ECommerceComponent {
         var yaxislabel1 = [0,0,0,0,0,0];
 
        this.casestats.forEach(ele => {
-         console.log('element',ele)
+        //  console.log('element',ele)
        if(ele){
         if(ele["assigned_timestamp"]){
           if(xaxislabel.includes(ele["assigned_timestamp"].substr(5,5)))
           {
-            // console.log('ss',ss)
             if(ele["closed_at"])
             {
               const ss = xaxislabel.indexOf(ele["closed_at"].substr(5,5));
@@ -42,12 +46,12 @@ export class ECommerceComponent {
                 xaxislabel.push(ele["closed_at"].substr(5,5));
 
               yaxislabel[ss] += 1;
-              console.log('ss1',ss)
+              // console.log('ss1',ss)
             }
             else{
               const ss = xaxislabel.indexOf(ele["assigned_timestamp"].substr(5,5));
               yaxislabel1[ss] += 1;
-              console.log('ss2',ss)
+              // console.log('ss2',ss)
             }
           }
           else
@@ -60,12 +64,12 @@ export class ECommerceComponent {
                 xaxislabel.push(ele["closed_at"].substr(5,5));
 
               yaxislabel[ss] += 1;
-              console.log('ss3',ss)
+              // console.log('ss3',ss)
             }
             else{
               const ss = xaxislabel.indexOf(ele["assigned_timestamp"].substr(5,5));
               yaxislabel1[ss] += 1;
-              console.log('ss4',ss)
+              // console.log('ss4',ss)
             }
           }
        }}
@@ -92,18 +96,13 @@ export class ECommerceComponent {
         };
         
         this.lineoptions = {
-          maintainAspectRatio: false,
           responsive: true,
-          legend: {
-            labels: {
-              fontColor: chartjs.textColor,
-            },
-          },
+          maintainAspectRatio: false,
           scales: {
             xAxes: [
               {
                 gridLines: {
-                  display: false,
+                  display: true,
                   color: chartjs.axisLineColor,
                 },
                 ticks: {
@@ -123,8 +122,79 @@ export class ECommerceComponent {
               },
             ],
           },
-        };
-      });
+          legend: {
+            labels: {
+              fontColor: chartjs.textColor,
+            },
+          },
+        } 
+    }
+  )});
+
+  this.adminservice.getIndividualsdata().subscribe(data =>{
+    console.log(data);
+    this.themeSubscription1 = this.theme.getJsTheme().subscribe(config => {
+      var reply=Object.keys(data);
+      const colors: any = config.variables;
+      const chartjs: any = config.variables.chartjs;
+      var chartlabels=[];
+      var chartdata=[];
+      for(var i=0;i<reply.length;i++)
+      {
+        if(chartlabels.includes(data[i]["date_request"].substr(5,5)))
+        {
+          chartdata[i]+=data[i]["no_individuals"];
+        }
+        else
+        {
+          chartlabels.push(data[i]["date_request"].substr(5,5));
+          chartdata[i]=0;
+          chartdata[i]+=data[i]["no_individuals"];
+        }
+      }
+      this.bardata = {
+        labels: chartlabels,
+        datasets: [{
+          data: chartdata,
+          label: 'Individuals Served',
+          backgroundColor: NbColorHelper.hexToRgbA(colors.primaryLight, 0.8),
+        }]
+      };
+
+      this.baroptions = {
+        maintainAspectRatio: false,
+        responsive: true,
+        legend: {
+          labels: {
+            fontColor: chartjs.textColor,
+          },
+        },
+        scales: {
+          xAxes: [
+            {
+              gridLines: {
+                display: false,
+                color: chartjs.axisLineColor,
+              },
+              ticks: {
+                fontColor: chartjs.textColor,
+              },
+            },
+          ],
+          yAxes: [
+            {
+              gridLines: {
+                display: true,
+                color: chartjs.axisLineColor,
+              },
+              ticks: {
+                fontColor: chartjs.textColor,
+              },
+            },
+          ],
+        },
+      };
     });
-  }
+  });
+ }
 }

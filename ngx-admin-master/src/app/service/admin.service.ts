@@ -26,6 +26,9 @@ export class AdminService {
     return this.httpClient.post(this.nodeAppUrl + 'user-form-submit', formResponse, this.nodeJsHttpHeaders);
   }
 
+  getIndividualsdata() {
+    return this.httpClient.get(this.nodeAppUrl + 'individual-details', this.nodeJsHttpHeaders);
+  }
   EditFormSubmit(formResponse) {
     console.log(formResponse);
     return this.httpClient.post(this.nodeAppUrl + 'edit-form-submit', formResponse, this.nodeJsHttpHeaders);

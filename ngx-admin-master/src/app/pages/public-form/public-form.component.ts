@@ -68,6 +68,8 @@ export class PublicFormComponent implements OnInit {
       let wardId = response['data'][0].name.slice(5); //To Remove String Ward from name
       this.public_data.patchValue({
         ward_id: wardId,
+       
+
       });
       this.addResponseToDB();
     });
