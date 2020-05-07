@@ -94,9 +94,36 @@ router.post('/edit-form-submit', (req,res)=> {
 
 });
 
+router.get('/get-case-stats', (req,res)=>{
+
+    connection.query("SELECT * FROM self_solve", (error, rows, fields) => {
+        if(error){
+            console.log('error');
+        }
+        else{
+            res.send(rows);
+        }
+    })
+
+})
+
+router.get('/get-food-stats', (req,res)=>{
+
+    connection.query("SELECT * FROM bng_food", (error, rows, fields) => {
+        if(error){
+            console.log('error');
+        }
+        else{
+            res.send(rows);
+        }
+    })
+
+})
+
 //type localhost:8080 in browser to make a query
 app.get('/', (req, res)=>{
-connection.query("select * from bng_food ", (error, rows, fields) => {
+    
+connection.query("select * from self_solve ", (error, rows, fields) => {
     if(error){
         console.log('error');
     }

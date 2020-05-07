@@ -1,8 +1,6 @@
-import { AfterViewInit, Component, Input, OnChanges, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 import { delay, takeWhile } from 'rxjs/operators';
-
-import { OrdersChart } from '../../../../@core/data/orders-chart';
 import { LayoutService } from '../../../../@core/utils/layout.service';
 
 @Component({
@@ -17,19 +15,23 @@ import { LayoutService } from '../../../../@core/utils/layout.service';
     </div>
   `,
 })
-export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges {
+export class OrdersChartComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
 
-  @Input()
-  ordersChartData: OrdersChart;
+  @Input() casestatData;
 
   private alive = true;
 
   echartsIntance: any;
   option: any;
 
+  ngOnInit(){
+    // console.log('CASESTAT',this.casestatData)
+  }
+
+
   ngOnChanges(): void {
     if (this.option) {
-      this.updateOrdersChartOptions(this.ordersChartData);
+      this.updateOrdersChartOptions(this.casestatData);
     }
   }
 
@@ -52,10 +54,12 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
         const eTheme: any = config.variables.orders;
 
         this.setOptions(eTheme);
-        this.updateOrdersChartOptions(this.ordersChartData);
+        this.updateOrdersChartOptions(this.casestatData);
       });
   }
 
+   
+  
   setOptions(eTheme) {
     this.option = {
       grid: {
@@ -260,10 +264,10 @@ export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges
     };
   }
 
-  updateOrdersChartOptions(ordersChartData: OrdersChart) {
+  updateOrdersChartOptions(casestatData) {
     const options = this.option;
-    const series = this.getNewSeries(options.series, ordersChartData.linesData);
-    const xAxis = this.getNewXAxis(options.xAxis, ordersChartData.chartLabel);
+    const series = this.getNewSeries(options.series, casestatData.linesData);
+    const xAxis = this.getNewXAxis(options.xAxis, casestatData.chartLabel);
 
     this.option = {
       ...options,

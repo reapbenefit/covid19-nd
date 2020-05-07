@@ -16,7 +16,7 @@ export class ChartPanelHeaderComponent implements OnDestroy {
 
   @Input() type: string = 'week';
 
-  types: string[] = ['week', 'month', 'year'];
+  types: string[] = ['week', 'month'];
   chartLegend: {iconColor: string; title: string}[];
   breakpoint: NbMediaBreakpoint = { name: '', width: 0 };
   breakpoints: any;
@@ -45,15 +45,15 @@ export class ChartPanelHeaderComponent implements OnDestroy {
     this.chartLegend = [
       {
         iconColor: orderProfitLegend.firstItem,
-        title: 'Payment',
+        title: 'Closed',
       },
       {
         iconColor: orderProfitLegend.secondItem,
-        title: 'Canceled',
+        title: 'Active',
       },
       {
         iconColor: orderProfitLegend.thirdItem,
-        title: 'All orders',
+        title: 'All Cases',
       },
     ];
   }
