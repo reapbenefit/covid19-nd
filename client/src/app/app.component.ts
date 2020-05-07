@@ -786,6 +786,13 @@ export class AppComponent {
 
   ngOnInit() {
 
+    // For Testing
+    // this.dataService.updateESRecord({
+    //   "place_org_id": 53784,
+    //   "closed_by": 'ngotestuser',
+    //   "place_org_subcategory": 'Rations-Asked'
+    // });
+
     // Login User
     this.LoginUserInfo();
 
@@ -1796,11 +1803,13 @@ export class AppComponent {
   userName = '';
   userRole = [];
   activeRole = [];
+  userData = {};
   LoginUserInfo() {
     this.dataService.getUserInfo().subscribe(res => {
       console.log(res);
       if (res['data'] && res['data']) {
         console.log(res['data']);
+        this.userData = res['data'];
         this.userName = res['data']['username'];
         this.userRole = res['data']['userrole'] && res['data']['userrole']['roles'] || [];
         if (window.localStorage.getItem('page')) {
@@ -1812,6 +1821,7 @@ export class AppComponent {
 
         this.commonService.setusername(this.userName);
         this.commonService.setUserrole(this.userRole);
+        this.commonService.setUserData(this.userData);
 
         console.log({
           userName: this.userName,
@@ -1903,6 +1913,7 @@ export class AppComponent {
       data: data,
       username: this.userName,
       userrole: this.userRole,
+      userdata: this.userData,
       number: number
     })
     let obj = {
@@ -1910,6 +1921,7 @@ export class AppComponent {
       data: data,
       username: this.userName,
       userrole: this.userRole,
+      userdata: this.userData,
       number: number
     }
     this.dataService.assignme(obj).subscribe(res => {
@@ -1943,18 +1955,28 @@ export class AppComponent {
       type: type,
       data: data,
       username: this.userName,
-      userrole: this.userRole
+      userrole: this.userRole,
+      userdata: this.userData
     })
     let obj = {
       type: type,
       data: data,
       username: this.userName,
-      userrole: this.userRole
+      userrole: this.userRole,
+      userdata: this.userData
     }
     this.dataService.givenbyme(obj).subscribe(res => {
       console.log(res);
       if (res && res['status'] == 'success') {
         alert("Data saved successfuly");
+
+        // updte ES DB
+        this.dataService.updateESRecord({
+          "place_org_id": res['data']['place_org_id'],
+          "closed_by": this.userName,
+          "place_org_subcategory": res['data']['place_org_subcategory']
+        });
+
         this.getUserAssignedList();
       } else {
         alert(res['message']);

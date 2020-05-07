@@ -31,6 +31,7 @@ export class CommonService {
 
     private username = new Subject<any>();
     private userRole = new Subject<any>();
+    private userData = new Subject<any>();
     setusername(user){
         this.username.next({ data: user });
     }
@@ -43,6 +44,13 @@ export class CommonService {
     }
     getUserrole(){
         return this.userRole.asObservable();
+    }
+    
+    setUserData(userData){
+        this.userData.next({ data: userData });
+    }
+    getUserData(){
+        return this.userData.asObservable();
     }
 
 

@@ -2,6 +2,7 @@ const Keycloak = require('keycloak-connect');
 const session = require('express-session');
 const express = require('express')
 const path = require('path');
+var request = require('request');
 
 /**
  * For Db connect and
@@ -55,7 +56,6 @@ app.get('/api/v1/user/data/read', keycloak.checkSso(), (req, res) => {
     // console.log('////////////////////');
     console.log(req);
     console.log(req.kauth.grant.access_token.content);
-    console.log(req.kauth.grant.access_token.content.groups);
     let response = {};
     response.data = {};
     response.data.name = req.kauth.grant.access_token.content.name;
@@ -63,6 +63,10 @@ app.get('/api/v1/user/data/read', keycloak.checkSso(), (req, res) => {
     response.data.first_name = req.kauth.grant.access_token.content.given_name;
     response.data.last_name = req.kauth.grant.access_token.family_name;
     response.data.userrole = req.kauth.grant.access_token.content.realm_access;
+    if (req.kauth.grant.access_token.content['group'] && req.kauth.grant.access_token.content['group'].length) {
+        response.data.group = req.kauth.grant.access_token.content.group[0];
+    }
+    console.log(response);
     // console.log(response);
     res.send(response);
 });
@@ -200,10 +204,15 @@ function sanitize_input(req, input_object) {
 /**
  * MySql Db Connection and service
  * table : self-solve
+ *
+ * connectTimeout: 60 * 60 * 1000,
+ * aquireTimeout: 60 * 60 * 1000,
+ * timeout: 60 * 60 * 1000,
  */
 const mysql = require('mysql');
 var connection = mysql.createPool({
     connectionLimit: 100,
+    timeout: 60 * 60 * 100,
     host: 'devlp.solveninja.org',
     user: 'curiouscat',
     password: 'S0lvesm@lld3ntbig',
@@ -267,7 +276,12 @@ app.post('/assignme', async (req, res) => {
             var place_org_id = req.body.data.id;
             var assigned_to = req.body.username;
             var phone_number = req.body.number;
+            var place_org_name = req.body.userdata['group'] || '';
+            place_org_name = place_org_name.replace(/\//g, '');
+
             var assigned_timestamp = new Date();
+
+            console.log(place_org_name);
 
             // For Main Table
             var subcategory = req.body.data.subcategory;
@@ -337,8 +351,8 @@ app.post('/assignme', async (req, res) => {
                     console.log(rows);
                     console.log("Data Availabel");
                     if (rows.length == 0) {
-                        var records = [[place_org_id, assigned_to, phone_number, assigned_timestamp]];
-                        connection.query("INSERT INTO self_solve (place_org_id, assigned_to, phone_number, assigned_timestamp) VALUES ?", [records], function (err, ss, ff) {
+                        var records = [[place_org_id, assigned_to, phone_number, assigned_timestamp, place_org_name]];
+                        connection.query("INSERT INTO self_solve (place_org_id, assigned_to, phone_number, assigned_timestamp, place_org_name) VALUES ?", [records], function (err, ss, ff) {
                             // if any error while executing above query, throw error
                             if (err) {
                                 console.log("Insearting Error");
@@ -350,6 +364,8 @@ app.post('/assignme', async (req, res) => {
                                 console.log(ff);
                                 console.log("Insearted succesfluuy S");
                                 updateMainTable();
+                                // result = { "status": 'success', "message": "data Updated successfully M" };
+                                // res.send(result);
                             }
                         });
                     } else {
@@ -459,7 +475,12 @@ app.post('/givenbyme', async (req, res) => {
                             }
                         } else {
                             retrylevel = 0;
-                            result = { "status": 'success', "message": "data Updated successfully M" };
+                            result = {
+                                "status": 'success', "data": {
+                                    "place_org_id": place_org_id,
+                                    "place_org_subcategory": finalName
+                                }
+                            };
                             res.send(result);
                         }
                     })
@@ -709,7 +730,10 @@ app.get('/testconnect', async (req, res) => {
         res.send(result);
     } else {
 
-        var query = `SELECT * FROM self_solve`;
+
+
+        // var query = `SELECT * FROM self_solve`;
+        var query = `SELECT * FROM public_data_place_org_table WHERE place_org_id =53784`;
         connection.query(query, function (err, rows) {
             if (err) {
                 console.log(err);
@@ -719,31 +743,15 @@ app.get('/testconnect', async (req, res) => {
                 console.log(rows);
                 result = { "status": 'success', "data": rows };
                 res.send(result);
+
             }
         });
 
-        // var request = {
-        //     params: {
-        //         place_org_id: 136005,
-        //         closed_at: new Date(),
-        //         closed_by: 'testngouser'
-        //     }
-        // }
-        // axios.post('https://es.solveninja.org/updatePlaceClosed?place_org_id=136005&closed_at=2020-05-06&closed_by=testngouser')
-        //         .then(function (response) {
-        //             // handle success
-        //             console.log(response);
-        //         })
-        //         .catch(function (error) {
-        //             // handle error
-        //             console.log(error);
-        //         })
-        //         .then(function () {
-        //             // always executed
-        //             result = { "status": 'success', "data": 'test' };
-        //             res.send(result);
-        //         });
 
+
+        // place_org_id: 136005,
+        //     closed_at: new Date(),
+        //         closed_by: 'testngouser'
 
         // var form_data = {
         //     closed_by: "testngoadmin",

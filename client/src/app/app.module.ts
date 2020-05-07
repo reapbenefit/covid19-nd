@@ -19,6 +19,7 @@ import { environment } from './../environments/environment.prod'
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { from } from 'rxjs';
 import { FilterPipe, InputsearchPipe, RaTotalCounts } from './app.component';
+import { DatePipe } from '@angular/common';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
   ],
   providers: [
     CommonService, 
+    DatePipe,
     GoogleAnalyticsService
   ],
   bootstrap: [AppComponent]

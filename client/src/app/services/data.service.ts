@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import { DatePipe } from '@angular/common';
+declare var $: any;
 @Injectable({
     providedIn: 'root',
 })
@@ -25,7 +26,7 @@ export class DataService {
     public SelIssCat;
     public wardSelectedID = 0;
     private headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
-    constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient, public datepipe: DatePipe) { }
 
 
 
@@ -135,6 +136,32 @@ export class DataService {
     }
     getUserInfo() {
         return this.httpClient.get(`/api/v1/user/data/read`, { headers: this.headers });
+    }
+
+    /**
+     * Update ES  
+     * @param obj 
+     */
+    updateESRecord(obj){
+        var settings = {
+            "url": "https://es.solveninja.org/updatePlaceClosed",
+            "method": "POST",
+            "headers": {
+                "content-type": "application/x-www-form-urlencoded",
+                "cache-control": "no-cache",
+            },
+            "data": {
+                "place_org_id": obj.place_org_id,
+                "closed_at": this.datepipe.transform(new Date(), 'yyyy-MM-dd'),
+                "closed_by": obj.closed_by,
+                "subcategory": obj.place_org_subcategory
+            }
+        }
+        if ($) {
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+            });
+        }
     }
 
     /**

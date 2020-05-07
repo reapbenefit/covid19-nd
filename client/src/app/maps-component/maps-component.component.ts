@@ -63,6 +63,10 @@ export class MapsComponentComponent implements OnInit {
       console.log(res);
       this.userRole = res.data;
     })
+    this.subscriptionWithUserData = this.commonService.getUserData().subscribe(res => {
+      console.log(res);
+      this.userData = res.data;
+    })
 
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(position => {
@@ -275,8 +279,10 @@ export class MapsComponentComponent implements OnInit {
   loaderAction = false;//Assign Me
   userName = '';
   userRole =  [];
+  userData = '';
   subscriptionWithUserRole: Subscription;
   subscriptionWithUserName: Subscription;
+  subscriptionWithUserData: Subscription;
   
   /**
    * Get Given List
@@ -341,6 +347,7 @@ export class MapsComponentComponent implements OnInit {
       data: data,
       username: this.userName,
       userrole: this.userRole,
+      userdata: this.userData,
       number: number
     })
     let obj = {
@@ -348,6 +355,7 @@ export class MapsComponentComponent implements OnInit {
       data: data,
       username: this.userName,
       userrole: this.userRole,
+      userdata: this.userData,
       number: number
     }
     this.dataService.assignme(obj).subscribe(res => {
@@ -381,18 +389,28 @@ export class MapsComponentComponent implements OnInit {
       type: type,
       data: data,
       username: this.userName,
-      userrole: this.userRole
+      userrole: this.userRole,
+      userdata: this.userData
     })
     let obj = {
       type: type,
       data: data,
       username: this.userName,
-      userrole: this.userRole
+      userrole: this.userRole,
+      userdata: this.userData
     }
     this.dataService.givenbyme(obj).subscribe(res => {
       console.log(res);
       if (res && res['status'] == 'success') {
         alert("Data saved successfuly");
+
+        // updte ES DB
+        this.dataService.updateESRecord({
+          "place_org_id": res['data']['place_org_id'],
+          "closed_by": this.userName,
+          "place_org_subcategory": res['data']['place_org_subcategory']
+        });
+
         this.getUserAssignedList();
       } else {
         alert(res['message']);
@@ -415,11 +433,13 @@ export class MapsComponentComponent implements OnInit {
     this.loaderAction = true;
     console.log({
       username: this.userName,
-      userrole: this.userRole
+      userrole: this.userRole,
+      userdata: this.userData
     })
     let obj = {
       username: this.userName,
-      userrole: this.userRole
+      userrole: this.userRole,
+      userdata: this.userData
     }
     this.dataService.getAllassignedList(obj).subscribe(res => {
       console.log(res);
