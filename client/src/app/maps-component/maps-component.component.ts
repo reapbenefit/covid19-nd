@@ -196,9 +196,9 @@ export class MapsComponentComponent implements OnInit {
       console.log(data);
       this.responceData = data;
       if (this.responceData != null) {
-        this.responceData.data['menuId'] = marker['menuId'] ? marker['menuId']: 0;
-        this.responceData.data['id'] = marker['id'] ? marker['id']: 0;
-        if (marker['subcategory']){
+        this.responceData.data['menuId'] = marker['menuId'] ? marker['menuId'] : 0;
+        this.responceData.data['id'] = marker['id'] ? marker['id'] : 0;
+        if (marker['subcategory']) {
           this.responceData.data['subcategory'] = marker['subcategory'];
         }
         this.locationDetails = this.responceData.data;
@@ -208,7 +208,7 @@ export class MapsComponentComponent implements OnInit {
   }
 
   mapClicked(event) {
-    
+
     this.lat = event.coords.lat;
     this.lng = event.coords.lng;
     let obj = {
@@ -245,8 +245,8 @@ export class MapsComponentComponent implements OnInit {
     // console.log(this.dataService.topLeft);
     // The Elastic query likes the rectangle to be specified with top-left and
     // bottom-right, hence converting NorthEast/SouthWest to the same.
-    let topLeft = {lat: bounds.getNorthEast().lat(), lng: bounds.getSouthWest().lng()}
-    let bottomRight = {lat: bounds.getSouthWest().lat(), lng: bounds.getNorthEast().lng()}
+    let topLeft = { lat: bounds.getNorthEast().lat(), lng: bounds.getSouthWest().lng() }
+    let bottomRight = { lat: bounds.getSouthWest().lat(), lng: bounds.getNorthEast().lng() }
     this.dataService.topLeft = topLeft;
     this.dataService.bottomRight = bottomRight;
     // console.log(this.dataService.topLeft);
@@ -278,12 +278,12 @@ export class MapsComponentComponent implements OnInit {
    */
   loaderAction = false;//Assign Me
   userName = '';
-  userRole =  [];
+  userRole = [];
   userData = '';
   subscriptionWithUserRole: Subscription;
   subscriptionWithUserName: Subscription;
   subscriptionWithUserData: Subscription;
-  
+
   /**
    * Get Given List
    */
@@ -316,7 +316,7 @@ export class MapsComponentComponent implements OnInit {
    * start asigning User
    */
   validateMobileNumber(number, item) {
-    
+
     if (parseInt(number) != NaN && number.toString().length < 13) {
       this.startAssignMe(this.user_Assign_Type, this.user_Assign_data, number);
       item['numberPopup'] = false;
@@ -337,7 +337,7 @@ export class MapsComponentComponent implements OnInit {
     data['numberPopup'] = true;
     this.user_Assign_Type = type;
     this.user_Assign_data = data;
-    
+
   }
 
   startAssignMe(type, data, number) {
@@ -366,6 +366,13 @@ export class MapsComponentComponent implements OnInit {
         // Get All givenList
         alert("Assigned successfully");
         this.getUserAssignedList();
+        // updte ES DB
+        this.dataService.updateESRecord({
+          "place_org_id": res['data']['place_org_id'],
+          "closed_by": this.userName,
+          "place_org_subcategory": res['data']['place_org_subcategory']
+        }, 'assigned');
+
       } else {
         alert(res['message']);
       }

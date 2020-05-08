@@ -16,8 +16,8 @@ export class DataService {
     public SelectedCityLng = 77.5906;
     public centerLng = 12.9796;
     public centerLat = 77.5906;
-    public topLeft = {lat: this.SelectedCityLat, lng: this.SelectedCityLng};
-    public bottomRight = {lat: this.SelectedCityLat, lng: this.SelectedCityLng};
+    public topLeft = { lat: this.SelectedCityLat, lng: this.SelectedCityLng };
+    public bottomRight = { lat: this.SelectedCityLat, lng: this.SelectedCityLng };
     public zoom = 13;
     public AQMDataList;
     public getcurrentlocation = false;
@@ -73,34 +73,34 @@ export class DataService {
     /**
      * @param obj Get MenuList
      */
-    MenuList= [];
+    MenuList = [];
     getMenuList(obj) {
         return this.httpClient.post(`${this.baseURLCOVID}/neighbourHood/getMenuItems.php`, obj, { headers: this.headers });
     }
     private getSubMenus(obj) {
-      var menu;
-      let menuItems = []
-      obj["menuData"].forEach((menu, index) => {
-          let submenus = menu["submenus"];
-          var id;
-          submenus.split(",").forEach((id, index) => {
-            menuItems.push(id);
-          });
-      });
-      return menuItems;
+        var menu;
+        let menuItems = []
+        obj["menuData"].forEach((menu, index) => {
+            let submenus = menu["submenus"];
+            var id;
+            submenus.split(",").forEach((id, index) => {
+                menuItems.push(id);
+            });
+        });
+        return menuItems;
     }
     CollectionsDataES(obj) {
         console.log(obj);
         let menuItems = this.getSubMenus(obj);
         let params = {
-          menuData: menuItems,
-          topLeftLat: "" + this.topLeft.lat,
-          topLeftLon: "" + this.topLeft.lng,
-          bottomRightLat: "" + this.bottomRight.lat,
-          bottomRightLon: "" + this.bottomRight.lng,
+            menuData: menuItems,
+            topLeftLat: "" + this.topLeft.lat,
+            topLeftLon: "" + this.topLeft.lng,
+            bottomRightLat: "" + this.bottomRight.lat,
+            bottomRightLon: "" + this.bottomRight.lng,
         };
         console.log(params);
-        return this.httpClient.get(`${this.baseURLES}/places`, {params: params, headers: this.headers});
+        return this.httpClient.get(`${this.baseURLES}/places`, { params: params, headers: this.headers });
     }
     getCategoryImpactsDataES(obj) {
         console.log(obj);
@@ -120,19 +120,19 @@ export class DataService {
     getCountDataES(obj) {
         let menuItems = this.getSubMenus(obj);
         let params = {
-          menuData: menuItems,
+            menuData: menuItems,
             latitude: "" + obj.latitude,
             longitude: "" + obj.longitude,
-          radius:'30km'
-        }; 
-        return this.httpClient.get(`${this.baseURLES}/categoryCounts`, {params: params, headers: this.headers});
+            radius: '30km'
+        };
+        return this.httpClient.get(`${this.baseURLES}/categoryCounts`, { params: params, headers: this.headers });
     }
     getCountAllDataES(obj) {
         let menuItems = this.getSubMenus(obj);
         let params = {
-          menuData: menuItems
-        }; 
-        return this.httpClient.get(`${this.baseURLES}/categoryCounts`, {params: params, headers: this.headers});
+            menuData: menuItems
+        };
+        return this.httpClient.get(`${this.baseURLES}/categoryCounts`, { params: params, headers: this.headers });
     }
     getUserInfo() {
         return this.httpClient.get(`/api/v1/user/data/read`, { headers: this.headers });
@@ -142,7 +142,7 @@ export class DataService {
      * Update ES  
      * @param obj 
      */
-    updateESRecord(obj){
+    updateESRecord(obj, ass = '') {
         var settings = {
             "url": "https://es.solveninja.org/updatePlaceClosed",
             "method": "POST",
@@ -152,8 +152,8 @@ export class DataService {
             },
             "data": {
                 "place_org_id": obj.place_org_id,
-                "closed_at": this.datepipe.transform(new Date(), 'yyyy-MM-dd'),
-                "closed_by": obj.closed_by,
+                "closed_at": ass != 'assigned' ? this.datepipe.transform(new Date(), 'yyyy-MM-dd') : '',
+                "closed_by": ass != 'assigned' ? obj.closed_by: '',
                 "subcategory": obj.place_org_subcategory
             }
         }
@@ -170,7 +170,7 @@ export class DataService {
     assignme(obj) {
         return this.httpClient.post(`/assignme`, obj, { headers: this.headers });
     }
-    
+
     /**
      * @param obj Get All Given for Logged In User
      */
@@ -184,14 +184,14 @@ export class DataService {
     getUserAssignedList(obj) {
         return this.httpClient.post(`/getassignedlist`, obj, { headers: this.headers });
     }
-    
+
     /**
      * @param obj Get getAllassignedList
      */
     getAllassignedList(obj) {
         return this.httpClient.post(`/getAllassignedList`, obj, { headers: this.headers });
     }
-    
+
     /**
      * @param obj Get GettotalClosedAsignment
      */

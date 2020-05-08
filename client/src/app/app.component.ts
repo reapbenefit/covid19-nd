@@ -1931,6 +1931,13 @@ export class AppComponent {
       }else if(res && res['status'] == 'success'){
         // Get All givenList
         alert("Assigned successfully");
+        // updte ES DB
+        this.dataService.updateESRecord({
+          "place_org_id": res['data']['place_org_id'],
+          "closed_by": this.userName,
+          "place_org_subcategory": res['data']['place_org_subcategory']
+        }, 'assigned');
+        
         this.getUserAssignedList();
       }else{
         alert(res['message']);

@@ -331,8 +331,15 @@ app.post('/assignme', async (req, res) => {
                             }
                         } else {
                             retrylevel = 0;
-                            result = { "status": 'success', "message": "data Updated successfully M" };
+                            result = {
+                                "status": 'success', "data": {
+                                    "place_org_id": place_org_id,
+                                    "place_org_subcategory": finalName
+                                }
+                            };
                             res.send(result);
+                            // result = { "status": 'success', "message": "data Updated successfully M" };
+                            // res.send(result);
                         }
                     })
                 } else {
@@ -733,7 +740,7 @@ app.get('/testconnect', async (req, res) => {
 
 
         // var query = `SELECT * FROM self_solve`;
-        var query = `SELECT * FROM public_data_place_org_table WHERE place_org_id =53784`;
+        var query = `SELECT * FROM public_data_place_org_table WHERE place_org_id =129714`;
         connection.query(query, function (err, rows) {
             if (err) {
                 console.log(err);
