@@ -47,6 +47,10 @@ export class AdminService {
     return this.httpClient.get(this.nodeAppUrl + 'get-case-stats', this.nodeJsHttpHeaders);
   }
 
+  getorgstats() {
+    return this.httpClient.get(this.nodeAppUrl + 'get-org-stats', this.nodeJsHttpHeaders);
+  }
+
   //Function to Fetch Ward ID using Lat and Long - Works for Lat and Long info available in API (Bangalore)
   //Not Sure about Other Cities
   getWardId(location) {
