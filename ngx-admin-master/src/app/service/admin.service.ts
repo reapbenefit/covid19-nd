@@ -86,8 +86,8 @@ export class AdminService {
       new subCategory('Governance', 'MLA'),
       new subCategory('Governance', 'Corporator'),
 
-      new subCategory('Utilities', 'Citizen Services"'),
-      new subCategory('Utilities', 'Citizen Services"'),
+      new subCategory('Utilities', 'Citizen Services'),
+      new subCategory('Utilities', 'Citizen Services'),
 
       new subCategory('Important Medical Services', 'Corona Testing Centre'),
       new subCategory('Important Medical Services', 'First Responder'),
