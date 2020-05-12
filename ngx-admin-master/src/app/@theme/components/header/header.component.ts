@@ -1,7 +1,7 @@
-import { AdminService } from './../../../service/admin.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
+import { AdminService } from './../../../service/admin.service';
 import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
 
   constructor(
-              private AdminService: AdminService,
+              private adminService: AdminService,
               private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
@@ -56,13 +56,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   username = '';
   userRoles = [];
   checkuser() {
-    this.AdminService.getUserInfo().subscribe(res => {
-      console.log(res);
+    this.adminService.getUserInfo().subscribe(res => {
       if (res['data'] && res['data']['username']) {
         this.username = res['data']['username'];
         this.userRoles = res['data']['userrole']['roles'];
       }
-    })
+    });
   }
 
   ngOnInit() {
