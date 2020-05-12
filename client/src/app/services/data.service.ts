@@ -112,12 +112,14 @@ export class DataService {
         let menuItems = this.getSubMenus(obj);
         let params = {
             menuData: menuItems,
-            // topLeftLat: "" + obj.topLeftLat,
-            // topLeftLon: "" + obj.topLeftLon,
-            // bottomRightLat: "" + obj.bottomRightLat,
-            // bottomRightLon: "" + obj.bottomRightLon,
-            // latitude: "" + obj.latitude,
-            // longitude: "" + obj.longitude
+            //Uncommented
+            topLeftLat: "" + obj.topLeftLat,
+            topLeftLon: "" + obj.topLeftLon,
+            bottomRightLat: "" + obj.bottomRightLat,
+            bottomRightLon: "" + obj.bottomRightLon,
+            latitude: "" + obj.latitude,
+            longitude: "" + obj.longitude
+            //Uncommented ends here
         };
         console.log(params);
         return this.httpClient.get(`${this.baseEsSolv}/categoryImpacts`, { params: params, headers: this.headers });
