@@ -65,9 +65,9 @@ export class DataService {
         return this.httpClient.post(`${this.baseURLCOVID}/getDetailData.php`, obj, { headers: this.headers });
         // return this.httpClient.post(`${this.baseURL}/neighbourHood/getDetailData.php`, obj, { headers: this.headers });
     }
-    
+
     getCorrLocDetailsNewOne(obj) {
-        return this.httpClient.get(`${this.baseURLES}/places?id=${obj.id}`, { headers: this.headers });
+        return this.httpClient.get(`${this.baseEsSolv}/places?id=${obj.id}`, { headers: this.headers });
     }
 
     //New APIs
@@ -120,7 +120,7 @@ export class DataService {
             // longitude: "" + obj.longitude
         };
         console.log(params);
-        return this.httpClient.get(`${this.baseURLES}/categoryImpacts`, { params: params, headers: this.headers });
+        return this.httpClient.get(`${this.baseEsSolv}/categoryImpacts`, { params: params, headers: this.headers });
     }
     getCountDataES(obj) {
         let menuItems = this.getSubMenus(obj);
@@ -130,22 +130,22 @@ export class DataService {
             longitude: "" + obj.longitude,
             radius: '30km'
         };
-        return this.httpClient.get(`${this.baseURLES}/categoryCounts`, { params: params, headers: this.headers });
+        return this.httpClient.get(`${this.baseEsSolv}/categoryCounts`, { params: params, headers: this.headers });
     }
     getCountAllDataES(obj) {
         let menuItems = this.getSubMenus(obj);
         let params = {
             menuData: menuItems
         };
-        return this.httpClient.get(`${this.baseURLES}/categoryCounts`, { params: params, headers: this.headers });
+        return this.httpClient.get(`${this.baseEsSolv}/categoryCounts`, { params: params, headers: this.headers });
     }
     getUserInfo() {
         return this.httpClient.get(`/api/v1/user/data/read`, { headers: this.headers });
     }
 
     /**
-     * Update ES  
-     * @param obj 
+     * Update ES
+     * @param obj
      */
     updateESRecord(obj, ass = '') {
         var settings = {
