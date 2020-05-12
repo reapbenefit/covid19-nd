@@ -10,6 +10,7 @@ export class DataService {
     public baseURL = "https://devlp.solveninja.org/wp-includes/rest-api";
     public baseURLCOVID = "https://devlp.solveninja.org/wp-includes/covid/rest-api";
     public baseURLES = "http://52.172.26.84/"
+    public baseEsSolv = "https://es.solveninja.org/"
     // public baseURL = "https://solveninja.org/wp-includes/rest-api";
     public SelectedCity = 1;
     public SelectedCityLat = 12.9796;
@@ -64,6 +65,10 @@ export class DataService {
         return this.httpClient.post(`${this.baseURLCOVID}/getDetailData.php`, obj, { headers: this.headers });
         // return this.httpClient.post(`${this.baseURL}/neighbourHood/getDetailData.php`, obj, { headers: this.headers });
     }
+    
+    getCorrLocDetailsNewOne(obj) {
+        return this.httpClient.get(`${this.baseURLES}/places?id=${obj.id}`, { headers: this.headers });
+    }
 
     //New APIs
     getDashboardData(obj) {
@@ -100,7 +105,7 @@ export class DataService {
             bottomRightLon: "" + this.bottomRight.lng,
         };
         console.log(params);
-        return this.httpClient.get(`${this.baseURLES}/places`, { params: params, headers: this.headers });
+        return this.httpClient.get(`${this.baseEsSolv}/places`, { params: params, headers: this.headers });
     }
     getCategoryImpactsDataES(obj) {
         console.log(obj);

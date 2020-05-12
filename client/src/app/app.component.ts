@@ -1928,7 +1928,7 @@ export class AppComponent {
       console.log(res);
       if (res && res['assigned'] == true){
         alert("Sorry Already action taken by someone.")
-      }else if(res && res['status'] == 'success'){
+      }else if(res && res['status'] == 'success'){ 
         // Get All givenList
         alert("Assigned successfully");
         // updte ES DB

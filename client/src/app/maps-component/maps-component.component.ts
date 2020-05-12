@@ -192,7 +192,7 @@ export class MapsComponentComponent implements OnInit {
       "city": Number(this.dataService.SelectCityID)
     }
 
-    this.dataService.getCorrLocDetails(obj).subscribe(data => {
+    this.dataService.getCorrLocDetailsNewOne(obj).subscribe(data => {
       console.log(data);
       this.responceData = data;
       if (this.responceData != null) {
@@ -203,7 +203,6 @@ export class MapsComponentComponent implements OnInit {
         }
         this.locationDetails = this.responceData.data;
       }
-      // this.select_marker(data);
     });
   }
 

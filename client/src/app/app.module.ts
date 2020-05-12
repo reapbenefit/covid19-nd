@@ -20,7 +20,12 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
 import { from } from 'rxjs';
 import { FilterPipe, InputsearchPipe, RaTotalCounts } from './app.component';
 import { DatePipe } from '@angular/common';
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular'; 
+
+import { ParseUrl } from './parse-url.pipe';
+import { DynamicContent } from './dynamic-content.directive';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +34,9 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
     GraphsComponent,
     FilterPipe,
     InputsearchPipe,
-    RaTotalCounts
+    RaTotalCounts,
+    ParseUrl,
+    DynamicContent
   ],
   imports: [
     BrowserModule,
