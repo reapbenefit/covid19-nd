@@ -11,10 +11,10 @@ import {
 import { LoginkeycloakComponent } from './loginkeycloak/loginkeycloak.component';
 
 export const routes: Routes = [
-  {
-    path: "loginkeycloak",
-    component: LoginkeycloakComponent,
-  },
+  // {
+  //   path: "loginkeycloak",
+  //   component: LoginkeycloakComponent,
+  // },
   {
     path: 'pages',
     loadChildren: () => import('./pages/pages.module')
@@ -46,8 +46,8 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: '', redirectTo: 'loginkeycloak', pathMatch: 'full'},
-  { path: '**', redirectTo: 'loginkeycloak' },
+  { path: '', redirectTo: 'pages', pathMatch: 'full'},
+  { path: '**', redirectTo: 'pages' },
 ];
 
 const config: ExtraOptions = {

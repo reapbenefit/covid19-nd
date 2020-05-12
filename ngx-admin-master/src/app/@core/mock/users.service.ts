@@ -8,12 +8,12 @@ export class UserService extends UserData {
   private time: Date = new Date;
 
   private users = {
-    nick: { name: 'Admin', picture: 'assets/images/admin-ui.png' },
-    eva: { name: 'Eva Moor', picture: 'assets/images/eva.png' },
-    jack: { name: 'Jack Williams', picture: 'assets/images/jack.png' },
-    lee: { name: 'Lee Wong', picture: 'assets/images/lee.png' },
-    alan: { name: 'Alan Thompson', picture: 'assets/images/alan.png' },
-    kate: { name: 'Kate Martinez', picture: 'assets/images/kate.png' },
+    nick: { name: 'Admin', picture: `${window.location.origin}/assets/images/admin-ui.png` },
+    eva: { name: 'Eva Moor', picture: `${window.location.origin}/assets/images/eva.png` },
+    jack: { name: 'Jack Williams', picture: `${window.location.origin}/assets/images/jack.png` },
+    lee: { name: 'Lee Wong', picture: `${window.location.origin}/assets/images/lee.png` },
+    alan: { name: 'Alan Thompson', picture: `${window.location.origin}/assets/images/alan.png` },
+    kate: { name: 'Kate Martinez', picture: `${window.location.origin}/assets/images/kate.png` },
   };
   private types = {
     mobile: 'mobile',

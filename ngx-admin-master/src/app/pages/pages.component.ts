@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {UserRoleService} from '../user-role.service'
+import { UserRoleService } from '../user-role.service'
 import { MENU_ITEMS } from './pages-menu';
 
 @Component({
@@ -13,17 +13,14 @@ import { MENU_ITEMS } from './pages-menu';
   `,
 })
 export class PagesComponent {
-  menu:any;
-  constructor(private userroleservice:UserRoleService)
-  {
+  menu: any;
+  constructor(private userroleservice: UserRoleService) {
 
   }
-  ngOnInit()
-  {
-    var UserRole=this.userroleservice.getUserRole();
-    if(UserRole=="admin")
-    {
-      this.menu=[
+  ngOnInit() {
+    var UserRole = this.userroleservice.getUserRole();
+    if (UserRole == "admin") {
+      this.menu = [
         {
           title: 'Home',
           icon: 'shopping-cart-outline',
@@ -31,22 +28,22 @@ export class PagesComponent {
           home: true,
         },
         {
-          title: 'Volunteer',
-          icon: 'home-outline',
-          link: '/pages/VolunteerForm',
-        },
-      
-        {
-          title: 'NGO',
+          title: 'Requests',
           icon: 'home-outline',
           link: '/pages/NGOTable',
+          children: [
+            {
+              title: 'Create Request',
+              icon: 'home-outline',
+              link: '/pages/VolunteerForm',
+            },
+          ]
         }
-       
+
       ];
     }
-    else if(UserRole=="supadmin")
-    {
-      this.menu=[
+    else if (UserRole == "supadmin") {
+      this.menu = [
         {
           title: 'Home',
           icon: 'shopping-cart-outline',
@@ -54,22 +51,22 @@ export class PagesComponent {
           home: true,
         },
         {
-          title: 'Volunteer',
-          icon: 'home-outline',
-          link: '/pages/VolunteerForm',
-        },
-      
-        {
-          title: 'NGO',
+          title: 'Requests',
           icon: 'home-outline',
           link: '/pages/NGOTable',
+          children: [
+            {
+              title: 'Create Request',
+              icon: 'home-outline',
+              link: '/pages/VolunteerForm',
+            },
+          ]
         }
-       
+
       ];
     }
-    if(UserRole=="user")
-    {
-      this.menu=[
+    if (UserRole == "user") {
+      this.menu = [
         {
           title: 'Home',
           icon: 'shopping-cart-outline',
@@ -77,9 +74,9 @@ export class PagesComponent {
           home: true,
         },
         {
-          title: 'Volunteer',
+          title: 'Request',
           icon: 'home-outline',
-          link: '/pages/VolunteerForm',
+          // link: '/pages/VolunteerForm',
         },
       ];
     }

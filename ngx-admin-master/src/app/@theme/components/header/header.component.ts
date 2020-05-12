@@ -1,3 +1,4 @@
+import { AdminService } from './../../../service/admin.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
@@ -5,6 +6,8 @@ import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { filter } from 'rxjs/operators';
+
 
 @Component({
   selector: 'ngx-header',
@@ -40,7 +43,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
 
-  constructor(private sidebarService: NbSidebarService,
+  constructor(
+              private AdminService: AdminService,
+              private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
               private userService: UserData,
@@ -48,7 +53,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private breakpointService: NbMediaBreakpointsService) {
   }
 
+  username = '';
+  userRoles = [];
+  checkuser() {
+    this.AdminService.getUserInfo().subscribe(res => {
+      console.log(res);
+      if (res['data'] && res['data']['username']) {
+        this.username = res['data']['username'];
+        this.userRoles = res['data']['userrole']['roles'];
+      }
+    })
+  }
+
   ngOnInit() {
+
+    this.checkuser();
+
     this.currentTheme = this.themeService.currentTheme;
 
     this.userService.getUsers()
@@ -69,6 +89,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(themeName => this.currentTheme = themeName);
+
+    this.menuService.onItemClick()
+      .pipe(
+        filter(({ tag }) => tag === 'my-context-menu'),
+        map(({ item: { title } }) => title),
+      )
+      .subscribe(title =>{
+        if (title == 'Log out'){
+          window.location.replace('/logout');
+        }
+      });
+        
   }
 
   ngOnDestroy() {
@@ -91,4 +123,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.menuService.navigateHome();
     return false;
   }
+
+  testme(){
+    alert();
+  }
+
+
+
 }

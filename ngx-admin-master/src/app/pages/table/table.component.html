@@ -1,15 +1,13 @@
-<div style="text-align:center">
-    <h1>
-      Overview
-    </h1>
-  </div>
+
+<h1 class="box-title">Overview</h1>
+
 <!--
   <ul>
     <li *ngFor="let row of rowData">{{row.place_org_name}}</li>
 </ul>-->
   <ag-grid-angular
 
-  style = "width: 125%; height: 650px;"
+  [ngStyle]="{'height': tableheight+'px'}"
   class = "ag-theme-balham"
   
   [rowData] = "rowData"

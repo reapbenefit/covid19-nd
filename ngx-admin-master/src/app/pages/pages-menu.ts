@@ -9,13 +9,13 @@ export const MENU_ITEMS: NbMenuItem[] = [
     home: true,
   },
   {
-    title: 'Volunteer',
+    title: 'Create Request',
     icon: 'home-outline',
     link: '/pages/VolunteerForm',
   },
 
   {
-    title: 'NGO',
+    title: 'Requests',
     icon: 'home-outline',
     link: '/pages/NGOTable',
   },
