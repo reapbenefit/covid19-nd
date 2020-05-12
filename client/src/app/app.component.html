@@ -140,7 +140,7 @@
         </div>
         <div class="col-lg-12">
           <iframe
-            src="http://internaldashboard.solveninja.org:4000/public/dashboard/07b9f145-5be8-4206-942e-7251e15791d9"
+            src="https://analytics.zoho.in/open-view/148665000000034128"
             frameborder="0" style="height: calc(100vh - 35px);;width: 100%"></iframe>
         </div>
       </div>
@@ -186,7 +186,7 @@
                 target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">Local Schemes</a>
 
               <a *ngIf="(activeRole.indexOf('NGOAdmin') !=-1)" target="_blank"
-                href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba">Analytics</a>
+                href="https://analytics.zoho.in/open-view/148665000000034128">Analytics</a>
 
               <a href="JavaScript:void(0)">
                 <span class="headerlink">Contribute <span class="arrowme fa fa-angle-down"></span></span>
@@ -200,7 +200,7 @@
                     target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">Local Schemes</a>
 
                   <a *ngIf="!(activeRole.indexOf('NGOAdmin') !=-1)" target="_blank"
-                    href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba">Analytics</a>
+                    href="https://analytics.zoho.in/open-view/148665000000034128">Analytics</a>
 
                   <a href="JavaScript:void(0)" (click)="NeighbourhoodMultilingulSelfAssessment()">Multilingual Self
                     Assessment</a>
@@ -241,21 +241,21 @@
 
                 <ul class="web-big-button-icon-list">
                   <li>
-                    <div (click)="NeighbourhoodData()">
+                    <!-- <div (click)="NeighbourhoodData()"> -->
                       <i class="fa fa-home"></i>
-                      <span>Social distancing </span>
-                    </div>
+                      <span>Submit Local Data</span>
+                    <!-- </div> -->
                   </li>
                   <li>
                     <div (click)="NeighbourhoodAnalytics()">
                       <i class="fa fa-handshake-o"></i>
-                      <span>Refer a Needy</span>
+                      <span>Need help!</span>
                     </div>
                   </li>
                   <li>
                     <div (click)="toVolunteer()">
                       <i class="fa fa-hand-paper-o"></i>
-                      <span>Volunteer </span>
+                      <span>I want to Volunteer</span>
                     </div>
                   </li>
                 </ul>
@@ -280,7 +280,15 @@
                     <div class="title-b">Schemes</div>
                     <span class="count">40</span>
                   </div>
-                  <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
+                  <div class="box">
+                    <div class="title-b">People supported with Partners</div>
+                    <span class="count">5,49,268</span>
+                  </div>
+                  <div class="box">
+                    <div class="title-b">People needing support</div>
+                    <span class="count">1,28,124</span>
+                  </div>
+                  <!-- <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
                     <div class="box animate" [ngClass]="{'animatebox': getoverrallrectangleCountData.length == 0}"
                       *ngIf="menuItems[0].value == 120">
                       <div class="title-b">People supported with Partners</div>
@@ -293,7 +301,7 @@
                       <span
                         class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
                     </div>
-                  </ng-template>
+                  </ng-template> -->
                 </div>
                 <!-- End Sub Categories count  Based on Selection-->
 
@@ -388,8 +396,8 @@
                   (click)="legends_details = 'legends'">Legends</a>
                 <a [ngClass]="{'active': legends_details == 'details'}" href="JavaScript:void(0)"
                   (click)="legends_details = 'details'; detail_list_number = 100">Details</a>
-                
-                  <a *ngIf="userName" [ngClass]="{'active': legends_details == 'mylist'}" href="JavaScript:void(0)" 
+
+                  <a *ngIf="userName" [ngClass]="{'active': legends_details == 'mylist'}" href="JavaScript:void(0)"
                   (click)="legends_details = 'mylist'; detail_list_number = 100">My Lists</a>
               </div>
               <div class="filter-g" *ngIf="legends_details == 'details' && mapData?.length">
@@ -401,7 +409,7 @@
 
               <div class="ra-custom-google"
                 (scroll)="detail_list_number = (mapData?.length >= detail_list_number)? (detail_list_number + 100): (detail_list_number)">
-                
+
                 <ng-template [ngIf]="legends_details =='legends'">
                   <div class="categories-box-g">
                     <ul class="webview-ra">
@@ -414,7 +422,7 @@
                             <div class="jest-count">
                               {{(items.count !=0 && items.count != undefined)? '('+items.count+')': ''}}</div>
                           </li>
-                        </ng-template> 
+                        </ng-template>
                       </ng-template>
                       <li>
                         No Categories Selected
@@ -475,7 +483,7 @@
                     </div>
                   </ng-template>
                 </ng-template>
-                
+
                 <ng-template [ngIf]="legends_details =='mylist'">
                   <ng-template [ngIf]="true">
                     <div class="result-g-box {{ i }}" [ngClass]="{'displaynone': !(user_given_listArray.indexOf(item?.id) != -1 && userName)}"
@@ -883,14 +891,14 @@
                 (click)="legends_details = 'legends'">Legends</a>
               <a [ngClass]="{'active': legends_details == 'details'}" href="JavaScript:void(0)"
                 (click)="legends_details = 'details'; detail_list_number = 100">Details</a>
-              
+
               <a *ngIf="userName" [ngClass]="{'active': legends_details == 'mylist'}" href="JavaScript:void(0)"
                   (click)="legends_details = 'mylist'; detail_list_number = 100">My Lists</a>
             </div>
             <div class="filter-g" *ngIf="legends_details == 'details' && mapData?.length">
               <input type="text" placeholder="Search place" [(ngModel)]="filterdetailsvalue">
             </div>
-            
+
             <h5 *ngIf="legends_details == 'mylist' && userName" class="ass-closed-count">Assignments closed <span>
                 ({{total_cosed_Asss}})</span></h5>
             <h5 *ngIf="legends_details == 'mylist' && userName" class="ass-closed-count">Pending Assignments <span> </span></h5>
@@ -1106,7 +1114,15 @@
         <div class="title-b">Schemes</div>
         <span class="count">40</span>
       </div>
-      <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
+      <div class="box">
+        <div class="title-b">People supported with Partners</div>
+        <span class="count">5,49,268</span>
+      </div>
+      <div class="box">
+        <div class="title-b">People needing support</div>
+        <span class="count">1,28,124</span>
+      </div>
+      <!-- <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
         <div class="box animate" [ngClass]="{'animatebox': getoverrallrectangleCountData.length == 0}"
           *ngIf="menuItems[0].value == 120">
           <div class="title-b">People supported with Partners</div>
@@ -1119,7 +1135,7 @@
           <span
             class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
         </div>
-      </ng-template>
+      </ng-template> -->
     </div>
     <!-- End Sub Categories count  Based on Selection-->
 
@@ -1153,7 +1169,7 @@
       <strong></strong></a>
 
     <a *ngIf="(activeRole.indexOf('NGOAdmin') !=-1)" target="_blank"
-      href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba">
+      href="https://analytics.zoho.in/open-view/148665000000034128">
       <span class="icon fa fa-bar-chart"></span>
       <span class="title-f">Analytics</span>
       <strong></strong></a>
@@ -1260,7 +1276,7 @@
 
           <li *ngIf="!(activeRole.indexOf('NGOAdmin') !=-1)">
             <a style="color: #38a669"
-              href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba"
+              href="https://analytics.zoho.in/open-view/148665000000034128"
               target="_blank">
               Analytics<i class="fa fa-angle-right"></i> </a>
           </li>
@@ -1297,7 +1313,7 @@
 <!-- <div class="mobilenumber-popup" *ngIf="numberPopup">
   <div class="nubmer-box animated fadeInDown">
     <h5>Enter Mobile Number <span class="fa fa-times" (click)="numberPopup = false" style="font-size: 18px;"></span></h5>
-    
+
     <div class="body-mobile">
       <ul>
         <li>
@@ -1308,7 +1324,6 @@
         </li>
       </ul>
     </div>
-    
+
   </div>
 </div> -->
-
