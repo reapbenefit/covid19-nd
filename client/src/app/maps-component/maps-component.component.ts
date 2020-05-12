@@ -18,7 +18,7 @@ export class MapsComponentComponent implements OnInit {
 
   @Input() MapData;
   @Output() wardDetails = new EventEmitter();
-  public zoom: number = 12;
+  public zoom: number = 11;
   // initial center position for the map
   public lat: any = 12.9796734;
   public lng: any = 77.5890556;
