@@ -95,7 +95,7 @@ export class DataService {
         return menuItems;
     }
     CollectionsDataES(obj) {
-        console.log(obj);
+        // console.log(obj);
         let menuItems = this.getSubMenus(obj);
         let params = {
             menuData: menuItems,
@@ -104,22 +104,29 @@ export class DataService {
             bottomRightLat: "" + this.bottomRight.lat,
             bottomRightLon: "" + this.bottomRight.lng,
         };
-        console.log(params);
+        // console.log(params);
         return this.httpClient.get(`${this.baseEsSolv}/places`, { params: params, headers: this.headers });
     }
-    getCategoryImpactsDataES(obj) {
-        console.log(obj);
+    getCategoryImpactsDataES(obj, withparam = false) {
+        // console.log(obj);
         let menuItems = this.getSubMenus(obj);
-        let params = {
-            menuData: menuItems,
-            // topLeftLat: "" + obj.topLeftLat,
-            // topLeftLon: "" + obj.topLeftLon,
-            // bottomRightLat: "" + obj.bottomRightLat,
-            // bottomRightLon: "" + obj.bottomRightLon,
-            // latitude: "" + obj.latitude,
-            // longitude: "" + obj.longitude
-        };
-        console.log(params);
+        let params = {};
+        if (withparam) {
+            params = {
+                menuData: menuItems,
+                topLeftLat: "" + obj.topLeftLat,
+                topLeftLon: "" + obj.topLeftLon,
+                bottomRightLat: "" + obj.bottomRightLat,
+                bottomRightLon: "" + obj.bottomRightLon,
+                latitude: "" + obj.latitude,
+                longitude: "" + obj.longitude
+            };
+        } else {
+            params = {
+                menuData: menuItems,
+            };
+        }
+        // console.log(params);
         return this.httpClient.get(`${this.baseEsSolv}/categoryImpacts`, { params: params, headers: this.headers });
     }
     getCountDataES(obj) {
@@ -158,7 +165,7 @@ export class DataService {
             "data": {
                 "place_org_id": obj.place_org_id,
                 "closed_at": ass != 'assigned' ? this.datepipe.transform(new Date(), 'yyyy-MM-dd') : '',
-                "closed_by": ass != 'assigned' ? obj.closed_by: '',
+                "closed_by": ass != 'assigned' ? obj.closed_by : '',
                 "subcategory": obj.place_org_subcategory
             }
         }

@@ -280,18 +280,14 @@
                     <div class="title-b">Schemes</div>
                     <span class="count">40</span>
                   </div>
-                  <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
-                    <div class="box animate" [ngClass]="{'animatebox': getoverrallrectangleCountData.length == 0}"
-                      *ngIf="menuItems[0].value == 120">
+                  <ng-template [ngIf]="true">
+                    <div class="box animate" [ngClass]="{'animatebox': People_supported == 0}">
                       <div class="title-b">People supported with Partners</div>
-                      <span
-                        class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
+                      <span class="count">{{People_supported? (People_supported * 4): ' '}}</span>
                     </div>
-                    <div class="box animate" [ngClass]="{'animatebox': getoverrallrectangleCountData.length == 0}"
-                      *ngIf="menuItems[0].value == 101" style="order: 1">
+                    <div class="box animate" [ngClass]="{'animatebox': People_needing_support == 0}" style="order: 1">
                       <div class="title-b">People needing support</div>
-                      <span
-                        class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
+                      <span class="count">{{People_needing_support? (People_needing_support * 4): ' '}}</span>
                     </div>
                   </ng-template>
                 </div>
@@ -365,18 +361,18 @@
 
                   <ng-template [ngIf]="!(activeRole.indexOf('NGOTeam') !=-1 ||  activeRole.indexOf('NGOAdmin') !=-1 )">
 
-                    <ng-template ngFor let-menuItems [ngForOf]="MenuItems" let-i="index">
-                      <li class="yourview-order-0" *ngIf="menuItems[0].value == 101">Families needing help
-                        {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+                    <ng-template [ngIf]="true">
+                      <li class="yourview-order-0">Families needing help
+                        {{right_Peopleneedingsupport_Count !=0 ? '('+right_Peopleneedingsupport_Count+')': ' (not mapped)'}}
                       </li>
-                      <li class="yourview-order-1" *ngIf="menuItems[0].value == 120">Successfully Supported
-                        {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+                      <li class="yourview-order-1">Successfully Supported
+                        {{right_Peoplesupported_Count !=0 ? '('+right_Peoplesupported_Count+')': ' (not mapped)'}}
                       </li>
-                      <li class="yourview-order-2" *ngIf="menuItems[0].value == 97">Resources Close By
-                        {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
+                      <li class="yourview-order-2">Resources Close By
+                        {{right_Resources_Count !=0 ? '('+right_Resources_Count+')': ' (not mapped)'}}
                       </li>
-                      <li class="yourview-order-3" *ngIf="menuItems[0].value == 121">Volunteers Close By
-                        {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
+                      <li class="yourview-order-3">Volunteers Close By
+                        {{right_Volunteers_Count !=0? '('+right_Volunteers_Count+')': ' (not mapped)'}}
                       </li>
                     </ng-template>
                   </ng-template>
@@ -388,20 +384,22 @@
                   (click)="legends_details = 'legends'">Legends</a>
                 <a [ngClass]="{'active': legends_details == 'details'}" href="JavaScript:void(0)"
                   (click)="legends_details = 'details'; detail_list_number = 100">Details</a>
-                
-                  <a *ngIf="userName" [ngClass]="{'active': legends_details == 'mylist'}" href="JavaScript:void(0)" 
+
+                <a *ngIf="userName" [ngClass]="{'active': legends_details == 'mylist'}" href="JavaScript:void(0)"
                   (click)="legends_details = 'mylist'; detail_list_number = 100">My Lists</a>
               </div>
               <div class="filter-g" *ngIf="legends_details == 'details' && mapData?.length">
                 <input type="text" placeholder="Search place" [(ngModel)]="filterdetailsvalue">
               </div>
 
-              <h5 *ngIf="legends_details == 'mylist' && userName"  class="ass-closed-count">Assignments closed <span> ({{total_cosed_Asss}})</span></h5>
-              <h5 *ngIf="legends_details == 'mylist' && userName"  class="ass-closed-count">Pending Assignments <span> </span></h5>
+              <h5 *ngIf="legends_details == 'mylist' && userName" class="ass-closed-count">Assignments closed <span>
+                  ({{total_cosed_Asss}})</span></h5>
+              <h5 *ngIf="legends_details == 'mylist' && userName" class="ass-closed-count">Pending Assignments <span>
+                </span></h5>
 
               <div class="ra-custom-google"
                 (scroll)="detail_list_number = (mapData?.length >= detail_list_number)? (detail_list_number + 100): (detail_list_number)">
-                
+
                 <ng-template [ngIf]="legends_details =='legends'">
                   <div class="categories-box-g">
                     <ul class="webview-ra">
@@ -414,7 +412,7 @@
                             <div class="jest-count">
                               {{(items.count !=0 && items.count != undefined)? '('+items.count+')': ''}}</div>
                           </li>
-                        </ng-template> 
+                        </ng-template>
                       </ng-template>
                       <li>
                         No Categories Selected
@@ -452,19 +450,25 @@
                       </div>
 
                       <div class="user-action" *ngIf="!item['numberPopup']">
-                        <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a" (click)="assignme('assign', item)"
+                        <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a"
+                          (click)="assignme('assign', item)"
                           *ngIf="food_ration_asked.indexOf(item.menuId) != -1 && userName && allAssignedList.indexOf(item?.id) == -1 ">
-                          <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i> Assign Me
+                          <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i>
+                          Assign Me
                         </a>
-                        <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a" (click)="givenbyme('given', item)"
+                        <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a"
+                          (click)="givenbyme('given', item)"
                           *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
-                          <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as Given
+                          <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as
+                          Given
                         </a>
                       </div>
                       <ng-template [ngIf]="item['numberPopup']">
                         <div class="user-action-ass-given">
-                          <input class="" type="number" min="0" max="10" [(ngModel)]="item['raphonenumber']" placeholder="Mobile Number">
-                          <a class="user-action-a-a" (click)="validateMobileNumber(item['raphonenumber'], item)">Submit</a>
+                          <input class="" type="number" min="0" max="10" [(ngModel)]="item['raphonenumber']"
+                            placeholder="Mobile Number">
+                          <a class="user-action-a-a"
+                            (click)="validateMobileNumber(item['raphonenumber'], item)">Submit</a>
                           <a class="user-action-a-a red" (click)="item['numberPopup'] = false">Cancel</a>
                         </div>
                       </ng-template>
@@ -475,10 +479,11 @@
                     </div>
                   </ng-template>
                 </ng-template>
-                
+
                 <ng-template [ngIf]="legends_details =='mylist'">
                   <ng-template [ngIf]="true">
-                    <div class="result-g-box {{ i }}" [ngClass]="{'displaynone': !(user_given_listArray.indexOf(item?.id) != -1 && userName)}"
+                    <div class="result-g-box {{ i }}"
+                      [ngClass]="{'displaynone': !(user_given_listArray.indexOf(item?.id) != -1 && userName)}"
                       *ngFor="let item of mapData; let i = index">
                       <div style="cursor: pointer;" class="lat-details-g animated fadeInDown"
                         (click)="item[collapse] = !item[collapse]">
@@ -499,9 +504,11 @@
                         </div>
                       </div>
                       <div class="user-action" *ngIf="!item['numberPopup']">
-                        <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a" (click)="givenbyme('given', item)"
+                        <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a"
+                          (click)="givenbyme('given', item)"
                           *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
-                          <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as Given
+                          <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as
+                          Given
                         </a>
                       </div>
                     </div>
@@ -859,18 +866,18 @@
 
                 <ng-template [ngIf]="!(activeRole.indexOf('NGOTeam') !=-1 ||  activeRole.indexOf('NGOAdmin') !=-1 )">
 
-                  <ng-template ngFor let-menuItems [ngForOf]="MenuItems" let-i="index">
-                    <li class="yourview-order-0" *ngIf="menuItems[0].value == 101">Families needing help
-                      {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+                  <ng-template [ngIf]="true">
+                    <li class="yourview-order-0">Families needing help
+                      {{right_Peopleneedingsupport_Count !=0 ? '('+right_Peopleneedingsupport_Count+')': ' (not mapped)'}}
                     </li>
-                    <li class="yourview-order-1" *ngIf="menuItems[0].value == 120">Successfully Supported
-                      {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+                    <li class="yourview-order-1">Successfully Supported
+                      {{right_Peoplesupported_Count !=0 ? '('+right_Peoplesupported_Count+')': ' (not mapped)'}}
                     </li>
-                    <li class="yourview-order-2" *ngIf="menuItems[0].value == 97">Resources Close By
-                      {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
+                    <li class="yourview-order-2">Resources Close By
+                      {{right_Resources_Count !=0 ? '('+right_Resources_Count+')': ' (not mapped)'}}
                     </li>
-                    <li class="yourview-order-3" *ngIf="menuItems[0].value == 121">Volunteers Close By
-                      {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
+                    <li class="yourview-order-3">Volunteers Close By
+                      {{right_Volunteers_Count !=0? '('+right_Volunteers_Count+')': ' (not mapped)'}}
                     </li>
                   </ng-template>
                 </ng-template>
@@ -883,17 +890,18 @@
                 (click)="legends_details = 'legends'">Legends</a>
               <a [ngClass]="{'active': legends_details == 'details'}" href="JavaScript:void(0)"
                 (click)="legends_details = 'details'; detail_list_number = 100">Details</a>
-              
+
               <a *ngIf="userName" [ngClass]="{'active': legends_details == 'mylist'}" href="JavaScript:void(0)"
-                  (click)="legends_details = 'mylist'; detail_list_number = 100">My Lists</a>
+                (click)="legends_details = 'mylist'; detail_list_number = 100">My Lists</a>
             </div>
             <div class="filter-g" *ngIf="legends_details == 'details' && mapData?.length">
               <input type="text" placeholder="Search place" [(ngModel)]="filterdetailsvalue">
             </div>
-            
+
             <h5 *ngIf="legends_details == 'mylist' && userName" class="ass-closed-count">Assignments closed <span>
                 ({{total_cosed_Asss}})</span></h5>
-            <h5 *ngIf="legends_details == 'mylist' && userName" class="ass-closed-count">Pending Assignments <span> </span></h5>
+            <h5 *ngIf="legends_details == 'mylist' && userName" class="ass-closed-count">Pending Assignments <span>
+              </span></h5>
 
             <div class="result-g-d"
               (scroll)="detail_list_number = (mapData?.length >= detail_list_number)? (detail_list_number + 100): (detail_list_number)">
@@ -948,17 +956,21 @@
                       <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a"
                         (click)="assignme('assign', item)"
                         *ngIf="food_ration_asked.indexOf(item.menuId) != -1 && userName && allAssignedList.indexOf(item?.id) == -1 ">
-                        <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i> Assign Me
+                        <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i>
+                        Assign Me
                       </a>
                       <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a"
-                        (click)="givenbyme('given', item)" *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
+                        (click)="givenbyme('given', item)"
+                        *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
                         <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as Given
                       </a>
                     </div>
                     <ng-template [ngIf]="item['numberPopup']">
                       <div class="user-action-ass-given">
-                        <input class="" type="number" min="0" max="10" [(ngModel)]="item['raphonenumber']" placeholder="Mobile Number">
-                        <a class="user-action-a-a" (click)="validateMobileNumber(item['raphonenumber'], item)">Submit</a>
+                        <input class="" type="number" min="0" max="10" [(ngModel)]="item['raphonenumber']"
+                          placeholder="Mobile Number">
+                        <a class="user-action-a-a"
+                          (click)="validateMobileNumber(item['raphonenumber'], item)">Submit</a>
                         <a class="user-action-a-a red" (click)="item['numberPopup'] = false">Cancel</a>
                       </div>
                     </ng-template>
@@ -994,7 +1006,8 @@
                     </div>
                     <div class="user-action" *ngIf="!item['numberPopup']">
                       <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a"
-                        (click)="givenbyme('given', item)" *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
+                        (click)="givenbyme('given', item)"
+                        *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
                         <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as Given
                       </a>
                     </div>
@@ -1311,4 +1324,3 @@
     
   </div>
 </div> -->
-

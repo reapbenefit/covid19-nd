@@ -809,8 +809,8 @@ export class AppComponent {
 
       this.dragchanges.push(this.NewObj)
       setTimeout(() => {
-        console.log("start");
-        console.log(this.dragchanges[this.dragchanges.length - 1]);
+        // console.log("start");
+        // console.log(this.dragchanges[this.dragchanges.length - 1]);
         this.CollectionsData(this.NewObj);
       }, 5000);
 
@@ -936,7 +936,7 @@ export class AppComponent {
   public ShowCitySelect = true;
   public ShowWardSelect = true;
   TreeMenuItemsSelect(event, menu) {
-    console.log({ event, menu });
+    // console.log({ event, menu });
     if (event.length > 0) {
       let menuIncludes = false;
       let menuIndex;
@@ -971,7 +971,7 @@ export class AppComponent {
       this.NewObj.level = this.dataService.zoom;
       this.NewObj.latitude = Number(this.NewObj.latitude);
       this.NewObj.longitude = Number(this.NewObj.longitude);
-      console.log(this.NewObj);
+      // console.log(this.NewObj);
       this.CollectionsData(this.NewObj);
     } else {
       for (let menuSel2 = 0; menuSel2 < this.NewObj.menuData.length; menuSel2++) {
@@ -1195,7 +1195,7 @@ export class AppComponent {
   public ServiceRequest = null;
   googleData = [];
   CollectionsData(obj) {
-    console.log(obj);
+    // console.log(obj);
     this.ServiceRequest ? this.ServiceRequest.unsubscribe() : null
     this.ServiceRequest = this.dataService.CollectionsDataES(obj).subscribe(data => {
       let resMap: any = data;
@@ -1208,7 +1208,7 @@ export class AppComponent {
       })
       // this.mapData = resMap.data;
       this.mapData = newData;
-      console.log(this.mapData);
+      // console.log(this.mapData);
       this.getCountBased_On_Location(obj);
     });
   }
@@ -1603,14 +1603,27 @@ export class AppComponent {
   overAll_Rec_serviceReqcount = 0;
   getoverrallrectangleCounts_unsubscribe = null;
   getoverrallrectangleCountData = [];
+
+  right_Resources_Array = [126, 98, 99, 138];
+  right_Resources_Count = 0;
+
+  right_Volunteers_Array = [126, 98, 99, 138];
+  right_Volunteers_Count = 0;
+
+  right_Peopleneedingsupport_Array = [136, 140, 132, 118, 123, 143, 101];
+  right_Peopleneedingsupport_Count = 0;
+
+  right_Peoplesupported_Array = [134, 135, 141, 142, 145, 146];
+  right_Peoplesupported_Count = 0;
+
   getoverrallrectangleCounts() {
     let tempData = [];
     this.MenuItems && this.MenuItems.map((items) => {
-      if (items[0].value == '120' || items[0].value == '101') {
-        items[0] && items[0]['internalChildren'].forEach(element => {
-          tempData.push(element.value)
-        });
-      }
+      // if (items[0].value == '120' || items[0].value == '101') {
+      items[0] && items[0]['internalChildren'].forEach(element => {
+        tempData.push(element.value)
+      });
+      // }
     });
     let tempObj = {
       "menuData": [
@@ -1625,11 +1638,13 @@ export class AppComponent {
       "latitude": this.dataService.bottomRight.lat,
       "longitude": this.dataService.bottomRight.lng
     }
-    console.log(tempObj);
+    // console.log(tempObj);
     this.getoverrallrectangleCounts_unsubscribe ? this.getoverrallrectangleCounts_unsubscribe.unsubscribe() : null;
-    this.getoverrallrectangleCounts_unsubscribe = this.dataService.getCategoryImpactsDataES(tempObj).subscribe(res => {
+    this.getoverrallrectangleCounts_unsubscribe = this.dataService.getCategoryImpactsDataES(tempObj, true).subscribe(res => {
       console.log(res['data']);
       this.overAll_Rec_serviceReqcount = 0;
+
+
       if (res && res['data'].length) {
         var responseData = res['data'];
         this.MenuItems.forEach(menu => {
@@ -1645,13 +1660,137 @@ export class AppComponent {
           });
           menu[0]['overall_rec_count_total'] = overall_rec_count_total;
         })
+        console.log("With Bounding impats: overall_rec_count_total");
         console.log(this.MenuItems);
+
+        /**
+         * Setting Counts for Right Side Section
+         */
+        this.right_Resources_Count = 0;
+        this.right_Volunteers_Count = 0;
+        this.right_Peopleneedingsupport_Count = 0;
+        this.right_Peoplesupported_Count = 0;
+
+        this.MenuItems.forEach(menu => {
+          menu[0]['internalChildren'].forEach(val => {
+            if(this.right_Resources_Array.indexOf(val.value) !== -1){
+              this.right_Resources_Count = this.right_Resources_Count + val.overall_rec_count;
+            }
+            if(this.right_Volunteers_Array.indexOf(val.value) !== -1){
+              this.right_Volunteers_Count = this.right_Volunteers_Count + val.overall_rec_count;
+            }
+            if(this.right_Peopleneedingsupport_Array.indexOf(val.value) !== -1){
+              this.right_Peopleneedingsupport_Count = this.right_Peopleneedingsupport_Count + val.overall_rec_count;
+            }
+            if(this.right_Peoplesupported_Array.indexOf(val.value) !== -1){
+              this.right_Peoplesupported_Count = this.right_Peoplesupported_Count + val.overall_rec_count;
+            }
+          });
+        });
+        console.log("right_Resources_Count : "+ this.right_Resources_Count);
+        console.log("right_Volunteers_Count : "+ this.right_Volunteers_Count);
+        console.log("right_Peopleneedingsupport_Count : "+ this.right_Peopleneedingsupport_Count);
+        console.log("right_Peoplesupported_Count : "+ this.right_Peoplesupported_Count);
+
+
         this.getoverrallrectangleCountData = responseData;
       }
     }, err => {
       if (this.overAll_Rec_serviceReqcount < 2) {
         this.overAll_Rec_serviceReqcount = this.overAll_Rec_serviceReqcount + 1;
         this.getoverrallrectangleCounts();
+      }
+      console.log(err);
+    }, () => {
+      console.log("Completed");
+    })
+
+  }
+
+  overAll_Rec_serviceReqcount_without = 0;
+  getoverrallrectangleCounts_unsubscribe_without = null;
+  getoverrallrectangleCountData_with = [];
+
+  People_needing_support_Array = [136, 140, 132, 118, 123, 143, 101];
+  People_needing_support = 0;
+
+  People_supported_Array = [134, 135, 141, 142, 145, 146];
+  People_supported = 0;
+  getoverrallrectangleCounts_without() {
+    let tempData = [];
+    this.MenuItems && this.MenuItems.map((items) => {
+      // if (items[0].value == '120' || items[0].value == '101') {
+      items[0] && items[0]['internalChildren'].forEach(element => {
+        tempData.push(element.value)
+      });
+      // }
+    });
+    let tempObj = {
+      "menuData": [
+        {
+          "submenus": tempData.join(),
+        }
+      ],
+      "topLeftLat": this.dataService.topLeft.lat,
+      "topLeftLon": this.dataService.topLeft.lng,
+      "bottomRightLat": this.dataService.bottomRight.lat,
+      "bottomRightLon": this.dataService.bottomRight.lng,
+      "latitude": this.dataService.bottomRight.lat,
+      "longitude": this.dataService.bottomRight.lng
+    }
+    // console.log(tempObj);
+    this.getoverrallrectangleCounts_unsubscribe_without ? this.getoverrallrectangleCounts_unsubscribe_without.unsubscribe() : null;
+    this.getoverrallrectangleCounts_unsubscribe_without = this.dataService.getCategoryImpactsDataES(tempObj, false).subscribe(res => {
+      console.log(res['data']);
+      this.overAll_Rec_serviceReqcount_without = 0;
+      if (res && res['data'].length) {
+        var responseData = res['data'];
+        this.MenuItems.forEach(menu => {
+          let overall_rec_count_without_total = 0;
+          menu[0]['internalChildren'].forEach(element => {
+            let overall_rec_count_without = responseData.filter(val => {
+              if ((val.menuData).toString() == (element.value).toString()) { return val }
+            })
+            if (overall_rec_count_without[0]) {
+              element['overall_rec_count_without'] = overall_rec_count_without[0]['impact'];
+              overall_rec_count_without_total = overall_rec_count_without_total + parseInt(overall_rec_count_without[0]['impact'])
+            }
+          });
+          menu[0]['overall_rec_count_without_total'] = overall_rec_count_without_total;
+        })
+
+        console.log("With Bounding impats: overall_rec_count_without_total");
+        console.log(this.MenuItems);
+        console.log(this.MenuItems[1][0]['internalChildren']);
+
+        /**
+         * Setting count Without bounding boxes
+         * People_needing_support
+         */
+        this.People_needing_support = 0;
+        this.People_supported = 0;
+        this.MenuItems[1][0]['internalChildren'].forEach(val => {
+          if (this.People_needing_support_Array.indexOf(val.value) !== -1) {
+            this.People_needing_support = this.People_needing_support + val.overall_rec_count_without;
+          }
+          if (this.People_supported_Array.indexOf(val.value) !== -1) {
+            this.People_supported = this.People_supported + val.overall_rec_count_without;
+          }
+        })
+        console.log("People_needing_support: " + this.People_needing_support);
+        console.log("People_supported:" + this.People_supported);
+
+
+
+
+
+        this.getoverrallrectangleCountData_with = responseData;
+      }
+
+    }, err => {
+      if (this.overAll_Rec_serviceReqcount_without < 2) {
+        this.overAll_Rec_serviceReqcount_without = this.overAll_Rec_serviceReqcount_without + 1;
+        this.getoverrallrectangleCounts_without();
       }
       console.log(err);
     }, () => {
@@ -1726,7 +1865,7 @@ export class AppComponent {
   getoverrallCountser_call = 0;
   detail_list_number = 100;
   getCountBased_On_Location(obj?: any) {
-    console.log(obj);
+    // console.log(obj);
     if (obj && obj['latitude'] && obj['longitude']) {
       this.NewObj.latitude = obj['latitude'];
       this.NewObj.longitude = obj['longitude'];
@@ -1744,6 +1883,7 @@ export class AppComponent {
     }
     setTimeout(() => { // Time to get Boundiries , dut to map loading slow
       this.getoverrallrectangleCounts();
+      this.getoverrallrectangleCounts_without(); // with Bounding
     }, 500);
 
     let tempData = [];
@@ -1763,12 +1903,12 @@ export class AppComponent {
         "latitude": this.NewObj.latitude,
         "longitude": this.NewObj.longitude
       }
-      console.log(tempObj);
+      // console.log(tempObj);
       this.getCountBased_On_Location_unsubscribe ? this.getCountBased_On_Location_unsubscribe.unsubscribe() : null;
       this.getCountBased_On_Location_unsubscribe = this.dataService.getCountDataES(tempObj).subscribe(res => {
         this.lat_ln_serviceReqcount = 0;
         this.detail_list_number = 100;
-        console.log(res);
+        // console.log(res);
         if (res && res['data'].length) {
           this.CountsListArray = res['data'];
           this.MenuItems.forEach(menu => {
@@ -1787,7 +1927,7 @@ export class AppComponent {
         }
         console.log(err);
       }, () => {
-        console.log("Completed");
+        // console.log("Completed");
       })
     }
 
@@ -1886,7 +2026,7 @@ export class AppComponent {
    * start asigning User
    */
   validateMobileNumber(number, item) {
-    if (parseInt(number) != NaN && number.toString().length < 13 ){
+    if (parseInt(number) != NaN && number.toString().length < 13) {
       this.startAssignMe(this.user_Assign_Type, this.user_Assign_data, number);
       item['numberPopup'] = false;
     } else {
@@ -1899,14 +2039,14 @@ export class AppComponent {
 
   user_Assign_Type;
   user_Assign_data;
-  
+
   assignme(type, data) {
     data['numberPopup'] = true;
     this.user_Assign_Type = type;
     this.user_Assign_data = data;
   }
 
-  startAssignMe(type, data, number){
+  startAssignMe(type, data, number) {
     this.loaderAction = true;
     console.log({
       type: type,
@@ -1926,9 +2066,9 @@ export class AppComponent {
     }
     this.dataService.assignme(obj).subscribe(res => {
       console.log(res);
-      if (res && res['assigned'] == true){
+      if (res && res['assigned'] == true) {
         alert("Sorry Already action taken by someone.")
-      }else if(res && res['status'] == 'success'){ 
+      } else if (res && res['status'] == 'success') {
         // Get All givenList
         alert("Assigned successfully");
         // updte ES DB
@@ -1937,18 +2077,18 @@ export class AppComponent {
           "closed_by": this.userName,
           "place_org_subcategory": res['data']['place_org_subcategory']
         }, 'assigned');
-        
+
         this.getUserAssignedList();
-      }else{
+      } else {
         alert(res['message']);
       }
 
-    },err=>{
+    }, err => {
       console.log(err);
-    },()=>{
-        this.loaderAction = false;
+    }, () => {
+      this.loaderAction = false;
       console.log("Service completed");
-    }) 
+    })
   }
 
   /**
@@ -2030,7 +2170,7 @@ export class AppComponent {
       console.log("Service completed");
     })
   }
-  
+
   /**
    * Get total Closed Asignment based on User
    */
@@ -2047,7 +2187,7 @@ export class AppComponent {
     this.dataService.GettotalClosedAsignmentUser(obj).subscribe(res => {
       console.log(res);
       if (res && res['status'] == 'success') {
-        this.total_cosed_Asss  = res['data'].length;
+        this.total_cosed_Asss = res['data'].length;
         console.log(this.allAssignedList);
       } else {
         console.log(res);
@@ -2117,7 +2257,7 @@ export class InputsearchPipe {
           ((val['category'] != undefined ? val['category'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
           ((val['subcategory'] != undefined ? val['subcategory'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
           ((val['cityName'] != undefined ? val['cityName'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
-          ((val['wardName'] != undefined ? val['wardName'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 
+          ((val['wardName'] != undefined ? val['wardName'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1
         ) {
           val['index'] = index;
           return true;
