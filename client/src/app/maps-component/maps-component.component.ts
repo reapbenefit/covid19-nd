@@ -18,7 +18,7 @@ export class MapsComponentComponent implements OnInit {
 
   @Input() MapData;
   @Output() wardDetails = new EventEmitter();
-  public zoom: number = 10;
+  public zoom: number = 11;
   // initial center position for the map
   public lat: any = 12.9796734;
   public lng: any = 77.5890556;
@@ -50,8 +50,8 @@ export class MapsComponentComponent implements OnInit {
   ngOnInit() {
 
     /**
-     * UserName and Role Subscribe based on  
-     * App.compoenent.ts file 
+     * UserName and Role Subscribe based on
+     * App.compoenent.ts file
      */
     this.subscriptionWithUserName = this.commonService.getusername().subscribe(res => {
       console.log(res);
@@ -311,7 +311,7 @@ export class MapsComponentComponent implements OnInit {
   }
 
   /**
-   * Save user Info for 
+   * Save user Info for
    * start asigning User
    */
   validateMobileNumber(number, item) {
@@ -386,8 +386,8 @@ export class MapsComponentComponent implements OnInit {
 
   /**
    * Close Action
-   * @param type 
-   * @param data 
+   * @param type
+   * @param data
    */
   givenbyme(type, data) {
     this.loaderAction = true;
@@ -470,4 +470,3 @@ export class MapsComponentComponent implements OnInit {
 
 
 }
-

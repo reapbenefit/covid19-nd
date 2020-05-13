@@ -19,7 +19,7 @@ export class DataService {
     public centerLat = 77.5906;
     public topLeft = { lat: this.SelectedCityLat, lng: this.SelectedCityLng };
     public bottomRight = { lat: this.SelectedCityLat, lng: this.SelectedCityLng };
-    public zoom = 13;
+    public zoom = 11;
     public AQMDataList;
     public getcurrentlocation = false;
     public catType = 0;

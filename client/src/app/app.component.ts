@@ -1591,7 +1591,7 @@ export class AppComponent {
   @ViewChild('mapref') mapref;
   zoomToPlace(item, i) {
     // if (this.mapref && this.mapref.mapcomref) {
-    //   this.mapref.mapcomref.select_marker(item);      
+    //   this.mapref.mapcomref.select_marker(item);
     // }
   }
 
@@ -1720,7 +1720,7 @@ export class AppComponent {
     let tempData = [];
     this.MenuItems && this.MenuItems.map((items) => {
       // if (items[0].value == '120' || items[0].value == '101') {
-      items[0] && items[0]['internalChildren'].forEach(element => {
+      items[0] && items[0]['internalChildren'].forEach(element => { 
         tempData.push(element.value)
       });
       // }
