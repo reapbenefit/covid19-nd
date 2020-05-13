@@ -850,7 +850,7 @@
           <div class="result-g" [ngClass]="{'collapseme': detail_legends_collapse}">
 
             <div class="static-point-section">
-              <h5>In your view {{detail_list_number}}</h5>
+              <h5>In your view </h5>
               <ul style="padding-left: 9px;">
                 <ng-template [ngIf]="userName && activeRole.indexOf('NGOTeam') !=-1">
                   <li class="yourview-order-0">
@@ -1119,18 +1119,14 @@
         <div class="title-b">Schemes</div>
         <span class="count">40</span>
       </div>
-      <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
-        <div class="box animate" [ngClass]="{'animatebox': getoverrallrectangleCountData.length == 0}"
-          *ngIf="menuItems[0].value == 120">
+      <ng-template [ngIf]="true">
+        <div class="box animate" [ngClass]="{'animatebox': People_supported == 0}">
           <div class="title-b">People supported with Partners</div>
-          <span
-            class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
+          <span class="count">{{People_supported? (People_supported * 4): ' '}}</span>
         </div>
-        <div class="box animate" [ngClass]="{'animatebox': getoverrallrectangleCountData.length == 0}"
-          *ngIf="menuItems[0].value == 101" style="order: 1">
+        <div class="box animate" [ngClass]="{'animatebox': People_needing_support == 0}" style="order: 1">
           <div class="title-b">People needing support</div>
-          <span
-            class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
+          <span class="count">{{People_needing_support? (People_needing_support * 4): ' '}}</span>
         </div>
       </ng-template>
     </div>
