@@ -1,0 +1,20 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+.btn-primary {
+    background-color: #00df8e;
+    border-color: #00df8e;
+}
+
+.btn-primary:hover {
+    color: #000;
+}
+
+.btn-primary:focus {
+    color: #fff;
+    box-shadow: 0 0 0 0.2rem #00df8e;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+    background-color: #00df8e;
+    border-color: #00df8e;
+}

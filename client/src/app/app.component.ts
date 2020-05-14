@@ -1545,6 +1545,16 @@ export class AppComponent {
     this.searchLocation = true;
   }
 
+  /**
+   * On Click LocalData Menu on Mobile View
+   */
+  zones() {
+    this.resetAllSelection();
+    this.defaultSelectTrigger();
+    this.defaultpage = 'Zones';
+    this.searchLocation = true;
+  }
+
 
   /**
    * On click Legends 

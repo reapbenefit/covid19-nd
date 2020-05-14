@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>{{ data.action }} Zone</h1>
+<div mat-dialog-content>
+  <div>
+    <mat-form-field style="width: 100%;">
+      <mat-label>Zone Reference Name</mat-label>
+      <input matInput [(ngModel)]="data.name" disabled='true'>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field style="width: 100%;">
+      <mat-label>Zone Type</mat-label>
+      <input matInput [(ngModel)]="data.type" disabled='true'>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field style="width: 100%;">
+      <mat-label>Zone Owner</mat-label>
+      <input matInput [(ngModel)]="data.owner" disabled='true'>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field style="width: 100%;">
+      <mat-label>Zone Sub-Owner</mat-label>
+      <input matInput [(ngModel)]="data.subowner" disabled='true'>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field style="width: 100%;">
+      <mat-label>Zone Notes</mat-label>
+      <input matInput [(ngModel)]="data.notes" disabled='true'>
+    </mat-form-field>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onApprove()">Approve</button>
+  <button mat-button (click)="onReject()">Reject</button>
+  <br/>
+  <button mat-button (click)="onReviewLater()">Review Later</button>
+</div>

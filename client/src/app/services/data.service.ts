@@ -211,4 +211,18 @@ export class DataService {
     ichangemycity(lat, lan) {
         return this.httpClient.get(`https://www.ichangemycity.com/map/get_ward?latitude=${lat}&longitude=${lan}`, { headers: this.headers });
     }
+    getTags() {
+        return this.httpClient.get('http://devlp.solveninja.org:4321/getTags', {headers: this.headers});
+    }
+    submitZone(zoneDetails: any) {
+        console.log(JSON.stringify(zoneDetails));
+        return this.httpClient.post('http://devlp.solveninja.org:4321/addZone', zoneDetails, {headers: this.headers});
+    }
+    loadZones(left: number, bottom: number, right: number, top: number) {
+        return this.httpClient.get('http://devlp.solveninja.org:4321/getZones?left='+left+'&right='+right+'&top='+top+'&bottom='+bottom, {headers: this.headers});
+    }
+    updateZoneStatus(zoneId: string, status: string) {
+        console.log(zoneId + ' -> ' + status);
+        return this.httpClient.put('http://devlp.solveninja.org:4321/updateZoneStatus', {zoneId: zoneId, action: status} , {headers: this.headers});
+    }
 }

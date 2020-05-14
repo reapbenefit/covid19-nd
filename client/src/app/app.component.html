@@ -181,6 +181,8 @@
                 [ngClass]="{'active': defaultpage == 'Home'}">Home</a>
               <a href="JavaScript:Void(0)" (click)="pageLocaLData()"
                 [ngClass]="{'active': defaultpage == 'LocalData'}">Show Map</a>
+              <a href="JavaScript:Void(0)" (click)="zones()"
+                [ngClass]="{'active': defaultpage == 'Zones'}">Manage Zones</a>
 
               <a *ngIf="!(activeRole.indexOf('NGOUser') !=-1 || activeRole.indexOf('NGOTeam') !=-1 || activeRole.indexOf('NGOAdmin') !=-1)"
                 target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">Local Schemes</a>
@@ -546,6 +548,10 @@
           [showAgencies]="showAgencies" [IssueData]="IssueData" [showIssues]="showIssues"></app-main-content>
       </div>
 
+      <div [ngStyle]="{'display': (defaultpage == 'Zones')? 'block': 'none'}" class="web-map-wrapper"
+        style="position: relative;top: 70px;">
+        <app-zone-creator></app-zone-creator>
+      </div>
 
       <!-- <div *ngIf="dataService.zoom > 15"
         style="padding-top: 5px;margin: 0;height: 75px;position: absolute;bottom: 30px;background-color: white;width: calc(100% - 335px);overflow: auto;white-space: nowrap;">

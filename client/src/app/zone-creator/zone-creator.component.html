@@ -1,0 +1,19 @@
+<div>
+  <a *ngIf="mapLoaded" class="btn btn-primary" href="#" style="position: absolute; right: 30px; top: 10px; z-index: 99; width: 120px;" (click)="toggleDrawTool($event)">{{ drawToolText }}</a>
+  <a *ngIf="mapLoaded" class="btn btn-primary" href="#" style="position: absolute; right: 30px; top: 55px; z-index: 99; width: 120px;" (click)="loadZones($event)">Load Zones</a>
+</div>
+<agm-map [latitude]="center.lat" [longitude]="center.lng" [usePanning]="true" [streetViewControl]="false" [disableDefaultUI]="false" 
+  [zoomControl]="false" (mapReady)="onMapReady($event)" style="height: 90vH;" [zoom]="14">
+</agm-map>
+
+<ng-template #polygonModal let-modal>
+  <div class="modal-header">
+      <span class="cardHeaderTxt">Zone Information</span>
+      <button type="button" class="cardHeaderBtn" (click)="onClose()">&times;</button>
+  </div>
+  <div class="modal-body">
+      <div class="containerBody p-2">
+          
+      </div>
+  </div>
+</ng-template>

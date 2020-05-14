@@ -1,0 +1,61 @@
+<h1 mat-dialog-title>Zone Details</h1>
+<div mat-dialog-content>
+  <div>
+    <mat-form-field>
+      <mat-label>Zone Reference Name</mat-label>
+      <input matInput [(ngModel)]="data.name">
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field>
+      <mat-label>Zone Type</mat-label>
+      <mat-select [(ngModel)]="data.type" (selectionChange)="zoneTypeChanged($event)">
+        <mat-option *ngFor="let type of data.tags" [value]="type.type">{{ type.type }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <div *ngFor="let type of data.tags">
+      <mat-form-field *ngIf="data.type == type.type">
+        <mat-label>Zone Owner</mat-label>
+        <mat-select [(ngModel)]="data.owner" (selectionChange)="zoneOwnerChanged($event)">
+          <mat-option *ngFor="let owner of type.owners" [value]="owner.owner">{{ owner.owner }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <mat-form-field *ngIf="!data.type">
+      <mat-label>Select Zone Type</mat-label>
+      <mat-select disabled="true">
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <div *ngFor="let type of data.tags">
+      <div *ngFor="let owner of type.owners">
+        <mat-form-field *ngIf="data.type == type.type && data.owner == owner.owner">
+          <mat-label>Zone Sub-Owner</mat-label>
+          <mat-select [(ngModel)]="data.subowner" (selectionChange)="zoneSubOwnerChanged($event)">
+            <mat-option *ngFor="let subowner of owner.subowners" [value]="subowner.subowner">{{ subowner.subowner }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <mat-form-field *ngIf="!data.owner">
+      <mat-label>Select Zone Owner</mat-label>
+      <mat-select disabled="true">
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field>
+      <mat-label>Notes</mat-label>
+      <textarea matInput [(ngModel)]="data.notes"></textarea>
+    </mat-form-field>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancelClick()">Delete</button>
+  <button mat-button (click)="onSaveClick()">Save</button>
+  <button mat-button (click)="onSubmitClick()" *ngIf="data.tagId">Submit</button>
+  <button mat-button *ngIf="!data.tagId" disabled=true>Submit</button>
+</div>

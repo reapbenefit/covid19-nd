@@ -21,6 +21,15 @@ import { from } from 'rxjs';
 import { FilterPipe, InputsearchPipe, RaTotalCounts } from './app.component';
 import { DatePipe } from '@angular/common';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { ZoneCreatorComponent } from './zone-creator/zone-creator.component';
+import { ZoneDetailsDialogComponent } from './zone-details-dialog/zone-details-dialog.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ZoneReviewDialogComponent } from './zone-review-dialog/zone-review-dialog.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +38,10 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
     GraphsComponent,
     FilterPipe,
     InputsearchPipe,
-    RaTotalCounts
+    RaTotalCounts,
+    ZoneCreatorComponent,
+    ZoneDetailsDialogComponent,
+    ZoneReviewDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -41,11 +53,16 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
     ReactiveFormsModule,
     NgbModule,
     SelectDropDownModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatDialogModule,
     TreeviewModule.forRoot(),
     AgmCoreModule.forRoot({
       clientId: '<mandatory>',
       language: 'en',
-      libraries: ['geometry', 'places'],
+      libraries: ['geometry', 'places', 'drawing'],
       apiKey: environment.maps_api_key
     }),
     DeviceDetectorModule.forRoot(),
@@ -56,6 +73,7 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
     DatePipe,
     GoogleAnalyticsService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ZoneDetailsDialogComponent, ZoneReviewDialogComponent]
 })
 export class AppModule { }
