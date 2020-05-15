@@ -431,6 +431,7 @@
                             alt="">{{item.name}}
                         </h5>
                         <p>{{item.address}}</p>
+                        <p *ngIf="item?.phone"><b>Phone :</b> {{item?.phone}}</p>
                       </div>
                       <div class="lat-details-g moredetails" style="overflow: hidden">
                         <div class="animated fadeIn" *ngIf="item[collapse]">
@@ -491,6 +492,7 @@
                             alt="">{{item.name}}
                         </h5>
                         <p>{{item.address}}</p>
+                        <p *ngIf="item?.phone"><b>Phone :</b> {{item?.phone}}</p>
                       </div>
                       <div class="lat-details-g moredetails" style="overflow: hidden">
                         <div class="animated fadeIn" *ngIf="item[collapse]">
