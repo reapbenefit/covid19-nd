@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserRoleService } from '../user-role.service'
+import { UserRoleService } from '../user-role.service';
 import { MENU_ITEMS } from './pages-menu';
 
 @Component({
@@ -37,6 +37,11 @@ export class PagesComponent {
               icon: 'home-outline',
               link: '/pages/VolunteerForm',
             },
+            {
+              title: 'View Requests',
+              icon: 'home-outline',
+              link: '/pages/NGOTable',
+            }
           ]
         }
 
@@ -60,9 +65,14 @@ export class PagesComponent {
               icon: 'home-outline',
               link: '/pages/VolunteerForm',
             },
+            {
+              title: 'View Requests',
+              icon: 'home-outline',
+              link: '/pages/NGOTable',
+            }
           ]
-        }
-
+        },
+        
       ];
     }
     if (UserRole == "user") {
@@ -76,7 +86,7 @@ export class PagesComponent {
         {
           title: 'Request',
           icon: 'home-outline',
-          // link: '/pages/VolunteerForm',
+          link: '/pages/VolunteerForm',
         },
       ];
     }

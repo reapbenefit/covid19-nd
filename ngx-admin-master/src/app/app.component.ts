@@ -40,10 +40,12 @@ export class AppComponent implements OnInit {
 
         if (this.userRoles.indexOf('NGOAdmin') != -1) {
           this.User.setUserRole("supadmin");
+          this.User.setUserName("supadmin");
           this.router.navigate(['/pages']);
 
         } else if (this.userRoles.indexOf('NGOTeam') != -1) {
           this.User.setUserRole("admin");
+          this.User.setUserName(res['data']['group']);
           this.router.navigate(['/pages']);
 
         } else if (this.userRoles.indexOf('NGOUser') != -1) {

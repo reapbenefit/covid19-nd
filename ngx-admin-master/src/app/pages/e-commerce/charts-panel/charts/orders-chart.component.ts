@@ -9,12 +9,6 @@ import { LayoutService } from '../../../../@core/utils/layout.service';
   selector: 'ngx-orders-chart',
   styleUrls: ['./charts-common.component.scss'],
   template: `
-    <div echarts
-         [options]="option"
-         [merge]="option"
-         class="echart"
-         (chartInit)="onChartInit($event)">
-    </div>
   `,
 })
 export class OrdersChartComponent implements AfterViewInit, OnDestroy, OnChanges {

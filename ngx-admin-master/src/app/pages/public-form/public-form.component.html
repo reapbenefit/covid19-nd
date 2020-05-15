@@ -69,14 +69,14 @@
             </div>
             <div class="col col-md-4">
                 <div class="form-group">
-                    <input type="text" class="form-control" formControlName="place_org_lat" readonly placeholder="Enter Latitude">
+                    <input type="text" class="form-control" formControlName="place_org_lat"  placeholder="Enter Latitude">
                     <p class='text-left text-invalid' [ngStyle]="{'visibility': public_data.get('place_org_lat').touched && !public_data.get('place_org_lat').valid? 'visible': 'hidden'}">
                         Please Enter Latitude</p>
                 </div>
             </div>
             <div class="col col-md-3">
                 <div class="form-group">
-                    <input type="text" class="form-control" formControlName="place_org_long" readonly placeholder="Enter Longitude">
+                    <input type="text" class="form-control" formControlName="place_org_long" placeholder="Enter Longitude">
                     <p class='text-left text-invalid' [ngStyle]="{'visibility': public_data.get('place_org_long').touched && !public_data.get('place_org_long').valid? 'visible': 'hidden'}"> Please Enter Longitude</p>
                 </div>
             </div>

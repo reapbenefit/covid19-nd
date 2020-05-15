@@ -61,6 +61,9 @@ app.get('/api/v1/user/data/read', keycloak.checkSso(), (req, res) => {
     response.data.first_name = req.kauth.grant.access_token.content.given_name;
     response.data.last_name = req.kauth.grant.access_token.family_name;
     response.data.userrole = req.kauth.grant.access_token.content.realm_access;
+    if (req.kauth.grant.access_token.content['group'] && req.kauth.grant.access_token.content['group'].length) {
+        response.data.group = req.kauth.grant.access_token.content.group[0];
+    }
     // console.log(response);
     res.send(response);
 });
