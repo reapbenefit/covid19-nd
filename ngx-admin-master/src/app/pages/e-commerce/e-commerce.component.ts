@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NbThemeService, NbColorHelper } from '@nebular/theme';
-import {AdminService} from '../../service/admin.service';
+import {AdminService} from '../../service/admin.service'
 
 @Component({
   selector: 'ngx-ecommerce',
@@ -14,13 +14,9 @@ export class ECommerceComponent {
   linedata: any;
   lineoptions: any;
   themeSubscription: any;
-
   bardata: any;
   baroptions: any;
-
-  orgstats: any;
-  piedata: any;
-  pieoptions: any;
+  themeSubscription1: any;
 
   constructor(private theme: NbThemeService,private adminservice:AdminService) {
 
@@ -64,7 +60,6 @@ export class ECommerceComponent {
             if(ele["closed_at"])
             {
               const ss = xaxislabel.indexOf(ele["closed_at"].substr(5,5));
-              yaxislabel[ss] = 0;
               if(!xaxislabel.includes(ele["closed_at"].substr(5,5)))
                 xaxislabel.push(ele["closed_at"].substr(5,5));
 
@@ -73,7 +68,6 @@ export class ECommerceComponent {
             }
             else{
               const ss = xaxislabel.indexOf(ele["assigned_timestamp"].substr(5,5));
-              yaxislabel1[ss] = 0;
               yaxislabel1[ss] += 1;
               // console.log('ss4',ss)
             }
@@ -135,12 +129,11 @@ export class ECommerceComponent {
           },
         } 
     }
-  )}
-  );
+  )});
 
   this.adminservice.getIndividualsdata().subscribe(data =>{
     console.log(data);
-    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
+    this.themeSubscription1 = this.theme.getJsTheme().subscribe(config => {
       var reply=Object.keys(data);
       const colors: any = config.variables;
       const chartjs: any = config.variables.chartjs;
@@ -203,84 +196,5 @@ export class ECommerceComponent {
       };
     });
   });
-
-  this.adminservice.getorgstats().subscribe(data => {
-    
-    console.log('Org stats',data)
-  
-    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
-
-      this.orgstats = data;
-
-      const colors: any = config.variables;
-      const chartjs: any = config.variables.chartjs;
-
-      var piechartlabels = [];
-      var piechartdata = [];
-
-      this.orgstats.forEach(ele => {
-        if(ele){
-          if(piechartlabels.includes(ele["Organisation"])){
-            const ss = piechartlabels.indexOf(ele["Organisation"]);
-            piechartdata[ss] += 1;
-          }
-          else{
-            piechartlabels.push(ele["Organisation"]);
-            const ss = piechartlabels.indexOf(ele["Organisation"]);
-            piechartdata[ss]=0;
-            piechartdata[ss] += 1;
-          }
-        }
-      });
-
-      function dynamicColors(){
-         var r = Math.floor(Math.random() * 255);
-         var g = Math.floor(Math.random() * 255);
-         var b = Math.floor(Math.random() * 255);
-
-         return ("rgb(" + r + "," + g + "," + b + ")");
-      }
-      
-      var color = [];
-      piechartlabels.forEach(ele => {
-        color.push(dynamicColors());
-      })
-
-      console.log('Piechartlabels',piechartlabels)
-      console.log('Piechartdata',piechartdata)
-
-      this.piedata = {
-        labels: piechartlabels,
-        datasets: [{
-          data: piechartdata,
-          backgroundColor: color,
-        }],
-      };
-
-      this.pieoptions = {
-        maintainAspectRatio: false,
-        responsive: true,
-        scales: {
-          xAxes: [
-            {
-              display: false,
-            },
-          ],
-          yAxes: [
-            {
-              display: false,
-            },
-          ],
-        },
-        legend: {
-          labels: {
-            fontColor: chartjs.textColor,
-          },
-        },
-      };
-
-    })
-
-  })
  }
 }

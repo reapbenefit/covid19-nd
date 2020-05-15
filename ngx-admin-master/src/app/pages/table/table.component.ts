@@ -27,6 +27,8 @@ export class TableComponent implements OnInit {
   modalConfig: any;
   displayModal: any = false;
 
+  tableheight = window.document.body.clientHeight - 200;
+
   editForm = new FormGroup({
     org_id: new FormControl(),
     name: new FormControl(),
@@ -105,6 +107,7 @@ export class TableComponent implements OnInit {
       console.log(this.editForm.value);
       
       this._adminService.EditFormSubmit(this.editForm.value).subscribe(response => {
+        console.log(response);
         if (response['msg'] === 'Success') {
           this.displayEditModal = false;
           this.getDBData();
@@ -136,6 +139,7 @@ export class TableComponent implements OnInit {
   {
     console.log("hello");
     this._adminService.getPublicTableData().subscribe(response => {
+      console.log(response);
       this.rowData = [];
       this.rowList = response;
       this.rowList.forEach(item => {

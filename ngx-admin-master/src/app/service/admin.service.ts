@@ -14,7 +14,8 @@ import 'rxjs/add/observable/throw';
 export class AdminService {
 
   constructor(private httpClient: HttpClient) { }
-  nodeAppUrl = 'http://localhost:8080/';
+  // nodeAppUrl = 'http://localhost:3000/';
+  nodeAppUrl = window.location.origin + "/";
   nodeJsHttpHeaders = {
     headers: new HttpHeaders({
       Accept: 'application/json',
@@ -38,17 +39,21 @@ export class AdminService {
     return this.httpClient.get<IAdmin[]>(this.nodeAppUrl + 'get-public-table', this.nodeJsHttpHeaders).catch(this.errorHandler);
   }
 
-  errorHandler(error: HttpErrorResponse){
+  errorHandler(error: HttpErrorResponse) {
     return Observable.throw(error.message || "Server Error");
 
   }
 
-  getcasestats() {
-    return this.httpClient.get(this.nodeAppUrl + 'get-case-stats', this.nodeJsHttpHeaders);
+  /**
+   * Get Logged In user information 
+   */
+  getUserInfo() {
+    return this.httpClient.get(`/api/v1/user/data/read`, this.nodeJsHttpHeaders);
   }
 
-  getorgstats() {
-    return this.httpClient.get(this.nodeAppUrl + 'get-org-stats', this.nodeJsHttpHeaders);
+
+  getcasestats() {
+    return this.httpClient.get(this.nodeAppUrl + 'get-case-stats', this.nodeJsHttpHeaders);
   }
 
   //Function to Fetch Ward ID using Lat and Long - Works for Lat and Long info available in API (Bangalore)

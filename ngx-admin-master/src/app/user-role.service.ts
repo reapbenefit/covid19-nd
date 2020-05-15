@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class UserRoleService {
   private User="";
+  private Username="";
   constructor() {
 
    }
@@ -15,5 +16,13 @@ export class UserRoleService {
   setUserRole(role:any)
   {
     this.User=role;
+  }
+  setUserName(name:any)
+  {
+    this.Username=name;
+  }
+  getUserName()
+  {
+    return this.Username;
   }
 }

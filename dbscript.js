@@ -107,7 +107,7 @@ router.get('/get-case-stats', (req,res)=>{
 
 })
 
-router.get('/get-org-stats', (req,res)=>{
+router.get('/get-food-stats', (req,res)=>{
 
     connection.query("SELECT * FROM bng_food", (error, rows, fields) => {
         if(error){
@@ -123,7 +123,7 @@ router.get('/get-org-stats', (req,res)=>{
 //type localhost:8080 in browser to make a query
 app.get('/', (req, res)=>{
     
-connection.query("select * from bng_food", (error, rows, fields) => {
+connection.query("select * from self_solve ", (error, rows, fields) => {
     if(error){
         console.log('error');
     }
