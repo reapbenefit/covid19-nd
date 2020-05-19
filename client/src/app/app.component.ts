@@ -364,7 +364,8 @@ export class AppComponent {
     this.NewObj.cityId = this.SelectedCity == undefined ? 0 : this.SelectedCity;
     this.NewObj.wardId = this.wardSelected == undefined ? 0 : this.wardSelected;
     this.NewObj.menuData = [];
-    this.NewObj.level = this.dataService.zoom;
+    // this.NewObj.level = this.dataService.zoom;
+    this.NewObj.level = event.value['zoom']? event.value['zoom'] : this.dataService.zoom;
     this.NewObj.latitude = Number(this.dataService.SelectedCityLat);
     this.NewObj.longitude = Number(this.dataService.SelectedCityLng);
     this.CollectionsData(this.NewObj);
@@ -1317,6 +1318,7 @@ export class AppComponent {
         this.dataService.SelectedCityLng = position.coords.longitude;
         this.SelectCity({
           "value": {
+            "zoom": 13,
             "cityName": "Your Location Location",
             "lat": this.dataService.SelectedCityLat,
             "lng": this.dataService.SelectedCityLng
