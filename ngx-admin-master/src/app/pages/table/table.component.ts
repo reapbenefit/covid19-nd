@@ -26,6 +26,7 @@ export class TableComponent implements OnInit {
   formCheck: any;
   modalConfig: any;
   displayModal: any = false;
+  public noRowsTemplate;
 
   tableheight = window.document.body.clientHeight - 200;
 
@@ -43,6 +44,10 @@ export class TableComponent implements OnInit {
   });
 
   constructor(private _adminService: AdminService){
+    
+    this.noRowsTemplate =
+      `<span class="ag-overlay-loading-center">Loading Data...</span>`;
+    
     this.frameworkComponents = {
       buttonRenderer: EditButtonComponent,
     }
