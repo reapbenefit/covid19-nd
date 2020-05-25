@@ -32,7 +32,7 @@ export class DataService {
     subscriptionWithUserData: Subscription;
     orgname = '';
     constructor(private httpClient: HttpClient, public datepipe: DatePipe, public commonService: CommonService) {
-        this.subscriptionWithUserData = this.commonService.getUserData().subscribe(res => {
+        this.subscriptionWithUserData = this.commonService.getorgname().subscribe(res => {
             return this.orgname = res.data;
         })
     }
@@ -101,7 +101,7 @@ export class DataService {
     }
     
     CollectionsDataES(obj) {
-        this.subscriptionWithUserData = this.commonService.getUserData().subscribe(res => {
+        this.subscriptionWithUserData = this.commonService.getorgname().subscribe(res => {
             this.orgname = res.data;
         });
         // console.log(obj);
@@ -112,15 +112,16 @@ export class DataService {
             topLeftLon: "" + this.topLeft.lng,
             bottomRightLat: "" + this.bottomRight.lat,
             bottomRightLon: "" + this.bottomRight.lng,
-            creatorOrg: this.orgname
         };
+        if (this.orgname != "All" && this.orgname != '') { params['creatorOrg'] = this.orgname};
+
         var url = `${this.baseEsSolv}/places`;
-        console.log(this.orgname);
+        // console.log(this.orgname);
         // console.log(params);
         return this.httpClient.get(url, { params: params, headers: this.headers });
     }
     getCountDataES(obj) {
-        this.subscriptionWithUserData = this.commonService.getUserData().subscribe(res => {
+        this.subscriptionWithUserData = this.commonService.getorgname().subscribe(res => {
             this.orgname = res.data;
         });
         let menuItems = this.getSubMenus(obj);
@@ -129,13 +130,13 @@ export class DataService {
             latitude: "" + obj.latitude,
             longitude: "" + obj.longitude,
             radius: '30km',
-            creatorOrg: this.orgname
         };
+        if (this.orgname != "All" && this.orgname != '') { params['creatorOrg'] = this.orgname };
         var url = `${this.baseEsSolv}/categoryCounts`;
         return this.httpClient.get(url, { params: params, headers: this.headers });
     }
     getCategoryImpactsDataES(obj, withparam = false) {
-        this.subscriptionWithUserData = this.commonService.getUserData().subscribe(res => {
+        this.subscriptionWithUserData = this.commonService.getorgname().subscribe(res => {
             this.orgname = res.data;
         });
         // console.log(obj);
@@ -151,8 +152,8 @@ export class DataService {
                 bottomRightLon: "" + obj.bottomRightLon,
                 latitude: "" + obj.latitude,
                 longitude: "" + obj.longitude,
-                creatorOrg: this.orgname
             };
+            if (this.orgname != "All" && this.orgname != '') { params['creatorOrg'] = this.orgname };
         } else {
             params = {
                 menuData: menuItems,

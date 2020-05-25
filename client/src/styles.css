@@ -2301,10 +2301,17 @@ h5.ass-closed-count span {
   border-radius: 16px;
   border: 1px solid #dfdfdf;
   margin-bottom: 5px;
-  -webkit-appearance: none;
-  padding-right: 28px !important;
-  padding-left: 16px !important;
   cursor: pointer;
+  /* -webkit-appearance: none;
+  padding-right: 28px !important;
+  padding-left: 16px !important; */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position-x: 98%;
+    background-position-y: 5px;
+    padding-right: 26px !important;
 }
 
 .orglist_dropdown {
@@ -2317,6 +2324,7 @@ h5.ass-closed-count span {
   top: 7px;
   font-size: 25px !important;
   color: grey;
+  cursor: pointer;
 }
 
 .orglist_dropdown select:focus, .orglist_dropdown select:active, .orglist_dropdown select:visited {

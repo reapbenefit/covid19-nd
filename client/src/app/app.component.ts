@@ -345,7 +345,7 @@ export class AppComponent {
       this.WardSelected = undefined;
       this.dataService.wardDetails({ "cityId": this.SelectedCity }).subscribe(data => {
         var tempWardData: any = data;
-        this.Wards = tempWardData['data'] ? tempWardData.data : [];
+        this.Wards = tempWardData? tempWardData['data'] : [];
         this.ShowWardSelect = false;
         setTimeout(() => {
           this.ShowWardSelect = true;
@@ -1301,15 +1301,22 @@ export class AppComponent {
 
   // Ra Custom Code
   // Default Categories Seletion Value
-  defaultCategoriesSelect = 92; //"People Needing Help" value is 101  
+  // defaultCategoriesSelect = 92; 
+  defaultCategoriesSelect = [93, 117, 125];
+  // Do Some Preselect If OrName is there
+  defaultSelect_for_orgname = [146, 143, 145, 144, 118, 123, 135, 142, 141, 140, 119, 134, 136, 132, 139, 122];
   defaultSelectTrigger() {
-    setTimeout(() => {
-      this.MenuItems && this.MenuItems.forEach(ele => {
-        if (ele[0]['value'] == this.defaultCategoriesSelect) {
-          this.selectAll(ele);
-        }
-      })
-    }, 1000)
+    this.resetAllSelection();
+    let temp = this.orgListModel != '' ? this.defaultSelect_for_orgname : this.defaultCategoriesSelect;
+    // setTimeout(() => {
+      this.MenuItems && this.MenuItems.forEach(items => {
+        items[0]['internalChildren'].forEach(child => {
+          if (temp.indexOf(child.value) != -1){
+            this.singleselect(child, items);
+          }
+        });
+      });
+    // }, 2000);
   }
 
 
@@ -1972,14 +1979,15 @@ export class AppComponent {
     if (window.location.pathname.indexOf('/map/') == 0) {
       var orgname = (window.location.pathname.split("/")).filter(val => val != '' ? true : false);
       // setting OrgName in service 
-      this.commonService.setUserData(orgname[1] ? orgname[1].replace(/(%20)/g, ' ').replace(/(-)/g, ' ').trim() : '');
+      this.commonService.setorgname(orgname[1] ? orgname[1].replace(/(%20)/g, ' ').replace(/(-)/g, ' ').trim() : '');
       this.orgListModel = orgname[1] ? orgname[1].replace(/(%20)/g, ' ').replace(/(-)/g, ' ').trim() : '';
+  
       // Shoing Map Page
       this.pageLocaLData();
       // trigger All count based Service by calling below one
       this.call_CollectionsDataService();
     } else {
-      this.commonService.setUserData('');
+      this.commonService.setorgname('');
     }
 
 
