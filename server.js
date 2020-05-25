@@ -44,6 +44,7 @@ app.use(bodyParser.json({ limit: '30mb' }));
 // serve the static files
 app.use('/', express.static(path.join(__dirname, '/client/dist/Neighbourhood/')));
 app.use('/home', keycloak.protect(), express.static(path.join(__dirname, '/client/dist/Neighbourhood/')));
+app.use('/map/:OrgName', express.static(path.join(__dirname, '/client/dist/Neighbourhood/')));
 // protect test route with the keycloak
 // app.get('/test', keycloak.protect(),  (req, res) =>  {
 //     res.send("OK")
@@ -199,7 +200,6 @@ function sanitize_input(req, input_object) {
         }
     })
 }
-
 
 /**
  * MySql Db Connection and service

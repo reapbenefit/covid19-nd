@@ -260,6 +260,17 @@
                   </li>
                 </ul>
 
+                <label style="font-weight: 600;margin-left: 1px;">Organisation</label>
+                <div class="orglist_dropdown" style="margin-bottom: 8px;">
+                  <select (change)="changeOrgList($event)" [(ngModel)]="orgListModel">
+                    <option value="" disabled>Select Organisation</option>
+                    <option value="All">All</option>
+                    <option *ngFor="let item of orgsListArray" [ngValue]="item.creator_org_name">
+                      {{item.creator_org_name}}</option>
+                  </select>
+                  <span class="fa fa-angle-down"></span>
+                </div>
+
                 <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton2()">Help those in
                   need</a>
                 <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where
@@ -312,6 +323,15 @@
           </div>
         </div>
         <div class="ra-custom-categories" style="margin: 15px 10px;">
+          <div class="orglist_dropdown">
+            <select (change)="changeOrgList($event)" [(ngModel)]="orgListModel">
+              <option value="" disabled>Select Organisation</option>
+              <option value="All">All</option>
+              <option *ngFor="let item of orgsListArray" [ngValue]="item.creator_org_name">
+                {{item.creator_org_name}}</option>
+            </select>
+            <span class="fa fa-angle-down"></span>
+          </div>
           <ul *ngFor="let menuItem of MenuItems;let menuIndex = index;" class="box">
             <li class="first-child-section">
               <div class="header-sec">
@@ -801,6 +821,16 @@
         <div class="tree-wrapper">
           <!-- ra-custom-categories Mobile -->
           <div class="ra-custom-categories-mobile">
+            <label style="font-weight: 600;margin-left: 4px;">Organisation</label>
+            <div class="orglist_dropdown">
+              <select (change)="changeOrgList($event)" [(ngModel)]="orgListModel" style="border-radius: 0px;">
+                <option value="" disabled>Select Organisation</option>
+                <option value="All">All</option>
+                <option *ngFor="let item of orgsListArray" [ngValue]="item.creator_org_name">
+                  {{item.creator_org_name}}</option>
+              </select>
+              <span class="fa fa-angle-down"></span>
+            </div>
             <div class="category" style="display: none !important;">
               <!-- Do not remove this based on this down tree func working -->
               <div class="" *ngFor="let menuItem of MenuItems;let menuIndex = index;">
@@ -1099,8 +1129,19 @@
           </div>
         </li>
       </ul>
+
       <div class="action-button">
+        <label style="font-weight: 600;margin-left:6px;">Organisation</label>
         <!-- <a href="JavaScript:void(0)" (click)="homepageButton1()">Want Medical Help?</a> -->
+        <div class="orglist_dropdown" style="margin: 0 5px;">
+          <select (change)="changeOrgList($event)" [(ngModel)]="orgListModel">
+            <option value="" disabled>Select Organisation</option>
+            <option value="All">All</option>
+            <option *ngFor="let item of orgsListArray" [ngValue]="item.creator_org_name">
+              {{item.creator_org_name}}</option>
+          </select>
+          <span class="fa fa-angle-down"></span>
+        </div>
         <a href="JavaScript:void(0)" (click)="homepageButton2()">Help those in need</a>
         <a href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where you can get help?</a>
       </div>
@@ -1302,23 +1343,3 @@
   <!-- More Menu -->
 
 </div>
-
-
-
-<!-- <div class="mobilenumber-popup" *ngIf="numberPopup">
-  <div class="nubmer-box animated fadeInDown">
-    <h5>Enter Mobile Number <span class="fa fa-times" (click)="numberPopup = false" style="font-size: 18px;"></span></h5>
-    
-    <div class="body-mobile">
-      <ul>
-        <li>
-          <input type="number"  min="0" max="10" [(ngModel)]="mobilenumber" placeholder="XXX XXX XXXX" pattern="[789][0-9]{9}">
-        </li>
-        <li>
-          <a (click)="validateMobileNumber()">Submit</a>
-        </li>
-      </ul>
-    </div>
-    
-  </div>
-</div> -->

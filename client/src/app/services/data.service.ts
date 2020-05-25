@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import { Subscription, forkJoin } from 'rxjs';
+import { CommonService } from './common.service';
 declare var $: any;
 @Injectable({
     providedIn: 'root',
@@ -27,9 +29,13 @@ export class DataService {
     public SelIssCat;
     public wardSelectedID = 0;
     private headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
-    constructor(private httpClient: HttpClient, public datepipe: DatePipe) { }
-
-
+    subscriptionWithUserData: Subscription;
+    orgname = '';
+    constructor(private httpClient: HttpClient, public datepipe: DatePipe, public commonService: CommonService) {
+        this.subscriptionWithUserData = this.commonService.getUserData().subscribe(res => {
+            return this.orgname = res.data;
+        })
+    }
 
     getCampaigns(obj) {
         return this.httpClient.get(`${this.baseURL}/neighbourHood/getCampaigns.php`, { headers: this.headers });
@@ -65,11 +71,10 @@ export class DataService {
         return this.httpClient.post(`${this.baseURLCOVID}/getDetailData.php`, obj, { headers: this.headers });
         // return this.httpClient.post(`${this.baseURL}/neighbourHood/getDetailData.php`, obj, { headers: this.headers });
     }
-
     getCorrLocDetailsNewOne(obj) {
-        return this.httpClient.get(`${this.baseEsSolv}/places?id=${obj.id}`, { headers: this.headers });
+        var url = `${this.baseEsSolv}/places?id=${obj.id}`;
+        return this.httpClient.get(url, { headers: this.headers });
     }
-
     //New APIs
     getDashboardData(obj) {
         return this.httpClient.post(`${this.baseURLCOVID}/neighbourHood/getDetailData.php`, obj, { headers: this.headers });
@@ -94,7 +99,11 @@ export class DataService {
         });
         return menuItems;
     }
+    
     CollectionsDataES(obj) {
+        this.subscriptionWithUserData = this.commonService.getUserData().subscribe(res => {
+            this.orgname = res.data;
+        });
         // console.log(obj);
         let menuItems = this.getSubMenus(obj);
         let params = {
@@ -103,14 +112,36 @@ export class DataService {
             topLeftLon: "" + this.topLeft.lng,
             bottomRightLat: "" + this.bottomRight.lat,
             bottomRightLon: "" + this.bottomRight.lng,
+            creatorOrg: this.orgname
         };
+        var url = `${this.baseEsSolv}/places`;
+        console.log(this.orgname);
         // console.log(params);
-        return this.httpClient.get(`${this.baseEsSolv}/places`, { params: params, headers: this.headers });
+        return this.httpClient.get(url, { params: params, headers: this.headers });
+    }
+    getCountDataES(obj) {
+        this.subscriptionWithUserData = this.commonService.getUserData().subscribe(res => {
+            this.orgname = res.data;
+        });
+        let menuItems = this.getSubMenus(obj);
+        let params = {
+            menuData: menuItems,
+            latitude: "" + obj.latitude,
+            longitude: "" + obj.longitude,
+            radius: '30km',
+            creatorOrg: this.orgname
+        };
+        var url = `${this.baseEsSolv}/categoryCounts`;
+        return this.httpClient.get(url, { params: params, headers: this.headers });
     }
     getCategoryImpactsDataES(obj, withparam = false) {
+        this.subscriptionWithUserData = this.commonService.getUserData().subscribe(res => {
+            this.orgname = res.data;
+        });
         // console.log(obj);
         let menuItems = this.getSubMenus(obj);
         let params = {};
+        var url = `${this.baseEsSolv}/categoryImpacts`;
         if (withparam) {
             params = {
                 menuData: menuItems,
@@ -119,7 +150,8 @@ export class DataService {
                 bottomRightLat: "" + obj.bottomRightLat,
                 bottomRightLon: "" + obj.bottomRightLon,
                 latitude: "" + obj.latitude,
-                longitude: "" + obj.longitude
+                longitude: "" + obj.longitude,
+                creatorOrg: this.orgname
             };
         } else {
             params = {
@@ -127,28 +159,31 @@ export class DataService {
             };
         }
         // console.log(params);
-        return this.httpClient.get(`${this.baseEsSolv}/categoryImpacts`, { params: params, headers: this.headers });
-    }
-    getCountDataES(obj) {
-        let menuItems = this.getSubMenus(obj);
-        let params = {
-            menuData: menuItems,
-            latitude: "" + obj.latitude,
-            longitude: "" + obj.longitude,
-            radius: '30km'
-        };
-        return this.httpClient.get(`${this.baseEsSolv}/categoryCounts`, { params: params, headers: this.headers });
+        return this.httpClient.get(url, { params: params, headers: this.headers });
     }
     getCountAllDataES(obj) {
         let menuItems = this.getSubMenus(obj);
         let params = {
             menuData: menuItems
         };
-        return this.httpClient.get(`${this.baseEsSolv}/categoryCounts`, { params: params, headers: this.headers });
+        var url = `${this.baseEsSolv}/categoryCounts`;
+        return this.httpClient.get(url, { params: params, headers: this.headers });
     }
+    /**
+     * get oged Inuser Info
+     */
     getUserInfo() {
         return this.httpClient.get(`/api/v1/user/data/read`, { headers: this.headers });
     }
+
+    /**
+     * Get Orgs List
+     * Creaters List
+     */
+    getOrgsList() {
+        return this.httpClient.get(`${this.baseURLES}/creators`, { headers: this.headers });
+    }
+
 
     /**
      * Update ES

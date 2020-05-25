@@ -1321,7 +1321,7 @@ h6.sub-title-home {
   font-size: 14px;
   /* background: #f19001; */
   background: #5cdb95;
-  padding: 5px 10px;
+  padding: 8px 10px;
   border-radius: 20px;
   margin: 10px 5px;
   text-align: center;
@@ -2002,7 +2002,7 @@ h1.popup-user-images {
   color: #fff;
   cursor: pointer;
   -webkit-box-shadow: 1px 1px 0px grey;
-          box-shadow: 1px 1px 0px grey;
+  box-shadow: 1px 1px 0px grey;
 }
 
 .plus-menu-ra .menub-box {
@@ -2068,9 +2068,9 @@ ul.web-big-button-icon-list {
   -webkit-box-direction: normal;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-pack: space-evenly;
-  -ms-flex-pack: space-evenly;
-  justify-content: space-evenly;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 ul.web-big-button-icon-list li {
@@ -2078,6 +2078,15 @@ ul.web-big-button-icon-list li {
   text-align: center;
   margin: 0 9px;
   cursor: pointer;
+  line-height: 1;
+}
+
+ul.web-big-button-icon-list li:nth-child(2) {
+  margin-right: 13px;
+}
+
+ul.web-big-button-icon-list li:first-child {
+  margin-left: 0px;
 }
 
 ul.web-big-button-icon-list li a {
@@ -2117,8 +2126,8 @@ a.user-action-a-a {
   border-radius: 5px;
   display: inline-block;
   -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  -ms-flex: 1;
+  flex: 1;
   height: 30px;
   margin-right: 10px;
   font-size: 14px;
@@ -2132,11 +2141,11 @@ a.user-action-a-a {
   display: flex;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
   -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
   margin-bottom: 5px;
 }
 
@@ -2285,6 +2294,41 @@ h5.ass-closed-count span {
   margin-top: 10px;
 }
 
+.orglist_dropdown select {
+  padding: 5px 9px !important;
+  width: 100%;
+  height: 39px;
+  border-radius: 16px;
+  border: 1px solid #dfdfdf;
+  margin-bottom: 5px;
+  -webkit-appearance: none;
+  padding-right: 28px !important;
+  padding-left: 16px !important;
+  cursor: pointer;
+}
+
+.orglist_dropdown {
+  position: relative;
+}
+
+.orglist_dropdown span {
+  position: absolute;
+  right: 13px;
+  top: 7px;
+  font-size: 25px !important;
+  color: grey;
+}
+
+.orglist_dropdown select:focus, .orglist_dropdown select:active, .orglist_dropdown select:visited {
+  outline: none;
+}
+
+.ra-custom-categories .orglist_dropdown select {
+  margin-bottom: 7px;
+  border-radius: 0px !important;
+}
+
 /* end Map Popup Box */
 /* End Google Search */
 /* End Custom Code Ramesh */
+/*# sourceMappingURL=style.css.map */

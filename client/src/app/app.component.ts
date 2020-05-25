@@ -12,6 +12,8 @@ import { GoogleAnalyticsService } from './services/google-analytics.service';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 declare const google: any;
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -134,13 +136,16 @@ export class AppComponent {
   subscription: Subscription;
   subscriptionWithCord: Subscription;
 
-  constructor(private deviceService: DeviceDetectorService, private dataService: DataService,
+  constructor(private router: Router, private location: Location, private deviceService: DeviceDetectorService, private dataService: DataService,
     private modalService: NgbModal,
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private commonService: CommonService,
     private KeycloakService: KeycloakService,
     private googleAnalyticsService: GoogleAnalyticsService) {
+
+    // Calling Before NgInt to set Url
+    this.getUrlParameters();
   }
 
   /**
@@ -365,7 +370,7 @@ export class AppComponent {
     this.NewObj.wardId = this.wardSelected == undefined ? 0 : this.wardSelected;
     this.NewObj.menuData = [];
     // this.NewObj.level = this.dataService.zoom;
-    this.NewObj.level = event.value['zoom']? event.value['zoom'] : this.dataService.zoom;
+    this.NewObj.level = event.value['zoom'] ? event.value['zoom'] : this.dataService.zoom;
     this.NewObj.latitude = Number(this.dataService.SelectedCityLat);
     this.NewObj.longitude = Number(this.dataService.SelectedCityLng);
     this.CollectionsData(this.NewObj);
@@ -786,13 +791,8 @@ export class AppComponent {
   dragchanges = [];
 
   ngOnInit() {
-
-    // For Testing
-    // this.dataService.updateESRecord({
-    //   "place_org_id": 53784,
-    //   "closed_by": 'ngotestuser',
-    //   "place_org_subcategory": 'Rations-Asked'
-    // });
+    // Get Creaters OrgsList
+    this.getOrgList();
 
     // Login User
     this.LoginUserInfo();
@@ -803,22 +803,7 @@ export class AppComponent {
     /**
      * Get New coord's
      */
-    this.subscriptionWithCord = this.commonService.getCord().subscribe((cordnates) => {
-      this.NewObj.level = this.dataService.zoom;
-      this.NewObj.latitude = cordnates.data.lat;
-      this.NewObj.longitude = cordnates.data.lng;
-
-      this.dragchanges.push(this.NewObj)
-      setTimeout(() => {
-        // console.log("start");
-        // console.log(this.dragchanges[this.dragchanges.length - 1]);
-        this.CollectionsData(this.NewObj);
-      }, 5000);
-
-    }, err => {
-      console.log(err);
-    }, () => {
-    })
+    this.call_CollectionsDataService();
 
     /**
      * 1.) Get Cities service call
@@ -1212,6 +1197,25 @@ export class AppComponent {
       // console.log(this.mapData);
       this.getCountBased_On_Location(obj);
     });
+  }
+
+  call_CollectionsDataService() {
+    this.subscriptionWithCord = this.commonService.getCord().subscribe((cordnates) => {
+      this.NewObj.level = this.dataService.zoom;
+      this.NewObj.latitude = cordnates.data.lat;
+      this.NewObj.longitude = cordnates.data.lng;
+
+      this.dragchanges.push(this.NewObj)
+      setTimeout(() => {
+        // console.log("start");
+        // console.log(this.dragchanges[this.dragchanges.length - 1]);
+        this.CollectionsData(this.NewObj);
+      }, 5000);
+
+    }, err => {
+      console.log(err);
+    }, () => {
+    })
   }
 
   SingleSelectMenuDropDown(event, MenuID) {
@@ -1675,24 +1679,24 @@ export class AppComponent {
 
         this.MenuItems.forEach(menu => {
           menu[0]['internalChildren'].forEach(val => {
-            if(this.right_Resources_Array.indexOf(val.value) !== -1){
+            if (this.right_Resources_Array.indexOf(val.value) !== -1) {
               this.right_Resources_Count = this.right_Resources_Count + val.overall_rec_count;
             }
-            if(this.right_Volunteers_Array.indexOf(val.value) !== -1){
+            if (this.right_Volunteers_Array.indexOf(val.value) !== -1) {
               this.right_Volunteers_Count = this.right_Volunteers_Count + val.overall_rec_count;
             }
-            if(this.right_Peopleneedingsupport_Array.indexOf(val.value) !== -1){
+            if (this.right_Peopleneedingsupport_Array.indexOf(val.value) !== -1) {
               this.right_Peopleneedingsupport_Count = this.right_Peopleneedingsupport_Count + val.overall_rec_count;
             }
-            if(this.right_Peoplesupported_Array.indexOf(val.value) !== -1){
+            if (this.right_Peoplesupported_Array.indexOf(val.value) !== -1) {
               this.right_Peoplesupported_Count = this.right_Peoplesupported_Count + val.overall_rec_count;
             }
           });
         });
-        console.log("right_Resources_Count : "+ this.right_Resources_Count);
-        console.log("right_Volunteers_Count : "+ this.right_Volunteers_Count);
-        console.log("right_Peopleneedingsupport_Count : "+ this.right_Peopleneedingsupport_Count);
-        console.log("right_Peoplesupported_Count : "+ this.right_Peoplesupported_Count);
+        console.log("right_Resources_Count : " + this.right_Resources_Count);
+        console.log("right_Volunteers_Count : " + this.right_Volunteers_Count);
+        console.log("right_Peopleneedingsupport_Count : " + this.right_Peopleneedingsupport_Count);
+        console.log("right_Peoplesupported_Count : " + this.right_Peoplesupported_Count);
 
 
         this.getoverrallrectangleCountData = responseData;
@@ -1722,7 +1726,7 @@ export class AppComponent {
     let tempData = [];
     this.MenuItems && this.MenuItems.map((items) => {
       // if (items[0].value == '120' || items[0].value == '101') {
-      items[0] && items[0]['internalChildren'].forEach(element => { 
+      items[0] && items[0]['internalChildren'].forEach(element => {
         tempData.push(element.value)
       });
       // }
@@ -1935,6 +1939,54 @@ export class AppComponent {
 
   }
 
+  /**
+   * Get Org List 
+   * Creaters List
+   */
+  orgsListArray = [];
+  orgListModel = '';
+  getOrgList() {
+    this.dataService.getOrgsList().subscribe(res => {
+      if (res['success'] == true) {
+        this.orgsListArray = res['data'] || [];
+        console.log(this.orgsListArray);
+      }
+    }, err => {
+      console.log(err);
+    }, () => {
+      console.log("Completed");
+    });
+  }
+  changeOrgList(event) {
+    // window.open("/map/" + this.orgListModel, "_self");
+    history.pushState({}, null, "/map/" + this.orgListModel.replace(/ /g, '-'));
+    this.getUrlParameters();
+  }
+
+  /**
+   * Get URL Parameters to find current URL we are in
+   */
+
+  getUrlParameters() {
+
+    if (window.location.pathname.indexOf('/map/') == 0) {
+      var orgname = (window.location.pathname.split("/")).filter(val => val != '' ? true : false);
+      // setting OrgName in service 
+      this.commonService.setUserData(orgname[1] ? orgname[1].replace(/(%20)/g, ' ').replace(/(-)/g, ' ').trim() : '');
+      this.orgListModel = orgname[1] ? orgname[1].replace(/(%20)/g, ' ').replace(/(-)/g, ' ').trim() : '';
+      // Shoing Map Page
+      this.pageLocaLData();
+      // trigger All count based Service by calling below one
+      this.call_CollectionsDataService();
+    } else {
+      this.commonService.setUserData('');
+    }
+
+
+    // ///////////////////////// Calling All rest function and api calls afer Analyzing URL //////////////////
+
+
+  }
 
 
 
