@@ -260,7 +260,7 @@
                   </li>
                 </ul> -->
 
-                <label style="font-weight: 600;margin-left: 1px;">Organisation</label>
+                <label style="font-weight: 600;margin-left: 1px;">Browse by Organisation</label>
                 <div class="orglist_dropdown" style="margin-bottom: 8px;">
                   <select (change)="changeOrgList($event)" [(ngModel)]="orgListModel">
                     <option value="" disabled>Select Organisation</option>
@@ -297,7 +297,15 @@
                     <div class="title-b">Schemes</div>
                     <span class="count">40</span>
                   </div>
-                  <ng-template [ngIf]="true">
+                  <div class="box">
+                    <div class="title-b">People supported with Partners</div>
+                    <span class="count">11,60,000</span>
+                  </div>
+                  <div class="box">
+                    <div class="title-b">People needing support</div>
+                    <span class="count">10,00,000</span>
+                  </div>
+                  <!-- <ng-template [ngIf]="true">
                     <div class="box animate" [ngClass]="{'animatebox': People_supported == 0}">
                       <div class="title-b">People supported with Partners</div>
                       <span class="count">{{People_supported? (People_supported * 4): ' '}}</span>
@@ -306,7 +314,7 @@
                       <div class="title-b">People needing support</div>
                       <span class="count">{{People_needing_support? (People_needing_support * 4): ' '}}</span>
                     </div>
-                  </ng-template>
+                  </ng-template> -->
                 </div>
                 <!-- End Sub Categories count  Based on Selection-->
 
@@ -1137,7 +1145,7 @@
       </ul> -->
 
       <div class="action-button">
-        <label style="font-weight: 600;margin-left:6px;">Organisation</label>
+        <label style="font-weight: 600;margin-left:6px;">Browse by Organisation</label>
         <!-- <a href="JavaScript:void(0)" (click)="homepageButton1()">Want Medical Help?</a> -->
         <div class="orglist_dropdown" style="margin: 0 5px;">
           <select (change)="changeOrgList($event)" [(ngModel)]="orgListModel">
@@ -1174,7 +1182,15 @@
         <div class="title-b">Schemes</div>
         <span class="count">40</span>
       </div>
-      <ng-template [ngIf]="true">
+      <div class="box">
+        <div class="title-b">People supported with Partners</div>
+        <span class="count">11,60,000</span>
+      </div>
+      <div class="box">
+        <div class="title-b">People needing support</div>
+        <span class="count">10,00,000</span>
+      </div>
+      <!-- <ng-template [ngIf]="true">
         <div class="box animate" [ngClass]="{'animatebox': People_supported == 0}">
           <div class="title-b">People supported with Partners</div>
           <span class="count">{{People_supported? (People_supported * 4): ' '}}</span>
@@ -1183,7 +1199,7 @@
           <div class="title-b">People needing support</div>
           <span class="count">{{People_needing_support? (People_needing_support * 4): ' '}}</span>
         </div>
-      </ng-template>
+      </ng-template> -->
     </div>
     <!-- End Sub Categories count  Based on Selection-->
 
