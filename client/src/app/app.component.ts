@@ -1329,7 +1329,7 @@ export class AppComponent {
         this.dataService.SelectedCityLng = position.coords.longitude;
         this.SelectCity({
           "value": {
-            "zoom": 13,
+            "zoom": 15,
             "cityName": "Your Location Location",
             "lat": this.dataService.SelectedCityLat,
             "lng": this.dataService.SelectedCityLng
