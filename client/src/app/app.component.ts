@@ -1981,7 +1981,6 @@ export class AppComponent {
       // setting OrgName in service 
       this.commonService.setorgname(orgname[1] ? orgname[1].replace(/(%20)/g, ' ').replace(/(-)/g, ' ').trim() : '');
       this.orgListModel = orgname[1] ? orgname[1].replace(/(%20)/g, ' ').replace(/(-)/g, ' ').trim() : '';
-  
       // Shoing Map Page
       this.pageLocaLData();
       // trigger All count based Service by calling below one
@@ -1989,7 +1988,6 @@ export class AppComponent {
     } else {
       this.commonService.setorgname('');
     }
-
 
     // ///////////////////////// Calling All rest function and api calls afer Analyzing URL //////////////////
 
@@ -2020,7 +2018,10 @@ export class AppComponent {
         if (this.userRole.length) {
           this.activeRole = this.userRole;
         }
-
+        if(this.userData){
+          // Shoing Map Page
+          this.pageLocaLData();
+        }
         this.commonService.setusername(this.userName);
         this.commonService.setUserrole(this.userRole);
         this.commonService.setUserData(this.userData);

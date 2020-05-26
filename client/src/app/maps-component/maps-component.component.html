@@ -53,13 +53,15 @@
           <tr *ngIf="locationDetails.complaintNumber != '' && locationDetails.complaintNumber != undefined"><td><strong>Complaint Number:&nbsp;</strong></td><td><span>{{locationDetails.complaintNumber}}</span></td></tr>
           <tr *ngIf="locationDetails.NoOfLikes != '' && locationDetails.NoOfLikes != undefined"><td><strong>No Of Likes:&nbsp;</strong></td><td><span>{{locationDetails.NoOfLikes}}</span></td></tr>
           <tr *ngIf="locationDetails.wards != '' && locationDetails.wards != undefined"><td><strong>Wards:&nbsp;</strong></td><td><span>{{locationDetails.wards}}</span></td></tr>
-          <tr *ngIf="locationDetails['phone']">
-            <td><strong>Phone:&nbsp;</strong></td>
-            <td><span>{{locationDetails['phone']}}</span></td>
-          </tr>
+          
           <tr *ngIf="locationDetails['data']">
             <td><strong>Description:&nbsp;</strong></td>
             <td><span [innerHTML]="locationDetails.data | parseUrl"></span></td>
+          </tr>
+
+          <tr *ngIf="locationDetails['phone'] && userName">
+            <td><strong>Phone:&nbsp;</strong></td>
+            <td><span>{{locationDetails['phone']}}</span></td>
           </tr>
           
 
