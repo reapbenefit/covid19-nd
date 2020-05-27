@@ -1,0 +1,20 @@
+<nb-card size="medium">
+  <nb-tabset fullWidth (changeTab)="changeTab($event)">
+    <nb-tab tabTitle="Cases">
+      <div class="chart-container">
+        <ngx-chart-panel-header [type]="period"
+                                (periodChange)="setPeriodAndGetChartData($event)">
+        </ngx-chart-panel-header>
+        <ngx-orders-chart *ngIf = 'casestat' [casestatData]="casestat"></ngx-orders-chart>
+      </div>
+    </nb-tab>
+    <nb-tab tabTitle="Food Requests" [lazyLoad]="true">
+      <div class="chart-container">
+        <ngx-chart-panel-header [type]="period"
+                                (periodChange)="setPeriodAndGetChartData($event)">
+        </ngx-chart-panel-header>
+        <ngx-profit-chart *ngIf = 'foodstat' [foodstatData]="foodstat"></ngx-profit-chart>
+      </div>
+    </nb-tab>
+  </nb-tabset>
+</nb-card>

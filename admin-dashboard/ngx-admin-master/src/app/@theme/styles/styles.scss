@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap");
+@import "~ag-grid-community/dist/styles/ag-grid.scss";
+@import "~ag-grid-community/dist/styles/ag-theme-balham.css";
+@import "~bootstrap/dist/css/bootstrap.min.css";
+
+// themes - our custom or/and out of the box themes
+@import "themes";
+
+// framework component themes (styles tied to theme variables)
+@import "~@nebular/theme/styles/globals";
+@import "~@nebular/auth/styles/all";
+
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/grid";
+
+// loading progress bar theme
+@import "./pace.theme";
+
+@import "./layout";
+@import "./overrides";
+
+// install the framework and custom global styles
+@include nb-install() {
+  // framework global styles
+  @include nb-theme-global();
+  @include nb-auth-global();
+
+  @include ngx-layout();
+  // loading progress bar
+  @include ngx-pace-theme();
+
+  @include nb-overrides();
+}
+
+.ag-row-editing {
+  background-color: #5bc0de !important;
+}
+.nb-theme-default nb-layout .layout {
+  background-color: #f0f0f0;
+}
+.nb-theme-default nb-card-header {
+  font-size: 16px;
+  font-weight: 300;
+}
+.nb-theme-default nb-layout-header nav {
+  box-shadow: none !important;
+  border-bottom: 1px solid #dfdfdf;
+}
+h1.box-title {
+  margin: 0px !important;
+  font-size: 26px !important;
+  margin-bottom: 5px;
+  margin-top: 6px;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 200;
+  letter-spacing: -1px;
+  line-height: 36px;
+  background: #fff;
+  padding: 15px 35px 15px 15px;
+  position: relative;
+}
+.nb-theme-default nb-card {
+  border-radius: 0px !important;
+  border: none !important;
+}
+
+.logome{
+  width: 100px !important; 
+  height: 100px !important;
+   background-image: url("../../../assets/images/reapbenefit.jpg") !important;
+}
