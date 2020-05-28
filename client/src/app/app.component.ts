@@ -1,5 +1,5 @@
 import { Component, NgZone, ViewChild, ElementRef, HostListener, Pipe, ApplicationRef } from '@angular/core';
-import { DataService } from './services/data.service';
+import { DataService, ZoneGeoJson } from './services/data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 // import { } from 'googlemaps';
 import { MapsAPILoader, LatLngBounds } from '@agm/core';
@@ -31,7 +31,12 @@ export class AppComponent {
   legends_details = 'legends'; // false --> Details
   filterdetailsvalue = '';
   loaderAction = false;
-
+  geoJson: ZoneGeoJson = {type:"FeatureCollection", features: []};
+  selectedZoneTags = {
+    types: [],
+    owners: [],
+    subowners: []
+  }
 
   // @ViewChild('Governance') Governance: ElementRef;
 
@@ -133,6 +138,8 @@ export class AppComponent {
   public showComp = false;
   subscription: Subscription;
   subscriptionWithCord: Subscription;
+  private zoneTags;
+  private zoneTagsTree;
 
   constructor(private deviceService: DeviceDetectorService, private dataService: DataService,
     private modalService: NgbModal,
@@ -931,6 +938,8 @@ export class AppComponent {
         });
       });
     });
+
+    this.fetchMetaData();
   }
 
   public ShowCitySelect = true;
@@ -1195,22 +1204,57 @@ export class AppComponent {
   public ServiceRequest = null;
   googleData = [];
   CollectionsData(obj) {
-    console.log(obj);
-    this.ServiceRequest ? this.ServiceRequest.unsubscribe() : null
-    this.ServiceRequest = this.dataService.CollectionsDataES(obj).subscribe(data => {
-      let resMap: any = data;
+    console.log(obj);    
+    let bottom = this.dataService.bottomRight.lat;
+    let left = this.dataService.topLeft.lng;
+    let top = this.dataService.topLeft.lat;
+    let right = this.dataService.bottomRight.lng;
+    this.ServiceRequest ? this.ServiceRequest.unsubscribe() : null;
+    if(this.selectedZoneTags.types.length > 0 || this.selectedZoneTags.owners.length > 0 || this.selectedZoneTags.subowners.length > 0) {
+      this.ServiceRequest = this.dataService.loadZones(left, bottom, right, top, this.selectedZoneTags.types, this.selectedZoneTags.owners, this.selectedZoneTags.subowners, ['APPROVED']).subscribe(res => {
+        console.log(res)
+        let tempGeoJson = res;
+        tempGeoJson.features = tempGeoJson.features.filter(feature => {
+          let points = feature.geometry.coordinates[0];
+          let firstPoint = points[0];
+          let lastPoint = points[points.length-1];
+          return (points.length > 3) && (firstPoint[0] == lastPoint[0] && firstPoint[1] == lastPoint[1]);
+        });
+        tempGeoJson.features.forEach(feature => {
+          let paths = [];
+          feature.geometry.coordinates.forEach(c => {
+            c.forEach(g => {
+              paths.push({lng: g[0], lat: g[1]});
+            })
+          });
+          (feature as any).paths = paths;
+        })
+        this.geoJson = tempGeoJson;
 
+        this.ServiceRequest = this.dataService.CollectionsDataESByZone(obj, res.features.map(z => z.properties.zoneId)).subscribe(function(data) {
+          this.handleCollectionsDataESResponse(data, obj);
+        }.bind(this));
+      });
+    } else {
+      this.geoJson = {type: "FeatureCollection", features: []};
+      this.ServiceRequest = this.dataService.CollectionsDataESByZone(obj, []).subscribe(function(data) {
+        this.handleCollectionsDataESResponse(data, obj);
+      }.bind(this));
+    }
+  }
 
-      let newData = resMap.data.map(val => {
-        val['number'] = val.data;
-        delete val['data'];
-        return val;
-      })
-      // this.mapData = resMap.data;
-      this.mapData = newData;
-      console.log(this.mapData);
-      this.getCountBased_On_Location(obj);
-    });
+  handleCollectionsDataESResponse(data, obj) {
+    let resMap: any = data;
+
+    let newData = resMap.data.map(val => {
+      val['number'] = val.data;
+      delete val['data'];
+      return val;
+    })
+    // this.mapData = resMap.data;
+    this.mapData = newData;
+    console.log(this.mapData);
+    this.getCountBased_On_Location(obj);
   }
 
   SingleSelectMenuDropDown(event, MenuID) {
@@ -2071,9 +2115,60 @@ export class AppComponent {
     })
   }
 
+  fetchMetaData() {
+    this.dataService.getTags().subscribe(function(response) {
+      // console.log(response);
+      let tagTree = [];
+      response.data.forEach(element => {
+        let typeObject = tagTree.filter(function(e){
+          return e.type === element.type;
+        })[0]
 
+        if(!typeObject) {
+          typeObject = {
+            type: element.type,
+            owners: []
+          }
+          tagTree.push(typeObject);
+        }
 
+        let ownerObject = typeObject.owners.filter(function(e){
+          return e.owner === element.owner;
+        })[0]
 
+        if(!ownerObject) {
+          ownerObject = {
+            owner: element.owner,
+            subowners: []
+          }
+          typeObject.owners.push(ownerObject);
+        }
+
+        let subownerObject = ownerObject.subowners.filter(function(e){
+          return e.subowner === element.subowner;
+        })[0]
+
+        if(!subownerObject) {
+          subownerObject = {
+            subowner: element.subowner,
+            id: element.id
+          }
+          ownerObject.subowners.push(subownerObject);
+        }
+      });
+      // console.log('Prepared Tag Tree:');
+      // console.log(tagTree);
+      this.zoneTags = response.data;
+      this.zoneTagsTree = tagTree;
+    }.bind(this));
+  }
+
+  zoneTagsSelected(event) {
+    console.log('Zone tags selected:');
+    console.log(event);
+    this.selectedZoneTags = event;
+    this.CollectionsData(this.NewObj);
+  }
 
 }
 

@@ -13,6 +13,7 @@ export interface DialogData {
   notes: string;
   userId: string;
   tagId: number;
+  color: string;
 }
 
 @Component({

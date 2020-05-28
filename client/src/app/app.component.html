@@ -351,6 +351,8 @@
             <div class="full-details">
               <div class="static-point-section">
                 <h5>In your view</h5>
+                <app-role-filter [activeRole]="activeRole" (selectedTags)="zoneTagsSelected($event)">
+                </app-role-filter>
                 <ul>
 
                   <ng-template [ngIf]="userName && activeRole.indexOf('NGOTeam') !=-1">
@@ -541,7 +543,7 @@
             </ul>
           </div>
         </div>
-        <app-main-content #mapref [mapData]="mapData" [AQM]="AQM" [AQMGraphLoc]="AQMGraphLoc" [graphData]="graphData"
+        <app-main-content #mapref [mapData]="mapData" [geoJson]="geoJson" [AQM]="AQM" [AQMGraphLoc]="AQMGraphLoc" [graphData]="graphData"
           [graphDataStatus]="graphDataStatus" [showComp]="showComp" [compare]="compare" [showgraphs]="showgraphs"
           [selIssCat]="selIssCat" (WardData)="WardData($event)" (hideGraphs)="hideGraphs($event)"
           [WardDetails]="WardDetails" [showGovernance]="showGovernance" [wardAgencyList]="wardAgencyList"

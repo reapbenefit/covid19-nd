@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { MouseEvent, LatLngBounds, AgmDataLayer, AgmMap, DataMouseEvent } from '@agm/core';
-import { DataService } from '../services/data.service';
+import { DataService, ZoneFeature } from '../services/data.service';
 import { CommonService } from '../services/common.service';
 import { GoogleAnalyticsService } from '../services/google-analytics.service';
-import geoJson from '../../assets/SampleGeoJson.json';
+// import geoJson from '../../assets/SampleGeoJson.json';
 import { Subscription, forkJoin } from 'rxjs';
 
 @Component({
@@ -13,8 +13,9 @@ import { Subscription, forkJoin } from 'rxjs';
 })
 export class MapsComponentComponent implements OnInit {
 
-  @ViewChild('infoWindow') infoWindow: ElementRef
-  @ViewChild('gm') gmmm: ElementRef
+  @ViewChild('infoWindow') infoWindow: ElementRef;
+  // @ViewChild('zoneInfoWindow') zoneInfoWindow: ElementRef;
+  @ViewChild('gm') gmmm: ElementRef;
 
   @Input() MapData;
   @Output() wardDetails = new EventEmitter();
@@ -24,9 +25,13 @@ export class MapsComponentComponent implements OnInit {
   public lng: any = 77.5890556;
 
   public infoWindowOpened = null
+  // public zoneInfoWindowOpened = null
   public previous_info_window = null
+  // public previous_zone_info_window = null
   public markers = [];
-  geoJson = geoJson;
+  // geoJson = geoJson;
+  @Input() geoJson;
+  private zones = []
 
   styleFunc(feature: any): any {
     return ({
@@ -43,9 +48,7 @@ export class MapsComponentComponent implements OnInit {
 
   constructor(private dataService: DataService,
     private commonService: CommonService,
-    private googleAnalyticsService: GoogleAnalyticsService) {
-    this.geoJson = JSON.parse(JSON.stringify(this.geoJson));
-  }
+    private googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit() {
 
@@ -124,14 +127,20 @@ export class MapsComponentComponent implements OnInit {
 
   public previous;
   select_marker(data) {
-    console.log(this.gmmm);
-    if (this.previous_info_window == null)
-      this.previous_info_window = data;
-    else {
-      this.infoWindowOpened = data;
-      this.previous_info_window.close();
-    }
-    this.previous_info_window = data;
+    // console.log(this.gmmm);
+    // if (this.previous_info_window == null)
+    //   this.previous_info_window = data;
+    // else {
+    //   this.infoWindowOpened = data;
+    //   this.previous_info_window.close();
+    // }
+    // this.previous_info_window = data;
+  }
+
+  zoneClicked(event, zone) {
+    zone.selected = zone.selected ? !zone.selected : true;
+    zone.latitude = event.latLng.lat();
+    zone.longitude = event.latLng.lng();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -144,7 +153,23 @@ export class MapsComponentComponent implements OnInit {
     //     }
     //   }
     // });
-    this.markers = this.MapData;
+    let markersInZones = [];
+    this.geoJson.features.forEach(feature => {
+      let paths = [];
+      feature.geometry.coordinates.forEach(c => {
+        c.forEach(g => {
+          paths.push({lng: g[0], lat: g[1]});
+        })
+      })
+      let newPolygon = new google.maps.Polygon({paths: paths});
+      this.MapData.filter(marker => {
+        let pointInsideZone = google.maps.geometry.poly.containsLocation(new google.maps.LatLng(marker.lat, marker.lng), newPolygon);
+        return (markersInZones.indexOf(marker) == -1) && pointInsideZone;
+      }).forEach(marker => markersInZones.push(marker));
+    })
+
+    this.markers = this.geoJson.features.length > 0 ? markersInZones : this.MapData;
+    // this.markers = this.MapData;
     this.previous_info_window = null;
     this.locationDetails = {
       "id": '',

@@ -104,7 +104,18 @@
       </div>
     </agm-info-window>
   </agm-marker>
-  <agm-data-layer [geoJson]="geoJson" [style]="styleFunc" (layerClick)="onClick($event)"></agm-data-layer>
+  <agm-polygon *ngFor="let zone of geoJson.features" [paths]="zone.paths" (polyClick)="zoneClicked($event, zone)">
+    <agm-info-window [latitude]="zone.latitude" [longitude]="zone.longitude" [isOpen]="zone.selected ? zone.selected : false">
+      <div>
+        <h5>{{zone.properties.name}}</h5>
+        <span>Type: {{ zone.properties.tag.type }}</span><br/>
+        <span>Owner: {{ zone.properties.tag.owner }}</span><br/>
+        <span>Sub-Owner: {{ zone.properties.tag.subowner }}</span><br/>
+        <span *ngIf="zone.properties.notes">Notes: {{ zone.properties.notes }}</span>
+      </div>
+    </agm-info-window>
+  </agm-polygon>
+  <!-- <agm-data-layer [geoJson]="geoJson" [style]="styleFunc" (layerClick)="onClick($event)"></agm-data-layer> -->
 </agm-map>
 
 <!-- <div class="mobilenumber-popup" *ngIf="numberPopup">

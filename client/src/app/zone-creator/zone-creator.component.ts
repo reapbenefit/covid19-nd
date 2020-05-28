@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Injectable } from '@angular/core';
+import { Component, OnInit, HostListener, Injectable, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -34,6 +34,14 @@ export class ZoneCreatorComponent implements OnInit {
   private map;
   private savedPolygons = 0;
   private loadedZones = [];
+  private submittedZones = [];
+  private savedZones = [];
+  private selectedTags = {
+    types: [],
+    owners: [],
+    subowners: []
+  };
+  private colorScheme = "status";
 
   constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public dialog: MatDialog, private dataService: DataService){}
 
@@ -147,7 +155,7 @@ export class ZoneCreatorComponent implements OnInit {
   }
 
   onPolygonComplete(polygon, zoneDetails) {
-    this.zoneDetails = zoneDetails || {tags: this.zoneTagsTree, notes: ''};
+    this.zoneDetails = zoneDetails || {tags: this.zoneTagsTree, notes: '', color: 'black'};
     let dialogRef = this.dialog.open(ZoneDetailsDialogComponent, {
       data: this.zoneDetails
     });
@@ -163,8 +171,8 @@ export class ZoneCreatorComponent implements OnInit {
       } else if(result == 'Save') {
         this.savedPolygons = this.savedPolygons + 1;
         polygon.setOptions({
-          fillColor: 'orange',
-          strokeColor: 'red'
+          fillColor: this.colorScheme === 'status' ? 'orange' : thisZoneDetails.color,
+          strokeColor: this.colorScheme === 'status' ? 'red' : thisZoneDetails.color
         });
         polygon.setEditable(false);
         polygon.addListener('click', function(event){
@@ -173,11 +181,11 @@ export class ZoneCreatorComponent implements OnInit {
             thisPolygonInfoWindowOpen = false;
             polygon.setEditable(false);
 	      	} else {
-            let polygonContent = "<span><h6 style='display: inline;'>Name:</h6> "+thisZoneDetails.name+"</span><br/>"+
+            let polygonContent = "<span><h6 style='display: inline;'>"+thisZoneDetails.name+"</h6></span><br/><hr>"+
               "<span><h6 style='display: inline;'>Type:</h6> "+thisZoneDetails.type+"</span><br/>"+
               "<span><h6 style='display: inline;'>Owner:</h6> "+thisZoneDetails.owner+"</span><br/>"+
               "<span><h6 style='display: inline;'>Sub-Owner:</h6> "+thisZoneDetails.subowner+"</span><br/>"+
-              "<span><h6 style='display: inline;'>Notes:</h6><pre>"+thisZoneDetails.notes+"</pre></span>";
+              (thisZoneDetails.notes ? "<span><h6 style='display: inline;'>Notes:</h6><pre>"+thisZoneDetails.notes+"</pre></span>" : "");
 	      		thisPolygonInfoWindow.setContent(polygonContent);
 		  		  thisPolygonInfoWindow.setPosition(event.latLng);
             thisPolygonInfoWindow.open(polygon.getMap());
@@ -189,6 +197,19 @@ export class ZoneCreatorComponent implements OnInit {
         polygon.addListener('rightclick', function(event){
           this.onPolygonComplete(polygon, thisZoneDetails);
         }.bind(this));
+
+        this.savedZones.push({
+          polygon: polygon,
+          status: {
+            fillColor: 'orange',
+            strokeColor: 'red'
+          },
+          color: {
+            fillColor: thisZoneDetails.color,
+            strokeColor: thisZoneDetails.color
+          }
+        });
+
       } else if(result == 'Submit') {
         //TODO Set userId in result / form fields
         let geometry = []
@@ -225,8 +246,8 @@ export class ZoneCreatorComponent implements OnInit {
         //TODO Validate result / form fields
         polygon.setEditable(false);
         polygon.setOptions({
-          fillColor: 'green',
-          strokeColor: 'darkgreen'
+          fillColor: this.colorScheme === 'status' ? 'green' : thisZoneDetails.color,
+          strokeColor: this.colorScheme === 'status' ? 'darkgreen' : thisZoneDetails.color
         });
 
         polygon.addListener('click', function(event){
@@ -235,11 +256,11 @@ export class ZoneCreatorComponent implements OnInit {
             thisPolygonInfoWindow.close();
             thisPolygonInfoWindowOpen = false;
           } else {
-            let polygonContent = "<span><h6 style='display: inline;'>Name:</h6> "+thisZoneDetails.name+"</span><br/>"+
+            let polygonContent = "<span><h6 style='display: inline;'>"+thisZoneDetails.name+"</h6></span><br/><hr>"+
             "<span><h6 style='display: inline;'>Type:</h6> "+thisZoneDetails.type+"</span><br/>"+
             "<span><h6 style='display: inline;'>Owner:</h6> "+thisZoneDetails.owner+"</span><br/>"+
             "<span><h6 style='display: inline;'>Sub-Owner:</h6> "+thisZoneDetails.subowner+"</span><br/>"+
-            "<span><h6 style='display: inline;'>Notes:</h6><pre>"+thisZoneDetails.notes+"</pre></span>";
+            (thisZoneDetails.notes ? "<span><h6 style='display: inline;'>Notes:</h6><pre>"+thisZoneDetails.notes+"</pre></span>" : "");
             thisPolygonInfoWindow.setContent(polygonContent);
             thisPolygonInfoWindow.setPosition(event.latLng);
             thisPolygonInfoWindow.open(polygon.getMap());
@@ -249,6 +270,18 @@ export class ZoneCreatorComponent implements OnInit {
         });
 
         if(zoneDetails) this.savedPolygons = this.savedPolygons - 1;
+
+        this.submittedZones.push({
+          polygon: polygon,
+          status: {
+            fillColor: 'green',
+            strokeColor: 'darkgreen'
+          },
+          color: {
+            fillColor: thisZoneDetails.color,
+            strokeColor: thisZoneDetails.color
+          }
+        });
       }
     });
     this.toggleDrawTool();
@@ -282,10 +315,12 @@ export class ZoneCreatorComponent implements OnInit {
     let left = this.map.getBounds().getSouthWest().lng();
     let top = this.map.getBounds().getNorthEast().lat();
     let right = this.map.getBounds().getNorthEast().lng();
-    this.dataService.loadZones(left, bottom, right, top).subscribe(result => {
+    this.dataService.loadZones(left, bottom, right, top, this.selectedTags.types, this.selectedTags.owners, this.selectedTags.subowners).subscribe(result => {
       console.log(result);
-      this.loadedZones.forEach(p => p.setMap(undefined));
+      this.loadedZones.forEach(p => p.polygon.setMap(undefined));
+      this.submittedZones.forEach(p => p.polygon.setMap(undefined));
       this.loadedZones = [];
+      this.submittedZones = [];
       (result as any).features.forEach(feature => {
         let paths = [];
         feature.geometry.coordinates.forEach(c => {
@@ -304,12 +339,13 @@ export class ZoneCreatorComponent implements OnInit {
           notes: feature.properties.notes,
           userId: '',
           zoneId: feature.properties.zoneId,
-          action: feature.properties.status == 'UNDER_REVIEW_FOR_CREATE' ? 'Add' : feature.properties.status == 'UNDER_REVIEW_FOR_DELETE' ? 'Delete' : undefined
+          action: feature.properties.status == 'UNDER_REVIEW_FOR_CREATE' ? 'Add' : feature.properties.status == 'UNDER_REVIEW_FOR_DELETE' ? 'Delete' : undefined,
+          color: 'black'
         };
 
         let newPolygon = new google.maps.Polygon({
-          fillColor: thisZoneDetails.action == 'Add' ? 'lightblue' : thisZoneDetails.action == 'Delete' ? 'OrangeRed' : 'RoyalBlue',
-          strokeColor: thisZoneDetails.action == 'Add' ? 'blue' : thisZoneDetails.action == 'Delete' ? 'red' : 'MidnightBlue',
+          fillColor: this.colorScheme === 'status' ? (thisZoneDetails.action == 'Add' ? 'lightblue' : thisZoneDetails.action == 'Delete' ? 'OrangeRed' : 'RoyalBlue') : thisZoneDetails.color,
+          strokeColor: this.colorScheme === 'status' ? (thisZoneDetails.action == 'Add' ? 'blue' : thisZoneDetails.action == 'Delete' ? 'red' : 'MidnightBlue') : thisZoneDetails.color,
           editable: false,
           paths: paths
         })
@@ -321,11 +357,11 @@ export class ZoneCreatorComponent implements OnInit {
             thisPolygonInfoWindow.close();
             thisPolygonInfoWindowOpen = false;
           } else {
-            let polygonContent = "<span><h6 style='display: inline;'>Name:</h6> "+thisZoneDetails.name+"</span><br/>"+
+            let polygonContent = "<span><h6 style='display: inline;'>"+thisZoneDetails.name+"</h6></span><br/><hr>"+
             "<span><h6 style='display: inline;'>Type:</h6> "+thisZoneDetails.type+"</span><br/>"+
             "<span><h6 style='display: inline;'>Owner:</h6> "+thisZoneDetails.owner+"</span><br/>"+
             "<span><h6 style='display: inline;'>Sub-Owner:</h6> "+thisZoneDetails.subowner+"</span><br/>"+
-            "<span><h6 style='display: inline;'>Notes:</h6><pre>"+thisZoneDetails.notes+"</pre></span><br/>";
+            (thisZoneDetails.notes ? "<span><h6 style='display: inline;'>Notes:</h6><pre>"+thisZoneDetails.notes+"</pre></span><br/>" : "");
             thisPolygonInfoWindow.setContent(polygonContent);
             thisPolygonInfoWindow.setPosition(event.latLng);
             thisPolygonInfoWindow.open(newPolygon.getMap());
@@ -351,7 +387,17 @@ export class ZoneCreatorComponent implements OnInit {
           }.bind(this));
         }
 
-        this.loadedZones.push(newPolygon);
+        this.loadedZones.push({
+          polygon: newPolygon,
+          status: {
+            fillColor: thisZoneDetails.action == 'Add' ? 'lightblue' : thisZoneDetails.action == 'Delete' ? 'OrangeRed' : 'RoyalBlue',
+            strokeColor: thisZoneDetails.action == 'Add' ? 'blue' : thisZoneDetails.action == 'Delete' ? 'red' : 'MidnightBlue'
+          },
+          color: {
+            fillColor: thisZoneDetails.color,
+            strokeColor: thisZoneDetails.color
+          }
+        });
       });
     });
   }
@@ -368,5 +414,24 @@ export class ZoneCreatorComponent implements OnInit {
     if(this.savedPolygons > 0) {
       $event.returnValue =true;
     }
+  }
+
+  zoneTagsSelected(selectedTags) {
+    this.selectedTags = selectedTags;
+  }
+
+  colorSchemeChanged(event) {
+    this.changePolygonColor(this.loadedZones, event.value);
+    this.changePolygonColor(this.savedZones, event.value);
+    this.changePolygonColor(this.submittedZones, event.value);
+  }
+
+  changePolygonColor(zones, colorScheme) {
+    zones.forEach(loadedZone => {
+      loadedZone.polygon.setOptions({
+        fillColor: loadedZone[colorScheme].fillColor,
+        strokeColor: loadedZone[colorScheme].strokeColor
+      })
+    })
   }
 }

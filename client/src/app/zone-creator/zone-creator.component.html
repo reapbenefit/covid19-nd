@@ -1,10 +1,31 @@
-<div>
-  <a *ngIf="mapLoaded" class="btn btn-primary" href="#" style="position: absolute; right: 30px; top: 10px; z-index: 99; width: 120px;" (click)="toggleDrawTool($event)">{{ drawToolText }}</a>
-  <a *ngIf="mapLoaded" class="btn btn-primary" href="#" style="position: absolute; right: 30px; top: 55px; z-index: 99; width: 120px;" (click)="loadZones($event)">Load Zones</a>
-</div>
 <agm-map [latitude]="center.lat" [longitude]="center.lng" [usePanning]="true" [streetViewControl]="false" [disableDefaultUI]="false" 
   [zoomControl]="false" (mapReady)="onMapReady($event)" style="height: 90vH;" [zoom]="14">
 </agm-map>
+<div class="lengents-details-wrapper" [ngClass]="{'collapseme': detail_legends_collapse}" style="z-index: 99; top: 10px;">
+  <div class="lengents-details-box">
+    <div class="collapse-button" [ngClass]="{'rotateleft': detail_legends_collapse}"
+      (click)="detail_legends_collapse = !detail_legends_collapse"><span class="fa fa-chevron-up"></span>
+    </div>
+    <div class="full-details">
+      <div class="static-point-section">
+        <div>
+          <a *ngIf="mapLoaded" class="btn btn-primary" href="#" style="width: 100%;" (click)="toggleDrawTool($event)">{{ drawToolText }}</a>
+        </div>
+        <hr>
+        <h5>Zones in your View</h5>
+        <app-role-filter [activeRole]="activeRole" (selectedTags)="zoneTagsSelected($event)">
+        </app-role-filter>
+        <h5>Zone Colour Scheme</h5>
+        <mat-button-toggle-group [(ngModel)]="colorScheme" (change)="colorSchemeChanged($event)" name="fontStyle" aria-label="Font Style" style="width: 100%;">
+          <mat-button-toggle value="status" style="width: 50%;">Zone Status</mat-button-toggle>
+          <mat-button-toggle value="color" style="width: 50%;">Zone Color</mat-button-toggle>
+        </mat-button-toggle-group>
+        <hr>
+        <a *ngIf="mapLoaded" class="btn btn-primary" href="#" style="width: 100%;" (click)="loadZones($event)">Load Zones</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <ng-template #polygonModal let-modal>
   <div class="modal-header">

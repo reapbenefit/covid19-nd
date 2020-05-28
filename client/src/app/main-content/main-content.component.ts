@@ -15,6 +15,7 @@ export class MainContentComponent implements OnInit {
   @ViewChild('mapcomref') mapcomref;
 
   @Input() mapData;
+  @Input() geoJson;
   @Input() graphData;
   @Input() compare;
   @Input() showgraphs;

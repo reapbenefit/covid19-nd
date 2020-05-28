@@ -1,7 +1,7 @@
 <div class="content">
   <div class="row" style="">
     <div class="col-lg-12 col-md-12 col-xs-12 center">
-      <app-maps-component #mapcomref [MapData]="MapData" (wardDetails)="wardDetails($event)"></app-maps-component>
+      <app-maps-component #mapcomref [MapData]="MapData" [geoJson]="geoJson" (wardDetails)="wardDetails($event)"></app-maps-component>
     </div>
     <div class="col-lg-12 p-0">
       <div *ngIf="showGraphs" class="Showgraph">

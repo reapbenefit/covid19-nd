@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import { Observable } from 'rxjs';
 declare var $: any;
 @Injectable({
     providedIn: 'root',
@@ -101,6 +102,22 @@ export class DataService {
         };
         console.log(params);
         return this.httpClient.get(`${this.baseURLES}/places`, { params: params, headers: this.headers });
+    }
+    CollectionsDataESByZone(obj, zoneFilters: string[]) {
+        console.log(obj);
+        console.log(zoneFilters);
+        let url = `${this.baseURLES}/places`;
+        let menuItems = this.getSubMenus(obj);
+        let params = {
+            menuData: menuItems,
+            topLeftLat: "" + this.topLeft.lat,
+            topLeftLon: "" + this.topLeft.lng,
+            bottomRightLat: "" + this.bottomRight.lat,
+            bottomRightLon: "" + this.bottomRight.lng,
+            zoneId: zoneFilters
+        };
+        console.log(params);
+        return this.httpClient.get(url, { params: params, headers: this.headers });
     }
     getCategoryImpactsDataES(obj) {
         console.log(obj);
@@ -212,17 +229,64 @@ export class DataService {
         return this.httpClient.get(`https://www.ichangemycity.com/map/get_ward?latitude=${lat}&longitude=${lan}`, { headers: this.headers });
     }
     getTags() {
-        return this.httpClient.get('http://devlp.solveninja.org:4321/getTags', {headers: this.headers});
+        return this.httpClient.get('http://es.solveninja.org:4321/getTags', {headers: this.headers});
     }
     submitZone(zoneDetails: any) {
         console.log(JSON.stringify(zoneDetails));
-        return this.httpClient.post('http://devlp.solveninja.org:4321/addZone', zoneDetails, {headers: this.headers});
+        return this.httpClient.post('http://es.solveninja.org:4321/addZone', zoneDetails, {headers: this.headers});
     }
-    loadZones(left: number, bottom: number, right: number, top: number) {
-        return this.httpClient.get('http://devlp.solveninja.org:4321/getZones?left='+left+'&right='+right+'&top='+top+'&bottom='+bottom, {headers: this.headers});
+    loadZones(left: number, bottom: number, right: number, top: number, types: string[] = [], owners: string[] = [], subowners: string[] = [], status: string[] = []): Observable<ZoneGeoJson> {
+        let url = 'http://es.solveninja.org:4321/getZones?left='+left+'&right='+right+'&top='+top+'&bottom='+bottom;
+        if(types.length > 0) {
+            url = url + types.map(type => `&type=${type}`).join('');
+        }
+        if(owners.length > 0) {
+            url = url + owners.map(owner => `&owner=${owner}`).join('');
+        }
+        if(subowners.length > 0) {
+            url = url + subowners.map(subowner => `&subowner=${subowner}`).join('');
+        }
+        if(status) {
+            url = url + status.map(s => `&status=${s}`).join('');
+        }
+        console.log(url);
+        return this.httpClient.get<ZoneGeoJson>(url, {headers: this.headers});
     }
     updateZoneStatus(zoneId: string, status: string) {
         console.log(zoneId + ' -> ' + status);
-        return this.httpClient.put('http://devlp.solveninja.org:4321/updateZoneStatus', {zoneId: zoneId, action: status} , {headers: this.headers});
+        return this.httpClient.put('http://es.solveninja.org:4321/updateZoneStatus', {zoneId: zoneId, action: status} , {headers: this.headers});
     }
+}
+
+export interface ZoneGeoJson {
+    features: ZoneFeature[],
+    type: string
+}
+
+export interface ZoneFeature {
+    type: string,
+    properties: ZoneProperties,
+    geometry: Geometry
+}
+
+export interface ZoneProperties {
+    is_deleted: boolean,
+    name: string,
+    notes: string,
+    status: string,
+    tag: ZoneTag,
+    tagId: number,
+    zoneId: string
+}
+
+export interface ZoneTag {
+    owner: string,
+    subowner: string,
+    tagId: number,
+    type: string
+}
+
+export interface Geometry {
+    type: string,
+    coordinates: number[][]
 }

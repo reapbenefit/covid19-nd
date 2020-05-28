@@ -1,0 +1,80 @@
+<div>
+  <mat-form-field style="width: 100%;">
+    <mat-chip-list #zoneTypeChipList aria-label="Selected Zone Types">
+      <mat-chip
+        *ngFor="let zoneType of zoneTypes"
+        [selectable]="selectable"
+        [removable]="removable"
+        (removed)="remove(zoneType,'Type')">
+        {{zoneType}}
+        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+      </mat-chip>
+      <input
+        placeholder="Select Zone Type"
+        #zoneTypeInput
+        [formControl]="zoneTypeCtrl"
+        [matAutocomplete]="zoneTypeAuto"
+        [matChipInputFor]="zoneTypeChipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="add($event,'Type')">
+    </mat-chip-list>
+    <mat-autocomplete #zoneTypeAuto="matAutocomplete" (optionSelected)="selected($event,'Type')">
+      <mat-option *ngFor="let zoneType of filteredZoneTypes | async" [value]="zoneType">
+        {{zoneType}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <br/>
+  <mat-form-field style="width: 100%;">
+    <mat-chip-list #zoneOwnerChipList aria-label="Selected Zone Owners">
+      <mat-chip
+        *ngFor="let zoneOwner of zoneOwners"
+        [selectable]="selectable"
+        [removable]="removable"
+        (removed)="remove(zoneOwner,'Owner')">
+        {{zoneOwner}}
+        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+      </mat-chip>
+      <input
+        placeholder="Select Zone Owner"
+        #zoneOwnerInput
+        [formControl]="zoneOwnerCtrl"
+        [matAutocomplete]="zoneOwnerAuto"
+        [matChipInputFor]="zoneOwnerChipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="add($event,'Owner')">
+    </mat-chip-list>
+    <mat-autocomplete #zoneOwnerAuto="matAutocomplete" (optionSelected)="selected($event,'Owner')">
+      <mat-option *ngFor="let zoneOwner of filteredZoneOwners | async" [value]="zoneOwner">
+        {{zoneOwner}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <br/>
+  <mat-form-field style="width: 100%;">
+    <mat-chip-list #zoneSubownerChipList aria-label="Selected Zone Subowners">
+      <mat-chip
+        *ngFor="let zoneSubowner of zoneSubowners"
+        [selectable]="selectable"
+        [removable]="removable"
+        (removed)="remove(zoneSubowner,'Subowner')">
+        {{zoneSubowner}}
+        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+      </mat-chip>
+      <input
+        placeholder="Select Zone Subowner"
+        #zoneSubownerInput
+        [formControl]="zoneSubownerCtrl"
+        [matAutocomplete]="zoneSubownerAuto"
+        [matChipInputFor]="zoneSubownerChipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="add($event,'Subowner')">
+    </mat-chip-list>
+    <mat-autocomplete #zoneSubownerAuto="matAutocomplete" (optionSelected)="selected($event,'Subowner')">
+      <mat-option *ngFor="let zoneSubowner of filteredZoneSubowners | async" [value]="zoneSubowner">
+        {{zoneSubowner}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <hr/>
+</div>

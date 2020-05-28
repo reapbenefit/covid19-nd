@@ -28,7 +28,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTreeModule } from '@angular/material/tree';
 import { ZoneReviewDialogComponent } from './zone-review-dialog/zone-review-dialog.component';
+import { RoleFilterComponent } from './role-filter/role-filter.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -41,7 +48,8 @@ import { ZoneReviewDialogComponent } from './zone-review-dialog/zone-review-dial
     RaTotalCounts,
     ZoneCreatorComponent,
     ZoneDetailsDialogComponent,
-    ZoneReviewDialogComponent
+    ZoneReviewDialogComponent,
+    RoleFilterComponent
   ],
   imports: [
     BrowserModule,
@@ -58,6 +66,12 @@ import { ZoneReviewDialogComponent } from './zone-review-dialog/zone-review-dial
     MatSelectModule,
     MatButtonModule,
     MatDialogModule,
+    MatChipsModule,
+    MatCheckboxModule,
+    MatAutocompleteModule,
+    MatButtonToggleModule,
+    MatTreeModule,
+    MatIconModule,
     TreeviewModule.forRoot(),
     AgmCoreModule.forRoot({
       clientId: '<mandatory>',
