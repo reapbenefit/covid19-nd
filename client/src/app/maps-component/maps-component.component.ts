@@ -269,6 +269,9 @@ export class MapsComponentComponent implements OnInit {
   openURL(URL) {
     window.open(URL);
   }
+  userLogin() {
+    window.location.replace('/home');
+  }
 
 
   /**

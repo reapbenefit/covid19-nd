@@ -58,6 +58,18 @@
             <td><strong>Description:&nbsp;</strong></td>
             <td><span [innerHTML]="locationDetails.data | parseUrl"></span></td>
           </tr>
+          
+          <tr *ngIf="!userName">
+            <td><strong></strong></td>
+            <td>
+              <span (click)="userLogin()" style="
+                  color: #00df8e;
+                  font-weight: 500;
+                  text-decoration: underline;
+                  cursor: pointer;
+              ">Login to see more details.</span>
+            </td>
+          </tr>
 
           <tr *ngIf="locationDetails['phone'] && userName">
             <td><strong>Phone:&nbsp;</strong></td>
