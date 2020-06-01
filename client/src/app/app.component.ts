@@ -144,7 +144,9 @@ export class AppComponent {
     private KeycloakService: KeycloakService,
     private googleAnalyticsService: GoogleAnalyticsService) {
 
-    // Calling Before NgInt to set Url
+    // Get Creaters OrgsList
+    this.getOrgList();
+    // Calling Before NgInt to set Url  
     this.getUrlParameters();
   }
 
@@ -345,7 +347,7 @@ export class AppComponent {
       this.WardSelected = undefined;
       this.dataService.wardDetails({ "cityId": this.SelectedCity }).subscribe(data => {
         var tempWardData: any = data;
-        this.Wards = tempWardData? tempWardData['data'] : [];
+        this.Wards = tempWardData ? tempWardData['data'] : [];
         this.ShowWardSelect = false;
         setTimeout(() => {
           this.ShowWardSelect = true;
@@ -791,9 +793,6 @@ export class AppComponent {
   dragchanges = [];
 
   ngOnInit() {
-    // Get Creaters OrgsList
-    this.getOrgList();
-
     // Login User
     this.LoginUserInfo();
 
@@ -1309,13 +1308,13 @@ export class AppComponent {
     this.resetAllSelection();
     let temp = this.orgListModel != '' ? this.defaultSelect_for_orgname : this.defaultCategoriesSelect;
     // setTimeout(() => {
-      this.MenuItems && this.MenuItems.forEach(items => {
-        items[0]['internalChildren'].forEach(child => {
-          if (temp.indexOf(child.value) != -1){
-            this.singleselect(child, items);
-          }
-        });
+    this.MenuItems && this.MenuItems.forEach(items => {
+      items[0]['internalChildren'].forEach(child => {
+        if (temp.indexOf(child.value) != -1) {
+          this.singleselect(child, items);
+        }
       });
+    });
     // }, 2000);
   }
 
@@ -1968,30 +1967,26 @@ export class AppComponent {
     // window.open("/map/" + this.orgListModel, "_self");
     history.pushState({}, null, "/map/" + this.orgListModel.replace(/ /g, '-'));
     this.getUrlParameters();
+
+    if (this.defaultpage != 'LocalData') {
+      this.pageLocaLData();
+    }
   }
 
   /**
    * Get URL Parameters to find current URL we are in
    */
-
   getUrlParameters() {
-
     if (window.location.pathname.indexOf('/map/') == 0) {
       var orgname = (window.location.pathname.split("/")).filter(val => val != '' ? true : false);
       // setting OrgName in service 
       this.commonService.setorgname(orgname[1] ? orgname[1].replace(/(%20)/g, ' ').replace(/(-)/g, ' ').trim() : '');
       this.orgListModel = orgname[1] ? orgname[1].replace(/(%20)/g, ' ').replace(/(-)/g, ' ').trim() : '';
-      // Shoing Map Page
-      this.pageLocaLData();
-      // trigger All count based Service by calling below one
-      this.call_CollectionsDataService();
+      console.log(this.orgListModel);
     } else {
       this.commonService.setorgname('');
     }
-
-    // ///////////////////////// Calling All rest function and api calls afer Analyzing URL //////////////////
-
-
+    console.log(this.orgListModel);
   }
 
 
@@ -2018,10 +2013,7 @@ export class AppComponent {
         if (this.userRole.length) {
           this.activeRole = this.userRole;
         }
-        if(this.userData){
-          // Shoing Map Page
-          this.pageLocaLData();
-        }
+
         this.commonService.setusername(this.userName);
         this.commonService.setUserrole(this.userRole);
         this.commonService.setUserData(this.userData);
@@ -2031,14 +2023,28 @@ export class AppComponent {
           userRole: this.userRole
         });
 
+        setTimeout(() => {
+          if (this.userName || this.orgListModel) {
+            // Shoing Map Page
+            this.pageLocaLData();
+          }
+        }, 500);
+
         // Get All givenList
         this.getUserAssignedList();
+        
 
       }
     }, (err) => {
-      console.log(err);
+        // If not Logged In Keylok send error So 
+        setTimeout(() => {
+          if (this.userName || this.orgListModel) {
+            // Shoing Map Page
+            this.pageLocaLData();
+          }
+        }, 500);
     }, () => {
-      console.log("User Info!")
+        console.log("User Info!")
     })
   }
   userLogin() {
