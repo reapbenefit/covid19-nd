@@ -1,13 +1,13 @@
 <h1 mat-dialog-title>Zone Details</h1>
 <div mat-dialog-content>
   <div>
-    <mat-form-field>
+    <mat-form-field style="width: 100%;">
       <mat-label>Zone Reference Name</mat-label>
       <input matInput [(ngModel)]="data.name">
     </mat-form-field>
   </div>
   <div>
-    <mat-form-field>
+    <mat-form-field style="width: 100%;">
       <mat-label>Zone Type</mat-label>
       <mat-select [(ngModel)]="data.type" (selectionChange)="zoneTypeChanged($event)">
         <mat-option *ngFor="let type of data.tags" [value]="type.type">{{ type.type }}</mat-option>
@@ -16,14 +16,14 @@
   </div>
   <div>
     <div *ngFor="let type of data.tags">
-      <mat-form-field *ngIf="data.type == type.type">
+      <mat-form-field *ngIf="data.type == type.type" style="width: 100%;">
         <mat-label>Zone Owner</mat-label>
         <mat-select [(ngModel)]="data.owner" (selectionChange)="zoneOwnerChanged($event)">
           <mat-option *ngFor="let owner of type.owners" [value]="owner.owner">{{ owner.owner }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
-    <mat-form-field *ngIf="!data.type">
+    <mat-form-field *ngIf="!data.type" style="width: 100%;">
       <mat-label>Select Zone Type</mat-label>
       <mat-select disabled="true">
       </mat-select>
@@ -32,7 +32,7 @@
   <div>
     <div *ngFor="let type of data.tags">
       <div *ngFor="let owner of type.owners">
-        <mat-form-field *ngIf="data.type == type.type && data.owner == owner.owner">
+        <mat-form-field *ngIf="data.type == type.type && data.owner == owner.owner" style="width: 100%;">
           <mat-label>Zone Sub-Owner</mat-label>
           <mat-select [(ngModel)]="data.subowner" (selectionChange)="zoneSubOwnerChanged($event)">
             <mat-option *ngFor="let subowner of owner.subowners" [value]="subowner.subowner">{{ subowner.subowner }}</mat-option>
@@ -40,20 +40,14 @@
         </mat-form-field>
       </div>
     </div>
-    <mat-form-field *ngIf="!data.owner">
+    <mat-form-field *ngIf="!data.owner" style="width: 100%;">
       <mat-label>Select Zone Owner</mat-label>
       <mat-select disabled="true">
       </mat-select>
     </mat-form-field>
   </div>
   <div>
-    <mat-form-field>
-      <mat-label>Notes</mat-label>
-      <textarea matInput [(ngModel)]="data.notes"></textarea>
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field>
+    <mat-form-field style="width: 100%;">
       <mat-label>Zone Colour</mat-label>
       <mat-select [(ngModel)]="data.color">
         <mat-option value="black">Black (Default)</mat-option>
@@ -61,6 +55,12 @@
         <mat-option value="yellow">Yellow</mat-option>
         <mat-option value="green">Green</mat-option>
       </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field style="width: 100%;">
+      <mat-label>Notes</mat-label>
+      <textarea matInput [(ngModel)]="data.notes"></textarea>
     </mat-form-field>
   </div>
 </div>

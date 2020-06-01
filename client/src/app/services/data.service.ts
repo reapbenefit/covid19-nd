@@ -104,20 +104,24 @@ export class DataService {
         return this.httpClient.get(`${this.baseURLES}/places`, { params: params, headers: this.headers });
     }
     CollectionsDataESByZone(obj, zoneFilters: string[]) {
-        console.log(obj);
-        console.log(zoneFilters);
-        let url = `${this.baseURLES}/places`;
-        let menuItems = this.getSubMenus(obj);
-        let params = {
-            menuData: menuItems,
-            topLeftLat: "" + this.topLeft.lat,
-            topLeftLon: "" + this.topLeft.lng,
-            bottomRightLat: "" + this.bottomRight.lat,
-            bottomRightLon: "" + this.bottomRight.lng,
-            zoneId: zoneFilters
-        };
-        console.log(params);
-        return this.httpClient.get(url, { params: params, headers: this.headers });
+        if(zoneFilters && zoneFilters.length > 0) {
+            console.log(obj);
+            console.log(zoneFilters);
+            let url = `http://es.solveninja.org:4321/placesWithZones`;
+            let menuItems = this.getSubMenus(obj);
+            let params = {
+                menuData: menuItems,
+                topLeftLat: "" + this.topLeft.lat,
+                topLeftLon: "" + this.topLeft.lng,
+                bottomRightLat: "" + this.bottomRight.lat,
+                bottomRightLon: "" + this.bottomRight.lng,
+                zoneId: zoneFilters
+            };
+            console.log(params);
+            return this.httpClient.get(url, { params: params, headers: this.headers });
+        } else {
+            return this.CollectionsData(obj);
+        }
     }
     getCategoryImpactsDataES(obj) {
         console.log(obj);
@@ -235,6 +239,13 @@ export class DataService {
         console.log(JSON.stringify(zoneDetails));
         return this.httpClient.post('http://es.solveninja.org:4321/addZone', zoneDetails, {headers: this.headers});
     }
+    updateZone(zoneDetails: any) {
+        console.log(JSON.stringify(zoneDetails));
+        return this.httpClient.put('http://es.solveninja.org:4321/updateZone', zoneDetails, {headers: this.headers});
+    }
+    deleteZone(zoneId: string) {
+        return this.httpClient.delete('http://es.solveninja.org:4321/deleteZone', {params: {zoneId: zoneId},headers: this.headers});
+    }
     loadZones(left: number, bottom: number, right: number, top: number, types: string[] = [], owners: string[] = [], subowners: string[] = [], status: string[] = []): Observable<ZoneGeoJson> {
         let url = 'http://es.solveninja.org:4321/getZones?left='+left+'&right='+right+'&top='+top+'&bottom='+bottom;
         if(types.length > 0) {
@@ -276,7 +287,8 @@ export interface ZoneProperties {
     status: string,
     tag: ZoneTag,
     tagId: number,
-    zoneId: string
+    zoneId: string,
+    color: string
 }
 
 export interface ZoneTag {

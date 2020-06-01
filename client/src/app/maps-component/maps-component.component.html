@@ -104,7 +104,7 @@
       </div>
     </agm-info-window>
   </agm-marker>
-  <agm-polygon *ngFor="let zone of geoJson.features" [paths]="zone.paths" (polyClick)="zoneClicked($event, zone)">
+  <agm-polygon *ngFor="let zone of geoJson.features" [paths]="zone.paths" (polyClick)="zoneClicked($event, zone)" [fillColor]="zone.properties.color" [strokeColor]="zone.properties.color">
     <agm-info-window [latitude]="zone.latitude" [longitude]="zone.longitude" [isOpen]="zone.selected ? zone.selected : false">
       <div>
         <h5>{{zone.properties.name}}</h5>

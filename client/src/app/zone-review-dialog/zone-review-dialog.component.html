@@ -3,7 +3,7 @@
   <div>
     <mat-form-field style="width: 100%;">
       <mat-label>Zone Reference Name</mat-label>
-      <input matInput [(ngModel)]="data.name" disabled='true'>
+      <input matInput [(ngModel)]="data.name" [disabled]='!editable'>
     </mat-form-field>
   </div>
   <div>
@@ -26,14 +26,30 @@
   </div>
   <div>
     <mat-form-field style="width: 100%;">
+      <mat-label>Zone Colour</mat-label>
+      <mat-select [(ngModel)]="data.color" [disabled]='!editable'>
+        <mat-option value="black">Black (Default)</mat-option>
+        <mat-option value="red">Red</mat-option>
+        <mat-option value="yellow">Yellow</mat-option>
+        <mat-option value="green">Green</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field style="width: 100%;">
       <mat-label>Zone Notes</mat-label>
-      <input matInput [(ngModel)]="data.notes" disabled='true'>
+      <input matInput [(ngModel)]="data.notes" [disabled]='!editable'>
     </mat-form-field>
   </div>
 </div>
-<div mat-dialog-actions>
+<div *ngIf='data.action !== "Update"' mat-dialog-actions>
   <button mat-button (click)="onApprove()">Approve</button>
   <button mat-button (click)="onReject()">Reject</button>
   <br/>
   <button mat-button (click)="onReviewLater()">Review Later</button>
+</div>
+<div *ngIf='data.action === "Update"' mat-dialog-actions>
+  <button mat-button (click)="onDelete()">Delete</button>
+  <button mat-button (click)="onUpdate()">Update</button>
+  <button mat-button (click)="onReviewLater()">Cancel</button>
 </div>

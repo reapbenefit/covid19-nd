@@ -12,6 +12,7 @@ export interface ReviewData {
   userId: string;
   action: string;
   zoneId: string;
+  color: string;
 }
 
 @Component({
@@ -25,7 +26,14 @@ export class ZoneReviewDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<ZoneReviewDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ReviewData) {}
 
+  editable = false
+
   ngOnInit() {
+    if(this.data.action === 'Update') {
+      this.editable = true;
+    } else {
+      this.editable = false;
+    }
   }
 
   onApprove() {
@@ -38,6 +46,14 @@ export class ZoneReviewDialogComponent implements OnInit {
 
   onReviewLater() {
     this.dialogRef.close('REVIEW LATER');
+  }
+
+  onUpdate() {
+    this.dialogRef.close('UPDATE');
+  }
+
+  onDelete() {
+    this.dialogRef.close('DELETE');
   }
 
 }

@@ -339,8 +339,8 @@ export class ZoneCreatorComponent implements OnInit {
           notes: feature.properties.notes,
           userId: '',
           zoneId: feature.properties.zoneId,
-          action: feature.properties.status == 'UNDER_REVIEW_FOR_CREATE' ? 'Add' : feature.properties.status == 'UNDER_REVIEW_FOR_DELETE' ? 'Delete' : undefined,
-          color: 'black'
+          action: feature.properties.status == 'UNDER_REVIEW_FOR_CREATE' ? 'Add' : feature.properties.status == 'UNDER_REVIEW_FOR_DELETE' ? 'Delete' : 'Update',
+          color: feature.properties.color
         };
 
         let newPolygon = new google.maps.Polygon({
@@ -382,6 +382,27 @@ export class ZoneCreatorComponent implements OnInit {
                   console.log('Result from Updating Zone Status');
                   console.log(result);
                 });
+              } else if(result == 'UPDATE') {
+                this.dataService.updateZone({
+                  type: "FeatureCollection",
+                  features: [{
+                        type: "Feature",
+                        properties: {
+                          zoneId: thisZoneDetails.zoneId,
+                          name: thisZoneDetails.name,
+                          notes: thisZoneDetails.notes,
+                          color: thisZoneDetails.color
+                        }
+                     }]
+                }).subscribe(result => {
+                  console.log('Result from Updating Zone Status');
+                  console.log(result);
+                });
+              } else if(result == 'DELETE') {
+                this.dataService.deleteZone(thisZoneDetails.zoneId).subscribe(result => {
+                  console.log('Result from Deleting Zone Status');
+                  console.log(result);
+                });;
               }
             })
           }.bind(this));
