@@ -552,7 +552,7 @@
 
       <div [ngStyle]="{'display': (defaultpage == 'Zones')? 'block': 'none'}" class="web-map-wrapper"
         style="position: relative;top: 70px;">
-        <app-zone-creator></app-zone-creator>
+        <app-zone-creator [activeRole]='activeRole'></app-zone-creator>
       </div>
 
       <!-- <div *ngIf="dataService.zoom > 15"

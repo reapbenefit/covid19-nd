@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Injectable, ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener, Injectable, ViewChild, Input } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -41,8 +41,9 @@ export class ZoneCreatorComponent implements OnInit {
     owners: [],
     subowners: []
   };
-  private colorScheme = "status";
+  colorScheme = "status";
   detail_legends_collapse = true; // true means Collapse
+  @Input() activeRole;
 
   constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public dialog: MatDialog, private dataService: DataService){}
 
