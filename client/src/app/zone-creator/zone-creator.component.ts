@@ -42,6 +42,7 @@ export class ZoneCreatorComponent implements OnInit {
     subowners: []
   };
   private colorScheme = "status";
+  detail_legends_collapse = true; // true means Collapse
 
   constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public dialog: MatDialog, private dataService: DataService){}
 
