@@ -1180,22 +1180,22 @@ export class AppComponent {
   public ServiceRequest = null;
   googleData = [];
   CollectionsData(obj) {
-    // console.log(obj);
-    this.ServiceRequest ? this.ServiceRequest.unsubscribe() : null
-    this.ServiceRequest = this.dataService.CollectionsDataES(obj).subscribe(data => {
-      let resMap: any = data;
-
-
-      let newData = resMap.data.map(val => {
-        val['number'] = val.data;
-        delete val['data'];
-        return val;
-      })
-      // this.mapData = resMap.data;
-      this.mapData = newData;
-      // console.log(this.mapData);
-      this.getCountBased_On_Location(obj);
-    });
+    console.log(this.dataService.topLeft);
+    if (this.dataService.topLeft.lat != this.dataService.bottomRight.lat && this.dataService.topLeft.lng != this.dataService.bottomRight.lng) {
+      this.ServiceRequest ? this.ServiceRequest.unsubscribe() : null
+      this.ServiceRequest = this.dataService.CollectionsDataES(obj).subscribe(data => {
+        let resMap: any = data;
+        let newData = resMap.data.map(val => {
+          val['number'] = val.data;
+          delete val['data'];
+          return val;
+        })
+        // this.mapData = resMap.data;
+        this.mapData = newData;
+        // console.log(this.mapData);
+        this.getCountBased_On_Location(obj);
+      });
+    }
   }
 
   call_CollectionsDataService() {
@@ -2032,19 +2032,19 @@ export class AppComponent {
 
         // Get All givenList
         this.getUserAssignedList();
-        
+
 
       }
     }, (err) => {
-        // If not Logged In Keylok send error So 
-        setTimeout(() => {
-          if (this.userName || this.orgListModel) {
-            // Shoing Map Page
-            this.pageLocaLData();
-          }
-        }, 500);
+      // If not Logged In Keylok send error So 
+      setTimeout(() => {
+        if (this.userName || this.orgListModel) {
+          // Shoing Map Page
+          this.pageLocaLData();
+        }
+      }, 500);
     }, () => {
-        console.log("User Info!")
+      console.log("User Info!")
     })
   }
   userLogin() {
