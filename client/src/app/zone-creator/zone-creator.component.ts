@@ -225,7 +225,8 @@ export class ZoneCreatorComponent implements OnInit {
         let zoneProperties = {
           tagId: thisZoneDetails.tagId,
           name: thisZoneDetails.name,
-          notes: thisZoneDetails.notes
+          notes: thisZoneDetails.notes,
+          color: thisZoneDetails.color
         }
       
         let geoJson = {
@@ -323,7 +324,7 @@ export class ZoneCreatorComponent implements OnInit {
       this.submittedZones.forEach(p => p.polygon.setMap(undefined));
       this.loadedZones = [];
       this.submittedZones = [];
-      (result as any).features.forEach(feature => {
+      (result as any).features.filter(feature => feature.properties.status !== 'REJECTED').forEach(feature => {
         let paths = [];
         feature.geometry.coordinates.forEach(c => {
           c.forEach(g => {
@@ -341,7 +342,7 @@ export class ZoneCreatorComponent implements OnInit {
           notes: feature.properties.notes,
           userId: '',
           zoneId: feature.properties.zoneId,
-          action: feature.properties.status == 'UNDER_REVIEW_FOR_CREATE' ? 'Add' : feature.properties.status == 'UNDER_REVIEW_FOR_DELETE' ? 'Delete' : 'Update',
+          action: feature.properties.status == 'UNDER_REVIEW_FOR_CREATE' ? 'Add' : (feature.properties.status == 'UNDER_REVIEW_FOR_DELETE' ? 'Delete' : 'Update'),
           color: feature.properties.color
         };
 

@@ -153,23 +153,23 @@ export class MapsComponentComponent implements OnInit {
     //     }
     //   }
     // });
-    let markersInZones = [];
-    this.geoJson.features.forEach(feature => {
-      let paths = [];
-      feature.geometry.coordinates.forEach(c => {
-        c.forEach(g => {
-          paths.push({lng: g[0], lat: g[1]});
-        })
-      })
-      let newPolygon = new google.maps.Polygon({paths: paths});
-      this.MapData.filter(marker => {
-        let pointInsideZone = google.maps.geometry.poly.containsLocation(new google.maps.LatLng(marker.lat, marker.lng), newPolygon);
-        return (markersInZones.indexOf(marker) == -1) && pointInsideZone;
-      }).forEach(marker => markersInZones.push(marker));
-    })
+    // let markersInZones = [];
+    // this.geoJson.features.forEach(feature => {
+    //   let paths = [];
+    //   feature.geometry.coordinates.forEach(c => {
+    //     c.forEach(g => {
+    //       paths.push({lng: g[0], lat: g[1]});
+    //     })
+    //   })
+    //   let newPolygon = new google.maps.Polygon({paths: paths});
+    //   this.MapData.filter(marker => {
+    //     let pointInsideZone = google.maps.geometry.poly.containsLocation(new google.maps.LatLng(marker.lat, marker.lng), newPolygon);
+    //     return (markersInZones.indexOf(marker) == -1) && pointInsideZone;
+    //   }).forEach(marker => markersInZones.push(marker));
+    // })
 
-    this.markers = this.geoJson.features.length > 0 ? markersInZones : this.MapData;
-    // this.markers = this.MapData;
+    // this.markers = this.geoJson.features.length > 0 ? markersInZones : this.MapData;
+    this.markers = this.MapData;
     this.previous_info_window = null;
     this.locationDetails = {
       "id": '',

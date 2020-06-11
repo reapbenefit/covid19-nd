@@ -76,5 +76,31 @@
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
+  <br/>
+  <mat-form-field style="width: 100%;">
+    <mat-chip-list #zoneNameChipList aria-label="Selected Zone Names">
+      <mat-chip
+        *ngFor="let zoneName of zoneNames"
+        [selectable]="selectable"
+        [removable]="removable"
+        (removed)="remove(zoneName,'Name')">
+        {{zoneName}}
+        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+      </mat-chip>
+      <input
+        placeholder="Select Zone Name"
+        #zoneNameInput
+        [formControl]="zoneNameCtrl"
+        [matAutocomplete]="zoneNameAuto"
+        [matChipInputFor]="zoneNameChipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="add($event,'Name')">
+    </mat-chip-list>
+    <mat-autocomplete #zoneNameAuto="matAutocomplete" (optionSelected)="selected($event,'Name')">
+      <mat-option *ngFor="let zoneName of filteredZoneNames | async" [value]="zoneName">
+        {{zoneName}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
   <hr/>
 </div>

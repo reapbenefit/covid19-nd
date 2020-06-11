@@ -41,8 +41,18 @@ export class RoleFilterComponent {
   @ViewChild('zoneSubownerInput') zoneSubownerInput: ElementRef<HTMLInputElement>;
   @ViewChild('zoneSubownerAuto') zoneSubownerMatAutocomplete: MatAutocomplete;
 
+  zoneNameCtrl = new FormControl();
+  filteredZoneNames: Observable<string[]>;
+  zoneNames: string[] = [];
+  @Input() allZoneNames: string[];
+  @ViewChild('zoneNameInput') zoneNameInput: ElementRef<HTMLInputElement>;
+  @ViewChild('zoneNameAuto') zoneNameMatAutocomplete: MatAutocomplete;
+
   constructor(private dataService: DataService) {
     this.fetchMetaData();
+    this.filteredZoneNames = this.zoneNameCtrl.valueChanges.pipe(
+      startWith(null),
+      map((zoneName: string | null) => this._filter(this.allZoneNames ? this.allZoneNames : [], this.zoneNames, zoneName)));
   }
 
   fetchMetaData() {
@@ -82,6 +92,8 @@ export class RoleFilterComponent {
         this.zoneOwners.push(value.trim());
       } else if(type === 'Subowner' && this.allZoneSubowners.indexOf(value.trim()) != -1) {
         this.zoneSubowners.push(value.trim());
+      } else if(type === 'Name' && this.allZoneNames.indexOf(value.trim()) != -1) {
+        this.zoneNames.push(value.trim());
       }
     }
     if (input) {
@@ -97,7 +109,8 @@ export class RoleFilterComponent {
     this.selectedTags.emit({
       types: this.zoneTypes,
       owners: this.zoneOwners,
-      subowners: this.zoneSubowners
+      subowners: this.zoneSubowners,
+      zoneNames: this.zoneNames
     });
   }
 
@@ -114,6 +127,9 @@ export class RoleFilterComponent {
     } else if(type === 'Subowner') {
       removeFrom = this.zoneSubowners;
       resetCtrl = this.zoneSubownerCtrl;
+    } else if(type === 'Name') {
+      removeFrom = this.zoneNames;
+      resetCtrl = this.zoneNameCtrl;
     }
 
     const index = removeFrom.indexOf(value);
@@ -124,7 +140,8 @@ export class RoleFilterComponent {
     this.selectedTags.emit({
       types: this.zoneTypes,
       owners: this.zoneOwners,
-      subowners: this.zoneSubowners
+      subowners: this.zoneSubowners,
+      zoneNames: this.zoneNames
     });
   }
 
@@ -141,11 +158,16 @@ export class RoleFilterComponent {
       this.zoneSubowners.push(event.option.viewValue);
       this.zoneSubownerInput.nativeElement.value = '';
       this.zoneSubownerCtrl.setValue(null);
+    } else if(type === 'Name') {
+      this.zoneNames.push(event.option.viewValue);
+      this.zoneNameInput.nativeElement.value = '';
+      this.zoneNameCtrl.setValue(null);
     }
     this.selectedTags.emit({
       types: this.zoneTypes,
       owners: this.zoneOwners,
-      subowners: this.zoneSubowners
+      subowners: this.zoneSubowners,
+      zoneNames: this.zoneNames
     });
   }
 

@@ -35,7 +35,8 @@ export class AppComponent {
   selectedZoneTags = {
     types: [],
     owners: [],
-    subowners: []
+    subowners: [],
+    zoneNames: []
   }
 
   // @ViewChild('Governance') Governance: ElementRef;
@@ -1203,6 +1204,7 @@ export class AppComponent {
   // It will change for Each drag on map 
   public ServiceRequest = null;
   googleData = [];
+  allZoneNames: string[] = [];
   CollectionsData(obj) {
     console.log(obj);    
     let bottom = this.dataService.bottomRight.lat;
@@ -1213,12 +1215,15 @@ export class AppComponent {
     if(this.selectedZoneTags.types.length > 0 || this.selectedZoneTags.owners.length > 0 || this.selectedZoneTags.subowners.length > 0) {
       this.ServiceRequest = this.dataService.loadZones(left, bottom, right, top, this.selectedZoneTags.types, this.selectedZoneTags.owners, this.selectedZoneTags.subowners, ['APPROVED']).subscribe(res => {
         console.log(res)
+        this.allZoneNames = [];
+        res.features.forEach(feature => this.allZoneNames.push(feature.properties.name));
+        
         let tempGeoJson = res;
         tempGeoJson.features = tempGeoJson.features.filter(feature => {
           let points = feature.geometry.coordinates[0];
           let firstPoint = points[0];
           let lastPoint = points[points.length-1];
-          return (points.length > 3) && (firstPoint[0] == lastPoint[0] && firstPoint[1] == lastPoint[1]);
+          return (points.length > 3) && (firstPoint[0] == lastPoint[0] && firstPoint[1] == lastPoint[1]) && (this.selectedZoneTags.zoneNames.length == 0 || this.selectedZoneTags.zoneNames.indexOf(feature.properties.name) != -1);
         });
         tempGeoJson.features.forEach(feature => {
           let paths = [];

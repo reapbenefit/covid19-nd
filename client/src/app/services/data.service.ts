@@ -115,12 +115,12 @@ export class DataService {
                 topLeftLon: "" + this.topLeft.lng,
                 bottomRightLat: "" + this.bottomRight.lat,
                 bottomRightLon: "" + this.bottomRight.lng,
-                zoneId: zoneFilters
+                zoneIds: zoneFilters
             };
             console.log(params);
             return this.httpClient.get(url, { params: params, headers: this.headers });
         } else {
-            return this.CollectionsData(obj);
+            return this.CollectionsDataES(obj);
         }
     }
     getCategoryImpactsDataES(obj) {
