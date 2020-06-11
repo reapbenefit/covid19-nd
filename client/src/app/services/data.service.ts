@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { Observable } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
+import { CommonService } from './common.service';
 declare var $: any;
 @Injectable({
     providedIn: 'root',
@@ -11,6 +13,7 @@ export class DataService {
     public baseURL = "https://devlp.solveninja.org/wp-includes/rest-api";
     public baseURLCOVID = "https://devlp.solveninja.org/wp-includes/covid/rest-api";
     public baseURLES = "http://52.172.26.84/"
+    public baseEsSolv = "https://es.solveninja.org/"
     // public baseURL = "https://solveninja.org/wp-includes/rest-api";
     public SelectedCity = 1;
     public SelectedCityLat = 12.9796;
@@ -19,7 +22,7 @@ export class DataService {
     public centerLat = 77.5906;
     public topLeft = { lat: this.SelectedCityLat, lng: this.SelectedCityLng };
     public bottomRight = { lat: this.SelectedCityLat, lng: this.SelectedCityLng };
-    public zoom = 13;
+    public zoom = 11;
     public AQMDataList;
     public getcurrentlocation = false;
     public catType = 0;
@@ -27,9 +30,13 @@ export class DataService {
     public SelIssCat;
     public wardSelectedID = 0;
     private headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
-    constructor(private httpClient: HttpClient, public datepipe: DatePipe) { }
-
-
+    subscriptionWithUserData: Subscription;
+    orgname = '';
+    constructor(private httpClient: HttpClient, public datepipe: DatePipe, public commonService: CommonService) {
+        this.subscriptionWithUserData = this.commonService.getorgname().subscribe(res => {
+            return this.orgname = res.data;
+        })
+    }
 
     getCampaigns(obj) {
         return this.httpClient.get(`${this.baseURL}/neighbourHood/getCampaigns.php`, { headers: this.headers });
@@ -65,7 +72,10 @@ export class DataService {
         return this.httpClient.post(`${this.baseURLCOVID}/getDetailData.php`, obj, { headers: this.headers });
         // return this.httpClient.post(`${this.baseURL}/neighbourHood/getDetailData.php`, obj, { headers: this.headers });
     }
-
+    getCorrLocDetailsNewOne(obj) {
+        var url = `${this.baseEsSolv}/places?id=${obj.id}`;
+        return this.httpClient.get(url, { headers: this.headers });
+    }
     //New APIs
     getDashboardData(obj) {
         return this.httpClient.post(`${this.baseURLCOVID}/neighbourHood/getDetailData.php`, obj, { headers: this.headers });
@@ -90,8 +100,12 @@ export class DataService {
         });
         return menuItems;
     }
+    
     CollectionsDataES(obj) {
-        console.log(obj);
+        this.subscriptionWithUserData = this.commonService.getorgname().subscribe(res => {
+            this.orgname = res.data;
+        });
+        // console.log(obj);
         let menuItems = this.getSubMenus(obj);
         let params = {
             menuData: menuItems,
@@ -100,8 +114,12 @@ export class DataService {
             bottomRightLat: "" + this.bottomRight.lat,
             bottomRightLon: "" + this.bottomRight.lng,
         };
-        console.log(params);
-        return this.httpClient.get(`${this.baseURLES}/places`, { params: params, headers: this.headers });
+        if (this.orgname != "All" && this.orgname != '') { params['creatorOrg'] = this.orgname};
+
+        var url = `${this.baseEsSolv}/places`;
+        // console.log(this.orgname);
+        // console.log(params);
+        return this.httpClient.get(url, { params: params, headers: this.headers });
     }
     CollectionsDataESByZone(obj, zoneFilters: string[]) {
         if(zoneFilters && zoneFilters.length > 0) {
@@ -123,45 +141,75 @@ export class DataService {
             return this.CollectionsDataES(obj);
         }
     }
-    getCategoryImpactsDataES(obj) {
-        console.log(obj);
-        let menuItems = this.getSubMenus(obj);
-        let params = {
-            menuData: menuItems,
-            // topLeftLat: "" + obj.topLeftLat,
-            // topLeftLon: "" + obj.topLeftLon,
-            // bottomRightLat: "" + obj.bottomRightLat,
-            // bottomRightLon: "" + obj.bottomRightLon,
-            // latitude: "" + obj.latitude,
-            // longitude: "" + obj.longitude
-        };
-        console.log(params);
-        return this.httpClient.get(`${this.baseURLES}/categoryImpacts`, { params: params, headers: this.headers });
-    }
     getCountDataES(obj) {
+        this.subscriptionWithUserData = this.commonService.getorgname().subscribe(res => {
+            this.orgname = res.data;
+        });
         let menuItems = this.getSubMenus(obj);
         let params = {
             menuData: menuItems,
             latitude: "" + obj.latitude,
             longitude: "" + obj.longitude,
-            radius: '30km'
+            radius: '30km',
         };
-        return this.httpClient.get(`${this.baseURLES}/categoryCounts`, { params: params, headers: this.headers });
+        if (this.orgname != "All" && this.orgname != '') { params['creatorOrg'] = this.orgname };
+        var url = `${this.baseEsSolv}/categoryCounts`;
+        return this.httpClient.get(url, { params: params, headers: this.headers });
+    }
+    getCategoryImpactsDataES(obj, withparam = false) {
+        this.subscriptionWithUserData = this.commonService.getorgname().subscribe(res => {
+            this.orgname = res.data;
+        });
+        // console.log(obj);
+        let menuItems = this.getSubMenus(obj);
+        let params = {};
+        var url = `${this.baseEsSolv}/categoryImpacts`;
+        if (withparam) {
+            params = {
+                menuData: menuItems,
+                topLeftLat: "" + obj.topLeftLat,
+                topLeftLon: "" + obj.topLeftLon,
+                bottomRightLat: "" + obj.bottomRightLat,
+                bottomRightLon: "" + obj.bottomRightLon,
+                latitude: "" + obj.latitude,
+                longitude: "" + obj.longitude,
+            };
+            if (this.orgname != "All" && this.orgname != '') { params['creatorOrg'] = this.orgname };
+        } else {
+            params = {
+                menuData: menuItems,
+            };
+        }
+        // console.log(params);
+        return this.httpClient.get(url, { params: params, headers: this.headers });
     }
     getCountAllDataES(obj) {
         let menuItems = this.getSubMenus(obj);
         let params = {
             menuData: menuItems
         };
-        return this.httpClient.get(`${this.baseURLES}/categoryCounts`, { params: params, headers: this.headers });
+        var url = `${this.baseEsSolv}/categoryCounts`;
+        return this.httpClient.get(url, { params: params, headers: this.headers });
     }
+    /**
+     * get oged Inuser Info
+     */
     getUserInfo() {
         return this.httpClient.get(`/api/v1/user/data/read`, { headers: this.headers });
     }
 
     /**
-     * Update ES  
-     * @param obj 
+     * Get Orgs List
+     * Creaters List
+     */
+    getOrgsList() {
+        return this.httpClient.get(`${this.baseEsSolv}/creators`, { headers: this.headers });
+    }
+
+
+    /**
+     * Update ES
+     * @param obj
      */
     updateESRecord(obj, ass = '') {
         var settings = {
@@ -174,7 +222,7 @@ export class DataService {
             "data": {
                 "place_org_id": obj.place_org_id,
                 "closed_at": ass != 'assigned' ? this.datepipe.transform(new Date(), 'yyyy-MM-dd') : '',
-                "closed_by": ass != 'assigned' ? obj.closed_by: '',
+                "closed_by": ass != 'assigned' ? obj.closed_by : '',
                 "subcategory": obj.place_org_subcategory
             }
         }

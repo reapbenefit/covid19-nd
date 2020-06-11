@@ -28,13 +28,14 @@
           <tr *ngIf="locationDetails.ward_id != '' && locationDetails.ward_id != undefined"><td><strong>Ward ID:&nbsp;</strong></td><td><span>{{locationDetails.ward_id}}</span></td></tr>
           <tr *ngIf="locationDetails.wardName != '' && locationDetails.wardName != undefined"><td><strong>Ward Name:&nbsp;</strong></td><td><span *ngIf="locationDetails.wardName != ''">{{locationDetails.wardName}}</span><span *ngIf="locationDetails.wardName == ''">NA</span></td></tr>
           <tr *ngIf="locationDetails.name != '' && locationDetails.name != undefined"><td><strong>Name:&nbsp;</strong></td><td><span>{{locationDetails.name}}</span></td></tr>
-          <tr *ngIf="locationDetails.type != '' && locationDetails.type != undefined"><td><strong>Type:&nbsp;</strong></td><td><span>{{locationDetails.type}}</span></td></tr>
+         
           <tr *ngIf="locationDetails.streetName != '' && locationDetails.streetName != undefined"><td><strong>streetName:&nbsp;</strong></td><td><span>{{locationDetails.streetName}}</span></td></tr>
           <tr *ngIf="locationDetails.address != '' && locationDetails.address != undefined"><td><strong>Address:&nbsp;</strong></td><td><span>{{locationDetails.address}}</span></td></tr>
           <tr *ngIf="locationDetails.contactNum != '' && locationDetails.contactNum != undefined"><td><strong>Contact:&nbsp;</strong></td><td><span>{{locationDetails.contactNum}}</span></td></tr>
           <tr *ngIf="locationDetails.manager_name != '' && locationDetails.manager_name != undefined"><td><strong>Manager Name:&nbsp;</strong></td><td><span>{{locationDetails.manager_name}}</span></td></tr>
           <tr *ngIf="locationDetails.facility_type != '' && locationDetails.facility_type != undefined"><td><strong>Facility Type:&nbsp;</strong></td><td><span>{{locationDetails.facility_type}}</span></td></tr>
           <tr *ngIf="locationDetails.category != '' && locationDetails.category != undefined"><td><strong>Category:&nbsp;</strong></td><td><span>{{locationDetails.category}}</span></td> </tr>
+          <tr *ngIf="locationDetails.subcategory != '' && locationDetails.subcategory != undefined"><td><strong>Sub Category:&nbsp;</strong></td><td><span>{{locationDetails.subcategory}}</span></td> </tr>
           <tr *ngIf="locationDetails.status != '' && locationDetails.status != undefined"><td><strong>Status:&nbsp;</strong></td><td><span>{{locationDetails.status}}</span></td> </tr>
           <tr *ngIf="locationDetails.provider_website != '' && locationDetails.provider_website != undefined"><td><strong>Website:&nbsp;</strong></td><td><span>{{locationDetails.provider_website}}</span></td></tr>
           <tr *ngIf="locationDetails.gents != '' && locationDetails.gents != undefined"><td><strong>Gents:&nbsp;</strong></td><td><span>{{locationDetails.gents}}</span></td> </tr>
@@ -52,6 +53,28 @@
           <tr *ngIf="locationDetails.complaintNumber != '' && locationDetails.complaintNumber != undefined"><td><strong>Complaint Number:&nbsp;</strong></td><td><span>{{locationDetails.complaintNumber}}</span></td></tr>
           <tr *ngIf="locationDetails.NoOfLikes != '' && locationDetails.NoOfLikes != undefined"><td><strong>No Of Likes:&nbsp;</strong></td><td><span>{{locationDetails.NoOfLikes}}</span></td></tr>
           <tr *ngIf="locationDetails.wards != '' && locationDetails.wards != undefined"><td><strong>Wards:&nbsp;</strong></td><td><span>{{locationDetails.wards}}</span></td></tr>
+          
+          <tr *ngIf="locationDetails['data']">
+            <td><strong>Description:&nbsp;</strong></td>
+            <td><span [innerHTML]="locationDetails.data | parseUrl"></span></td>
+          </tr>
+          
+          <tr *ngIf="!userName">
+            <td><strong></strong></td>
+            <td>
+              <span (click)="userLogin()" style="
+                  color: #00df8e;
+                  font-weight: 500;
+                  text-decoration: underline;
+                  cursor: pointer;
+              ">Login to see more details. </span>
+            </td>
+          </tr>
+
+          <tr *ngIf="locationDetails['phone'] && userName">
+            <td><strong>Phone:&nbsp;</strong></td>
+            <td><span>{{locationDetails['phone']}}</span></td>
+          </tr>
           
 
           <ng-template [ngIf]="!locationDetails['numberPopup']">

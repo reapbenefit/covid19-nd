@@ -19,10 +19,10 @@ export class MapsComponentComponent implements OnInit {
 
   @Input() MapData;
   @Output() wardDetails = new EventEmitter();
-  public zoom: number = 10;
+  public zoom: number = 11;
   // initial center position for the map
-  public lat: any = 12.9796734;
-  public lng: any = 77.5890556;
+  public lat;
+  public lng;
 
   public infoWindowOpened = null
   // public zoneInfoWindowOpened = null
@@ -53,8 +53,8 @@ export class MapsComponentComponent implements OnInit {
   ngOnInit() {
 
     /**
-     * UserName and Role Subscribe based on  
-     * App.compoenent.ts file 
+     * UserName and Role Subscribe based on
+     * App.compoenent.ts file
      */
     this.subscriptionWithUserName = this.commonService.getusername().subscribe(res => {
       console.log(res);
@@ -217,7 +217,7 @@ export class MapsComponentComponent implements OnInit {
       "city": Number(this.dataService.SelectCityID)
     }
 
-    this.dataService.getCorrLocDetails(obj).subscribe(data => {
+    this.dataService.getCorrLocDetailsNewOne(obj).subscribe(data => {
       console.log(data);
       this.responceData = data;
       if (this.responceData != null) {
@@ -228,7 +228,6 @@ export class MapsComponentComponent implements OnInit {
         }
         this.locationDetails = this.responceData.data;
       }
-      // this.select_marker(data);
     });
   }
 
@@ -295,6 +294,9 @@ export class MapsComponentComponent implements OnInit {
   openURL(URL) {
     window.open(URL);
   }
+  userLogin() {
+    window.location.replace('/home');
+  }
 
 
   /**
@@ -337,7 +339,7 @@ export class MapsComponentComponent implements OnInit {
   }
 
   /**
-   * Save user Info for 
+   * Save user Info for
    * start asigning User
    */
   validateMobileNumber(number, item) {
@@ -412,8 +414,8 @@ export class MapsComponentComponent implements OnInit {
 
   /**
    * Close Action
-   * @param type 
-   * @param data 
+   * @param type
+   * @param data
    */
   givenbyme(type, data) {
     this.loaderAction = true;
@@ -496,4 +498,3 @@ export class MapsComponentComponent implements OnInit {
 
 
 }
-

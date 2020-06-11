@@ -37,6 +37,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
+import { ParseUrl } from './parse-url.pipe';
+import { DynamicContent } from './dynamic-content.directive';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,7 +53,9 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     ZoneCreatorComponent,
     ZoneDetailsDialogComponent,
     ZoneReviewDialogComponent,
-    RoleFilterComponent
+    RoleFilterComponent,
+    ParseUrl,
+    DynamicContent
   ],
   imports: [
     BrowserModule,

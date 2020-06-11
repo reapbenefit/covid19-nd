@@ -44,6 +44,7 @@ app.use(bodyParser.json({ limit: '30mb' }));
 // serve the static files
 app.use('/', express.static(path.join(__dirname, '/client/dist/Neighbourhood/')));
 app.use('/home', keycloak.protect(), express.static(path.join(__dirname, '/client/dist/Neighbourhood/')));
+app.use('/map/:orgname?', express.static(path.join(__dirname, '/client/dist/Neighbourhood/')));
 // protect test route with the keycloak
 // app.get('/test', keycloak.protect(),  (req, res) =>  {
 //     res.send("OK")
@@ -199,7 +200,6 @@ function sanitize_input(req, input_object) {
         }
     })
 }
-
 
 /**
  * MySql Db Connection and service
@@ -788,24 +788,3 @@ app.listen(3000, function () {
     console.log('Listening at http://localhost:3000');
     console.log('serving angular app from -> ', path.join(__dirname, '/client/dist/Neighbourhood/'));
 });
-
-// CHARACTER_MAXIMUM_LENGTH: null
-// CHARACTER_OCTET_LENGTH: null
-// CHARACTER_SET_NAME: null
-// COLLATION_NAME: null
-// COLUMN_COMMENT: ""
-// COLUMN_DEFAULT: null
-// COLUMN_KEY: "PRI"
-// COLUMN_NAME: "place_org_id"
-// COLUMN_TYPE: "int(11)"
-// DATA_TYPE: "int"
-// DATETIME_PRECISION: null
-// EXTRA: "auto_increment"
-// IS_NULLABLE: "NO"
-// NUMERIC_PRECISION: 10
-// NUMERIC_SCALE: 0
-// ORDINAL_POSITION: 1
-// PRIVILEGES: "select,insert,update,references"
-// TABLE_CATALOG: "def"
-// TABLE_NAME: "public_data_place_org_table"
-// TABLE_SCHEMA: "theapp"

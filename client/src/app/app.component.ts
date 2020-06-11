@@ -12,6 +12,8 @@ import { GoogleAnalyticsService } from './services/google-analytics.service';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 declare const google: any;
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -142,13 +144,18 @@ export class AppComponent {
   private zoneTags;
   private zoneTagsTree;
 
-  constructor(private deviceService: DeviceDetectorService, private dataService: DataService,
+  constructor(private router: Router, private location: Location, private deviceService: DeviceDetectorService, private dataService: DataService,
     private modalService: NgbModal,
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private commonService: CommonService,
     private KeycloakService: KeycloakService,
     private googleAnalyticsService: GoogleAnalyticsService) {
+
+    // Get Creaters OrgsList
+    this.getOrgList();
+    // Calling Before NgInt to set Url  
+    this.getUrlParameters();
   }
 
   /**
@@ -348,7 +355,7 @@ export class AppComponent {
       this.WardSelected = undefined;
       this.dataService.wardDetails({ "cityId": this.SelectedCity }).subscribe(data => {
         var tempWardData: any = data;
-        this.Wards = tempWardData['data'] ? tempWardData.data : [];
+        this.Wards = tempWardData ? tempWardData['data'] : [];
         this.ShowWardSelect = false;
         setTimeout(() => {
           this.ShowWardSelect = true;
@@ -372,7 +379,8 @@ export class AppComponent {
     this.NewObj.cityId = this.SelectedCity == undefined ? 0 : this.SelectedCity;
     this.NewObj.wardId = this.wardSelected == undefined ? 0 : this.wardSelected;
     this.NewObj.menuData = [];
-    this.NewObj.level = this.dataService.zoom;
+    // this.NewObj.level = this.dataService.zoom;
+    this.NewObj.level = event.value['zoom'] ? event.value['zoom'] : this.dataService.zoom;
     this.NewObj.latitude = Number(this.dataService.SelectedCityLat);
     this.NewObj.longitude = Number(this.dataService.SelectedCityLng);
     this.CollectionsData(this.NewObj);
@@ -793,14 +801,6 @@ export class AppComponent {
   dragchanges = [];
 
   ngOnInit() {
-
-    // For Testing
-    // this.dataService.updateESRecord({
-    //   "place_org_id": 53784,
-    //   "closed_by": 'ngotestuser',
-    //   "place_org_subcategory": 'Rations-Asked'
-    // });
-
     // Login User
     this.LoginUserInfo();
 
@@ -810,22 +810,7 @@ export class AppComponent {
     /**
      * Get New coord's
      */
-    this.subscriptionWithCord = this.commonService.getCord().subscribe((cordnates) => {
-      this.NewObj.level = this.dataService.zoom;
-      this.NewObj.latitude = cordnates.data.lat;
-      this.NewObj.longitude = cordnates.data.lng;
-
-      this.dragchanges.push(this.NewObj)
-      setTimeout(() => {
-        console.log("start");
-        console.log(this.dragchanges[this.dragchanges.length - 1]);
-        this.CollectionsData(this.NewObj);
-      }, 5000);
-
-    }, err => {
-      console.log(err);
-    }, () => {
-    })
+    this.call_CollectionsDataService();
 
     /**
      * 1.) Get Cities service call
@@ -946,7 +931,7 @@ export class AppComponent {
   public ShowCitySelect = true;
   public ShowWardSelect = true;
   TreeMenuItemsSelect(event, menu) {
-    console.log({ event, menu });
+    // console.log({ event, menu });
     if (event.length > 0) {
       let menuIncludes = false;
       let menuIndex;
@@ -981,7 +966,7 @@ export class AppComponent {
       this.NewObj.level = this.dataService.zoom;
       this.NewObj.latitude = Number(this.NewObj.latitude);
       this.NewObj.longitude = Number(this.NewObj.longitude);
-      console.log(this.NewObj);
+      // console.log(this.NewObj);
       this.CollectionsData(this.NewObj);
     } else {
       for (let menuSel2 = 0; menuSel2 < this.NewObj.menuData.length; menuSel2++) {
@@ -1242,9 +1227,11 @@ export class AppComponent {
       });
     } else {
       this.geoJson = {type: "FeatureCollection", features: []};
-      this.ServiceRequest = this.dataService.CollectionsDataESByZone(obj, []).subscribe(function(data) {
-        this.handleCollectionsDataESResponse(data, obj);
-      }.bind(this));
+      if (this.dataService.topLeft.lat != this.dataService.bottomRight.lat && this.dataService.topLeft.lng != this.dataService.bottomRight.lng) {
+        this.ServiceRequest = this.dataService.CollectionsDataESByZone(obj, []).subscribe(function(data) {
+          this.handleCollectionsDataESResponse(data, obj);
+        }.bind(this));
+      }
     }
   }
 
@@ -1258,8 +1245,27 @@ export class AppComponent {
     })
     // this.mapData = resMap.data;
     this.mapData = newData;
-    console.log(this.mapData);
+    // console.log(this.mapData);
     this.getCountBased_On_Location(obj);
+  }
+
+  call_CollectionsDataService() {
+    this.subscriptionWithCord = this.commonService.getCord().subscribe((cordnates) => {
+      this.NewObj.level = this.dataService.zoom;
+      this.NewObj.latitude = cordnates.data.lat;
+      this.NewObj.longitude = cordnates.data.lng;
+
+      this.dragchanges.push(this.NewObj)
+      setTimeout(() => {
+        // console.log("start");
+        // console.log(this.dragchanges[this.dragchanges.length - 1]);
+        this.CollectionsData(this.NewObj);
+      }, 5000);
+
+    }, err => {
+      console.log(err);
+    }, () => {
+    })
   }
 
   SingleSelectMenuDropDown(event, MenuID) {
@@ -1345,15 +1351,22 @@ export class AppComponent {
 
   // Ra Custom Code
   // Default Categories Seletion Value
-  defaultCategoriesSelect = 92; //"People Needing Help" value is 101  
+  // defaultCategoriesSelect = 92; 
+  defaultCategoriesSelect = [93, 117, 125];
+  // Do Some Preselect If OrName is there
+  defaultSelect_for_orgname = [146, 143, 145, 144, 118, 123, 135, 142, 141, 140, 119, 134, 136, 132, 139, 122];
   defaultSelectTrigger() {
-    setTimeout(() => {
-      this.MenuItems && this.MenuItems.forEach(ele => {
-        if (ele[0]['value'] == this.defaultCategoriesSelect) {
-          this.selectAll(ele);
+    this.resetAllSelection();
+    let temp = this.orgListModel != '' ? this.defaultSelect_for_orgname : this.defaultCategoriesSelect;
+    // setTimeout(() => {
+    this.MenuItems && this.MenuItems.forEach(items => {
+      items[0]['internalChildren'].forEach(child => {
+        if (temp.indexOf(child.value) != -1) {
+          this.singleselect(child, items);
         }
-      })
-    }, 1000)
+      });
+    });
+    // }, 2000);
   }
 
 
@@ -1366,6 +1379,7 @@ export class AppComponent {
         this.dataService.SelectedCityLng = position.coords.longitude;
         this.SelectCity({
           "value": {
+            "zoom": 13,
             "cityName": "Your Location Location",
             "lat": this.dataService.SelectedCityLat,
             "lng": this.dataService.SelectedCityLng
@@ -1650,7 +1664,7 @@ export class AppComponent {
   @ViewChild('mapref') mapref;
   zoomToPlace(item, i) {
     // if (this.mapref && this.mapref.mapcomref) {
-    //   this.mapref.mapcomref.select_marker(item);      
+    //   this.mapref.mapcomref.select_marker(item);
     // }
   }
 
@@ -1662,14 +1676,27 @@ export class AppComponent {
   overAll_Rec_serviceReqcount = 0;
   getoverrallrectangleCounts_unsubscribe = null;
   getoverrallrectangleCountData = [];
+
+  right_Resources_Array = [126, 98, 99, 138];
+  right_Resources_Count = 0;
+
+  right_Volunteers_Array = [126, 98, 99, 138];
+  right_Volunteers_Count = 0;
+
+  right_Peopleneedingsupport_Array = [136, 140, 132, 118, 123, 143, 101];
+  right_Peopleneedingsupport_Count = 0;
+
+  right_Peoplesupported_Array = [134, 135, 141, 142, 145, 146];
+  right_Peoplesupported_Count = 0;
+
   getoverrallrectangleCounts() {
     let tempData = [];
     this.MenuItems && this.MenuItems.map((items) => {
-      if (items[0].value == '120' || items[0].value == '101') {
-        items[0] && items[0]['internalChildren'].forEach(element => {
-          tempData.push(element.value)
-        });
-      }
+      // if (items[0].value == '120' || items[0].value == '101') {
+      items[0] && items[0]['internalChildren'].forEach(element => {
+        tempData.push(element.value)
+      });
+      // }
     });
     let tempObj = {
       "menuData": [
@@ -1684,11 +1711,13 @@ export class AppComponent {
       "latitude": this.dataService.bottomRight.lat,
       "longitude": this.dataService.bottomRight.lng
     }
-    console.log(tempObj);
+    // console.log(tempObj);
     this.getoverrallrectangleCounts_unsubscribe ? this.getoverrallrectangleCounts_unsubscribe.unsubscribe() : null;
-    this.getoverrallrectangleCounts_unsubscribe = this.dataService.getCategoryImpactsDataES(tempObj).subscribe(res => {
+    this.getoverrallrectangleCounts_unsubscribe = this.dataService.getCategoryImpactsDataES(tempObj, true).subscribe(res => {
       console.log(res['data']);
       this.overAll_Rec_serviceReqcount = 0;
+
+
       if (res && res['data'].length) {
         var responseData = res['data'];
         this.MenuItems.forEach(menu => {
@@ -1704,13 +1733,137 @@ export class AppComponent {
           });
           menu[0]['overall_rec_count_total'] = overall_rec_count_total;
         })
+        console.log("With Bounding impats: overall_rec_count_total");
         console.log(this.MenuItems);
+
+        /**
+         * Setting Counts for Right Side Section
+         */
+        this.right_Resources_Count = 0;
+        this.right_Volunteers_Count = 0;
+        this.right_Peopleneedingsupport_Count = 0;
+        this.right_Peoplesupported_Count = 0;
+
+        this.MenuItems.forEach(menu => {
+          menu[0]['internalChildren'].forEach(val => {
+            if (this.right_Resources_Array.indexOf(val.value) !== -1) {
+              this.right_Resources_Count = this.right_Resources_Count + val.overall_rec_count;
+            }
+            if (this.right_Volunteers_Array.indexOf(val.value) !== -1) {
+              this.right_Volunteers_Count = this.right_Volunteers_Count + val.overall_rec_count;
+            }
+            if (this.right_Peopleneedingsupport_Array.indexOf(val.value) !== -1) {
+              this.right_Peopleneedingsupport_Count = this.right_Peopleneedingsupport_Count + val.overall_rec_count;
+            }
+            if (this.right_Peoplesupported_Array.indexOf(val.value) !== -1) {
+              this.right_Peoplesupported_Count = this.right_Peoplesupported_Count + val.overall_rec_count;
+            }
+          });
+        });
+        console.log("right_Resources_Count : " + this.right_Resources_Count);
+        console.log("right_Volunteers_Count : " + this.right_Volunteers_Count);
+        console.log("right_Peopleneedingsupport_Count : " + this.right_Peopleneedingsupport_Count);
+        console.log("right_Peoplesupported_Count : " + this.right_Peoplesupported_Count);
+
+
         this.getoverrallrectangleCountData = responseData;
       }
     }, err => {
       if (this.overAll_Rec_serviceReqcount < 2) {
         this.overAll_Rec_serviceReqcount = this.overAll_Rec_serviceReqcount + 1;
         this.getoverrallrectangleCounts();
+      }
+      console.log(err);
+    }, () => {
+      console.log("Completed");
+    })
+
+  }
+
+  overAll_Rec_serviceReqcount_without = 0;
+  getoverrallrectangleCounts_unsubscribe_without = null;
+  getoverrallrectangleCountData_with = [];
+
+  People_needing_support_Array = [136, 140, 132, 118, 123, 143, 101];
+  People_needing_support = 0;
+
+  People_supported_Array = [134, 135, 141, 142, 145, 146];
+  People_supported = 0;
+  getoverrallrectangleCounts_without() {
+    let tempData = [];
+    this.MenuItems && this.MenuItems.map((items) => {
+      // if (items[0].value == '120' || items[0].value == '101') {
+      items[0] && items[0]['internalChildren'].forEach(element => {
+        tempData.push(element.value)
+      });
+      // }
+    });
+    let tempObj = {
+      "menuData": [
+        {
+          "submenus": tempData.join(),
+        }
+      ],
+      "topLeftLat": this.dataService.topLeft.lat,
+      "topLeftLon": this.dataService.topLeft.lng,
+      "bottomRightLat": this.dataService.bottomRight.lat,
+      "bottomRightLon": this.dataService.bottomRight.lng,
+      "latitude": this.dataService.bottomRight.lat,
+      "longitude": this.dataService.bottomRight.lng
+    }
+    // console.log(tempObj);
+    this.getoverrallrectangleCounts_unsubscribe_without ? this.getoverrallrectangleCounts_unsubscribe_without.unsubscribe() : null;
+    this.getoverrallrectangleCounts_unsubscribe_without = this.dataService.getCategoryImpactsDataES(tempObj, false).subscribe(res => {
+      console.log(res['data']);
+      this.overAll_Rec_serviceReqcount_without = 0;
+      if (res && res['data'].length) {
+        var responseData = res['data'];
+        this.MenuItems.forEach(menu => {
+          let overall_rec_count_without_total = 0;
+          menu[0]['internalChildren'].forEach(element => {
+            let overall_rec_count_without = responseData.filter(val => {
+              if ((val.menuData).toString() == (element.value).toString()) { return val }
+            })
+            if (overall_rec_count_without[0]) {
+              element['overall_rec_count_without'] = overall_rec_count_without[0]['impact'];
+              overall_rec_count_without_total = overall_rec_count_without_total + parseInt(overall_rec_count_without[0]['impact'])
+            }
+          });
+          menu[0]['overall_rec_count_without_total'] = overall_rec_count_without_total;
+        })
+
+        console.log("With Bounding impats: overall_rec_count_without_total");
+        console.log(this.MenuItems);
+        console.log(this.MenuItems[1][0]['internalChildren']);
+
+        /**
+         * Setting count Without bounding boxes
+         * People_needing_support
+         */
+        this.People_needing_support = 0;
+        this.People_supported = 0;
+        this.MenuItems[1][0]['internalChildren'].forEach(val => {
+          if (this.People_needing_support_Array.indexOf(val.value) !== -1) {
+            this.People_needing_support = this.People_needing_support + val.overall_rec_count_without;
+          }
+          if (this.People_supported_Array.indexOf(val.value) !== -1) {
+            this.People_supported = this.People_supported + val.overall_rec_count_without;
+          }
+        })
+        console.log("People_needing_support: " + this.People_needing_support);
+        console.log("People_supported:" + this.People_supported);
+
+
+
+
+
+        this.getoverrallrectangleCountData_with = responseData;
+      }
+
+    }, err => {
+      if (this.overAll_Rec_serviceReqcount_without < 2) {
+        this.overAll_Rec_serviceReqcount_without = this.overAll_Rec_serviceReqcount_without + 1;
+        this.getoverrallrectangleCounts_without();
       }
       console.log(err);
     }, () => {
@@ -1785,7 +1938,7 @@ export class AppComponent {
   getoverrallCountser_call = 0;
   detail_list_number = 100;
   getCountBased_On_Location(obj?: any) {
-    console.log(obj);
+    // console.log(obj);
     if (obj && obj['latitude'] && obj['longitude']) {
       this.NewObj.latitude = obj['latitude'];
       this.NewObj.longitude = obj['longitude'];
@@ -1803,6 +1956,7 @@ export class AppComponent {
     }
     setTimeout(() => { // Time to get Boundiries , dut to map loading slow
       this.getoverrallrectangleCounts();
+      this.getoverrallrectangleCounts_without(); // with Bounding
     }, 500);
 
     let tempData = [];
@@ -1822,12 +1976,12 @@ export class AppComponent {
         "latitude": this.NewObj.latitude,
         "longitude": this.NewObj.longitude
       }
-      console.log(tempObj);
+      // console.log(tempObj);
       this.getCountBased_On_Location_unsubscribe ? this.getCountBased_On_Location_unsubscribe.unsubscribe() : null;
       this.getCountBased_On_Location_unsubscribe = this.dataService.getCountDataES(tempObj).subscribe(res => {
         this.lat_ln_serviceReqcount = 0;
         this.detail_list_number = 100;
-        console.log(res);
+        // console.log(res);
         if (res && res['data'].length) {
           this.CountsListArray = res['data'];
           this.MenuItems.forEach(menu => {
@@ -1846,12 +2000,55 @@ export class AppComponent {
         }
         console.log(err);
       }, () => {
-        console.log("Completed");
+        // console.log("Completed");
       })
     }
 
   }
 
+  /**
+   * Get Org List 
+   * Creaters List
+   */
+  orgsListArray = [];
+  orgListModel = '';
+  getOrgList() {
+    this.dataService.getOrgsList().subscribe(res => {
+      if (res['success'] == true) {
+        this.orgsListArray = res['data'] || [];
+        console.log(this.orgsListArray);
+      }
+    }, err => {
+      console.log(err);
+    }, () => {
+      console.log("Completed");
+    });
+  }
+  changeOrgList(event) {
+    // window.open("/map/" + this.orgListModel, "_self");
+    history.pushState({}, null, "/map/" + this.orgListModel.replace(/ /g, '-'));
+    this.getUrlParameters();
+
+    if (this.defaultpage != 'LocalData') {
+      this.pageLocaLData();
+    }
+  }
+
+  /**
+   * Get URL Parameters to find current URL we are in
+   */
+  getUrlParameters() {
+    if (window.location.pathname.indexOf('/map/') == 0) {
+      var orgname = (window.location.pathname.split("/")).filter(val => val != '' ? true : false);
+      // setting OrgName in service 
+      this.commonService.setorgname(orgname[1] ? orgname[1].replace(/(%20)/g, ' ').replace(/(-)/g, ' ').trim() : '');
+      this.orgListModel = orgname[1] ? orgname[1].replace(/(%20)/g, ' ').replace(/(-)/g, ' ').trim() : '';
+      console.log(this.orgListModel);
+    } else {
+      this.commonService.setorgname('');
+    }
+    console.log(this.orgListModel);
+  }
 
 
 
@@ -1887,12 +2084,26 @@ export class AppComponent {
           userRole: this.userRole
         });
 
+        setTimeout(() => {
+          if (this.userName || this.orgListModel) {
+            // Shoing Map Page
+            this.pageLocaLData();
+          }
+        }, 500);
+
         // Get All givenList
         this.getUserAssignedList();
 
+
       }
     }, (err) => {
-      console.log(err);
+      // If not Logged In Keylok send error So 
+      setTimeout(() => {
+        if (this.userName || this.orgListModel) {
+          // Shoing Map Page
+          this.pageLocaLData();
+        }
+      }, 500);
     }, () => {
       console.log("User Info!")
     })
@@ -1945,7 +2156,7 @@ export class AppComponent {
    * start asigning User
    */
   validateMobileNumber(number, item) {
-    if (parseInt(number) != NaN && number.toString().length < 13 ){
+    if (parseInt(number) != NaN && number.toString().length < 13) {
       this.startAssignMe(this.user_Assign_Type, this.user_Assign_data, number);
       item['numberPopup'] = false;
     } else {
@@ -1958,14 +2169,14 @@ export class AppComponent {
 
   user_Assign_Type;
   user_Assign_data;
-  
+
   assignme(type, data) {
     data['numberPopup'] = true;
     this.user_Assign_Type = type;
     this.user_Assign_data = data;
   }
 
-  startAssignMe(type, data, number){
+  startAssignMe(type, data, number) {
     this.loaderAction = true;
     console.log({
       type: type,
@@ -1985,9 +2196,9 @@ export class AppComponent {
     }
     this.dataService.assignme(obj).subscribe(res => {
       console.log(res);
-      if (res && res['assigned'] == true){
+      if (res && res['assigned'] == true) {
         alert("Sorry Already action taken by someone.")
-      }else if(res && res['status'] == 'success'){
+      } else if (res && res['status'] == 'success') {
         // Get All givenList
         alert("Assigned successfully");
         // updte ES DB
@@ -1996,18 +2207,18 @@ export class AppComponent {
           "closed_by": this.userName,
           "place_org_subcategory": res['data']['place_org_subcategory']
         }, 'assigned');
-        
+
         this.getUserAssignedList();
-      }else{
+      } else {
         alert(res['message']);
       }
 
-    },err=>{
+    }, err => {
       console.log(err);
-    },()=>{
-        this.loaderAction = false;
+    }, () => {
+      this.loaderAction = false;
       console.log("Service completed");
-    }) 
+    })
   }
 
   /**
@@ -2089,7 +2300,7 @@ export class AppComponent {
       console.log("Service completed");
     })
   }
-  
+
   /**
    * Get total Closed Asignment based on User
    */
@@ -2106,7 +2317,7 @@ export class AppComponent {
     this.dataService.GettotalClosedAsignmentUser(obj).subscribe(res => {
       console.log(res);
       if (res && res['status'] == 'success') {
-        this.total_cosed_Asss  = res['data'].length;
+        this.total_cosed_Asss = res['data'].length;
         console.log(this.allAssignedList);
       } else {
         console.log(res);
@@ -2227,7 +2438,7 @@ export class InputsearchPipe {
           ((val['category'] != undefined ? val['category'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
           ((val['subcategory'] != undefined ? val['subcategory'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
           ((val['cityName'] != undefined ? val['cityName'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
-          ((val['wardName'] != undefined ? val['wardName'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 
+          ((val['wardName'] != undefined ? val['wardName'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1
         ) {
           val['index'] = index;
           return true;

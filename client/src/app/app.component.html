@@ -140,7 +140,7 @@
         </div>
         <div class="col-lg-12">
           <iframe
-            src="http://internaldashboard.solveninja.org:4000/public/dashboard/07b9f145-5be8-4206-942e-7251e15791d9"
+            src="https://analytics.zoho.in/open-view/148665000000034128"
             frameborder="0" style="height: calc(100vh - 35px);;width: 100%"></iframe>
         </div>
       </div>
@@ -188,7 +188,7 @@
                 target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">Local Schemes</a>
 
               <a *ngIf="(activeRole.indexOf('NGOAdmin') !=-1)" target="_blank"
-                href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba">Analytics</a>
+                href="https://analytics.zoho.in/open-view/148665000000034128">Analytics</a>
 
               <a href="JavaScript:void(0)">
                 <span class="headerlink">Contribute <span class="arrowme fa fa-angle-down"></span></span>
@@ -202,11 +202,11 @@
                     target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">Local Schemes</a>
 
                   <a *ngIf="!(activeRole.indexOf('NGOAdmin') !=-1)" target="_blank"
-                    href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba">Analytics</a>
+                    href="https://analytics.zoho.in/open-view/148665000000034128">Analytics</a>
 
                   <a href="JavaScript:void(0)" (click)="NeighbourhoodMultilingulSelfAssessment()">Multilingual Self
                     Assessment</a>
-                  <a target="_blank" href="https://covidselfcheck.app/">Self Assessment </a>
+                    <a target="_blank" href="https://solveninja.org/partners/">Partners</a>
 
                   <a href="JavaScript:void(0)" (click)="NeighbourhoodData()">Social distancing </a>
 
@@ -241,7 +241,7 @@
                 <h3 class="text-center" style="font-weight: 300 !important;margin-bottom: 20px;margin-left: -10px;">Join
                   Hands With Us</h3>
 
-                <ul class="web-big-button-icon-list">
+                <!-- <ul class="web-big-button-icon-list">
                   <li>
                     <div (click)="NeighbourhoodData()">
                       <i class="fa fa-home"></i>
@@ -260,12 +260,29 @@
                       <span>Volunteer </span>
                     </div>
                   </li>
-                </ul>
+                </ul> -->
 
-                <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton2()">Help those in
+                <label style="font-weight: 600;margin-left: 1px;">Browse by Organisation</label>
+                <div class="orglist_dropdown" style="margin-bottom: 8px;">
+                  <select (change)="changeOrgList($event)" [(ngModel)]="orgListModel">
+                    <option value="" disabled>Select Organisation</option>
+                    <option value="All">All</option>
+                    <option *ngFor="let item of orgsListArray" [ngValue]="item.creator_org_name">
+                      {{item.creator_org_name}}</option>
+                  </select>
+                  <!-- <span class="fa fa-angle-down"></span> -->
+                </div>
+
+                <!-- <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton2()">Help those in
                   need</a>
                 <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where
-                  you can get help?</a>
+                  you can get help?</a> -->
+                  <a style="text-align: center;" href="JavaScript:void(0)" (click)="NeighbourhoodAnalytics()">Refer a person needing help</a>
+                  <a style="text-align: center;" href="JavaScript:void(0)" (click)="toVolunteer()">Sign up to Volunteer</a>
+                  <a style="text-align: center;" href="JavaScript:void(0)" href="https://www.youtube.com/watch?v=9k9xWrVbiXs" target="_blank">How to Use this tool</a>
+                  <a style="text-align: center;" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">Submit Local data/information</a>
+                  <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton3()">Where can I get help?</a>
+                  <a style="text-align: center;" href="JavaScript:void(0)" (click)="userLogin()">Pick up a task</a>
 
               </div>
             </div>
@@ -282,20 +299,24 @@
                     <div class="title-b">Schemes</div>
                     <span class="count">40</span>
                   </div>
-                  <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
-                    <div class="box animate" [ngClass]="{'animatebox': getoverrallrectangleCountData.length == 0}"
-                      *ngIf="menuItems[0].value == 120">
+                  <div class="box">
+                    <div class="title-b">People supported with Partners</div>
+                    <span class="count">11,60,000</span>
+                  </div>
+                  <div class="box">
+                    <div class="title-b">People needing support</div>
+                    <span class="count">10,00,000</span>
+                  </div>
+                  <!-- <ng-template [ngIf]="true">
+                    <div class="box animate" [ngClass]="{'animatebox': People_supported == 0}">
                       <div class="title-b">People supported with Partners</div>
-                      <span
-                        class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
+                      <span class="count">{{People_supported? (People_supported * 4): ' '}}</span>
                     </div>
-                    <div class="box animate" [ngClass]="{'animatebox': getoverrallrectangleCountData.length == 0}"
-                      *ngIf="menuItems[0].value == 101" style="order: 1">
+                    <div class="box animate" [ngClass]="{'animatebox': People_needing_support == 0}" style="order: 1">
                       <div class="title-b">People needing support</div>
-                      <span
-                        class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
+                      <span class="count">{{People_needing_support? (People_needing_support * 4): ' '}}</span>
                     </div>
-                  </ng-template>
+                  </ng-template> -->
                 </div>
                 <!-- End Sub Categories count  Based on Selection-->
 
@@ -318,6 +339,15 @@
           </div>
         </div>
         <div class="ra-custom-categories" style="margin: 15px 10px;">
+          <div class="orglist_dropdown">
+            <select (change)="changeOrgList($event)" [(ngModel)]="orgListModel">
+              <option value="" disabled>Select Organisation</option>
+              <option value="All">All</option>
+              <option *ngFor="let item of orgsListArray" [ngValue]="item.creator_org_name">
+                {{item.creator_org_name}}</option>
+            </select>
+            <!-- <span class="fa fa-angle-down"></span> -->
+          </div>
           <ul *ngFor="let menuItem of MenuItems;let menuIndex = index;" class="box">
             <li class="first-child-section">
               <div class="header-sec">
@@ -369,18 +399,18 @@
 
                   <ng-template [ngIf]="!(activeRole.indexOf('NGOTeam') !=-1 ||  activeRole.indexOf('NGOAdmin') !=-1 )">
 
-                    <ng-template ngFor let-menuItems [ngForOf]="MenuItems" let-i="index">
-                      <li class="yourview-order-0" *ngIf="menuItems[0].value == 101">Families needing help
-                        {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+                    <ng-template [ngIf]="true">
+                      <li class="yourview-order-0">Families needing help
+                        {{right_Peopleneedingsupport_Count !=0 ? '('+right_Peopleneedingsupport_Count+')': ' (not mapped)'}}
                       </li>
-                      <li class="yourview-order-1" *ngIf="menuItems[0].value == 120">Successfully Supported
-                        {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+                      <li class="yourview-order-1">Successfully Supported
+                        {{right_Peoplesupported_Count !=0 ? '('+right_Peoplesupported_Count+')': ' (not mapped)'}}
                       </li>
-                      <li class="yourview-order-2" *ngIf="menuItems[0].value == 97">Resources Close By
-                        {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
+                      <li class="yourview-order-2">Resources Close By
+                        {{right_Resources_Count !=0 ? '('+right_Resources_Count+')': ' (not mapped)'}}
                       </li>
-                      <li class="yourview-order-3" *ngIf="menuItems[0].value == 121">Volunteers Close By
-                        {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
+                      <li class="yourview-order-3">Volunteers Close By
+                        {{right_Volunteers_Count !=0? '('+right_Volunteers_Count+')': ' (not mapped)'}}
                       </li>
                     </ng-template>
                   </ng-template>
@@ -392,20 +422,22 @@
                   (click)="legends_details = 'legends'">Legends</a>
                 <a [ngClass]="{'active': legends_details == 'details'}" href="JavaScript:void(0)"
                   (click)="legends_details = 'details'; detail_list_number = 100">Details</a>
-                
-                  <a *ngIf="userName" [ngClass]="{'active': legends_details == 'mylist'}" href="JavaScript:void(0)" 
+
+                <a *ngIf="userName" [ngClass]="{'active': legends_details == 'mylist'}" href="JavaScript:void(0)"
                   (click)="legends_details = 'mylist'; detail_list_number = 100">My Lists</a>
               </div>
               <div class="filter-g" *ngIf="legends_details == 'details' && mapData?.length">
                 <input type="text" placeholder="Search place" [(ngModel)]="filterdetailsvalue">
               </div>
 
-              <h5 *ngIf="legends_details == 'mylist' && userName"  class="ass-closed-count">Assignments closed <span> ({{total_cosed_Asss}})</span></h5>
-              <h5 *ngIf="legends_details == 'mylist' && userName"  class="ass-closed-count">Pending Assignments <span> </span></h5>
+              <h5 *ngIf="legends_details == 'mylist' && userName" class="ass-closed-count">Assignments closed <span>
+                  ({{total_cosed_Asss}})</span></h5>
+              <h5 *ngIf="legends_details == 'mylist' && userName" class="ass-closed-count">Pending Assignments <span>
+                </span></h5>
 
               <div class="ra-custom-google"
                 (scroll)="detail_list_number = (mapData?.length >= detail_list_number)? (detail_list_number + 100): (detail_list_number)">
-                
+
                 <ng-template [ngIf]="legends_details =='legends'">
                   <div class="categories-box-g">
                     <ul class="webview-ra">
@@ -418,7 +450,7 @@
                             <div class="jest-count">
                               {{(items.count !=0 && items.count != undefined)? '('+items.count+')': ''}}</div>
                           </li>
-                        </ng-template> 
+                        </ng-template>
                       </ng-template>
                       <li>
                         No Categories Selected
@@ -437,6 +469,7 @@
                             alt="">{{item.name}}
                         </h5>
                         <p>{{item.address}}</p>
+                        <p *ngIf="item?.phone && userName"><b>Phone :</b> {{item?.phone}}</p>
                       </div>
                       <div class="lat-details-g moredetails" style="overflow: hidden">
                         <div class="animated fadeIn" *ngIf="item[collapse]">
@@ -456,19 +489,25 @@
                       </div>
 
                       <div class="user-action" *ngIf="!item['numberPopup']">
-                        <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a" (click)="assignme('assign', item)"
+                        <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a"
+                          (click)="assignme('assign', item)"
                           *ngIf="food_ration_asked.indexOf(item.menuId) != -1 && userName && allAssignedList.indexOf(item?.id) == -1 ">
-                          <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i> Assign Me
+                          <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i>
+                          Assign Me
                         </a>
-                        <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a" (click)="givenbyme('given', item)"
+                        <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a"
+                          (click)="givenbyme('given', item)"
                           *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
-                          <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as Given
+                          <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as
+                          Given
                         </a>
                       </div>
                       <ng-template [ngIf]="item['numberPopup']">
                         <div class="user-action-ass-given">
-                          <input class="" type="number" min="0" max="10" [(ngModel)]="item['raphonenumber']" placeholder="Mobile Number">
-                          <a class="user-action-a-a" (click)="validateMobileNumber(item['raphonenumber'], item)">Submit</a>
+                          <input class="" type="number" min="0" max="10" [(ngModel)]="item['raphonenumber']"
+                            placeholder="Mobile Number">
+                          <a class="user-action-a-a"
+                            (click)="validateMobileNumber(item['raphonenumber'], item)">Submit</a>
                           <a class="user-action-a-a red" (click)="item['numberPopup'] = false">Cancel</a>
                         </div>
                       </ng-template>
@@ -479,10 +518,11 @@
                     </div>
                   </ng-template>
                 </ng-template>
-                
+
                 <ng-template [ngIf]="legends_details =='mylist'">
                   <ng-template [ngIf]="true">
-                    <div class="result-g-box {{ i }}" [ngClass]="{'displaynone': !(user_given_listArray.indexOf(item?.id) != -1 && userName)}"
+                    <div class="result-g-box {{ i }}"
+                      [ngClass]="{'displaynone': !(user_given_listArray.indexOf(item?.id) != -1 && userName)}"
                       *ngFor="let item of mapData; let i = index">
                       <div style="cursor: pointer;" class="lat-details-g animated fadeInDown"
                         (click)="item[collapse] = !item[collapse]">
@@ -490,6 +530,7 @@
                             alt="">{{item.name}}
                         </h5>
                         <p>{{item.address}}</p>
+                        <p *ngIf="item?.phone && userName"><b>Phone :</b> {{item?.phone}}</p>
                       </div>
                       <div class="lat-details-g moredetails" style="overflow: hidden">
                         <div class="animated fadeIn" *ngIf="item[collapse]">
@@ -503,9 +544,11 @@
                         </div>
                       </div>
                       <div class="user-action" *ngIf="!item['numberPopup']">
-                        <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a" (click)="givenbyme('given', item)"
+                        <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a"
+                          (click)="givenbyme('given', item)"
                           *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
-                          <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as Given
+                          <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as
+                          Given
                         </a>
                       </div>
                     </div>
@@ -800,6 +843,16 @@
         <div class="tree-wrapper">
           <!-- ra-custom-categories Mobile -->
           <div class="ra-custom-categories-mobile">
+            <label style="font-weight: 600;margin-left: 4px;">Organisation</label>
+            <div class="orglist_dropdown">
+              <select (change)="changeOrgList($event)" [(ngModel)]="orgListModel" style="border-radius: 0px;">
+                <option value="" disabled>Select Organisation</option>
+                <option value="All">All</option>
+                <option *ngFor="let item of orgsListArray" [ngValue]="item.creator_org_name">
+                  {{item.creator_org_name}}</option>
+              </select>
+              <!-- <span class="fa fa-angle-down"></span> -->
+            </div>
             <div class="category" style="display: none !important;">
               <!-- Do not remove this based on this down tree func working -->
               <div class="" *ngFor="let menuItem of MenuItems;let menuIndex = index;">
@@ -851,7 +904,7 @@
           <div class="result-g" [ngClass]="{'collapseme': detail_legends_collapse}">
 
             <div class="static-point-section">
-              <h5>In your view {{detail_list_number}}</h5>
+              <h5>In your view </h5>
               <ul style="padding-left: 9px;">
                 <ng-template [ngIf]="userName && activeRole.indexOf('NGOTeam') !=-1">
                   <li class="yourview-order-0">
@@ -867,18 +920,18 @@
 
                 <ng-template [ngIf]="!(activeRole.indexOf('NGOTeam') !=-1 ||  activeRole.indexOf('NGOAdmin') !=-1 )">
 
-                  <ng-template ngFor let-menuItems [ngForOf]="MenuItems" let-i="index">
-                    <li class="yourview-order-0" *ngIf="menuItems[0].value == 101">Families needing help
-                      {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+                  <ng-template [ngIf]="true">
+                    <li class="yourview-order-0">Families needing help
+                      {{right_Peopleneedingsupport_Count !=0 ? '('+right_Peopleneedingsupport_Count+')': ' (not mapped)'}}
                     </li>
-                    <li class="yourview-order-1" *ngIf="menuItems[0].value == 120">Successfully Supported
-                      {{(menuItems[0]?.overall_rec_count_total != 0 && menuItems[0]?.overall_rec_count_total !=  undefined)? '('+menuItems[0]?.overall_rec_count_total+')': ' (not mapped)'}}
+                    <li class="yourview-order-1">Successfully Supported
+                      {{right_Peoplesupported_Count !=0 ? '('+right_Peoplesupported_Count+')': ' (not mapped)'}}
                     </li>
-                    <li class="yourview-order-2" *ngIf="menuItems[0].value == 97">Resources Close By
-                      {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
+                    <li class="yourview-order-2">Resources Close By
+                      {{right_Resources_Count !=0 ? '('+right_Resources_Count+')': ' (not mapped)'}}
                     </li>
-                    <li class="yourview-order-3" *ngIf="menuItems[0].value == 121">Volunteers Close By
-                      {{(menuItems[0]?.overallcount_total != 0 && menuItems[0]?.overallcount_total != undefined )? '('+menuItems[0]?.overallcount_total+')': ' (not mapped)'}}
+                    <li class="yourview-order-3">Volunteers Close By
+                      {{right_Volunteers_Count !=0? '('+right_Volunteers_Count+')': ' (not mapped)'}}
                     </li>
                   </ng-template>
                 </ng-template>
@@ -891,17 +944,18 @@
                 (click)="legends_details = 'legends'">Legends</a>
               <a [ngClass]="{'active': legends_details == 'details'}" href="JavaScript:void(0)"
                 (click)="legends_details = 'details'; detail_list_number = 100">Details</a>
-              
+
               <a *ngIf="userName" [ngClass]="{'active': legends_details == 'mylist'}" href="JavaScript:void(0)"
-                  (click)="legends_details = 'mylist'; detail_list_number = 100">My Lists</a>
+                (click)="legends_details = 'mylist'; detail_list_number = 100">My Lists</a>
             </div>
             <div class="filter-g" *ngIf="legends_details == 'details' && mapData?.length">
               <input type="text" placeholder="Search place" [(ngModel)]="filterdetailsvalue">
             </div>
-            
+
             <h5 *ngIf="legends_details == 'mylist' && userName" class="ass-closed-count">Assignments closed <span>
                 ({{total_cosed_Asss}})</span></h5>
-            <h5 *ngIf="legends_details == 'mylist' && userName" class="ass-closed-count">Pending Assignments <span> </span></h5>
+            <h5 *ngIf="legends_details == 'mylist' && userName" class="ass-closed-count">Pending Assignments <span>
+              </span></h5>
 
             <div class="result-g-d"
               (scroll)="detail_list_number = (mapData?.length >= detail_list_number)? (detail_list_number + 100): (detail_list_number)">
@@ -935,6 +989,7 @@
                       <h5 (click)="zoomToPlace(item, i)"><img class="title_icons" [src]="item.icon" alt="">{{item.name}}
                       </h5>
                       <p>{{item.address}}</p>
+                      <p *ngIf="item?.phone && userName"><b>Phone :</b> {{item?.phone}}</p>
                     </div>
                     <div class="lat-details-g moredetails" style="overflow: hidden">
                       <div class="animated fadeIn" *ngIf="item[collapse]">
@@ -956,17 +1011,21 @@
                       <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a"
                         (click)="assignme('assign', item)"
                         *ngIf="food_ration_asked.indexOf(item.menuId) != -1 && userName && allAssignedList.indexOf(item?.id) == -1 ">
-                        <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i> Assign Me
+                        <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i>
+                        Assign Me
                       </a>
                       <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a"
-                        (click)="givenbyme('given', item)" *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
+                        (click)="givenbyme('given', item)"
+                        *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
                         <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as Given
                       </a>
                     </div>
                     <ng-template [ngIf]="item['numberPopup']">
                       <div class="user-action-ass-given">
-                        <input class="" type="number" min="0" max="10" [(ngModel)]="item['raphonenumber']" placeholder="Mobile Number">
-                        <a class="user-action-a-a" (click)="validateMobileNumber(item['raphonenumber'], item)">Submit</a>
+                        <input class="" type="number" min="0" max="10" [(ngModel)]="item['raphonenumber']"
+                          placeholder="Mobile Number">
+                        <a class="user-action-a-a"
+                          (click)="validateMobileNumber(item['raphonenumber'], item)">Submit</a>
                         <a class="user-action-a-a red" (click)="item['numberPopup'] = false">Cancel</a>
                       </div>
                     </ng-template>
@@ -1002,7 +1061,8 @@
                     </div>
                     <div class="user-action" *ngIf="!item['numberPopup']">
                       <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeInDown user-action-a-a"
-                        (click)="givenbyme('given', item)" *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
+                        (click)="givenbyme('given', item)"
+                        *ngIf="user_given_listArray.indexOf(item?.id) != -1 && userName">
                         <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as Given
                       </a>
                     </div>
@@ -1072,7 +1132,7 @@
         <li>Shops near you mapped</li>
         <li>Volunteers near you Mapped</li> -->
       </ul>
-      <ul class="web-big-button-icon-list">
+      <!-- <ul class="web-big-button-icon-list">
         <li>
           <div (click)="NeighbourhoodData()">
             <i class="fa fa-home"></i>
@@ -1091,11 +1151,28 @@
             <span>Volunteer </span>
           </div>
         </li>
-      </ul>
+      </ul> -->
+
       <div class="action-button">
+        <label style="font-weight: 600;margin-left:6px;">Browse by Organisation</label>
         <!-- <a href="JavaScript:void(0)" (click)="homepageButton1()">Want Medical Help?</a> -->
-        <a href="JavaScript:void(0)" (click)="homepageButton2()">Help those in need</a>
-        <a href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where you can get help?</a>
+        <div class="orglist_dropdown" style="margin: 0 5px;">
+          <select (change)="changeOrgList($event)" [(ngModel)]="orgListModel">
+            <option value="" disabled>Select Organisation</option>
+            <option value="All">All</option>
+            <option *ngFor="let item of orgsListArray" [ngValue]="item.creator_org_name">
+              {{item.creator_org_name}}</option>
+          </select>
+          <!-- <span class="fa fa-angle-down"></span> -->
+        </div>
+        <!-- <a href="JavaScript:void(0)" (click)="homepageButton2()">Help those in need</a>
+        <a href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where you can get help?</a> -->
+        <a style="text-align: center;" href="JavaScript:void(0)" (click)="NeighbourhoodAnalytics()">Refer a person needing help</a>
+                <a style="text-align: center;" href="JavaScript:void(0)" (click)="toVolunteer()">Sign up to Volunteer</a>
+                <a style="text-align: center;" href="JavaScript:void(0)" href="https://www.youtube.com/watch?v=9k9xWrVbiXs" target="_blank">How to Use this tool</a>
+                <a style="text-align: center;" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">Submit Local data/information</a>
+                <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton3()">Where can I get help?</a>
+                <a style="text-align: center;" href="JavaScript:void(0)" (click)="userLogin()">Pick up a task</a>
       </div>
     </div>
 
@@ -1114,20 +1191,24 @@
         <div class="title-b">Schemes</div>
         <span class="count">40</span>
       </div>
-      <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
-        <div class="box animate" [ngClass]="{'animatebox': getoverrallrectangleCountData.length == 0}"
-          *ngIf="menuItems[0].value == 120">
+      <div class="box">
+        <div class="title-b">People supported with Partners</div>
+        <span class="count">11,60,000</span>
+      </div>
+      <div class="box">
+        <div class="title-b">People needing support</div>
+        <span class="count">10,00,000</span>
+      </div>
+      <!-- <ng-template [ngIf]="true">
+        <div class="box animate" [ngClass]="{'animatebox': People_supported == 0}">
           <div class="title-b">People supported with Partners</div>
-          <span
-            class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
+          <span class="count">{{People_supported? (People_supported * 4): ' '}}</span>
         </div>
-        <div class="box animate" [ngClass]="{'animatebox': getoverrallrectangleCountData.length == 0}"
-          *ngIf="menuItems[0].value == 101" style="order: 1">
+        <div class="box animate" [ngClass]="{'animatebox': People_needing_support == 0}" style="order: 1">
           <div class="title-b">People needing support</div>
-          <span
-            class="count">{{menuItems[0].overall_rec_count_total? (menuItems[0].overall_rec_count_total * 4): '0'}}</span>
+          <span class="count">{{People_needing_support? (People_needing_support * 4): ' '}}</span>
         </div>
-      </ng-template>
+      </ng-template> -->
     </div>
     <!-- End Sub Categories count  Based on Selection-->
 
@@ -1161,7 +1242,7 @@
       <strong></strong></a>
 
     <a *ngIf="(activeRole.indexOf('NGOAdmin') !=-1)" target="_blank"
-      href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba">
+      href="https://analytics.zoho.in/open-view/148665000000034128">
       <span class="icon fa fa-bar-chart"></span>
       <span class="title-f">Analytics</span>
       <strong></strong></a>
@@ -1268,7 +1349,7 @@
 
           <li *ngIf="!(activeRole.indexOf('NGOAdmin') !=-1)">
             <a style="color: #38a669"
-              href="http://internaldashboard.solveninja.org:4000/public/dashboard/65ea5995-d9cb-4fd7-82c1-07d095291aba"
+              href="https://analytics.zoho.in/open-view/148665000000034128"
               target="_blank">
               Analytics<i class="fa fa-angle-right"></i> </a>
           </li>
@@ -1278,7 +1359,7 @@
           </li>
 
           <li>
-            <a style="color: #38a669" href="JavaScript:void(0)" (click)="NeighbourhoodData()">Social distancing <i
+            <a style="color: #38a669" target="_blank" href="https://solveninja.org/partners/">Partners <i
                 class="fa fa-angle-right"></i></a>
           </li>
           <li>
@@ -1299,24 +1380,3 @@
   <!-- More Menu -->
 
 </div>
-
-
-
-<!-- <div class="mobilenumber-popup" *ngIf="numberPopup">
-  <div class="nubmer-box animated fadeInDown">
-    <h5>Enter Mobile Number <span class="fa fa-times" (click)="numberPopup = false" style="font-size: 18px;"></span></h5>
-    
-    <div class="body-mobile">
-      <ul>
-        <li>
-          <input type="number"  min="0" max="10" [(ngModel)]="mobilenumber" placeholder="XXX XXX XXXX" pattern="[789][0-9]{9}">
-        </li>
-        <li>
-          <a (click)="validateMobileNumber()">Submit</a>
-        </li>
-      </ul>
-    </div>
-    
-  </div>
-</div> -->
-
