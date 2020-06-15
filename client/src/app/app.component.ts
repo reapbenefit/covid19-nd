@@ -40,6 +40,8 @@ export class AppComponent {
     subowners: [],
     zoneNames: []
   }
+  selectedZoneDetails = {};
+  selectedZoneName = 'Select a Zone to see its details';
 
   // @ViewChild('Governance') Governance: ElementRef;
 
@@ -1235,18 +1237,41 @@ export class AppComponent {
     }
   }
 
-  handleCollectionsDataESResponse(data, obj) {
-    let resMap: any = data;
+  handleCollectionsDataESResponse(result, obj) {
+    // let resMap: any = data;
 
-    let newData = resMap.data.map(val => {
+    // let newData = resMap.data.map(val => {
+    //   val['number'] = val.data;
+    //   delete val['data'];
+    //   return val;
+    // })
+    // // this.mapData = resMap.data;
+    // this.mapData = newData;
+    // // console.log(this.mapData);
+    // this.getCountBased_On_Location(obj);
+
+    this.lat_ln_serviceReqcount = 0;
+    this.detail_list_number = 100;
+    // console.log(res);
+    if (result && result['data'].length) {
+      this.CountsListArray = result['data'];
+      this.MenuItems.forEach(menu => {
+        menu[0]['internalChildren'].forEach(element => {
+          let count = this.CountsListArray.filter(val => {
+            if ((val.menuId).toString() == (element.value).toString()) { return val }
+          })
+          element['count'] = count.length;
+        });
+      })
+    }
+
+    let newData = (result as any).data.map(val => {
       val['number'] = val.data;
       delete val['data'];
       return val;
     })
     // this.mapData = resMap.data;
     this.mapData = newData;
-    // console.log(this.mapData);
-    this.getCountBased_On_Location(obj);
   }
 
   call_CollectionsDataService() {
@@ -1921,7 +1946,6 @@ export class AppComponent {
     }, () => {
       console.log("Completed");
     })
-
   }
 
 
@@ -2384,6 +2408,40 @@ export class AppComponent {
     console.log(event);
     this.selectedZoneTags = event;
     this.CollectionsData(this.NewObj);
+  }
+
+  selectedZone(event) {
+    if(event) {
+      this.dataService.CollectionsDataESByZone(this.NewObj, [event.zoneId]).subscribe(result => {
+        this.selectedZoneDetails = result;
+        this.selectedZoneName = event.zoneName;
+        this.lat_ln_serviceReqcount = 0;
+        this.detail_list_number = 100;
+        // console.log(res);
+        if (result && result['data'].length) {
+          this.CountsListArray = result['data'];
+          this.MenuItems.forEach(menu => {
+            menu[0]['internalChildren'].forEach(element => {
+              let count = this.CountsListArray.filter(val => {
+                if ((val.menuId).toString() == (element.value).toString()) { return val }
+              })
+              element['count'] = count.length;
+            });
+          })
+        }
+
+        let newData = (result as any).data.map(val => {
+          val['number'] = val.data;
+          delete val['data'];
+          return val;
+        })
+        // this.mapData = resMap.data;
+        this.mapData = newData;
+      });
+    } else {
+      this.selectedZoneName = 'Select a Zone to see its details';
+      this.CollectionsData(this.NewObj);
+    }
   }
 
 }

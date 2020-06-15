@@ -440,6 +440,7 @@
 
                 <ng-template [ngIf]="legends_details =='legends'">
                   <div class="categories-box-g">
+                    <h6 style="text-align: center;">{{ selectedZoneName }}</h6>
                     <ul class="webview-ra">
                       <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
                         <ng-template ngFor let-items [ngForOf]="menuItems[0]['internalChildren']">
@@ -590,7 +591,7 @@
           [graphDataStatus]="graphDataStatus" [showComp]="showComp" [compare]="compare" [showgraphs]="showgraphs"
           [selIssCat]="selIssCat" (WardData)="WardData($event)" (hideGraphs)="hideGraphs($event)"
           [WardDetails]="WardDetails" [showGovernance]="showGovernance" [wardAgencyList]="wardAgencyList"
-          [showAgencies]="showAgencies" [IssueData]="IssueData" [showIssues]="showIssues"></app-main-content>
+          [showAgencies]="showAgencies" [IssueData]="IssueData" [showIssues]="showIssues" (selectedZone)="selectedZone($event)" [selectedZoneDetails]="selectedZoneDetails"></app-main-content>
       </div>
 
       <div [ngStyle]="{'display': (defaultpage == 'Zones')? 'block': 'none'}" class="web-map-wrapper"
@@ -905,6 +906,8 @@
 
             <div class="static-point-section">
               <h5>In your view </h5>
+              <app-role-filter [activeRole]="activeRole" [allZoneNames]="allZoneNames" (selectedTags)="zoneTagsSelected($event)">
+              </app-role-filter>
               <ul style="padding-left: 9px;">
                 <ng-template [ngIf]="userName && activeRole.indexOf('NGOTeam') !=-1">
                   <li class="yourview-order-0">
@@ -961,6 +964,7 @@
               (scroll)="detail_list_number = (mapData?.length >= detail_list_number)? (detail_list_number + 100): (detail_list_number)">
               <ng-template [ngIf]="legends_details == 'legends'">
                 <div class="categories-box-g" style="padding-top: 10px;">
+                  <h6 style="text-align: center;">{{ selectedZoneName }}</h6>
                   <ul class="webview-ra">
                     <ng-template ngFor let-menuItems [ngForOf]="MenuItems">
                       <ng-template ngFor let-items [ngForOf]="menuItems[0]['internalChildren']">
@@ -1099,11 +1103,11 @@
             </ul>
           </div>
         </div>
-        <app-main-content #mapref [mapData]="mapData" [AQM]="AQM" [AQMGraphLoc]="AQMGraphLoc" [graphData]="graphData"
+        <app-main-content #mapref [mapData]="mapData" [geoJson]="geoJson" [AQM]="AQM" [AQMGraphLoc]="AQMGraphLoc" [graphData]="graphData"
           [graphDataStatus]="graphDataStatus" [showComp]="showComp" [compare]="compare" [showgraphs]="showgraphs"
           [selIssCat]="selIssCat" (WardData)="WardData($event)" (hideGraphs)="hideGraphs($event)"
           [WardDetails]="WardDetails" [showGovernance]="showGovernance" [wardAgencyList]="wardAgencyList"
-          [showAgencies]="showAgencies" [IssueData]="IssueData" [showIssues]="showIssues"></app-main-content>
+          [showAgencies]="showAgencies" [IssueData]="IssueData" [showIssues]="showIssues" (selectedZone)="selectedZone($event)" [selectedZoneDetails]="selectedZoneDetails"></app-main-content>
       </div>
     </div>
     <!-- Page Main -->

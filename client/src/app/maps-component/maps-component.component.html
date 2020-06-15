@@ -134,7 +134,8 @@
         <span>Type: {{ zone.properties.tag.type }}</span><br/>
         <span>Owner: {{ zone.properties.tag.owner }}</span><br/>
         <span>Sub-Owner: {{ zone.properties.tag.subowner }}</span><br/>
-        <span *ngIf="zone.properties.notes">Notes: {{ zone.properties.notes }}</span>
+        <span *ngIf="zone.properties.notes">Notes: {{ zone.properties.notes }}</span><br/><br/>
+        <span>(Expand right panel to see more details about this Zone)</span>
       </div>
     </agm-info-window>
   </agm-polygon>

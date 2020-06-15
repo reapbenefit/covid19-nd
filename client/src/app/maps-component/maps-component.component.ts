@@ -19,6 +19,11 @@ export class MapsComponentComponent implements OnInit {
 
   @Input() MapData;
   @Output() wardDetails = new EventEmitter();
+  @Output() selectedZone = new EventEmitter();
+  @Input()
+  private set selectedZoneDetails(zoneDetails: any) {
+    console.log(zoneDetails);
+  }
   public zoom: number = 11;
   // initial center position for the map
   public lat;
@@ -31,7 +36,8 @@ export class MapsComponentComponent implements OnInit {
   public markers = [];
   // geoJson = geoJson;
   @Input() geoJson;
-  private zones = []
+  private zones = [];
+  private zoneNotSelectedTimeout;
 
   styleFunc(feature: any): any {
     return ({
@@ -138,9 +144,13 @@ export class MapsComponentComponent implements OnInit {
   }
 
   zoneClicked(event, zone) {
+    if(this.zoneNotSelectedTimeout) {
+      clearTimeout(this.zoneNotSelectedTimeout);
+    }
     zone.selected = zone.selected ? !zone.selected : true;
     zone.latitude = event.latLng.lat();
     zone.longitude = event.latLng.lng();
+    this.selectedZone.emit({zoneId: zone.properties.zoneId, zoneName: zone.properties.name});
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -242,7 +252,10 @@ export class MapsComponentComponent implements OnInit {
     this.dataService.getCorrLocDetails(obj).subscribe(data => {
       console.log(data);
     });
-    this.googleAnalyticsService.eventEmitter('Maps', 'Map_Click', 'Marker_Modification', "/")
+    this.googleAnalyticsService.eventEmitter('Maps', 'Map_Click', 'Marker_Modification', "/");
+    this.zoneNotSelectedTimeout = setTimeout(() => {
+      this.selectedZone.emit(undefined);
+    }, 1000);
   }
 
   markerDragEnd(m, $event: MouseEvent) {

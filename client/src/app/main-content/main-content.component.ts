@@ -30,6 +30,7 @@ export class MainContentComponent implements OnInit {
   @Input() showAgencies;
   @Input() IssueData;
   @Input() showIssues;
+  @Input() selectedZoneDetails;
   @Output() hideGraphs = new EventEmitter();
   public MapData;
   public GraphData;
@@ -78,6 +79,7 @@ export class MainContentComponent implements OnInit {
     }
   }
   @Output() WardData = new EventEmitter();
+  @Output() selectedZone = new EventEmitter();
   public wardDataEvent;
   public GovRes;
   public AgencyRes;
@@ -113,6 +115,10 @@ export class MainContentComponent implements OnInit {
       });
     }
     this.WardData.emit(this.wardDataEvent);
+  }
+
+  selectedZoneEvent(event) {
+    this.selectedZone.emit(event);
   }
 
   public WardDetailsData = {};
