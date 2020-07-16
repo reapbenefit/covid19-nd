@@ -848,9 +848,12 @@ export class AppComponent {
 
     this.setCurrentPosition();
     //load Places Autocomplete
+    var options = {
+      // types: ['(cities)'],
+      componentRestrictions: { country: "in" }
+    };
     this.mapsAPILoader.load().then(() => {
-      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
-      });
+      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, options);
       autocomplete.addListener("place_changed", () => {
         this.ngZone.run(() => {
           //get the place result
