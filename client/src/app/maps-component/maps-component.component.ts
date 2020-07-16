@@ -134,10 +134,19 @@ export class MapsComponentComponent implements OnInit {
     this.previous_info_window = data;
   }
 
+  // testurl = './assets/Icons/cc.png';
+  testurl = {
+    url: './assets/Icons/cc.png',
+    scaledSize: {
+      width: 88,
+      height: 70
+    }
+  };
+
   ngOnChanges(changes: SimpleChanges) {
     // this.MapData.forEach(element => {
     //   if (element.total != undefined) {
-    //     if (this.zoom >= 16) {
+    //     if (this.zoom >= 16) { 
     //       element.label = '';
     //     } else {
     //       element.label = element.total.toString();

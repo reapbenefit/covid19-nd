@@ -127,6 +127,10 @@
       </div>
     </agm-info-window>
   </agm-marker>
+
+  <agm-marker [latitude]="lat" [longitude]="lng" [iconUrl]="testurl">
+  </agm-marker>
+
   <agm-data-layer [geoJson]="geoJson" [style]="styleFunc" (layerClick)="onClick($event)"></agm-data-layer>
 </agm-map>
 
