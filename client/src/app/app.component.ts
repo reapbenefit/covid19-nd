@@ -1072,7 +1072,7 @@ export class AppComponent {
     var tempParm = this.wardSelectedName == undefined ? '' : '?ward_title=' + this.wardSelectedName;
     // window.open('http://internaldashboard.solveninja.org:4000/public/dashboard/07b9f145-5be8-4206-942e-7251e15791d9' + tempParm);
     this.formButtonClickEvent('Menu', 'Links_Button', 'NeighbourhoodAnalytics', 'Links_Button');
-    window.open('https://ee.kobotoolbox.org/x/#Rpxexbz7');
+    window.open('https://ee.kobotoolbox.org/x/MABCXQRa');
   }
 
   closeForum(type) {

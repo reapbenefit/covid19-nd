@@ -192,9 +192,9 @@
                 <span class="headerlink">Contribute <span class="arrowme fa fa-angle-down"></span></span>
                 <div class="onhover">
 
-                  <li>
+                  <!-- <li>
                     <a href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">Join Local Support Network</a>
-                  </li>
+                  </li> -->
 
                   <a *ngIf="(activeRole.indexOf('NGOUser') !=-1 || activeRole.indexOf('NGOTeam') !=-1 || activeRole.indexOf('NGOAdmin') !=-1)"
                     target="_blank" href="https://discourse.solveninja.org/tag/local-schemes">Local Schemes</a>
@@ -202,14 +202,14 @@
                   <a *ngIf="!(activeRole.indexOf('NGOAdmin') !=-1)" target="_blank"
                     href="https://analytics.zoho.in/open-view/148665000000034128">Analytics</a>
 
-                  <a href="JavaScript:void(0)" (click)="NeighbourhoodMultilingulSelfAssessment()">Multilingual Self
-                    Assessment</a>
+                  <!-- <a href="JavaScript:void(0)" (click)="NeighbourhoodMultilingulSelfAssessment()">Multilingual Self
+                    Assessment</a> -->
                     <a target="_blank" href="https://solveninja.org/partners/">Partners</a>
 
-                  <a href="JavaScript:void(0)" (click)="NeighbourhoodData()">Social distancing </a>
+                  <!-- <a href="JavaScript:void(0)" (click)="NeighbourhoodData()">Social distancing </a>
 
                   <a href="JavaScript:void(0)" (click)="NeighbourhoodAnalytics()">Help Those In Need </a>
-                  <a href="JavaScript:void(0)" (click)="toVolunteer()">Volunteer </a>
+                  <a href="JavaScript:void(0)" (click)="toVolunteer()">Volunteer </a> -->
 
                 </div>
               </a>
@@ -260,27 +260,27 @@
                   </li>
                 </ul> -->
 
-                <label style="font-weight: 600;margin-left: 1px;">Browse by Organisation</label>
-                <div class="orglist_dropdown" style="margin-bottom: 8px;">
+                <!-- <label style="font-weight: 600;margin-left: 1px;">Browse by Organisation</label> -->
+                <!-- <div class="orglist_dropdown" style="margin-bottom: 8px;">
                   <select (change)="changeOrgList($event)" [(ngModel)]="orgListModel">
                     <option value="" disabled>Select Organisation</option>
                     <option value="All">All</option>
                     <option *ngFor="let item of orgsListArray" [ngValue]="item.creator_org_name">
                       {{item.creator_org_name}}</option>
-                  </select>
+                  </select> -->
                   <!-- <span class="fa fa-angle-down"></span> -->
-                </div>
+                <!-- </div> -->
 
                 <!-- <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton2()">Help those in
                   need</a>
                 <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where
                   you can get help?</a> -->
-                  <a style="text-align: center;" href="JavaScript:void(0)" (click)="NeighbourhoodAnalytics()">Refer a person needing help</a>
-                  <a style="text-align: center;" href="JavaScript:void(0)" (click)="toVolunteer()">Sign up to Volunteer</a>
+                  <!-- <a style="text-align: center;" href="JavaScript:void(0)" (click)="NeighbourhoodAnalytics()">Refer a person needing help</a> -->
+                  <!-- <a style="text-align: center;" href="JavaScript:void(0)" (click)="toVolunteer()">Sign up to Volunteer</a> -->
                   <a style="text-align: center;" href="JavaScript:void(0)" href="https://www.youtube.com/watch?v=9k9xWrVbiXs" target="_blank">How to Use this tool</a>
                   <a style="text-align: center;" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">Submit Local data/information</a>
                   <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton3()">Where can I get help?</a>
-                  <a style="text-align: center;" href="JavaScript:void(0)" (click)="userLogin()">Pick up a task</a>
+                  <!-- <a style="text-align: center;" href="JavaScript:void(0)" (click)="userLogin()">Pick up a task</a> -->
 
               </div>
             </div>
@@ -298,12 +298,12 @@
                     <span class="count">40</span>
                   </div>
                   <div class="box">
-                    <div class="title-b">People supported with Partners</div>
-                    <span class="count">11,60,000</span>
+                    <div class="title-b">People supported by us and Partners</div>
+                    <span class="count">11,62,262</span>
                   </div>
                   <div class="box">
-                    <div class="title-b">People needing support</div>
-                    <span class="count">10,00,000</span>
+                    <div class="title-b">Data points mapped</div>
+                    <span class="count">1,30,103</span>
                   </div>
                   <!-- <ng-template [ngIf]="true">
                     <div class="box animate" [ngClass]="{'animatebox': People_supported == 0}">
@@ -337,15 +337,15 @@
           </div>
         </div>
         <div class="ra-custom-categories" style="margin: 15px 10px;">
-          <div class="orglist_dropdown">
+          <!-- <div class="orglist_dropdown">
             <select (change)="changeOrgList($event)" [(ngModel)]="orgListModel">
               <option value="" disabled>Select Organisation</option>
               <option value="All">All</option>
               <option *ngFor="let item of orgsListArray" [ngValue]="item.creator_org_name">
                 {{item.creator_org_name}}</option>
-            </select>
+            </select> -->
             <!-- <span class="fa fa-angle-down"></span> -->
-          </div>
+          <!-- </div> -->
           <ul *ngFor="let menuItem of MenuItems;let menuIndex = index;" class="box">
             <li class="first-child-section">
               <div class="header-sec">
@@ -562,20 +562,20 @@
           <span class="fa fa-plus-circle" (click)="leftaddmenu = !leftaddmenu"></span>
           <div class="menub-box">
             <ul [ngClass]="{'active': leftaddmenu}">
-              <li>
+              <!-- <li>
                 <a style="color: #38a669" target="_blank" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ">
                   Join Local Support Network <i class="fa fa-angle-right"></i>
                 </a>
-              </li>
+              </li> -->
               <li>
                 <a style="color: #38a669" (click)="NeighbourhoodData()">Social distancing <i
                     class="fa fa-angle-right"></i></a>
               </li>
-              <li>
+              <!-- <li>
                 <a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Refer a Needy <i
                     class="fa fa-angle-right"></i>
                 </a>
-              </li>
+              </li> -->
               <li>
                 <a style="color: #38a669" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a>
               </li>
@@ -1072,19 +1072,19 @@
           <span class="fa fa-plus-circle" (click)="leftaddmenu = !leftaddmenu"></span>
           <div class="menub-box">
             <ul [ngClass]="{'active': leftaddmenu}">
-              <li><a style="color: #38a669" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">
+              <!-- <li><a style="color: #38a669" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">
                   Join Local Support Network
                   <i class="fa fa-angle-right"></i> </a>
-              </li>
+              </li> -->
               <li>
                 <a style="color: #38a669" (click)="NeighbourhoodData()">Social distancing <i
                     class="fa fa-angle-right"></i></a>
               </li>
-              <li>
+              <!-- <li>
                 <a style="color: #38a669" (click)="NeighbourhoodAnalytics()">Refer a Needy <i
                     class="fa fa-angle-right"></i>
                 </a>
-              </li>
+              </li> -->
               <li>
                 <a style="color: #38a669" (click)="toVolunteer()">Volunteer <i class="fa fa-angle-right"></i> </a>
               </li>
@@ -1145,27 +1145,27 @@
         </li>
       </ul> -->
 
-      <div class="action-button">
-        <label style="font-weight: 600;margin-left:6px;">Browse by Organisation</label>
+      <!-- <div class="action-button"> -->
+        <!-- <label style="font-weight: 600;margin-left:6px;">Browse by Organisation</label> -->
         <!-- <a href="JavaScript:void(0)" (click)="homepageButton1()">Want Medical Help?</a> -->
-        <div class="orglist_dropdown" style="margin: 0 5px;">
+        <!-- <div class="orglist_dropdown" style="margin: 0 5px;">
           <select (change)="changeOrgList($event)" [(ngModel)]="orgListModel">
             <option value="" disabled>Select Organisation</option>
             <option value="All">All</option>
             <option *ngFor="let item of orgsListArray" [ngValue]="item.creator_org_name">
               {{item.creator_org_name}}</option>
-          </select>
+          </select> -->
           <!-- <span class="fa fa-angle-down"></span> -->
-        </div>
+        <!-- </div> -->
         <!-- <a href="JavaScript:void(0)" (click)="homepageButton2()">Help those in need</a>
         <a href="JavaScript:void(0)" (click)="homepageButton3()">Want to know where you can get help?</a> -->
-        <a style="text-align: center;" href="JavaScript:void(0)" (click)="NeighbourhoodAnalytics()">Refer a person needing help</a>
-                <a style="text-align: center;" href="JavaScript:void(0)" (click)="toVolunteer()">Sign up to Volunteer</a>
+        <!-- <a style="text-align: center;" href="JavaScript:void(0)" (click)="NeighbourhoodAnalytics()">Refer a person needing help</a> -->
+                <!-- <a style="text-align: center;" href="JavaScript:void(0)" (click)="toVolunteer()">Sign up to Volunteer</a> -->
                 <a style="text-align: center;" href="JavaScript:void(0)" href="https://www.youtube.com/watch?v=9k9xWrVbiXs" target="_blank">How to Use this tool</a>
                 <a style="text-align: center;" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">Submit Local data/information</a>
                 <a style="text-align: center;" href="JavaScript:void(0)" (click)="homepageButton3()">Where can I get help?</a>
-                <a style="text-align: center;" href="JavaScript:void(0)" (click)="userLogin()">Pick up a task</a>
-      </div>
+                <!-- <a style="text-align: center;" href="JavaScript:void(0)" (click)="userLogin()">Pick up a task</a> -->
+      <!-- </div> -->
     </div>
 
     <h6 class="sub-title-home animated fadeIn" *ngIf="CountsListArray?.length"
@@ -1185,11 +1185,11 @@
       </div>
       <div class="box">
         <div class="title-b">People supported with Partners</div>
-        <span class="count">11,60,000</span>
+        <span class="count">11,62,262</span>
       </div>
       <div class="box">
-        <div class="title-b">People needing support</div>
-        <span class="count">10,00,000</span>
+        <div class="title-b">Data points mapped</div>
+        <span class="count">1,30,103</span>
       </div>
       <!-- <ng-template [ngIf]="true">
         <div class="box animate" [ngClass]="{'animatebox': People_supported == 0}">
@@ -1328,10 +1328,10 @@
             <a style="color: #38a669">Login <i class="fa fa-angle-right"></i></a>
           </li>
 
-          <li><a style="color: #38a669" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">Join Local Support
+          <!-- <li><a style="color: #38a669" href="https://ee.kobotoolbox.org/x/#SPEoN8QZ" target="_blank">Join Local Support
               Network
               <i class="fa fa-angle-right"></i> </a>
-          </li>
+          </li> -->
 
           <li
             *ngIf="(activeRole.indexOf('NGOUser') !=-1 || activeRole.indexOf('NGOTeam') !=-1 || activeRole.indexOf('NGOAdmin') !=-1)">
