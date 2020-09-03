@@ -1,7 +1,8 @@
 <div class="content">
   <div class="row" style="">
     <div class="col-lg-12 col-md-12 col-xs-12 center">
-      <app-maps-component #mapcomref [MapData]="MapData" (wardDetails)="wardDetails($event)"></app-maps-component>
+      <app-maps-component style="height: 100%;width: 100%;" #mapcomref [MapData]="MapData"
+        (wardDetails)="wardDetails($event)"></app-maps-component>
     </div>
     <div class="col-lg-12 p-0">
       <div *ngIf="showGraphs" class="Showgraph">
@@ -159,8 +160,8 @@
             <div class="col-lg-6 displayCenter">
               <ngx-charts-bar-horizontal-stacked [view]="view" [scheme]="colorScheme" [results]="issue.graphData"
                 [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
-                [showXAxisLabel]="showXAxisLabel" [showDataLabel]="showDataLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-                [yAxisLabel]="yAxisLabel" (select)="onSelect($event)">
+                [showXAxisLabel]="showXAxisLabel" [showDataLabel]="showDataLabel" [showYAxisLabel]="showYAxisLabel"
+                [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" (select)="onSelect($event)">
               </ngx-charts-bar-horizontal-stacked>
             </div>
           </div>
@@ -186,8 +187,8 @@
       <div class="col-lg-8">
         <ngx-charts-bar-horizontal-stacked [view]="viewComp" [scheme]="colorScheme" [results]="ward1DataGraph"
           [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="false"
-          [showXAxisLabel]="showXAxisLabel" [showDataLabel]="showDataLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-          [yAxisLabel]="yAxisLabel">
+          [showXAxisLabel]="showXAxisLabel" [showDataLabel]="showDataLabel" [showYAxisLabel]="showYAxisLabel"
+          [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel">
         </ngx-charts-bar-horizontal-stacked>
       </div>
     </div>
@@ -199,14 +200,14 @@
       <div class="col-lg-8">
         <ngx-charts-bar-horizontal-stacked [view]="viewComp" [scheme]="colorScheme" [results]="ward2DataGraph"
           [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="false"
-          [showXAxisLabel]="showXAxisLabel" [showDataLabel]="showDataLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-          [yAxisLabel]="yAxisLabel">
+          [showXAxisLabel]="showXAxisLabel" [showDataLabel]="showDataLabel" [showYAxisLabel]="showYAxisLabel"
+          [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel">
         </ngx-charts-bar-horizontal-stacked>
       </div>
     </div>
   </div>
   <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="GetDataForCompare()">Get Data</button>
+    <button type="button" class="btn btn-outline-dark" (click)="GetDataForCompare()">Get Data</button>
     <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">Close</button>
   </div>
 </ng-template>

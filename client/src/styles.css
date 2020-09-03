@@ -1,8 +1,14 @@
+mgl-map {
+  height: 100%;
+  width: 100%;
+}
+
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.css";
 
 /* @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700"; */
 @import "https://fonts.googleapis.com/css?family=Poppins:200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap";
+
 body {
   font-family: "Poppins", sans-serif;
   height: 100%;
@@ -21,6 +27,7 @@ body {
     top: 70%;
     left: 84.3%;
   }
+
   #centerLocation {
     top: calc(100vh - 250px) !important;
     left: 46.6% !important;
@@ -999,6 +1006,7 @@ span.selection-cnt {
     max-width: 100% !important;
     text-align: center;
   }
+
   .col-md-1,
   .col-md-3,
   .col-md-4,
@@ -1009,15 +1017,19 @@ span.selection-cnt {
     max-width: 100% !important;
     text-align: center;
   }
+
   .ra-header .links {
     text-align: center !important;
   }
+
   .ra-header .col-md-1 .ra-logo {
     margin: auto;
   }
+
   .ra-header {
     padding-bottom: 20px;
   }
+
   .web-map-wrapper {
     position: relative !important;
     top: 195px !important;
@@ -1899,6 +1911,7 @@ ul.webview-ra li:first-child {
     -webkit-transition: none;
     transition: none;
   }
+
   to {
     background-color: #f6f7f8;
     -webkit-transition: all 0.3s ease-out;
@@ -1911,6 +1924,7 @@ ul.webview-ra li:first-child {
     -webkit-transition: none;
     transition: none;
   }
+
   to {
     background-color: #f6f7f8;
     -webkit-transition: all 0.3s ease-out;
@@ -2069,8 +2083,8 @@ ul.web-big-button-icon-list {
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
 }
 
 ul.web-big-button-icon-list li {
@@ -2209,7 +2223,7 @@ a.user-action-a-a i {
 }
 
 .mobilenumber-popup .nubmer-box .body-mobile ul li a {
-  background: #FF9800;
+  background: #ff9800;
   padding: 7px 10px;
   border-radius: 5px;
   margin: 10px;
@@ -2307,11 +2321,11 @@ h5.ass-closed-count span {
   padding-left: 16px !important; */
   -webkit-appearance: none;
   -moz-appearance: none;
-    background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
-    background-repeat: no-repeat;
-    background-position-x: 98%;
-    background-position-y: 5px;
-    padding-right: 26px !important;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 98%;
+  background-position-y: 5px;
+  padding-right: 26px !important;
 }
 
 .orglist_dropdown {
@@ -2327,7 +2341,9 @@ h5.ass-closed-count span {
   cursor: pointer;
 }
 
-.orglist_dropdown select:focus, .orglist_dropdown select:active, .orglist_dropdown select:visited {
+.orglist_dropdown select:focus,
+.orglist_dropdown select:active,
+.orglist_dropdown select:visited {
   outline: none;
 }
 
@@ -2335,7 +2351,20 @@ h5.ass-closed-count span {
   margin-bottom: 7px;
   border-radius: 0px !important;
 }
+.marker {
+  position: relative;
+}
 
+.marker .popup-data {
+  position: absolute;
+  background: #fff;
+  bottom: 34px;
+  padding: 5px;
+  border: 1px solid #fdfdfd;
+}
+.mapboxgl-popup {
+  max-width: 400px !important;
+}
 /* end Map Popup Box */
 /* End Google Search */
 /* End Custom Code Ramesh */

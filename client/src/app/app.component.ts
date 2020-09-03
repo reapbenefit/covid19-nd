@@ -1,39 +1,45 @@
-import { Component, NgZone, ViewChild, ElementRef, HostListener, Pipe, ApplicationRef } from '@angular/core';
-import { DataService } from './services/data.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  Component,
+  NgZone,
+  ViewChild,
+  ElementRef,
+  SimpleChanges,
+  HostListener,
+  Pipe,
+  ApplicationRef,
+} from "@angular/core";
+import { DataService } from "./services/data.service";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 // import { } from 'googlemaps';
-import { MapsAPILoader, LatLngBounds } from '@agm/core';
-import { FormControl } from '@angular/forms';
-import { Subscription, forkJoin } from 'rxjs';
-import { CommonService } from './services/common.service';
-import { ward } from './services/wards';
-import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
-import { GoogleAnalyticsService } from './services/google-analytics.service';
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { MapsAPILoader, LatLngBounds } from "@agm/core";
+import { FormControl } from "@angular/forms";
+import { Subscription, forkJoin } from "rxjs";
+import { CommonService } from "./services/common.service";
+import { ward } from "./services/wards";
+import { TreeviewItem, TreeviewConfig } from "ngx-treeview";
+import { GoogleAnalyticsService } from "./services/google-analytics.service";
+import { KeycloakAngularModule, KeycloakService } from "keycloak-angular";
 declare const google: any;
-import { DeviceDetectorService } from 'ngx-device-detector';
-import { Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { DeviceDetectorService } from "ngx-device-detector";
+import { Router } from "@angular/router";
+import { Location } from "@angular/common";
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"],
 })
 export class AppComponent {
-
-
   openpopups = false;
   searchLocation = false;
   filterSearch = false;
   isMobile = false;
   menupopup = false;
   collapseGooglesearch = false;
-  defaultpage = 'Home';
+  defaultpage = "Home";
   detail_legends_collapse = true; // true means Collapse
-  legends_details = 'legends'; // false --> Details
-  filterdetailsvalue = '';
+  legends_details = "legends"; // false --> Details
+  filterdetailsvalue = "";
   loaderAction = false;
-
 
   // @ViewChild('Governance') Governance: ElementRef;
 
@@ -42,11 +48,11 @@ export class AppComponent {
     hasFilter: false,
     hasCollapseExpand: false,
     decoupleChildFromParent: false,
-    maxHeight: 400
+    maxHeight: 400,
   });
 
   MenuItems: TreeviewItem[];
-  title = 'Neighbourhood';
+  title = "Neighbourhood";
   private showMenu = true;
   public cities = [
     // {
@@ -79,50 +85,57 @@ export class AppComponent {
   ];
   public Wards = [];
   // public Wards = ['Ward 1', 'Ward 2', 'Ward 3', 'Ward 4'];
-  public categories = [{
-    "id": 1,
-    "value": 'Air',
-    "ImgSrc": "./assets/Icons/Air.png",
-    "checked": false
-  }, {
-    "id": 6,
-    "value": 'Waste',
-    "ImgSrc": "./assets/Icons/Waste.png",
-    "checked": false
-  }, {
-    "id": 9,
-    "value": 'Potholes',
-    "ImgSrc": "./assets/Icons/Pothole.png",
-    "checked": false
-  }, {
-    "id": 7,
-    "value": 'Water',
-    "ImgSrc": "./assets/Icons/Water.png",
-    "checked": false
-  }, {
-    "id": 2,
-    "value": 'Energy',
-    "ImgSrc": "./assets/Icons/Energy.png",
-    "checked": false
-  }, {
-    "id": 4,
-    "value": 'Sanitation',
-    "ImgSrc": "./assets/Icons/Sanitation.png",
-    "checked": false
-  }, {
-    "id": 5,
-    "value": 'Traffic',
-    "ImgSrc": "./assets/Icons/Traffic.png",
-    "checked": false
-  }
-    , {
-    "id": 3,
-    "value": 'Other',
-    "ImgSrc": "./assets/Icons/Others.png",
-    "checked": false
-  }
+  public categories = [
+    {
+      id: 1,
+      value: "Air",
+      ImgSrc: "./assets/Icons/Air.png",
+      checked: false,
+    },
+    {
+      id: 6,
+      value: "Waste",
+      ImgSrc: "./assets/Icons/Waste.png",
+      checked: false,
+    },
+    {
+      id: 9,
+      value: "Potholes",
+      ImgSrc: "./assets/Icons/Pothole.png",
+      checked: false,
+    },
+    {
+      id: 7,
+      value: "Water",
+      ImgSrc: "./assets/Icons/Water.png",
+      checked: false,
+    },
+    {
+      id: 2,
+      value: "Energy",
+      ImgSrc: "./assets/Icons/Energy.png",
+      checked: false,
+    },
+    {
+      id: 4,
+      value: "Sanitation",
+      ImgSrc: "./assets/Icons/Sanitation.png",
+      checked: false,
+    },
+    {
+      id: 5,
+      value: "Traffic",
+      ImgSrc: "./assets/Icons/Traffic.png",
+      checked: false,
+    },
+    {
+      id: 3,
+      value: "Other",
+      ImgSrc: "./assets/Icons/Others.png",
+      checked: false,
+    },
   ];
-  private AQMS = ['GOVT', 'RB'];
+  private AQMS = ["GOVT", "RB"];
   public close = false;
   private agencyData;
   private DWCCData;
@@ -136,17 +149,21 @@ export class AppComponent {
   subscription: Subscription;
   subscriptionWithCord: Subscription;
 
-  constructor(private router: Router, private location: Location, private deviceService: DeviceDetectorService, private dataService: DataService,
+  constructor(
+    private router: Router,
+    private location: Location,
+    private deviceService: DeviceDetectorService,
+    private dataService: DataService,
     private modalService: NgbModal,
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private commonService: CommonService,
     private KeycloakService: KeycloakService,
-    private googleAnalyticsService: GoogleAnalyticsService) {
-
+    private googleAnalyticsService: GoogleAnalyticsService
+  ) {
     // Get Creaters OrgsList
     this.getOrgList();
-    // Calling Before NgInt to set Url  
+    // Calling Before NgInt to set Url
     this.getUrlParameters();
   }
 
@@ -162,11 +179,10 @@ export class AppComponent {
       this.detail_legends_collapse = false;
     }
 
-    console.log(isMobile);  // returns if the device is a mobile device (android / iPhone / windows-phone etc)
-    console.log(isTablet);  // returns if the device us a tablet (iPad etc)
+    console.log(isMobile); // returns if the device is a mobile device (android / iPhone / windows-phone etc)
+    console.log(isTablet); // returns if the device us a tablet (iPad etc)
     console.log(isDesktopDevice); // returns if the app is running on a Desktop browser.
   }
-
 
   SelectedCategory(event) {
     console.log(event);
@@ -191,15 +207,15 @@ export class AppComponent {
       catArr = undefined;
     }
     var obj = {
-      "cityId": this.SelectedCity,
-      "type": type,//{1:Campaign,2:Reports,5:Agencies,6:Governance,,7:DWCC,8:Toilet,9:AQM}
-      "level": this.dataService.zoom,
-      "category": catArr,
-      "lat": this.dataService.centerLat,
-      "lng": this.dataService.centerLng,
-      "dashboardData": true
-    }
-    this.dataService.getCorrLocDetails(obj).subscribe(data => {
+      cityId: this.SelectedCity,
+      type: type, //{1:Campaign,2:Reports,5:Agencies,6:Governance,,7:DWCC,8:Toilet,9:AQM}
+      level: this.dataService.zoom,
+      category: catArr,
+      lat: this.dataService.centerLat,
+      lng: this.dataService.centerLng,
+      dashboardData: true,
+    };
+    this.dataService.getCorrLocDetails(obj).subscribe((data) => {
       console.log(data);
       let res: any = data;
       this.mapData = res.data;
@@ -207,16 +223,18 @@ export class AppComponent {
   }
 
   open(content, type) {
-    let size
-    if (type == 'cityData') {
+    let size;
+    if (type == "cityData") {
       size = "sm";
     } else {
       size = "lg";
     }
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: size }).result.then((result) => {
-      // this.closeResult = `Closed with: ${result}`;
-    });
-    this.formButtonClickEvent('Menu', 'Links', type, 'Link');
+    this.modalService
+      .open(content, { ariaLabelledBy: "modal-basic-title", size: size })
+      .result.then((result) => {
+        // this.closeResult = `Closed with: ${result}`;
+      });
+    this.formButtonClickEvent("Menu", "Links", type, "Link");
   }
 
   private issGraph;
@@ -232,13 +250,13 @@ export class AppComponent {
     this.showComp = true;
     this.graphDataStatus = [];
     this.AQM = false;
-    (<HTMLInputElement>document.getElementById('DWCC')).checked = false;
-    (<HTMLInputElement>document.getElementById('Toilet')).checked = false;
-    (<HTMLInputElement>document.getElementById('Campaigns')).checked = false;
-    (<HTMLInputElement>document.getElementById('AQMcheck')).checked = false;
-    (<HTMLInputElement>document.getElementById('ICatagory')).checked = true;
-    (<HTMLInputElement>document.getElementById('Governance')).checked = false;
-    (<HTMLInputElement>document.getElementById('Agencies')).checked = false;
+    (<HTMLInputElement>document.getElementById("DWCC")).checked = false;
+    (<HTMLInputElement>document.getElementById("Toilet")).checked = false;
+    (<HTMLInputElement>document.getElementById("Campaigns")).checked = false;
+    (<HTMLInputElement>document.getElementById("AQMcheck")).checked = false;
+    (<HTMLInputElement>document.getElementById("ICatagory")).checked = true;
+    (<HTMLInputElement>document.getElementById("Governance")).checked = false;
+    (<HTMLInputElement>document.getElementById("Agencies")).checked = false;
     this.mapData = [];
     let catArr = [];
     this.graphData = [];
@@ -250,35 +268,40 @@ export class AppComponent {
     }
     this.dataService.catType = 2;
     issObj = {
-      "cityId": this.SelectedCity,
-      "wardId": this.wardID,
-      "category": catArr
-    }
+      cityId: this.SelectedCity,
+      wardId: this.wardID,
+      category: catArr,
+    };
     this.dataService.SelIssCat = catArr;
-    this.Type = 'Issues Categories';
-    this.dataService.getReports(issObj).subscribe(data => {
+    this.Type = "Issues Categories";
+    this.dataService.getReports(issObj).subscribe((data) => {
       console.log(data);
       this.issueMapData = data;
       this.mapData = this.issueMapData.mapData;
       this.issGraph = data;
-      this.mapData.forEach(element => {
+      this.mapData.forEach((element) => {
         if (element.category == "Waste") {
-          element.icon = './assets/Icons/Waste.png'
+          element.icon = "./assets/Icons/Waste.png";
         } else if (element.category == "Pothole") {
-          element.icon = './assets/Icons/Pothole.png'
+          element.icon = "./assets/Icons/Pothole.png";
         } else if (element.category == "Water") {
-          element.icon = './assets/Icons/Water.png'
+          element.icon = "./assets/Icons/Water.png";
         } else if (element.category == "Energy") {
-          element.icon = './assets/Icons/Energy.png'
+          element.icon = "./assets/Icons/Energy.png";
         } else if (element.category == "Traffic") {
-          element.icon = './assets/Icons/Traffic.png'
+          element.icon = "./assets/Icons/Traffic.png";
         } else if (element.category == "Sanitation") {
-          element.icon = './assets/Icons/Sanitization.png'
+          element.icon = "./assets/Icons/Sanitization.png";
         }
       });
       // this.IssueData = this.issGraph.graph;
       this.IssueData = undefined;
-      if (this.showgraphs == true || this.showGovernance == true || this.showAgencies == true || this.showIssues == true) {
+      if (
+        this.showgraphs == true ||
+        this.showGovernance == true ||
+        this.showAgencies == true ||
+        this.showIssues == true
+      ) {
         this.showIssues = true;
         this.showgraphs = false;
         this.showGovernance = false;
@@ -308,23 +331,23 @@ export class AppComponent {
   SelectCity(event) {
     console.log(event);
     this.searchLocation = false;
-    this.searchElementRef.nativeElement.value = '';
+    this.searchElementRef.nativeElement.value = "";
     this.MenuItems = this.getMenuJSON(this.MenuData);
     if (event.value != undefined) {
       // Tracking event
-      this.formButtonClickEvent('City Selection', '/', event, 'Select');
+      this.formButtonClickEvent("City Selection", "/", event, "Select");
 
       this.showMenuItems = true;
       this.ShowForum = false;
       this.mapData = [];
-      // this.showgraphs = false;      
+      // this.showgraphs = false;
       this.SelectedCity = event.value.id;
       this.dataService.SelectCityID = Number(this.SelectedCity);
       this.dataService.SelectedCity = event.value.id;
       var obj = {
-        'lat': Number(event.value.lat),
-        'lng': Number(event.value.lng),
-      }
+        lat: Number(event.value.lat),
+        lng: Number(event.value.lng),
+      };
       var arr = [];
       arr.push(obj);
       this.mapData = arr;
@@ -345,14 +368,16 @@ export class AppComponent {
       // (<HTMLInputElement>document.getElementById('Agencies')).checked = false;
       this.Wards = [];
       this.WardSelected = undefined;
-      this.dataService.wardDetails({ "cityId": this.SelectedCity }).subscribe(data => {
-        var tempWardData: any = data;
-        this.Wards = tempWardData ? tempWardData['data'] : [];
-        this.ShowWardSelect = false;
-        setTimeout(() => {
-          this.ShowWardSelect = true;
-        }, 10);
-      });
+      this.dataService
+        .wardDetails({ cityId: this.SelectedCity })
+        .subscribe((data) => {
+          var tempWardData: any = data;
+          this.Wards = tempWardData ? tempWardData["data"] : [];
+          this.ShowWardSelect = false;
+          setTimeout(() => {
+            this.ShowWardSelect = true;
+          }, 10);
+        });
     } else {
       this.dataService.zoom = 10;
       this.mapData = [];
@@ -372,15 +397,16 @@ export class AppComponent {
     this.NewObj.wardId = this.wardSelected == undefined ? 0 : this.wardSelected;
     this.NewObj.menuData = [];
     // this.NewObj.level = this.dataService.zoom;
-    this.NewObj.level = event.value['zoom'] ? event.value['zoom'] : this.dataService.zoom;
+    this.NewObj.level = event.value["zoom"]
+      ? event.value["zoom"]
+      : this.dataService.zoom;
     this.NewObj.latitude = Number(this.dataService.SelectedCityLat);
     this.NewObj.longitude = Number(this.dataService.SelectedCityLng);
     this.CollectionsData(this.NewObj);
-    this.formButtonClickEvent('Menu', 'City_Menu', 'City_Select', 'Select');
+    this.formButtonClickEvent("Menu", "City_Menu", "City_Select", "Select");
     this.defaultSelectTrigger();
     // get New count based on city changed
     this.getCountBased_On_Location(this.NewObj);
-
   }
 
   private dwcGraph;
@@ -390,7 +416,7 @@ export class AppComponent {
   public wardAgencyList;
   public showGovernance = false;
   public showAgencies = false;
-  public Type = '';
+  public Type = "";
   radioType(event, type) {
     this.ShowForum = false;
     this.showComp = false;
@@ -404,82 +430,197 @@ export class AppComponent {
     this.graphData = [];
     this.Type = type;
     let obj = {
-      "cityId": Number(this.SelectedCity),
-      "wardId": this.wardID
-    }
-    if (type == 'Agencies') {
+      cityId: Number(this.SelectedCity),
+      wardId: this.wardID,
+    };
+    if (type == "Agencies") {
       this.dataService.catType = 5;
       this.compare = true;
       if (true) {
-        this.dataService.getAgencies(obj).subscribe(data => {
-          this.agencyData = data;
-          this.mapData = this.agencyData.agencies;
-          this.mapData.forEach(element => {
-            if (element.name == "Mini Bangalore One Centre" || element.name == "Bangalore One Centre" || element.name == "Kiosk") {
-              element.icon = './assets/Icons/BOne.png'
-            } else if (element.name == "BBMP Revenue Office") {
-              element.icon = './assets/Icons/BB.png'
-            } else if (element.name == "Zonal Office") {
-              element.icon = './assets/Icons/BWSSB.png'
-            } else if (element.name == "BESCOM office" || element.name == "ELCITA Office") {
-              element.icon = './assets/Icons/BESCOM.png'
-            } else if (element.name == "Police Station") {
-              element.icon = './assets/Icons/Police.png'
+        this.dataService.getAgencies(obj).subscribe(
+          (data) => {
+            this.agencyData = data;
+            this.mapData = this.agencyData.agencies;
+            this.mapData.forEach((element) => {
+              if (
+                element.name == "Mini Bangalore One Centre" ||
+                element.name == "Bangalore One Centre" ||
+                element.name == "Kiosk"
+              ) {
+                element.icon = "./assets/Icons/BOne.png";
+              } else if (element.name == "BBMP Revenue Office") {
+                element.icon = "./assets/Icons/BB.png";
+              } else if (element.name == "Zonal Office") {
+                element.icon = "./assets/Icons/BWSSB.png";
+              } else if (
+                element.name == "BESCOM office" ||
+                element.name == "ELCITA Office"
+              ) {
+                element.icon = "./assets/Icons/BESCOM.png";
+              } else if (element.name == "Police Station") {
+                element.icon = "./assets/Icons/Police.png";
+              }
+            });
+            this.wardAgencyList = this.agencyData.wardAgencyList;
+            if (
+              this.showgraphs == true ||
+              this.showGovernance == true ||
+              this.showAgencies == true ||
+              this.showIssues == true
+            ) {
+              this.showIssues = false;
+              this.showgraphs = false;
+              this.showGovernance = false;
+              this.showAgencies = true;
+              this.AQM = false;
+            } else {
+              this.showIssues = false;
+              this.showgraphs = false;
+              this.showGovernance = false;
+              this.showAgencies = false;
+              this.AQM = false;
             }
-          });
-          this.wardAgencyList = this.agencyData.wardAgencyList;
-          if (this.showgraphs == true || this.showGovernance == true || this.showAgencies == true || this.showIssues == true) {
-            this.showIssues = false;
-            this.showgraphs = false;
-            this.showGovernance = false;
-            this.showAgencies = true;
-            this.AQM = false;
-          } else {
-            this.showIssues = false;
-            this.showgraphs = false;
-            this.showGovernance = false;
-            this.showAgencies = false;
-            this.AQM = false;
+          },
+          (error) => {
+            console.log(error);
           }
-        }, error => {
-          console.log(error);
-        })
+        );
       }
-    } else if (type == 'Issues Categories') {
+    } else if (type == "Issues Categories") {
       this.Type = type;
       this.dataService.catType = 2;
       this.compare = true;
       this.showComp = true;
-    } else if (type == 'DWCC') {
+    } else if (type == "DWCC") {
       this.dataService.catType = 7;
       this.compare = true;
       if (true) {
-        this.dataService.getDWCC(obj).subscribe(data => {
-          this.DWCCData = data;
-          this.mapData = this.DWCCData.data;
-          this.dwcGraph = data;
-          this.mapData.forEach(element => {
-            if (element.facility_type == "Bio Methanation Unit (BMU)") {
-              element.icon = './assets/Icons/BioMethanation.png'
-            } else if (element.facility_type == "Dry Waste Collection Center (DWCC)") {
-              element.icon = './assets/Icons/DryWaste.png'
-            } else if (element.facility_type == "Centralized Processing Facility") {
-              element.icon = './assets/Icons/ProcessFacility.png'
-            } else if (element.facility_type == "Leaf Litter Processing Units (LLPU)") {
-              element.icon = './assets/Icons/Leaf.png'
-            } else if (element.facility_type == "Organic Waste Converter (OWC)") {
-              element.icon = './assets/Icons/OrgWaste.png'
-            } else if (element.facility_type == "Landfills") {
-              element.icon = './assets/Icons/LandFills.png'
+        this.dataService.getDWCC(obj).subscribe(
+          (data) => {
+            this.DWCCData = data;
+            this.mapData = this.DWCCData.data;
+            this.dwcGraph = data;
+            this.mapData.forEach((element) => {
+              if (element.facility_type == "Bio Methanation Unit (BMU)") {
+                element.icon = "./assets/Icons/BioMethanation.png";
+              } else if (
+                element.facility_type == "Dry Waste Collection Center (DWCC)"
+              ) {
+                element.icon = "./assets/Icons/DryWaste.png";
+              } else if (
+                element.facility_type == "Centralized Processing Facility"
+              ) {
+                element.icon = "./assets/Icons/ProcessFacility.png";
+              } else if (
+                element.facility_type == "Leaf Litter Processing Units (LLPU)"
+              ) {
+                element.icon = "./assets/Icons/Leaf.png";
+              } else if (
+                element.facility_type == "Organic Waste Converter (OWC)"
+              ) {
+                element.icon = "./assets/Icons/OrgWaste.png";
+              } else if (element.facility_type == "Landfills") {
+                element.icon = "./assets/Icons/LandFills.png";
+              }
+            });
+            for (let ig = 0; ig < this.dwcGraph.total_count.length; ig++) {
+              var obj = {
+                name: this.dwcGraph.total_count[ig].name,
+                value: this.dwcGraph.total_count[ig].count,
+              };
+              this.graphData.push(obj);
+              if (
+                this.showgraphs == true ||
+                this.showGovernance == true ||
+                this.showAgencies == true ||
+                this.showIssues == true
+              ) {
+                this.showIssues = false;
+                this.showgraphs = true;
+                this.showGovernance = false;
+                this.showAgencies = false;
+                this.AQM = false;
+              } else {
+                this.showIssues = false;
+                this.showgraphs = false;
+                this.showGovernance = false;
+                this.showAgencies = false;
+                this.AQM = false;
+              }
             }
-          });
-          for (let ig = 0; ig < this.dwcGraph.total_count.length; ig++) {
-            var obj = {
-              "name": this.dwcGraph.total_count[ig].name,
-              "value": this.dwcGraph.total_count[ig].count
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+    } else if (type == "Governance") {
+      this.dataService.catType = 6;
+      this.compare = true;
+      if (true) {
+        this.dataService.getGovernance(obj).subscribe(
+          (data) => {
+            this.Governance = data;
+            this.mapData = this.Governance.Corporator;
+            this.mapData.forEach((element) => {
+              element.icon = "./assets/Icons/Corporator.png";
+            });
+            this.mapData = this.mapData.concat(this.Governance.MLA);
+            this.mapData.forEach((element) => {
+              if (element.icon == undefined) {
+                element.icon = "./assets/Icons/MLA.png";
+              }
+            });
+            // this.WardDetails = this.Governance;
+            this.WardDetails = undefined;
+            if (
+              this.showgraphs == true ||
+              this.showGovernance == true ||
+              this.showAgencies == true ||
+              this.showIssues == true
+            ) {
+              this.showIssues = false;
+              this.showgraphs = false;
+              this.showGovernance = true;
+              this.showAgencies = false;
+              this.AQM = false;
+            } else {
+              this.showIssues = false;
+              this.showgraphs = false;
+              this.showGovernance = false;
+              this.showAgencies = false;
+              this.AQM = false;
             }
-            this.graphData.push(obj);
-            if (this.showgraphs == true || this.showGovernance == true || this.showAgencies == true || this.showIssues == true) {
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+    } else if (type == "Toilets") {
+      this.dataService.catType = 8;
+      this.compare = true;
+      if (true) {
+        this.dataService.getToilets(obj).subscribe(
+          (data) => {
+            this.toiletsData = data;
+            this.mapData = this.toiletsData.data;
+            this.mapData.forEach((element) => {
+              element.icon = "./assets/Icons/Toilet.png";
+            });
+            for (let to = 0; to < this.toiletsData.info.length; to++) {
+              var obj = {
+                name: this.toiletsData.info[to].name,
+                value: this.toiletsData.info[to].count,
+              };
+              this.graphData.push(obj);
+            }
+            if (
+              this.showgraphs == true ||
+              this.showGovernance == true ||
+              this.showAgencies == true ||
+              this.showIssues == true
+            ) {
               this.showIssues = false;
               this.showgraphs = true;
               this.showGovernance = false;
@@ -492,155 +633,110 @@ export class AppComponent {
               this.showAgencies = false;
               this.AQM = false;
             }
+          },
+          (error) => {
+            console.log(error);
           }
-        }, error => {
-          console.log(error);
-        })
+        );
       }
-    } else if (type == "Governance") {
-      this.dataService.catType = 6;
-      this.compare = true;
-      if (true) {
-        this.dataService.getGovernance(obj).subscribe(data => {
-          this.Governance = data;
-          this.mapData = this.Governance.Corporator;
-          this.mapData.forEach(element => {
-            element.icon = './assets/Icons/Corporator.png'
-          });
-          this.mapData = this.mapData.concat(this.Governance.MLA)
-          this.mapData.forEach(element => {
-            if (element.icon == undefined) {
-              element.icon = './assets/Icons/MLA.png'
-            }
-          });
-          // this.WardDetails = this.Governance;
-          this.WardDetails = undefined;
-          if (this.showgraphs == true || this.showGovernance == true || this.showAgencies == true || this.showIssues == true) {
-            this.showIssues = false;
-            this.showgraphs = false;
-            this.showGovernance = true;
-            this.showAgencies = false;
-            this.AQM = false;
-          } else {
-            this.showIssues = false;
-            this.showgraphs = false;
-            this.showGovernance = false;
-            this.showAgencies = false;
-            this.AQM = false;
-          }
-        }, error => {
-          console.log(error);
-        })
-      }
-    } else if (type == 'Toilets') {
-      this.dataService.catType = 8;
-      this.compare = true;
-      if (true) {
-        this.dataService.getToilets(obj).subscribe(data => {
-          this.toiletsData = data;
-          this.mapData = this.toiletsData.data;
-          this.mapData.forEach(element => {
-            element.icon = './assets/Icons/Toilet.png'
-          });
-          for (let to = 0; to < this.toiletsData.info.length; to++) {
-            var obj = {
-              "name": this.toiletsData.info[to].name,
-              "value": this.toiletsData.info[to].count
-            }
-            this.graphData.push(obj);
-          }
-          if (this.showgraphs == true || this.showGovernance == true || this.showAgencies == true || this.showIssues == true) {
-            this.showIssues = false;
-            this.showgraphs = true;
-            this.showGovernance = false;
-            this.showAgencies = false;
-            this.AQM = false;
-          } else {
-            this.showIssues = false;
-            this.showgraphs = false;
-            this.showGovernance = false;
-            this.showAgencies = false;
-            this.AQM = false;
-          }
-        }, error => {
-          console.log(error);
-        })
-      }
-    } else if (type == 'Campaigns') {
+    } else if (type == "Campaigns") {
       this.dataService.catType = 1;
       this.compare = false;
       if (true) {
-        this.dataService.getCampaigns(obj).subscribe(data => {
-          this.campaignsData = data;
-          this.mapData = this.campaignsData.mapData;
-          this.mapData.forEach(element => {
-            element.icon = './assets/Icons/Camp.png'
-          });
-          for (let cm = 0; cm < this.campaignsData.graph.category.length; cm++) {
-            var obj = {
-              "name": this.campaignsData.graph.category[cm].value,
-              "value": this.campaignsData.graph.category[cm].count
+        this.dataService.getCampaigns(obj).subscribe(
+          (data) => {
+            this.campaignsData = data;
+            this.mapData = this.campaignsData.mapData;
+            this.mapData.forEach((element) => {
+              element.icon = "./assets/Icons/Camp.png";
+            });
+            for (
+              let cm = 0;
+              cm < this.campaignsData.graph.category.length;
+              cm++
+            ) {
+              var obj = {
+                name: this.campaignsData.graph.category[cm].value,
+                value: this.campaignsData.graph.category[cm].count,
+              };
+              this.graphData.push(obj);
             }
-            this.graphData.push(obj);
-          }
-          for (let cm1 = 0; cm1 < this.campaignsData.graph.status.length; cm1++) {
-            var obj = {
-              "name": this.campaignsData.graph.status[cm1].value,
-              "value": this.campaignsData.graph.status[cm1].count
+            for (
+              let cm1 = 0;
+              cm1 < this.campaignsData.graph.status.length;
+              cm1++
+            ) {
+              var obj = {
+                name: this.campaignsData.graph.status[cm1].value,
+                value: this.campaignsData.graph.status[cm1].count,
+              };
+              this.graphDataStatus.push(obj);
             }
-            this.graphDataStatus.push(obj);
+            if (
+              this.showgraphs == true ||
+              this.showGovernance == true ||
+              this.showAgencies == true ||
+              this.showIssues == true
+            ) {
+              this.showIssues = false;
+              this.showgraphs = true;
+              this.showGovernance = false;
+              this.showAgencies = false;
+              this.AQM = false;
+            } else {
+              this.showIssues = false;
+              this.showgraphs = false;
+              this.showGovernance = false;
+              this.showAgencies = false;
+              this.AQM = false;
+            }
+          },
+          (error) => {
+            console.log(error);
           }
-          if (this.showgraphs == true || this.showGovernance == true || this.showAgencies == true || this.showIssues == true) {
-            this.showIssues = false;
-            this.showgraphs = true;
-            this.showGovernance = false;
-            this.showAgencies = false;
-            this.AQM = false;
-          } else {
-            this.showIssues = false;
-            this.showgraphs = false;
-            this.showGovernance = false;
-            this.showAgencies = false;
-            this.AQM = false;
-          }
-        }, error => {
-          console.log(error);
-        })
+        );
       }
-    } else if (type == 'AQM') {
+    } else if (type == "AQM") {
       this.dataService.catType = 9;
       this.compare = false;
       this.AQM = true;
       if (true) {
-        this.dataService.AQMdata(obj).subscribe(data => {
-          this.AQMData = data;
-          this.mapData = this.AQMData.data;
-          this.mapData.forEach(element => {
-            if (element.source == 1) {
-              element.icon = './assets/Icons/AQMGovt.png'
+        this.dataService.AQMdata(obj).subscribe(
+          (data) => {
+            this.AQMData = data;
+            this.mapData = this.AQMData.data;
+            this.mapData.forEach((element) => {
+              if (element.source == 1) {
+                element.icon = "./assets/Icons/AQMGovt.png";
+              } else {
+                element.icon = "./assets/Icons/AQMPvt.png";
+              }
+            });
+            this.AQMGraphLoc = this.AQMData.graph;
+            this.dataService.AQMDataList = this.AQMData.data;
+            if (
+              this.showgraphs == true ||
+              this.showGovernance == true ||
+              this.showAgencies == true ||
+              this.showIssues == true
+            ) {
+              this.showIssues = false;
+              this.showgraphs = true;
+              this.showGovernance = false;
+              this.showAgencies = false;
+              this.AQM = true;
             } else {
-              element.icon = './assets/Icons/AQMPvt.png'
+              this.showIssues = false;
+              this.showgraphs = false;
+              this.showGovernance = false;
+              this.showAgencies = false;
+              this.AQM = false;
             }
-          });
-          this.AQMGraphLoc = this.AQMData.graph;
-          this.dataService.AQMDataList = this.AQMData.data;
-          if (this.showgraphs == true || this.showGovernance == true || this.showAgencies == true || this.showIssues == true) {
-            this.showIssues = false;
-            this.showgraphs = true;
-            this.showGovernance = false;
-            this.showAgencies = false;
-            this.AQM = true;
-          } else {
-            this.showIssues = false;
-            this.showgraphs = false;
-            this.showGovernance = false;
-            this.showAgencies = false;
-            this.AQM = false;
-          }
-        },
-          error => {
+          },
+          (error) => {
             console.log(error);
-          });
+          }
+        );
       }
     }
     // this.getDashboardData(this.dataService.catType);
@@ -659,7 +755,7 @@ export class AppComponent {
     } else if (this.Type == "Agencies") {
       this.showAgencies = !this.showAgencies;
       this.showgraphs = false;
-    } else if (this.Type == 'Issues Categories') {
+    } else if (this.Type == "Issues Categories") {
       this.showIssues = !this.showIssues;
       this.showgraphs = false;
     } else {
@@ -672,7 +768,7 @@ export class AppComponent {
         this.showGovernance = false;
       } else if (this.Type == "Agencies") {
         this.showAgencies = false;
-      } else if (this.Type == 'Issues Categories') {
+      } else if (this.Type == "Issues Categories") {
         this.showIssues = false;
       } else {
         this.showgraphs = false;
@@ -682,7 +778,7 @@ export class AppComponent {
 
   private setCurrentPosition() {
     if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(position => {
+      navigator.geolocation.getCurrentPosition((position) => {
         this.dataService.SelectedCityLat = position.coords.latitude;
         this.dataService.SelectedCityLng = position.coords.longitude;
       });
@@ -699,40 +795,40 @@ export class AppComponent {
   config = {
     displayKey: "submenu", //if objects array passed which key to be displayed defaults to description
     search: true, //true/false for the search functionlity defaults to false,
-    height: '250px', //height of the list so that if there are more no of items it can show a scroll defaults to auto. With auto height scroll will never appear
-    placeholder: 'Select', // text to be displayed when no item is selected defaults to Select,
-    customComparator: () => { }, // a custom function using which user wants to sort the items. default is undefined and Array.sort() will be used in that case,
+    height: "250px", //height of the list so that if there are more no of items it can show a scroll defaults to auto. With auto height scroll will never appear
+    placeholder: "Select", // text to be displayed when no item is selected defaults to Select,
+    customComparator: () => {}, // a custom function using which user wants to sort the items. default is undefined and Array.sort() will be used in that case,
     limitTo: 500, // a number thats limits the no of options displayed in the UI similar to angular's limitTo pipe
-    moreText: 'more', // text to be displayed whenmore than one items are selected like Option 1 + 5 more
-    noResultsFound: 'No Data', // text to be displayed when no items are found while searching
-    searchPlaceholder: 'Search', // label thats displayed in search input,
-    searchOnKey: 'submenu', // key on which search should be performed this will be selective search. if undefined this will be extensive search on all keys
-  }
+    moreText: "more", // text to be displayed whenmore than one items are selected like Option 1 + 5 more
+    noResultsFound: "No Data", // text to be displayed when no items are found while searching
+    searchPlaceholder: "Search", // label thats displayed in search input,
+    searchOnKey: "submenu", // key on which search should be performed this will be selective search. if undefined this will be extensive search on all keys
+  };
   configWard = {
     displayKey: "name", //if objects array passed which key to be displayed defaults to description
     search: true, //true/false for the search functionlity defaults to false,
-    height: '250px', //height of the list so that if there are more no of items it can show a scroll defaults to auto. With auto height scroll will never appear
-    placeholder: 'Select Ward', // text to be displayed when no item is selected defaults to Select,
-    customComparator: () => { }, // a custom function using which user wants to sort the items. default is undefined and Array.sort() will be used in that case,
+    height: "250px", //height of the list so that if there are more no of items it can show a scroll defaults to auto. With auto height scroll will never appear
+    placeholder: "Select Ward", // text to be displayed when no item is selected defaults to Select,
+    customComparator: () => {}, // a custom function using which user wants to sort the items. default is undefined and Array.sort() will be used in that case,
     limitTo: 500, // a number thats limits the no of options displayed in the UI similar to angular's limitTo pipe
-    moreText: 'more', // text to be displayed whenmore than one items are selected like Option 1 + 5 more
-    noResultsFound: 'No Data', // text to be displayed when no items are found while searching
-    searchPlaceholder: 'Search Ward', // label thats displayed in search input,
-    searchOnKey: 'name', // key on which search should be performed this will be selective search. if undefined this will be extensive search on all keys
-  }
+    moreText: "more", // text to be displayed whenmore than one items are selected like Option 1 + 5 more
+    noResultsFound: "No Data", // text to be displayed when no items are found while searching
+    searchPlaceholder: "Search Ward", // label thats displayed in search input,
+    searchOnKey: "name", // key on which search should be performed this will be selective search. if undefined this will be extensive search on all keys
+  };
   configCity = {
     displayKey: "cityName", //if objects array passed which key to be displayed defaults to description
     search: true, //true/false for the search functionlity defaults to false,
-    height: '250px', //height of the list so that if there are more no of items it can show a scroll defaults to auto. With auto height scroll will never appear
-    placeholder: 'Select City', // text to be displayed when no item is selected defaults to Select,
-    customComparator: () => { }, // a custom function using which user wants to sort the items. default is undefined and Array.sort() will be used in that case,
+    height: "250px", //height of the list so that if there are more no of items it can show a scroll defaults to auto. With auto height scroll will never appear
+    placeholder: "Select City", // text to be displayed when no item is selected defaults to Select,
+    customComparator: () => {}, // a custom function using which user wants to sort the items. default is undefined and Array.sort() will be used in that case,
     limitTo: 500, // a number thats limits the no of options displayed in the UI similar to angular's limitTo pipe
-    moreText: 'more', // text to be displayed whenmore than one items are selected like Option 1 + 5 more
-    noResultsFound: 'No Data', // text to be displayed when no items are found while searching
-    searchPlaceholder: 'Search City', // label thats displayed in search input,
-    searchOnKey: 'cityName', // key on which search should be performed this will be selective search. if undefined this will be extensive search on all keys
-    clearOnSelection: true
-  }
+    moreText: "more", // text to be displayed whenmore than one items are selected like Option 1 + 5 more
+    noResultsFound: "No Data", // text to be displayed when no items are found while searching
+    searchPlaceholder: "Search City", // label thats displayed in search input,
+    searchOnKey: "cityName", // key on which search should be performed this will be selective search. if undefined this will be extensive search on all keys
+    clearOnSelection: true,
+  };
 
   public CityData = [];
   public CitySelected;
@@ -743,47 +839,47 @@ export class AppComponent {
     let childrenCategoryTemp = [];
     let childerenCatMain = [];
     var childrenCategory;
-    data && data.forEach(element => {
-      childrenCategory = new TreeviewItem({
-        text: element.name,
-        value: element.menuId,
-        collapsed: false,
-        checked: false, children: [
-          { text: 'a', value: 0 },
-        ]
-      });
-      for (let mi = 0; mi < element.subMenus.length; mi++) {
-        var tempObj = {
-          text: element.subMenus[mi].submenu,
-          value: element.subMenus[mi].submenuId,
+    data &&
+      data.forEach((element) => {
+        childrenCategory = new TreeviewItem({
+          text: element.name,
+          value: element.menuId,
+          collapsed: false,
           checked: false,
-          name: 'ramesh',
+          children: [{ text: "a", value: 0 }],
+        });
+        for (let mi = 0; mi < element.subMenus.length; mi++) {
+          var tempObj = {
+            text: element.subMenus[mi].submenu,
+            value: element.subMenus[mi].submenuId,
+            checked: false,
+            name: "ramesh",
+          };
+          icons.push({
+            submenu: element.subMenus[mi].submenu,
+            icon: element.subMenus[mi].icon,
+            submenuId: element.subMenus[mi].submenuId,
+          });
+          childrenCategory.children.push(new TreeviewItem(tempObj));
+          childrenCategory.internalChecked = false;
         }
-        icons.push({
-          submenu: element.subMenus[mi].submenu,
-          icon: element.subMenus[mi].icon,
-          submenuId: element.subMenus[mi].submenuId
-        })
-        childrenCategory.children.push(new TreeviewItem(tempObj));
-        childrenCategory.internalChecked = false;
-      }
-      childrenCategory.children.splice(0, 1);
-      childrenCategoryTemp = [];
-      childrenCategoryTemp.push(childrenCategory);
-      childerenCatMain.push(childrenCategoryTemp);
-    });
-    childerenCatMain.forEach(val => {
-      val[0] && val[0]['internalChildren'].length && val[0]['internalChildren'].forEach(element => {
-        icons.forEach(val => {
-          if (element.value == val.submenuId) {
-            element['icon'] = val.icon;
-            return false;
-          }
-        })
-
+        childrenCategory.children.splice(0, 1);
+        childrenCategoryTemp = [];
+        childrenCategoryTemp.push(childrenCategory);
+        childerenCatMain.push(childrenCategoryTemp);
       });
-    })
-
+    childerenCatMain.forEach((val) => {
+      val[0] &&
+        val[0]["internalChildren"].length &&
+        val[0]["internalChildren"].forEach((element) => {
+          icons.forEach((val) => {
+            if (element.value == val.submenuId) {
+              element["icon"] = val.icon;
+              return false;
+            }
+          });
+        });
+    });
 
     return childerenCatMain;
   }
@@ -796,7 +892,7 @@ export class AppComponent {
     // Login User
     this.LoginUserInfo();
 
-    // Find Device 
+    // Find Device
     this.epicFunction();
 
     /**
@@ -810,29 +906,36 @@ export class AppComponent {
      */
     this.Wards.sort(this.dynamicSort("name"));
     let obj = {
-      "cityId": this.SelectedCity
-    }
-    forkJoin([this.dataService.cityDetails(), this.dataService.getMenuList(obj)]).subscribe(res => {
-      if (res[0] && res[0]['data']) {
-        var tempCityData: any = res[0];
-        this.cities = tempCityData.data;
-        this.CitiesList = JSON.stringify(tempCityData.data);
+      cityId: this.SelectedCity,
+    };
+    forkJoin([
+      this.dataService.cityDetails(),
+      this.dataService.getMenuList(obj),
+    ]).subscribe(
+      (res) => {
+        if (res[0] && res[0]["data"]) {
+          var tempCityData: any = res[0];
+          this.cities = tempCityData.data;
+          this.CitiesList = JSON.stringify(tempCityData.data);
+        }
+        if (res[1] && res[1]["data"]) {
+          var TempMenuData: any = res[1];
+          var temp: any = TempMenuData.data.filter((val) => {
+            if (val.menuId != 100) {
+              return val;
+            }
+          });
+          this.MenuData = temp;
+          this.MenuItems = this.getMenuJSON(this.MenuData);
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+      () => {
+        this.yourCurrentLocation();
       }
-      if (res[1] && res[1]['data']) {
-        var TempMenuData: any = res[1];
-        var temp: any = TempMenuData.data.filter(val => {
-          if (val.menuId != 100) {
-            return val;
-          }
-        });
-        this.MenuData = temp;
-        this.MenuItems = this.getMenuJSON(this.MenuData);
-      }
-    }, err => {
-      console.log(err);
-    }, () => {
-      this.yourCurrentLocation();
-    })
+    );
 
     // this.dataService.AQMdata(obj).subscribe(data => {
     //   this.AQMDataLoad = data;
@@ -850,10 +953,13 @@ export class AppComponent {
     //load Places Autocomplete
     var options = {
       // types: ['(cities)'],
-      componentRestrictions: { country: "in" }
+      componentRestrictions: { country: "in" },
     };
     this.mapsAPILoader.load().then(() => {
-      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, options);
+      let autocomplete = new google.maps.places.Autocomplete(
+        this.searchElementRef.nativeElement,
+        options
+      );
       autocomplete.addListener("place_changed", () => {
         this.ngZone.run(() => {
           //get the place result
@@ -863,15 +969,15 @@ export class AppComponent {
           if (place.geometry === undefined || place.geometry === null) {
             return;
           }
-          this.formButtonClickEvent('Menu', 'Search', 'Place_Search', 'Input');
+          this.formButtonClickEvent("Menu", "Search", "Place_Search", "Input");
           //set latitude, longitude and zoom
           this.dataService.SelectedCityLat = place.geometry.location.lat();
           this.dataService.SelectedCityLng = place.geometry.location.lng();
           var warNmObj = {
-            "lat": place.geometry.location.lat(),
-            "lng": place.geometry.location.lng()
-          }
-          this.dataService.getCorrLocWard(warNmObj).subscribe(data => {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng(),
+          };
+          this.dataService.getCorrLocWard(warNmObj).subscribe((data) => {
             this.dataService.zoom = 17;
             this.currentWard = data;
             this.CitySelected = undefined;
@@ -890,32 +996,40 @@ export class AppComponent {
             this.Wards = [];
             this.WardSelected = undefined;
             if (this.CitySelected != undefined) {
-              this.dataService.wardDetails({ "cityId": this.CitySelected.id }).subscribe(data => {
-                var tempWardData: any = data;
-                this.Wards = tempWardData.data;
-                for (let wd = 0; wd < this.Wards.length; wd++) {
-                  if (this.currentWard.details[0].id == this.Wards[wd].wardId) {
-                    this.WardSelected = this.Wards[wd];
-                    this.wardSelected = Number(this.Wards[wd].wardId);
-                    this.dataService.wardSelectedID = this.wardSelected;
-                    break;
+              this.dataService
+                .wardDetails({ cityId: this.CitySelected.id })
+                .subscribe((data) => {
+                  var tempWardData: any = data;
+                  this.Wards = tempWardData.data;
+                  for (let wd = 0; wd < this.Wards.length; wd++) {
+                    if (
+                      this.currentWard.details[0].id == this.Wards[wd].wardId
+                    ) {
+                      this.WardSelected = this.Wards[wd];
+                      this.wardSelected = Number(this.Wards[wd].wardId);
+                      this.dataService.wardSelectedID = this.wardSelected;
+                      break;
+                    }
                   }
-                }
-                this.NewObj.cityId = this.dataService.SelectCityID;
-                this.NewObj.wardId = this.currentWard.details[0].id;
-                this.NewObj.level = this.dataService.zoom;
-                this.NewObj.latitude = Number(this.dataService.SelectedCityLat);
-                this.NewObj.longitude = Number(this.dataService.SelectedCityLng);
-                this.CollectionsData(this.NewObj);
-                this.ShowWardSelect = false;
-                this.ShowCitySelect = false;
-                setTimeout(() => {
-                  this.ShowWardSelect = true;
-                  this.ShowCitySelect = true;
-                }, 100);
-              });
+                  this.NewObj.cityId = this.dataService.SelectCityID;
+                  this.NewObj.wardId = this.currentWard.details[0].id;
+                  this.NewObj.level = this.dataService.zoom;
+                  this.NewObj.latitude = Number(
+                    this.dataService.SelectedCityLat
+                  );
+                  this.NewObj.longitude = Number(
+                    this.dataService.SelectedCityLng
+                  );
+                  this.CollectionsData(this.NewObj);
+                  this.ShowWardSelect = false;
+                  this.ShowCitySelect = false;
+                  setTimeout(() => {
+                    this.ShowWardSelect = true;
+                    this.ShowCitySelect = true;
+                  }, 100);
+                });
             }
-          })
+          });
         });
       });
     });
@@ -930,12 +1044,16 @@ export class AppComponent {
       let menuIndex;
       if (this.NewObj.menuData.length == 0) {
         let tempMenu = {
-          "menuId": menu[0].value,
-          "submenus": event.join(',')
-        }
+          menuId: menu[0].value,
+          submenus: event.join(","),
+        };
         this.NewObj.menuData.push(tempMenu);
       } else {
-        for (let menuSel1 = 0; menuSel1 < this.NewObj.menuData.length; menuSel1++) {
+        for (
+          let menuSel1 = 0;
+          menuSel1 < this.NewObj.menuData.length;
+          menuSel1++
+        ) {
           if (menu[0].value == this.NewObj.menuData[menuSel1].menuId) {
             menuIncludes = true;
             menuIndex = menuSel1;
@@ -946,12 +1064,12 @@ export class AppComponent {
         }
         if (menuIncludes == false) {
           let tempMenu = {
-            "menuId": menu[0].value,
-            "submenus": event.join(',')
-          }
+            menuId: menu[0].value,
+            submenus: event.join(","),
+          };
           this.NewObj.menuData.push(tempMenu);
         } else {
-          this.NewObj.menuData[menuIndex].submenus = event.join(',');
+          this.NewObj.menuData[menuIndex].submenus = event.join(",");
         }
       }
       // this.NewObj.cityId = this.dataService.SelectCityID;
@@ -962,14 +1080,23 @@ export class AppComponent {
       // console.log(this.NewObj);
       this.CollectionsData(this.NewObj);
     } else {
-      for (let menuSel2 = 0; menuSel2 < this.NewObj.menuData.length; menuSel2++) {
+      for (
+        let menuSel2 = 0;
+        menuSel2 < this.NewObj.menuData.length;
+        menuSel2++
+      ) {
         if (this.NewObj.menuData[menuSel2].menuId == menu[0].value) {
           this.NewObj.menuData.splice(menuSel2, 1);
         }
       }
       this.CollectionsData(this.NewObj);
     }
-    this.formButtonClickEvent('Menu', 'Marker_Category', menu[0].text, 'CheckBox');
+    this.formButtonClickEvent(
+      "Menu",
+      "Marker_Category",
+      menu[0].text,
+      "CheckBox"
+    );
   }
   public wardName;
   public wardID;
@@ -986,39 +1113,48 @@ export class AppComponent {
   }
 
   getlocation() {
-    navigator.geolocation.getCurrentPosition(pos => {
-      // this.dataService.getCorrLocWard(pos.coords.latitude, pos.coords.longitude).subscribe(data => {
-      //   this.wardDetails = data;
-      var currLoc = {
-        'lat': pos.coords.latitude,
-        'lng': pos.coords.longitude,
-        'icon': './assets/Icons/myLocation.png'
-        // 'wardName':this.wardDetails[0].ward_name
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        // this.dataService.getCorrLocWard(pos.coords.latitude, pos.coords.longitude).subscribe(data => {
+        //   this.wardDetails = data;
+        var currLoc = {
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+          icon: "./assets/Icons/myLocation.png",
+          // 'wardName':this.wardDetails[0].ward_name
+        };
+        var obj = [];
+        obj.push(currLoc);
+        this.mapData = obj;
+        this.dataService.SelectedCityLat = 0;
+        this.dataService.SelectedCityLng = 0;
+        setTimeout(() => {
+          this.dataService.SelectedCityLat = pos.coords.latitude;
+          this.dataService.SelectedCityLng = pos.coords.longitude;
+        }, 100);
+        // this.showgraphs = false;
+        for (let clr2 = 0; clr2 < this.categories.length; clr2++) {
+          this.categories[clr2].checked = false;
+        }
+        (<HTMLInputElement>document.getElementById("DWCC")).checked = false;
+        (<HTMLInputElement>document.getElementById("Toilet")).checked = false;
+        (<HTMLInputElement>(
+          document.getElementById("Campaigns")
+        )).checked = false;
+        (<HTMLInputElement>document.getElementById("AQMcheck")).checked = false;
+        (<HTMLInputElement>(
+          document.getElementById("ICatagory")
+        )).checked = false;
+        (<HTMLInputElement>(
+          document.getElementById("Governance")
+        )).checked = false;
+        (<HTMLInputElement>document.getElementById("Agencies")).checked = false;
+      },
+      (error) => {
+        console.log(error);
+        // });
       }
-      var obj = []
-      obj.push(currLoc);
-      this.mapData = obj;
-      this.dataService.SelectedCityLat = 0;
-      this.dataService.SelectedCityLng = 0;
-      setTimeout(() => {
-        this.dataService.SelectedCityLat = pos.coords.latitude;
-        this.dataService.SelectedCityLng = pos.coords.longitude;
-      }, 100);
-      // this.showgraphs = false;
-      for (let clr2 = 0; clr2 < this.categories.length; clr2++) {
-        this.categories[clr2].checked = false;
-      }
-      (<HTMLInputElement>document.getElementById('DWCC')).checked = false;
-      (<HTMLInputElement>document.getElementById('Toilet')).checked = false;
-      (<HTMLInputElement>document.getElementById('Campaigns')).checked = false;
-      (<HTMLInputElement>document.getElementById('AQMcheck')).checked = false;
-      (<HTMLInputElement>document.getElementById('ICatagory')).checked = false;
-      (<HTMLInputElement>document.getElementById('Governance')).checked = false;
-      (<HTMLInputElement>document.getElementById('Agencies')).checked = false;
-    }, error => {
-      console.log(error);
-      // });
-    });
+    );
   }
 
   cordDetails(event) {
@@ -1038,9 +1174,10 @@ export class AppComponent {
       property = property.substr(1);
     }
     return function (a, b) {
-      var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+      var result =
+        a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
       return result * sortOrder;
-    }
+    };
   }
   public showClear = false;
   searchText(event) {
@@ -1052,7 +1189,7 @@ export class AppComponent {
     }
   }
   ClearSearch() {
-    this.searchControl.setValue('');
+    this.searchControl.setValue("");
     this.showClear = false;
   }
 
@@ -1060,26 +1197,43 @@ export class AppComponent {
   public ForumURL;
   NeighbourhoodForum() {
     // this.ShowForum = true;
-    var temForumURL = this.wardSelectedNameForForum == undefined ? 'https://discourse.solveninja.org/tags/' : 'https://discourse.solveninja.org/tags/' + this.wardSelectedNameForForum;
+    var temForumURL =
+      this.wardSelectedNameForForum == undefined
+        ? "https://discourse.solveninja.org/tags/"
+        : "https://discourse.solveninja.org/tags/" +
+          this.wardSelectedNameForForum;
     this.ForumURL = temForumURL;
     // setTimeout(() => {
     //   (<HTMLIFrameElement>document.getElementById('ForumSrc')).src = this.ForumURL;
     // }, 100);
     // window.open(this.ForumURL);
-    this.formButtonClickEvent('Menu', 'Links_Button', 'NeighbourhoodForum', 'Links_Button');
-    window.open('https://covid.apollo247.com/');
+    this.formButtonClickEvent(
+      "Menu",
+      "Links_Button",
+      "NeighbourhoodForum",
+      "Links_Button"
+    );
+    window.open("https://covid.apollo247.com/");
   }
   public ShowAnalytics = false;
   NeighbourhoodAnalytics() {
     // this.ShowAnalytics = true;
-    var tempParm = this.wardSelectedName == undefined ? '' : '?ward_title=' + this.wardSelectedName;
+    var tempParm =
+      this.wardSelectedName == undefined
+        ? ""
+        : "?ward_title=" + this.wardSelectedName;
     // window.open('http://internaldashboard.solveninja.org:4000/public/dashboard/07b9f145-5be8-4206-942e-7251e15791d9' + tempParm);
-    this.formButtonClickEvent('Menu', 'Links_Button', 'NeighbourhoodAnalytics', 'Links_Button');
-    window.open('https://ee.kobotoolbox.org/x/MABCXQRa');
+    this.formButtonClickEvent(
+      "Menu",
+      "Links_Button",
+      "NeighbourhoodAnalytics",
+      "Links_Button"
+    );
+    window.open("https://ee.kobotoolbox.org/x/MABCXQRa");
   }
 
   closeForum(type) {
-    if (type == 'Forum') {
+    if (type == "Forum") {
       this.ShowForum = false;
     } else {
       this.ShowAnalytics = false;
@@ -1094,9 +1248,12 @@ export class AppComponent {
       this.dataService.zoom = 17;
       this.wardSelected = event.value.wardId;
       this.wardSelectedName = event.value.name;
-      if (event.value.name.includes(' ')) {
+      if (event.value.name.includes(" ")) {
         this.wardSelectedNameForForum = event.value.name;
-        this.wardSelectedNameForForum = this.wardSelectedNameForForum.replace(/ /g, '-');
+        this.wardSelectedNameForForum = this.wardSelectedNameForForum.replace(
+          / /g,
+          "-"
+        );
       } else {
         this.wardSelectedNameForForum = event.value.name;
       }
@@ -1107,32 +1264,37 @@ export class AppComponent {
       this.wardSelectedNameForForum = undefined;
     }
     this.NewObj.cityId = this.dataService.SelectCityID;
-    this.wardSelected == undefined ? 0 : this.wardSelected
+    this.wardSelected == undefined ? 0 : this.wardSelected;
     this.NewObj.wardId = Number(this.wardSelected);
     this.dataService.wardSelectedID = this.wardSelected;
     this.NewObj.latitude = Number(this.dataService.SelectedCityLat);
     this.NewObj.longitude = Number(this.dataService.SelectedCityLng);
     this.CollectionsData(this.NewObj);
     var obj = {
-      'lat': Number(event.value.lat),
-      'lng': Number(event.value.lng),
-    }
+      lat: Number(event.value.lat),
+      lng: Number(event.value.lng),
+    };
     var arr = [];
     arr.push(obj);
     this.mapData = [];
     this.mapData = arr;
     this.dataService.SelectedCityLat = Number(event.value.lat);
     this.dataService.SelectedCityLng = Number(event.value.lng);
-    this.formButtonClickEvent('Ward_Select', 'Menu', 'Ward_Menu', 'City_Select')
+    this.formButtonClickEvent(
+      "Ward_Select",
+      "Menu",
+      "Ward_Menu",
+      "City_Select"
+    );
   }
   public NewObj = {
-    'level': this.dataService.zoom,
-    'cityId': this.SelectedCity,
-    'wardId': 0,
-    'menuData': [],
-    'latitude': 0,
-    'longitude': 0
-  }
+    level: this.dataService.zoom,
+    cityId: this.SelectedCity,
+    wardId: 0,
+    menuData: [],
+    latitude: 0,
+    longitude: 0,
+  };
   MenuMultiSelect(event, MenuID) {
     this.NewObj.level = this.dataService.zoom;
     this.NewObj.cityId = this.SelectedCity;
@@ -1140,7 +1302,11 @@ export class AppComponent {
     this.NewObj.wardId = this.wardSelected;
     var includes = false;
     var MenuIndex = 0;
-    for (var tempMenSer = 0; tempMenSer < this.NewObj.menuData.length; tempMenSer++) {
+    for (
+      var tempMenSer = 0;
+      tempMenSer < this.NewObj.menuData.length;
+      tempMenSer++
+    ) {
       if (MenuID == this.NewObj.menuData[tempMenSer].menuId) {
         includes = true;
         MenuIndex = tempMenSer;
@@ -1150,28 +1316,28 @@ export class AppComponent {
       }
     }
     if (includes == false) {
-      var TempSubMenuId = ''
+      var TempSubMenuId = "";
       for (let subMen = 0; subMen < event.value.length; subMen++) {
-        if (TempSubMenuId == '') {
+        if (TempSubMenuId == "") {
           TempSubMenuId = event.value[subMen].submenuId;
           TempSubMenuId = TempSubMenuId.toString();
         } else {
-          TempSubMenuId = TempSubMenuId + ',' + event.value[subMen].submenuId
+          TempSubMenuId = TempSubMenuId + "," + event.value[subMen].submenuId;
         }
       }
       var menuSelected = {
-        'menuId': MenuID,
-        'submenus': TempSubMenuId
-      }
+        menuId: MenuID,
+        submenus: TempSubMenuId,
+      };
       this.NewObj.menuData.push(menuSelected);
     } else {
-      var TempSubMenuId = ''
+      var TempSubMenuId = "";
       for (let subMen = 0; subMen < event.value.length; subMen++) {
-        if (TempSubMenuId == '') {
+        if (TempSubMenuId == "") {
           TempSubMenuId = event.value[subMen].submenuId;
           TempSubMenuId = TempSubMenuId.toString();
         } else {
-          TempSubMenuId = TempSubMenuId + ',' + event.value[subMen].submenuId
+          TempSubMenuId = TempSubMenuId + "," + event.value[subMen].submenuId;
         }
       }
       this.NewObj.menuData[MenuIndex].submenus = TempSubMenuId;
@@ -1179,51 +1345,62 @@ export class AppComponent {
     this.CollectionsData(this.NewObj);
   }
 
-  // It will change for Each drag on map 
+  // It will change for Each drag on map
   public ServiceRequest = null;
   googleData = [];
   CollectionsData(obj) {
     console.log(this.dataService.topLeft);
-    if (this.dataService.topLeft.lat != this.dataService.bottomRight.lat && this.dataService.topLeft.lng != this.dataService.bottomRight.lng) {
-      this.ServiceRequest ? this.ServiceRequest.unsubscribe() : null
-      this.ServiceRequest = this.dataService.CollectionsDataES(obj).subscribe(data => {
-        let resMap: any = data;
-        let newData = resMap.data.map(val => {
-          val['number'] = val.data;
-          delete val['data'];
-          return val;
-        })
-        // this.mapData = resMap.data;
-        this.mapData = newData;
-        // console.log(this.mapData);
-        this.getCountBased_On_Location(obj);
-      });
+    if (
+      this.dataService.topLeft.lat != this.dataService.bottomRight.lat &&
+      this.dataService.topLeft.lng != this.dataService.bottomRight.lng
+    ) {
+      this.ServiceRequest ? this.ServiceRequest.unsubscribe() : null;
+      this.ServiceRequest = this.dataService
+        .CollectionsDataES(obj)
+        .subscribe((data) => {
+          let resMap: any = data;
+          let newData = resMap.data.map((val) => {
+            val["number"] = val.data;
+            delete val["data"];
+            return val;
+          });
+          // this.mapData = resMap.data;
+          this.mapData = newData;
+          // console.log(this.mapData);
+          this.getCountBased_On_Location(obj);
+        });
     }
   }
 
   call_CollectionsDataService() {
-    this.subscriptionWithCord = this.commonService.getCord().subscribe((cordnates) => {
-      this.NewObj.level = this.dataService.zoom;
-      this.NewObj.latitude = cordnates.data.lat;
-      this.NewObj.longitude = cordnates.data.lng;
+    this.subscriptionWithCord = this.commonService.getCord().subscribe(
+      (cordnates) => {
+        this.NewObj.level = this.dataService.zoom;
+        this.NewObj.latitude = cordnates.data.lat;
+        this.NewObj.longitude = cordnates.data.lng;
 
-      this.dragchanges.push(this.NewObj)
-      setTimeout(() => {
-        // console.log("start");
-        // console.log(this.dragchanges[this.dragchanges.length - 1]);
-        this.CollectionsData(this.NewObj);
-      }, 5000);
-
-    }, err => {
-      console.log(err);
-    }, () => {
-    })
+        this.dragchanges.push(this.NewObj);
+        setTimeout(() => {
+          // console.log("start");
+          // console.log(this.dragchanges[this.dragchanges.length - 1]);
+          this.CollectionsData(this.NewObj);
+        }, 5000);
+      },
+      (err) => {
+        console.log(err);
+      },
+      () => {}
+    );
   }
 
   SingleSelectMenuDropDown(event, MenuID) {
     var includes = false;
     var MenuIndex = 0;
-    for (var tempMenSer = 0; tempMenSer < this.NewObj.menuData.length; tempMenSer++) {
+    for (
+      var tempMenSer = 0;
+      tempMenSer < this.NewObj.menuData.length;
+      tempMenSer++
+    ) {
       if (MenuID == this.NewObj.menuData[tempMenSer].menuId) {
         includes = true;
         MenuIndex = tempMenSer;
@@ -1234,9 +1411,9 @@ export class AppComponent {
     }
     if (includes == false) {
       var menuSelected = {
-        'menuId': MenuID,
-        'submenus': event.target.value
-      }
+        menuId: MenuID,
+        submenus: event.target.value,
+      };
       this.NewObj.menuData.push(menuSelected);
     } else {
       this.NewObj.menuData[MenuIndex].submenus = event.target.value;
@@ -1246,7 +1423,11 @@ export class AppComponent {
   MenuRadioSelect(event, MenuName, MenuID) {
     var includes = false;
     var MenuIndex = 0;
-    for (var tempMenSer = 0; tempMenSer < this.NewObj.menuData.length; tempMenSer++) {
+    for (
+      var tempMenSer = 0;
+      tempMenSer < this.NewObj.menuData.length;
+      tempMenSer++
+    ) {
       if (MenuID == this.NewObj.menuData[tempMenSer].menuId) {
         includes = true;
         MenuIndex = tempMenSer;
@@ -1257,9 +1438,9 @@ export class AppComponent {
     }
     if (includes == false) {
       var menuSelected = {
-        'menuId': MenuID,
-        'submenus': event.target.value
-      }
+        menuId: MenuID,
+        submenus: event.target.value,
+      };
       this.NewObj.menuData.push(menuSelected);
     } else {
       this.NewObj.menuData[MenuIndex].submenus = event.target.value;
@@ -1267,33 +1448,63 @@ export class AppComponent {
   }
 
   SubscribeToInsights() {
-    window.open('http://discourse.solveninja.org:5000/view/#!/forms/5e624910d3afc996a4edffc1');
-    this.formButtonClickEvent('SubscribeToInsights_Click', 'Links', 'Menu', 'button_click');
+    window.open(
+      "http://discourse.solveninja.org:5000/view/#!/forms/5e624910d3afc996a4edffc1"
+    );
+    this.formButtonClickEvent(
+      "SubscribeToInsights_Click",
+      "Links",
+      "Menu",
+      "button_click"
+    );
   }
   NeighbourhoodData() {
     // window.open('../assets/html/NDData.html');
-    this.formButtonClickEvent('NeighbourhoodData_Click', 'Links_Button', 'Menu', 'button_click');
-    window.open('https://ee.kobotoolbox.org/x/#4v5Ilf7D');
+    this.formButtonClickEvent(
+      "NeighbourhoodData_Click",
+      "Links_Button",
+      "Menu",
+      "button_click"
+    );
+    window.open("https://ee.kobotoolbox.org/x/#4v5Ilf7D");
   }
   FeedBack() {
-    this.formButtonClickEvent('FeedBack_Click', 'Links', 'Menu', 'button_click');
-    window.open('https://forms.gle/bSJpGUsm4sFGE3EW6');
+    this.formButtonClickEvent(
+      "FeedBack_Click",
+      "Links",
+      "Menu",
+      "button_click"
+    );
+    window.open("https://forms.gle/bSJpGUsm4sFGE3EW6");
   }
 
   toVolunteer() {
-    this.formButtonClickEvent('Volunteer_Click', 'Links', 'Menu', 'button_click');
-    window.open('https://forms.gle/vwYaFt7SFS8fMAT48');
+    this.formButtonClickEvent(
+      "Volunteer_Click",
+      "Links",
+      "Menu",
+      "button_click"
+    );
+    window.open("https://forms.gle/vwYaFt7SFS8fMAT48");
   }
 
   formButtonClickEvent(eventName, eventCategory, eventLabel, eventAction) {
     this.googleAnalyticsService.eventEmitter(
-      eventName, eventCategory, eventLabel, eventAction
+      eventName,
+      eventCategory,
+      eventLabel,
+      eventAction
     );
   }
 
   NeighbourhoodMultilingulSelfAssessment() {
-    this.formButtonClickEvent('Menu', 'Links_Button', 'NeighbourhoodForum', 'Links_Button');
-    window.open('https://covidselfcheck.app/');
+    this.formButtonClickEvent(
+      "Menu",
+      "Links_Button",
+      "NeighbourhoodForum",
+      "Links_Button"
+    );
+    window.open("https://covidselfcheck.app/");
   }
 
   markerListClick(markerList) {
@@ -1303,39 +1514,59 @@ export class AppComponent {
 
   // Ra Custom Code
   // Default Categories Seletion Value
-  // defaultCategoriesSelect = 92; 
+  // defaultCategoriesSelect = 92;
   defaultCategoriesSelect = [93, 117, 125];
   // Do Some Preselect If OrName is there
-  defaultSelect_for_orgname = [146, 143, 145, 144, 118, 123, 135, 142, 141, 140, 119, 134, 136, 132, 139, 122];
+  defaultSelect_for_orgname = [
+    146,
+    143,
+    145,
+    144,
+    118,
+    123,
+    135,
+    142,
+    141,
+    140,
+    119,
+    134,
+    136,
+    132,
+    139,
+    122,
+  ];
   defaultSelectTrigger() {
     this.resetAllSelection();
-    let temp = this.orgListModel != '' ? this.defaultSelect_for_orgname : this.defaultCategoriesSelect;
+    let temp =
+      this.orgListModel != ""
+        ? this.defaultSelect_for_orgname
+        : this.defaultCategoriesSelect;
     // setTimeout(() => {
-    this.MenuItems && this.MenuItems.forEach(items => {
-      items[0]['internalChildren'].forEach(child => {
-        if (temp.indexOf(child.value) != -1) {
-          this.singleselect(child, items);
-        }
+    this.MenuItems &&
+      this.MenuItems.forEach((items) => {
+        items[0]["internalChildren"].forEach((child) => {
+          if (temp.indexOf(child.value) != -1) {
+            this.singleselect(child, items);
+          }
+        });
       });
-    });
     // }, 2000);
   }
-
 
   yourCurrentLocation() {
     // // setDefault select
 
     if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(position => {
+      navigator.geolocation.getCurrentPosition((position) => {
         this.dataService.SelectedCityLat = position.coords.latitude;
         this.dataService.SelectedCityLng = position.coords.longitude;
         this.SelectCity({
-          "value": {
-            "zoom": 13,
-            "cityName": "Your Location Location",
-            "lat": this.dataService.SelectedCityLat,
-            "lng": this.dataService.SelectedCityLng
-          }
+          value: {
+            zoom: 13,
+            cityName: "Your Location Location",
+            lat: this.dataService.SelectedCityLat,
+            lng: this.dataService.SelectedCityLng,
+          },
         });
         console.log(this.dataService.SelectedCityLat);
         console.log(this.dataService.SelectedCityLng);
@@ -1353,44 +1584,44 @@ export class AppComponent {
     setTimeout(() => {
       console.log(this.cities);
       // this.CitySelected = this.cities[0];
-    }, 10)
-
+    }, 10);
   }
   singleselect(child, items) {
     child.internalChecked = !child.internalChecked;
     let temp = [];
-    items[0]['internalChildren'].forEach(element => {
+    items[0]["internalChildren"].forEach((element) => {
       if (element.internalChecked == true) {
         temp.push(element.value);
       }
     });
-    this.TreeMenuItemsSelect(temp, items)
-
+    this.TreeMenuItemsSelect(temp, items);
   }
   selectAll(items) {
     let temp = [];
-    items[0]['internalChildren'].forEach(element => {
+    items[0]["internalChildren"].forEach((element) => {
       element.internalChecked = true;
       temp.push(element.value);
     });
-    this.TreeMenuItemsSelect(temp, items)
+    this.TreeMenuItemsSelect(temp, items);
   }
   deselectAll(items) {
-    items[0]['internalChildren'].forEach(element => {
+    items[0]["internalChildren"].forEach((element) => {
       element.internalChecked = false;
     });
-    this.TreeMenuItemsSelect([], items)
+    this.TreeMenuItemsSelect([], items);
   }
 
   /**
-   * Get count of subcategories count 
-   * @param items 
+   * Get count of subcategories count
+   * @param items
    */
   getcounterCount(items) {
     let temp = 0;
-    items && items[0] && items[0]['internalChildren'].forEach(element => {
-      element.internalChecked ? (temp = temp + 1) : temp;
-    });
+    items &&
+      items[0] &&
+      items[0]["internalChildren"].forEach((element) => {
+        element.internalChecked ? (temp = temp + 1) : temp;
+      });
     return temp;
   }
 
@@ -1398,12 +1629,13 @@ export class AppComponent {
    * Reset All Selected Options from Tree
    */
   resetAllSelection() {
-    this.MenuItems && this.MenuItems.forEach(ele => {
-      ele[0]['internalChildren'].forEach(element => {
-        element.internalChecked = false;
+    this.MenuItems &&
+      this.MenuItems.forEach((ele) => {
+        ele[0]["internalChildren"].forEach((element) => {
+          element.internalChecked = false;
+        });
       });
-    });
-    this.NewObj['menuData'] = [];
+    this.NewObj["menuData"] = [];
   }
 
   /**
@@ -1412,24 +1644,29 @@ export class AppComponent {
   homepageButton1() {
     this.resetAllSelection();
     var value = 92;
-    this.MenuItems.forEach(ele => {
+    this.MenuItems.forEach((ele) => {
       let temp = [];
-      if (ele[0]['value'] == value) {
-        ele[0] && ele[0]['internalChildren'].forEach(child => {
-          child.internalChecked = true;
-          temp.push(child.value);
-        });
+      if (ele[0]["value"] == value) {
+        ele[0] &&
+          ele[0]["internalChildren"].forEach((child) => {
+            child.internalChecked = true;
+            temp.push(child.value);
+          });
         setTimeout(() => {
           this.TreeMenuItemsSelect(temp, ele);
-          this.defaultpage = 'LocalData';
+          this.defaultpage = "LocalData";
+          setTimeout(() => {
+            window.dispatchEvent(new Event("resize"));
+          }, 1);
           this.searchLocation = false;
-        }, 50)
+        }, 50);
       } else {
-        ele[0] && ele[0]['internalChildren'].forEach(child => {
-          child.internalChecked = false;
-        });
+        ele[0] &&
+          ele[0]["internalChildren"].forEach((child) => {
+            child.internalChecked = false;
+          });
       }
-    })
+    });
   }
   /**
    * On Click "Want to help needy?"
@@ -1438,37 +1675,41 @@ export class AppComponent {
     this.resetAllSelection();
     var value = 101; // People Needy Help
     var value1 = 130; // settlement
-    this.MenuItems.forEach(ele => {
+    this.MenuItems.forEach((ele) => {
       let temp = [];
-      if (ele[0]['value'] == value) {
-        ele[0] && ele[0]['internalChildren'].forEach(child => {
-          child.internalChecked = true;
-          temp.push(child.value);
-        });
-        setTimeout(() => {
-          this.TreeMenuItemsSelect(temp, ele);
-        }, 50)
-      } else {
-
-        if (ele[0]['value'] == value1) {
-          ele[0] && ele[0]['internalChildren'].forEach(child => {
+      if (ele[0]["value"] == value) {
+        ele[0] &&
+          ele[0]["internalChildren"].forEach((child) => {
             child.internalChecked = true;
             temp.push(child.value);
           });
+        setTimeout(() => {
+          this.TreeMenuItemsSelect(temp, ele);
+        }, 50);
+      } else {
+        if (ele[0]["value"] == value1) {
+          ele[0] &&
+            ele[0]["internalChildren"].forEach((child) => {
+              child.internalChecked = true;
+              temp.push(child.value);
+            });
           setTimeout(() => {
             this.TreeMenuItemsSelect(temp, ele);
           });
         } else {
-          ele[0] && ele[0]['internalChildren'].forEach(child => {
-            child.internalChecked = false;
-          });
+          ele[0] &&
+            ele[0]["internalChildren"].forEach((child) => {
+              child.internalChecked = false;
+            });
         }
       }
 
-      this.defaultpage = 'LocalData';
+      this.defaultpage = "LocalData";
       this.searchLocation = false;
-
-    })
+      setTimeout(() => {
+        window.dispatchEvent(new Event("resize"));
+      }, 1);
+    });
   }
 
   /**
@@ -1480,74 +1721,82 @@ export class AppComponent {
     var value1 = 112; // Shops near me
     var value2 = 97; // Shops near me
 
-    this.MenuItems.forEach(ele => {
+    this.MenuItems.forEach((ele) => {
       let temp = [];
-      if (ele[0]['value'] == value) {
-        ele[0] && ele[0]['internalChildren'].forEach(child => {
-          child.internalChecked = true;
-          temp.push(child.value);
-        });
+      if (ele[0]["value"] == value) {
+        ele[0] &&
+          ele[0]["internalChildren"].forEach((child) => {
+            child.internalChecked = true;
+            temp.push(child.value);
+          });
         setTimeout(() => {
           this.TreeMenuItemsSelect(temp, ele);
         });
       } else {
-
-        if (ele[0]['value'] == value1) {
-          ele[0] && ele[0]['internalChildren'].forEach(child => {
-            child.internalChecked = true;
-            temp.push(child.value);
-          });
+        if (ele[0]["value"] == value1) {
+          ele[0] &&
+            ele[0]["internalChildren"].forEach((child) => {
+              child.internalChecked = true;
+              temp.push(child.value);
+            });
           setTimeout(() => {
             this.TreeMenuItemsSelect(temp, ele);
           });
         } else {
-
-          if (ele[0]['value'] == value2) {
-            ele[0] && ele[0]['internalChildren'].forEach(child => {
-              child.internalChecked = true;
-              temp.push(child.value);
-            });
+          if (ele[0]["value"] == value2) {
+            ele[0] &&
+              ele[0]["internalChildren"].forEach((child) => {
+                child.internalChecked = true;
+                temp.push(child.value);
+              });
             setTimeout(() => {
               this.TreeMenuItemsSelect(temp, ele);
             });
           } else {
-            ele[0] && ele[0]['internalChildren'].forEach(child => {
-              child.internalChecked = false;
-            });
+            ele[0] &&
+              ele[0]["internalChildren"].forEach((child) => {
+                child.internalChecked = false;
+              });
           }
         }
       }
 
-      this.defaultpage = 'LocalData';
+      this.defaultpage = "LocalData";
+      setTimeout(() => {
+        window.dispatchEvent(new Event("resize"));
+      }, 1);
       this.searchLocation = false;
-
-    })
+    });
   }
 
   /**
    * On Lick Categories on Mobile view -- Home Page
-   * @param value 
+   * @param value
    */
   homeDirect(value) {
     this.resetAllSelection();
     console.log(value);
-    this.MenuItems.forEach(ele => {
+    this.MenuItems.forEach((ele) => {
       let temp = [];
-      if (ele[0]['value'] == value) {
-        ele[0] && ele[0]['internalChildren'].forEach(child => {
-          child.internalChecked = true;
-          temp.push(child.value);
-        });
+      if (ele[0]["value"] == value) {
+        ele[0] &&
+          ele[0]["internalChildren"].forEach((child) => {
+            child.internalChecked = true;
+            temp.push(child.value);
+          });
         this.TreeMenuItemsSelect(temp, ele);
-        this.defaultpage = 'LocalData';
+        this.defaultpage = "LocalData";
+        setTimeout(() => {
+          window.dispatchEvent(new Event("resize"));
+        }, 1);
         this.searchLocation = false;
       } else {
-        ele[0] && ele[0]['internalChildren'].forEach(child => {
-          child.internalChecked = false;
-        });
+        ele[0] &&
+          ele[0]["internalChildren"].forEach((child) => {
+            child.internalChecked = false;
+          });
       }
-
-    })
+    });
   }
 
   /**
@@ -1556,54 +1805,58 @@ export class AppComponent {
   pageLocaLData() {
     this.resetAllSelection();
     this.defaultSelectTrigger();
-    this.defaultpage = 'LocalData';
+    this.defaultpage = "LocalData";
     this.searchLocation = true;
+    setTimeout(() => {
+      window.dispatchEvent(new Event("resize"));
+    }, 1);
   }
 
-
   /**
-   * On click Legends 
+   * On click Legends
    */
   legentsCLick(menuID) {
     if (menuID) {
       this.resetAllSelection();
-      this.MenuItems.forEach(ele => {
-        ele[0] && ele[0]['internalChildren'].forEach(child => {
-          if (child.value == menuID) {
-            child.internalChecked = true;
-            this.TreeMenuItemsSelect([child.value], ele);
-            this.detail_legends_collapse = true;
-          }
-        });
-      })
+      this.MenuItems.forEach((ele) => {
+        ele[0] &&
+          ele[0]["internalChildren"].forEach((child) => {
+            if (child.value == menuID) {
+              child.internalChecked = true;
+              this.TreeMenuItemsSelect([child.value], ele);
+              this.detail_legends_collapse = true;
+            }
+          });
+      });
     }
   }
 
   tempListData = [
     {
-      "wardName": "Jaya Nagar",
-      "total": 1,
-      "lng": 77.588648,
-      "cityName": "bengaluru",
-      "icon": "./assets/Icons/coronavirus-testingcentre.png",
-      "menuId": 93,
-      "id": 7616,
-      "type": "12",
-      "lat": 12.937328,
+      wardName: "Jaya Nagar",
+      total: 1,
+      lng: 77.588648,
+      cityName: "bengaluru",
+      icon: "./assets/Icons/coronavirus-testingcentre.png",
+      menuId: 93,
+      id: 7616,
+      type: "12",
+      lat: 12.937328,
 
-      "name": "Neuberg Anand Reference Laboratory",
-      "address": "Aanand Tower, 54, Bowring Hospital Rd, Shivajinagar`, Bengaluru, Karnataka 560001",
-      "category": "Important Medical Services",
-      "phoneNum": "1800 425 1974",
-      "isFlagged": "0"
-    }
+      name: "Neuberg Anand Reference Laboratory",
+      address:
+        "Aanand Tower, 54, Bowring Hospital Rd, Shivajinagar`, Bengaluru, Karnataka 560001",
+      category: "Important Medical Services",
+      phoneNum: "1800 425 1974",
+      isFlagged: "0",
+    },
   ];
 
   /**
-   * Zoom To selected Ocation place 
+   * Zoom To selected Ocation place
    */
 
-  @ViewChild('mapref') mapref;
+  @ViewChild("mapref") mapref;
   zoomToPlace(item, i) {
     // if (this.mapref && this.mapref.mapcomref) {
     //   this.mapref.mapcomref.select_marker(item);
@@ -1633,93 +1886,125 @@ export class AppComponent {
 
   getoverrallrectangleCounts() {
     let tempData = [];
-    this.MenuItems && this.MenuItems.map((items) => {
-      // if (items[0].value == '120' || items[0].value == '101') {
-      items[0] && items[0]['internalChildren'].forEach(element => {
-        tempData.push(element.value)
+    this.MenuItems &&
+      this.MenuItems.map((items) => {
+        // if (items[0].value == '120' || items[0].value == '101') {
+        items[0] &&
+          items[0]["internalChildren"].forEach((element) => {
+            tempData.push(element.value);
+          });
+        // }
       });
-      // }
-    });
     let tempObj = {
-      "menuData": [
+      menuData: [
         {
-          "submenus": tempData.join(),
-        }
+          submenus: tempData.join(),
+        },
       ],
-      "topLeftLat": this.dataService.topLeft.lat,
-      "topLeftLon": this.dataService.topLeft.lng,
-      "bottomRightLat": this.dataService.bottomRight.lat,
-      "bottomRightLon": this.dataService.bottomRight.lng,
-      "latitude": this.dataService.bottomRight.lat,
-      "longitude": this.dataService.bottomRight.lng
-    }
+      topLeftLat: this.dataService.topLeft.lat,
+      topLeftLon: this.dataService.topLeft.lng,
+      bottomRightLat: this.dataService.bottomRight.lat,
+      bottomRightLon: this.dataService.bottomRight.lng,
+      latitude: this.dataService.bottomRight.lat,
+      longitude: this.dataService.bottomRight.lng,
+    };
     // console.log(tempObj);
-    this.getoverrallrectangleCounts_unsubscribe ? this.getoverrallrectangleCounts_unsubscribe.unsubscribe() : null;
-    this.getoverrallrectangleCounts_unsubscribe = this.dataService.getCategoryImpactsDataES(tempObj, true).subscribe(res => {
-      console.log(res['data']);
-      this.overAll_Rec_serviceReqcount = 0;
+    this.getoverrallrectangleCounts_unsubscribe
+      ? this.getoverrallrectangleCounts_unsubscribe.unsubscribe()
+      : null;
+    this.getoverrallrectangleCounts_unsubscribe = this.dataService
+      .getCategoryImpactsDataES(tempObj, true)
+      .subscribe(
+        (res) => {
+          console.log(res["data"]);
+          this.overAll_Rec_serviceReqcount = 0;
 
+          if (res && res["data"].length) {
+            var responseData = res["data"];
+            this.MenuItems.forEach((menu) => {
+              let overall_rec_count_total = 0;
+              menu[0]["internalChildren"].forEach((element) => {
+                let overall_rec_count = responseData.filter((val) => {
+                  if (val.menuData.toString() == element.value.toString()) {
+                    return val;
+                  }
+                });
+                if (overall_rec_count[0]) {
+                  element["overall_rec_count"] = overall_rec_count[0]["impact"];
+                  overall_rec_count_total =
+                    overall_rec_count_total +
+                    parseInt(overall_rec_count[0]["impact"]);
+                }
+              });
+              menu[0]["overall_rec_count_total"] = overall_rec_count_total;
+            });
+            console.log("With Bounding impats: overall_rec_count_total");
+            console.log(this.MenuItems);
 
-      if (res && res['data'].length) {
-        var responseData = res['data'];
-        this.MenuItems.forEach(menu => {
-          let overall_rec_count_total = 0;
-          menu[0]['internalChildren'].forEach(element => {
-            let overall_rec_count = responseData.filter(val => {
-              if ((val.menuData).toString() == (element.value).toString()) { return val }
-            })
-            if (overall_rec_count[0]) {
-              element['overall_rec_count'] = overall_rec_count[0]['impact'];
-              overall_rec_count_total = overall_rec_count_total + parseInt(overall_rec_count[0]['impact'])
-            }
-          });
-          menu[0]['overall_rec_count_total'] = overall_rec_count_total;
-        })
-        console.log("With Bounding impats: overall_rec_count_total");
-        console.log(this.MenuItems);
+            /**
+             * Setting Counts for Right Side Section
+             */
+            this.right_Resources_Count = 0;
+            this.right_Volunteers_Count = 0;
+            this.right_Peopleneedingsupport_Count = 0;
+            this.right_Peoplesupported_Count = 0;
 
-        /**
-         * Setting Counts for Right Side Section
-         */
-        this.right_Resources_Count = 0;
-        this.right_Volunteers_Count = 0;
-        this.right_Peopleneedingsupport_Count = 0;
-        this.right_Peoplesupported_Count = 0;
+            this.MenuItems.forEach((menu) => {
+              menu[0]["internalChildren"].forEach((val) => {
+                if (this.right_Resources_Array.indexOf(val.value) !== -1) {
+                  this.right_Resources_Count =
+                    this.right_Resources_Count + val.overall_rec_count;
+                }
+                if (this.right_Volunteers_Array.indexOf(val.value) !== -1) {
+                  this.right_Volunteers_Count =
+                    this.right_Volunteers_Count + val.overall_rec_count;
+                }
+                if (
+                  this.right_Peopleneedingsupport_Array.indexOf(val.value) !==
+                  -1
+                ) {
+                  this.right_Peopleneedingsupport_Count =
+                    this.right_Peopleneedingsupport_Count +
+                    val.overall_rec_count;
+                }
+                if (
+                  this.right_Peoplesupported_Array.indexOf(val.value) !== -1
+                ) {
+                  this.right_Peoplesupported_Count =
+                    this.right_Peoplesupported_Count + val.overall_rec_count;
+                }
+              });
+            });
+            console.log(
+              "right_Resources_Count : " + this.right_Resources_Count
+            );
+            console.log(
+              "right_Volunteers_Count : " + this.right_Volunteers_Count
+            );
+            console.log(
+              "right_Peopleneedingsupport_Count : " +
+                this.right_Peopleneedingsupport_Count
+            );
+            console.log(
+              "right_Peoplesupported_Count : " +
+                this.right_Peoplesupported_Count
+            );
 
-        this.MenuItems.forEach(menu => {
-          menu[0]['internalChildren'].forEach(val => {
-            if (this.right_Resources_Array.indexOf(val.value) !== -1) {
-              this.right_Resources_Count = this.right_Resources_Count + val.overall_rec_count;
-            }
-            if (this.right_Volunteers_Array.indexOf(val.value) !== -1) {
-              this.right_Volunteers_Count = this.right_Volunteers_Count + val.overall_rec_count;
-            }
-            if (this.right_Peopleneedingsupport_Array.indexOf(val.value) !== -1) {
-              this.right_Peopleneedingsupport_Count = this.right_Peopleneedingsupport_Count + val.overall_rec_count;
-            }
-            if (this.right_Peoplesupported_Array.indexOf(val.value) !== -1) {
-              this.right_Peoplesupported_Count = this.right_Peoplesupported_Count + val.overall_rec_count;
-            }
-          });
-        });
-        console.log("right_Resources_Count : " + this.right_Resources_Count);
-        console.log("right_Volunteers_Count : " + this.right_Volunteers_Count);
-        console.log("right_Peopleneedingsupport_Count : " + this.right_Peopleneedingsupport_Count);
-        console.log("right_Peoplesupported_Count : " + this.right_Peoplesupported_Count);
-
-
-        this.getoverrallrectangleCountData = responseData;
-      }
-    }, err => {
-      if (this.overAll_Rec_serviceReqcount < 2) {
-        this.overAll_Rec_serviceReqcount = this.overAll_Rec_serviceReqcount + 1;
-        this.getoverrallrectangleCounts();
-      }
-      console.log(err);
-    }, () => {
-      console.log("Completed");
-    })
-
+            this.getoverrallrectangleCountData = responseData;
+          }
+        },
+        (err) => {
+          if (this.overAll_Rec_serviceReqcount < 2) {
+            this.overAll_Rec_serviceReqcount =
+              this.overAll_Rec_serviceReqcount + 1;
+            this.getoverrallrectangleCounts();
+          }
+          console.log(err);
+        },
+        () => {
+          console.log("Completed");
+        }
+      );
   }
 
   overAll_Rec_serviceReqcount_without = 0;
@@ -1733,87 +2018,104 @@ export class AppComponent {
   People_supported = 0;
   getoverrallrectangleCounts_without() {
     let tempData = [];
-    this.MenuItems && this.MenuItems.map((items) => {
-      // if (items[0].value == '120' || items[0].value == '101') {
-      items[0] && items[0]['internalChildren'].forEach(element => {
-        tempData.push(element.value)
-      });
-      // }
-    });
-    let tempObj = {
-      "menuData": [
-        {
-          "submenus": tempData.join(),
-        }
-      ],
-      "topLeftLat": this.dataService.topLeft.lat,
-      "topLeftLon": this.dataService.topLeft.lng,
-      "bottomRightLat": this.dataService.bottomRight.lat,
-      "bottomRightLon": this.dataService.bottomRight.lng,
-      "latitude": this.dataService.bottomRight.lat,
-      "longitude": this.dataService.bottomRight.lng
-    }
-    // console.log(tempObj);
-    this.getoverrallrectangleCounts_unsubscribe_without ? this.getoverrallrectangleCounts_unsubscribe_without.unsubscribe() : null;
-    this.getoverrallrectangleCounts_unsubscribe_without = this.dataService.getCategoryImpactsDataES(tempObj, false).subscribe(res => {
-      console.log(res['data']);
-      this.overAll_Rec_serviceReqcount_without = 0;
-      if (res && res['data'].length) {
-        var responseData = res['data'];
-        this.MenuItems.forEach(menu => {
-          let overall_rec_count_without_total = 0;
-          menu[0]['internalChildren'].forEach(element => {
-            let overall_rec_count_without = responseData.filter(val => {
-              if ((val.menuData).toString() == (element.value).toString()) { return val }
-            })
-            if (overall_rec_count_without[0]) {
-              element['overall_rec_count_without'] = overall_rec_count_without[0]['impact'];
-              overall_rec_count_without_total = overall_rec_count_without_total + parseInt(overall_rec_count_without[0]['impact'])
-            }
+    this.MenuItems &&
+      this.MenuItems.map((items) => {
+        // if (items[0].value == '120' || items[0].value == '101') {
+        items[0] &&
+          items[0]["internalChildren"].forEach((element) => {
+            tempData.push(element.value);
           });
-          menu[0]['overall_rec_count_without_total'] = overall_rec_count_without_total;
-        })
+        // }
+      });
+    let tempObj = {
+      menuData: [
+        {
+          submenus: tempData.join(),
+        },
+      ],
+      topLeftLat: this.dataService.topLeft.lat,
+      topLeftLon: this.dataService.topLeft.lng,
+      bottomRightLat: this.dataService.bottomRight.lat,
+      bottomRightLon: this.dataService.bottomRight.lng,
+      latitude: this.dataService.bottomRight.lat,
+      longitude: this.dataService.bottomRight.lng,
+    };
+    // console.log(tempObj);
+    this.getoverrallrectangleCounts_unsubscribe_without
+      ? this.getoverrallrectangleCounts_unsubscribe_without.unsubscribe()
+      : null;
+    this.getoverrallrectangleCounts_unsubscribe_without = this.dataService
+      .getCategoryImpactsDataES(tempObj, false)
+      .subscribe(
+        (res) => {
+          console.log(res["data"]);
+          this.overAll_Rec_serviceReqcount_without = 0;
+          if (res && res["data"].length) {
+            var responseData = res["data"];
+            this.MenuItems.forEach((menu) => {
+              let overall_rec_count_without_total = 0;
+              menu[0]["internalChildren"].forEach((element) => {
+                let overall_rec_count_without = responseData.filter((val) => {
+                  if (val.menuData.toString() == element.value.toString()) {
+                    return val;
+                  }
+                });
+                if (overall_rec_count_without[0]) {
+                  element["overall_rec_count_without"] =
+                    overall_rec_count_without[0]["impact"];
+                  overall_rec_count_without_total =
+                    overall_rec_count_without_total +
+                    parseInt(overall_rec_count_without[0]["impact"]);
+                }
+              });
+              menu[0][
+                "overall_rec_count_without_total"
+              ] = overall_rec_count_without_total;
+            });
 
-        console.log("With Bounding impats: overall_rec_count_without_total");
-        console.log(this.MenuItems);
-        console.log(this.MenuItems[1][0]['internalChildren']);
+            console.log(
+              "With Bounding impats: overall_rec_count_without_total"
+            );
+            console.log(this.MenuItems);
+            console.log(this.MenuItems[1][0]["internalChildren"]);
 
-        /**
-         * Setting count Without bounding boxes
-         * People_needing_support
-         */
-        this.People_needing_support = 0;
-        this.People_supported = 0;
-        this.MenuItems[1][0]['internalChildren'].forEach(val => {
-          if (this.People_needing_support_Array.indexOf(val.value) !== -1) {
-            this.People_needing_support = this.People_needing_support + val.overall_rec_count_without;
+            /**
+             * Setting count Without bounding boxes
+             * People_needing_support
+             */
+            this.People_needing_support = 0;
+            this.People_supported = 0;
+            this.MenuItems[1][0]["internalChildren"].forEach((val) => {
+              if (this.People_needing_support_Array.indexOf(val.value) !== -1) {
+                this.People_needing_support =
+                  this.People_needing_support + val.overall_rec_count_without;
+              }
+              if (this.People_supported_Array.indexOf(val.value) !== -1) {
+                this.People_supported =
+                  this.People_supported + val.overall_rec_count_without;
+              }
+            });
+            console.log(
+              "People_needing_support: " + this.People_needing_support
+            );
+            console.log("People_supported:" + this.People_supported);
+
+            this.getoverrallrectangleCountData_with = responseData;
           }
-          if (this.People_supported_Array.indexOf(val.value) !== -1) {
-            this.People_supported = this.People_supported + val.overall_rec_count_without;
+        },
+        (err) => {
+          if (this.overAll_Rec_serviceReqcount_without < 2) {
+            this.overAll_Rec_serviceReqcount_without =
+              this.overAll_Rec_serviceReqcount_without + 1;
+            this.getoverrallrectangleCounts_without();
           }
-        })
-        console.log("People_needing_support: " + this.People_needing_support);
-        console.log("People_supported:" + this.People_supported);
-
-
-
-
-
-        this.getoverrallrectangleCountData_with = responseData;
-      }
-
-    }, err => {
-      if (this.overAll_Rec_serviceReqcount_without < 2) {
-        this.overAll_Rec_serviceReqcount_without = this.overAll_Rec_serviceReqcount_without + 1;
-        this.getoverrallrectangleCounts_without();
-      }
-      console.log(err);
-    }, () => {
-      console.log("Completed");
-    })
-
+          console.log(err);
+        },
+        () => {
+          console.log("Completed");
+        }
+      );
   }
-
 
   /**
    * get Overall Counts
@@ -1823,49 +2125,60 @@ export class AppComponent {
   getoverrallCounts_unsubscribe = null;
   getoverrallCounts() {
     let tempData = [];
-    this.MenuItems && this.MenuItems.map((items) => {
-      items[0] && items[0]['internalChildren'].forEach(element => {
-        tempData.push(element.value)
-      });
-    });
-    let tempObj = {
-      "menuData": [
-        {
-          "submenus": tempData.join()
-        }
-      ]
-    }
-    this.getoverrallCounts_unsubscribe ? this.getoverrallCounts_unsubscribe.unsubscribe() : null;
-    this.getoverrallCounts_unsubscribe = this.dataService.getCountAllDataES(tempObj).subscribe(res => {
-      console.log(res['data']);
-      this.overAll_serviceReqcount = 0;
-      if (res && res['data'].length) {
-        var responseData = res['data'];
-        this.MenuItems.forEach(menu => {
-          let overallcount_total = 0;
-          menu[0]['internalChildren'].forEach(element => {
-            let overallcount = responseData.filter(val => {
-              if ((val.menuData).toString() == (element.value).toString()) { return val }
-            })
-            element['overallcount'] = overallcount[0]['count'];
-            overallcount_total = overallcount_total + parseInt(overallcount[0]['count'])
+    this.MenuItems &&
+      this.MenuItems.map((items) => {
+        items[0] &&
+          items[0]["internalChildren"].forEach((element) => {
+            tempData.push(element.value);
           });
-          menu[0]['overallcount_total'] = overallcount_total;
-        })
-        console.log(this.MenuItems);
-      }
-    }, err => {
-      if (this.overAll_serviceReqcount < 2) {
-        this.overAll_serviceReqcount = this.overAll_serviceReqcount + 1;
-        this.getoverrallCounts();
-      }
-      console.log(err);
-    }, () => {
-      console.log("Completed");
-    })
-
+      });
+    let tempObj = {
+      menuData: [
+        {
+          submenus: tempData.join(),
+        },
+      ],
+    };
+    this.getoverrallCounts_unsubscribe
+      ? this.getoverrallCounts_unsubscribe.unsubscribe()
+      : null;
+    this.getoverrallCounts_unsubscribe = this.dataService
+      .getCountAllDataES(tempObj)
+      .subscribe(
+        (res) => {
+          console.log(res["data"]);
+          this.overAll_serviceReqcount = 0;
+          if (res && res["data"].length) {
+            var responseData = res["data"];
+            this.MenuItems.forEach((menu) => {
+              let overallcount_total = 0;
+              menu[0]["internalChildren"].forEach((element) => {
+                let overallcount = responseData.filter((val) => {
+                  if (val.menuData.toString() == element.value.toString()) {
+                    return val;
+                  }
+                });
+                element["overallcount"] = overallcount[0]["count"];
+                overallcount_total =
+                  overallcount_total + parseInt(overallcount[0]["count"]);
+              });
+              menu[0]["overallcount_total"] = overallcount_total;
+            });
+            console.log(this.MenuItems);
+          }
+        },
+        (err) => {
+          if (this.overAll_serviceReqcount < 2) {
+            this.overAll_serviceReqcount = this.overAll_serviceReqcount + 1;
+            this.getoverrallCounts();
+          }
+          console.log(err);
+        },
+        () => {
+          console.log("Completed");
+        }
+      );
   }
-
 
   /**
    * get Counts Based On Location
@@ -1873,7 +2186,7 @@ export class AppComponent {
    * call getoverrallCounts()
    * call getoverrallrectangleCounts()
    */
-  CountsListArray = []
+  CountsListArray = [];
   serviceCallAlCount = null;
   lat_ln_serviceReqcount = 0;
   getCountBased_On_Location_unsubscribe = null;
@@ -1881,97 +2194,115 @@ export class AppComponent {
   detail_list_number = 100;
   getCountBased_On_Location(obj?: any) {
     // console.log(obj);
-    if (obj && obj['latitude'] && obj['longitude']) {
-      this.NewObj.latitude = obj['latitude'];
-      this.NewObj.longitude = obj['longitude'];
+    if (obj && obj["latitude"] && obj["longitude"]) {
+      this.NewObj.latitude = obj["latitude"];
+      this.NewObj.longitude = obj["longitude"];
     } else {
-      this.subscriptionWithCord = this.commonService.getCord().subscribe(cordnates => {
-        this.NewObj.level = this.dataService.zoom;
-        this.NewObj.latitude = cordnates.data.lat;
-        this.NewObj.longitude = cordnates.data.lng;
-      });
+      this.subscriptionWithCord = this.commonService
+        .getCord()
+        .subscribe((cordnates) => {
+          this.NewObj.level = this.dataService.zoom;
+          this.NewObj.latitude = cordnates.data.lat;
+          this.NewObj.longitude = cordnates.data.lng;
+        });
     }
 
     if (this.getoverrallCountser_call == 0) {
       this.getoverrallCounts();
       this.getoverrallCountser_call = 1;
     }
-    setTimeout(() => { // Time to get Boundiries , dut to map loading slow
+    setTimeout(() => {
+      // Time to get Boundiries , dut to map loading slow
       this.getoverrallrectangleCounts();
       this.getoverrallrectangleCounts_without(); // with Bounding
     }, 500);
 
     let tempData = [];
-    this.MenuItems && this.MenuItems.map((items) => {
-      items[0] && items[0]['internalChildren'].forEach(element => {
-        tempData.push(element.value)
+    this.MenuItems &&
+      this.MenuItems.map((items) => {
+        items[0] &&
+          items[0]["internalChildren"].forEach((element) => {
+            tempData.push(element.value);
+          });
       });
-    });
 
     if (tempData.length) {
       let tempObj = {
-        "menuData": [
+        menuData: [
           {
-            "submenus": tempData.join()
-          }
+            submenus: tempData.join(),
+          },
         ],
-        "latitude": this.NewObj.latitude,
-        "longitude": this.NewObj.longitude
-      }
+        latitude: this.NewObj.latitude,
+        longitude: this.NewObj.longitude,
+      };
       // console.log(tempObj);
-      this.getCountBased_On_Location_unsubscribe ? this.getCountBased_On_Location_unsubscribe.unsubscribe() : null;
-      this.getCountBased_On_Location_unsubscribe = this.dataService.getCountDataES(tempObj).subscribe(res => {
-        this.lat_ln_serviceReqcount = 0;
-        this.detail_list_number = 100;
-        // console.log(res);
-        if (res && res['data'].length) {
-          this.CountsListArray = res['data'];
-          this.MenuItems.forEach(menu => {
-            menu[0]['internalChildren'].forEach(element => {
-              let count = this.CountsListArray.filter(val => {
-                if ((val.menuData).toString() == (element.value).toString()) { return val }
-              })
-              element['count'] = count[0]['count'];
-            });
-          })
-        }
-      }, err => {
-        if (this.lat_ln_serviceReqcount < 2) {
-          this.lat_ln_serviceReqcount = this.lat_ln_serviceReqcount + 1;
-          this.getCountBased_On_Location();
-        }
-        console.log(err);
-      }, () => {
-        // console.log("Completed");
-      })
+      this.getCountBased_On_Location_unsubscribe
+        ? this.getCountBased_On_Location_unsubscribe.unsubscribe()
+        : null;
+      this.getCountBased_On_Location_unsubscribe = this.dataService
+        .getCountDataES(tempObj)
+        .subscribe(
+          (res) => {
+            this.lat_ln_serviceReqcount = 0;
+            this.detail_list_number = 100;
+            // console.log(res);
+            if (res && res["data"].length) {
+              this.CountsListArray = res["data"];
+              this.MenuItems.forEach((menu) => {
+                menu[0]["internalChildren"].forEach((element) => {
+                  let count = this.CountsListArray.filter((val) => {
+                    if (val.menuData.toString() == element.value.toString()) {
+                      return val;
+                    }
+                  });
+                  element["count"] = count[0]["count"];
+                });
+              });
+            }
+          },
+          (err) => {
+            if (this.lat_ln_serviceReqcount < 2) {
+              this.lat_ln_serviceReqcount = this.lat_ln_serviceReqcount + 1;
+              this.getCountBased_On_Location();
+            }
+            console.log(err);
+          },
+          () => {
+            // console.log("Completed");
+          }
+        );
     }
-
   }
 
   /**
-   * Get Org List 
+   * Get Org List
    * Creaters List
    */
   orgsListArray = [];
-  orgListModel = '';
+  orgListModel = "";
   getOrgList() {
-    this.dataService.getOrgsList().subscribe(res => {
-      if (res['success'] == true) {
-        this.orgsListArray = res['data'] || [];
-        console.log(this.orgsListArray);
+    this.dataService.getOrgsList().subscribe(
+      (res) => {
+        if (res["success"] == true) {
+          this.orgsListArray = res["data"] || [];
+          console.log(this.orgsListArray);
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+      () => {
+        console.log("Completed");
       }
-    }, err => {
-      console.log(err);
-    }, () => {
-      console.log("Completed");
-    });
+    );
   }
   changeOrgList(event) {
     // window.open("/map/" + this.orgListModel, "_self");
-    history.pushState({}, null, "/map/" + this.orgListModel.replace(/ /g, '-'));
+    history.pushState({}, null, "/map/" + this.orgListModel.replace(/ /g, "-"));
     this.getUrlParameters();
 
-    if (this.defaultpage != 'LocalData') {
+    if (this.defaultpage != "LocalData") {
       this.pageLocaLData();
     }
   }
@@ -1980,89 +2311,97 @@ export class AppComponent {
    * Get URL Parameters to find current URL we are in
    */
   getUrlParameters() {
-    if (window.location.pathname.indexOf('/map/') == 0) {
-      var orgname = (window.location.pathname.split("/")).filter(val => val != '' ? true : false);
-      // setting OrgName in service 
-      this.commonService.setorgname(orgname[1] ? orgname[1].replace(/(%20)/g, ' ').replace(/(-)/g, ' ').trim() : '');
-      this.orgListModel = orgname[1] ? orgname[1].replace(/(%20)/g, ' ').replace(/(-)/g, ' ').trim() : '';
+    if (window.location.pathname.indexOf("/map/") == 0) {
+      var orgname = window.location.pathname
+        .split("/")
+        .filter((val) => (val != "" ? true : false));
+      // setting OrgName in service
+      this.commonService.setorgname(
+        orgname[1]
+          ? orgname[1].replace(/(%20)/g, " ").replace(/(-)/g, " ").trim()
+          : ""
+      );
+      this.orgListModel = orgname[1]
+        ? orgname[1].replace(/(%20)/g, " ").replace(/(-)/g, " ").trim()
+        : "";
       console.log(this.orgListModel);
     } else {
-      this.commonService.setorgname('');
+      this.commonService.setorgname("");
     }
     console.log(this.orgListModel);
   }
-
-
 
   /**
    * Get Logged In Usre Info
    * userName:string and Roles[]
    */
-  userName = '';
+  userName = "";
   userRole = [];
   activeRole = [];
   userData = {};
   LoginUserInfo() {
-    this.dataService.getUserInfo().subscribe(res => {
-      console.log(res);
-      if (res['data'] && res['data']) {
-        console.log(res['data']);
-        this.userData = res['data'];
-        this.userName = res['data']['username'];
-        this.userRole = res['data']['userrole'] && res['data']['userrole']['roles'] || [];
-        if (window.localStorage.getItem('page')) {
-          window.localStorage.setItem('page', this.defaultpage);
+    this.dataService.getUserInfo().subscribe(
+      (res) => {
+        console.log(res);
+        if (res["data"] && res["data"]) {
+          console.log(res["data"]);
+          this.userData = res["data"];
+          this.userName = res["data"]["username"];
+          this.userRole =
+            (res["data"]["userrole"] && res["data"]["userrole"]["roles"]) || [];
+          if (window.localStorage.getItem("page")) {
+            window.localStorage.setItem("page", this.defaultpage);
+          }
+          if (this.userRole.length) {
+            this.activeRole = this.userRole;
+          }
+
+          this.commonService.setusername(this.userName);
+          this.commonService.setUserrole(this.userRole);
+          this.commonService.setUserData(this.userData);
+
+          console.log({
+            userName: this.userName,
+            userRole: this.userRole,
+          });
+
+          setTimeout(() => {
+            if (this.userName || this.orgListModel) {
+              // Shoing Map Page
+              this.pageLocaLData();
+            }
+          }, 500);
+
+          // Get All givenList
+          this.getUserAssignedList();
         }
-        if (this.userRole.length) {
-          this.activeRole = this.userRole;
-        }
-
-        this.commonService.setusername(this.userName);
-        this.commonService.setUserrole(this.userRole);
-        this.commonService.setUserData(this.userData);
-
-        console.log({
-          userName: this.userName,
-          userRole: this.userRole
-        });
-
+      },
+      (err) => {
+        // If not Logged In Keylok send error So
         setTimeout(() => {
           if (this.userName || this.orgListModel) {
             // Shoing Map Page
             this.pageLocaLData();
           }
         }, 500);
-
-        // Get All givenList
-        this.getUserAssignedList();
-
-
+      },
+      () => {
+        console.log("User Info!");
       }
-    }, (err) => {
-      // If not Logged In Keylok send error So 
-      setTimeout(() => {
-        if (this.userName || this.orgListModel) {
-          // Shoing Map Page
-          this.pageLocaLData();
-        }
-      }, 500);
-    }, () => {
-      console.log("User Info!")
-    })
+    );
   }
   userLogin() {
-    window.localStorage.setItem('page', this.defaultpage);
-    window.location.replace('/home');
+    window.localStorage.setItem("page", this.defaultpage);
+    window.location.replace("/home");
   }
   LogoutMe() {
-    window.location.replace('/logout');
-    this.userName = '';
+    window.location.replace("/logout");
+    this.userName = "";
     this.userRole = [];
     this.activeRole = [];
-    this.commonService.setusername('');
+    this.commonService.setusername("");
     this.commonService.setUserrole([]);
   }
-
 
   /**
    * Get Given List
@@ -2070,37 +2409,40 @@ export class AppComponent {
   user_given_list = [];
   user_given_listArray = [];
   getUserAssignedList() {
-
     this.GettotalClosedAsignment();
     this.getAllassignedList();
 
     var obj = {
-      username: this.userName
-    }
-    this.dataService.getUserAssignedList(obj).subscribe(res => {
-      console.log(res);
-      if (res && res['status'] == 'success') {
-        this.user_given_list = res['data'];
-        this.user_given_listArray = this.user_given_list.map(val => {
-          return val['place_org_id'];
-        })
-        console.log(this.user_given_listArray);
+      username: this.userName,
+    };
+    this.dataService.getUserAssignedList(obj).subscribe(
+      (res) => {
+        console.log(res);
+        if (res && res["status"] == "success") {
+          this.user_given_list = res["data"];
+          this.user_given_listArray = this.user_given_list.map((val) => {
+            return val["place_org_id"];
+          });
+          console.log(this.user_given_listArray);
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+      () => {
+        console.log("getGiven completed");
       }
-    }, err => {
-      console.log(err);
-    }, () => {
-      console.log("getGiven completed");
-    })
+    );
   }
 
   /**
-   * Save user Info for 
+   * Save user Info for
    * start asigning User
    */
   validateMobileNumber(number, item) {
     if (parseInt(number) != NaN && number.toString().length < 13) {
       this.startAssignMe(this.user_Assign_Type, this.user_Assign_data, number);
-      item['numberPopup'] = false;
+      item["numberPopup"] = false;
     } else {
       alert("Enter valied Number");
     }
@@ -2113,7 +2455,7 @@ export class AppComponent {
   user_Assign_data;
 
   assignme(type, data) {
-    data['numberPopup'] = true;
+    data["numberPopup"] = true;
     this.user_Assign_Type = type;
     this.user_Assign_data = data;
   }
@@ -2126,47 +2468,53 @@ export class AppComponent {
       username: this.userName,
       userrole: this.userRole,
       userdata: this.userData,
-      number: number
-    })
+      number: number,
+    });
     let obj = {
       type: type,
       data: data,
       username: this.userName,
       userrole: this.userRole,
       userdata: this.userData,
-      number: number
-    }
-    this.dataService.assignme(obj).subscribe(res => {
-      console.log(res);
-      if (res && res['assigned'] == true) {
-        alert("Sorry Already action taken by someone.")
-      } else if (res && res['status'] == 'success') {
-        // Get All givenList
-        alert("Assigned successfully");
-        // updte ES DB
-        this.dataService.updateESRecord({
-          "place_org_id": res['data']['place_org_id'],
-          "closed_by": this.userName,
-          "place_org_subcategory": res['data']['place_org_subcategory']
-        }, 'assigned');
+      number: number,
+    };
+    this.dataService.assignme(obj).subscribe(
+      (res) => {
+        console.log(res);
+        if (res && res["assigned"] == true) {
+          alert("Sorry Already action taken by someone.");
+        } else if (res && res["status"] == "success") {
+          // Get All givenList
+          alert("Assigned successfully");
+          // updte ES DB
+          this.dataService.updateESRecord(
+            {
+              place_org_id: res["data"]["place_org_id"],
+              closed_by: this.userName,
+              place_org_subcategory: res["data"]["place_org_subcategory"],
+            },
+            "assigned"
+          );
 
-        this.getUserAssignedList();
-      } else {
-        alert(res['message']);
+          this.getUserAssignedList();
+        } else {
+          alert(res["message"]);
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+      () => {
+        this.loaderAction = false;
+        console.log("Service completed");
       }
-
-    }, err => {
-      console.log(err);
-    }, () => {
-      this.loaderAction = false;
-      console.log("Service completed");
-    })
+    );
   }
 
   /**
    * Close Action
-   * @param type 
-   * @param data 
+   * @param type
+   * @param data
    */
   givenbyme(type, data) {
     this.loaderAction = true;
@@ -2175,40 +2523,42 @@ export class AppComponent {
       data: data,
       username: this.userName,
       userrole: this.userRole,
-      userdata: this.userData
-    })
+      userdata: this.userData,
+    });
     let obj = {
       type: type,
       data: data,
       username: this.userName,
       userrole: this.userRole,
-      userdata: this.userData
-    }
-    this.dataService.givenbyme(obj).subscribe(res => {
-      console.log(res);
-      if (res && res['status'] == 'success') {
-        alert("Data saved successfuly");
+      userdata: this.userData,
+    };
+    this.dataService.givenbyme(obj).subscribe(
+      (res) => {
+        console.log(res);
+        if (res && res["status"] == "success") {
+          alert("Data saved successfuly");
 
-        // updte ES DB
-        this.dataService.updateESRecord({
-          "place_org_id": res['data']['place_org_id'],
-          "closed_by": this.userName,
-          "place_org_subcategory": res['data']['place_org_subcategory']
-        });
+          // updte ES DB
+          this.dataService.updateESRecord({
+            place_org_id: res["data"]["place_org_id"],
+            closed_by: this.userName,
+            place_org_subcategory: res["data"]["place_org_subcategory"],
+          });
 
-        this.getUserAssignedList();
-      } else {
-        alert(res['message']);
+          this.getUserAssignedList();
+        } else {
+          alert(res["message"]);
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+      () => {
+        this.loaderAction = false;
+        console.log("Service completed");
       }
-
-    }, err => {
-      console.log(err);
-    }, () => {
-      this.loaderAction = false;
-      console.log("Service completed");
-    })
+    );
   }
-
 
   /**
    * Get All Assigned User
@@ -2218,29 +2568,32 @@ export class AppComponent {
     this.loaderAction = true;
     console.log({
       username: this.userName,
-      userrole: this.userRole
-    })
+      userrole: this.userRole,
+    });
     let obj = {
       username: this.userName,
-      userrole: this.userRole
-    }
-    this.dataService.getAllassignedList(obj).subscribe(res => {
-      console.log(res);
-      if (res && res['status'] == 'success') {
-        this.allAssignedList = res['data'].map(val => {
-          return val['place_org_id'];
-        })
-        console.log(this.allAssignedList);
-      } else {
+      userrole: this.userRole,
+    };
+    this.dataService.getAllassignedList(obj).subscribe(
+      (res) => {
         console.log(res);
+        if (res && res["status"] == "success") {
+          this.allAssignedList = res["data"].map((val) => {
+            return val["place_org_id"];
+          });
+          console.log(this.allAssignedList);
+        } else {
+          console.log(res);
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+      () => {
+        this.loaderAction = false;
+        console.log("Service completed");
       }
-
-    }, err => {
-      console.log(err);
-    }, () => {
-      this.loaderAction = false;
-      console.log("Service completed");
-    })
+    );
   }
 
   /**
@@ -2250,55 +2603,50 @@ export class AppComponent {
   GettotalClosedAsignment() {
     console.log({
       username: this.userName,
-      userrole: this.userRole
-    })
+      userrole: this.userRole,
+    });
     let obj = {
       username: this.userName,
-      userrole: this.userRole
-    }
-    this.dataService.GettotalClosedAsignmentUser(obj).subscribe(res => {
-      console.log(res);
-      if (res && res['status'] == 'success') {
-        this.total_cosed_Asss = res['data'].length;
-        console.log(this.allAssignedList);
-      } else {
+      userrole: this.userRole,
+    };
+    this.dataService.GettotalClosedAsignmentUser(obj).subscribe(
+      (res) => {
         console.log(res);
+        if (res && res["status"] == "success") {
+          this.total_cosed_Asss = res["data"].length;
+          console.log(this.allAssignedList);
+        } else {
+          console.log(res);
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+      () => {
+        this.loaderAction = false;
+        console.log("Service completed");
       }
-
-    }, err => {
-      console.log(err);
-    }, () => {
-      this.loaderAction = false;
-      console.log("Service completed");
-    })
+    );
   }
-
-
-
-
-
 }
 
-
 @Pipe({
-  name: 'filterUnique',
-  pure: false
+  name: "filterUnique",
+  pure: false,
 })
 export class FilterPipe {
-
   transform(value: any, args?: any): any {
-
     var finalData = [];
     var finalKeys = [];
-    value.forEach(val => {
+    value.forEach((val) => {
       if (finalKeys.indexOf(val.menuId) == -1) {
         finalKeys.push(val.menuId);
         finalData.push({
-          menuId: val['menuId'],
-          icon: val['icon'] || '',
-          category: val['category'] || '',
-          subcategory: val['subcategory'] || '',
-          count: 0
+          menuId: val["menuId"],
+          icon: val["icon"] || "",
+          category: val["category"] || "",
+          subcategory: val["subcategory"] || "",
+          count: 0,
         });
       } else {
         // finalData.forEach(v=>{
@@ -2309,35 +2657,51 @@ export class FilterPipe {
         //   }
         // })
       }
-    })
+    });
     return finalData;
   }
 }
 @Pipe({
-  name: 'inputsearch',
-  pure: false
+  name: "inputsearch",
+  pure: false,
 })
 export class InputsearchPipe {
-
   transform(value: any, args?: any): any {
-
     var finalData = [];
-    if (args != '') {
+    if (args != "") {
       finalData = value.filter((val, index) => {
-        if ((val['name'] != undefined ? val['name'].toLowerCase() : '').indexOf(args.toLowerCase()) != -1 ||
-          ((val['address'] != undefined ? val['address'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
-          ((val['category'] != undefined ? val['category'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
-          ((val['subcategory'] != undefined ? val['subcategory'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
-          ((val['cityName'] != undefined ? val['cityName'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1 ||
-          ((val['wardName'] != undefined ? val['wardName'].toLowerCase() : '')).indexOf(args.toLowerCase()) != -1
+        if (
+          (val["name"] != undefined ? val["name"].toLowerCase() : "").indexOf(
+            args.toLowerCase()
+          ) != -1 ||
+          (val["address"] != undefined
+            ? val["address"].toLowerCase()
+            : ""
+          ).indexOf(args.toLowerCase()) != -1 ||
+          (val["category"] != undefined
+            ? val["category"].toLowerCase()
+            : ""
+          ).indexOf(args.toLowerCase()) != -1 ||
+          (val["subcategory"] != undefined
+            ? val["subcategory"].toLowerCase()
+            : ""
+          ).indexOf(args.toLowerCase()) != -1 ||
+          (val["cityName"] != undefined
+            ? val["cityName"].toLowerCase()
+            : ""
+          ).indexOf(args.toLowerCase()) != -1 ||
+          (val["wardName"] != undefined
+            ? val["wardName"].toLowerCase()
+            : ""
+          ).indexOf(args.toLowerCase()) != -1
         ) {
-          val['index'] = index;
+          val["index"] = index;
           return true;
         } else {
-          val['index'] = index;
+          val["index"] = index;
           return false;
         }
-      })
+      });
     } else {
       finalData = value;
     }
@@ -2345,48 +2709,43 @@ export class InputsearchPipe {
   }
 }
 @Pipe({
-  name: 'ratotalcounts',
-  pure: false
+  name: "ratotalcounts",
+  pure: false,
 })
 export class RaTotalCounts {
-
   transform(data: any, args?: any): any {
-
     // console.log(data);
     // console.log(args);
 
-    if (args == 'NGOTeam' && data && data.length) {
+    if (args == "NGOTeam" && data && data.length) {
       var count = 0;
       for (var i = 0; i < data.length; i++) {
         if (data[i][0].value == 101) {
-          data[i][0].internalChildren.forEach(val => {
+          data[i][0].internalChildren.forEach((val) => {
             if ([118, 136, 123, 132].indexOf(val.value) != -1) {
               count = count + val.overall_rec_count;
             }
-          })
+          });
           break;
         }
       }
-      return count ? `(${count.toString()})` : '';
-    } else if (args == 'NGOAdmin' && data && data.length) {
+      return count ? `(${count.toString()})` : "";
+    } else if (args == "NGOAdmin" && data && data.length) {
       var count = 0;
       for (var i = 0; i < data.length; i++) {
         if (data[i][0].value == 101) {
           // console.log(data[i][0]);
-          data[i][0].internalChildren.forEach(val => {
+          data[i][0].internalChildren.forEach((val) => {
             if ([135, 134].indexOf(val.value) != -1) {
               count = count + val.overall_rec_count;
             }
-          })
+          });
           break;
         }
       }
-      return count ? `(${count.toString()})` : '';
+      return count ? `(${count.toString()})` : "";
     } else {
-      return '';
+      return "";
     }
-
   }
 }
-
-
