@@ -11,11 +11,12 @@
         [clusterRadius]="50" [clusterProperties]="clusterProperties">
         <mgl-markers-for-clusters source="earthquakes{{index}}">
           <ng-template mglPoint let-feature>
-            <img src="{{feature.properties.icon}}" alt="">
+            <img src="{{feature.properties.icon}}" style="cursor: pointer;" alt=""
+              (click)="displayCorrdsDetails(feature.properties, 1)">
           </ng-template>
           <ng-template mglClusterPoint let-feature>
             <div style="position: relative;display:flex;flex-direction:column;">
-              <img src="{{content.icon}}" alt="" />
+              <img src="{{content.icon}}" />
               <div
                 style="background: #FF9800;border-radius: 50px;display: flex;padding: 6px;position: relative;bottom: 10px;left: -16px;">
                 <span style="margin:auto">{{ feature.properties.point_count }}</span>
@@ -29,13 +30,13 @@
 
   </ng-template>
 
-  <!-- <ng-template [ngIf]="markers.length">
+  <ng-template [ngIf]="markers.length">
 
-    <mgl-marker *ngFor="let m of markers; let i = index" [lngLat]="[m.lng, m.lat]">
+    <!-- <mgl-marker *ngFor="let m of markers; let i = index" [lngLat]="[m.lng, m.lat]">
       <div class="marker">
         <img src="{{m.icon}}" alt="" (click)="displayCorrdsDetails(m, i)" style="cursor: pointer;">
       </div>
-    </mgl-marker>
+    </mgl-marker> -->
 
     <div *ngIf="showcorordDetailsCnt">
       <mgl-popup [lngLat]="[popupdetails.lng, popupdetails.lat]">
@@ -229,251 +230,251 @@
     </div>
   </ng-template>
 
-</mgl-map> -->
+</mgl-map>
 
 
 
-  <agm-map style="visibility: hidden;" #gm [latitude]="lat" [longitude]="lng" [usePanning]="true"
-    [streetViewControl]="false" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="true"
-    (mapClick)="mapClicked($event)" (centerChange)="centerChange($event)" (zoomChange)="zoomChange($event)"
-    (boundsChange)="boundsChange($event)">
-    <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m, i)" [latitude]="m.lat"
-      [longitude]="m.lng" [label]="m.label" [markerDraggable]="m.draggable" (dragEnd)="markerDragEnd(m, $event)"
-      [iconUrl]="m.icon" (markerClick)="select_marker(infoWindow)">
-      <agm-info-window #infoWindow>
-        <div *ngIf="m.data != null">
-          <strong>
-            <ul style="list-style-type:none;padding: 0;margin: 0;" *ngIf="zoom > 12 && zoom < 16">
-              <li>
-                Ward : {{m.wardName}}
-              </li>
-            </ul>
-            <ul style="list-style-type:none;padding: 0;margin: 0;">
-              <li *ngFor="let data of m.data">
-                {{data}}
-              </li>
-            </ul>
-            <ul style="list-style-type:none;padding: 0;margin: 0;">
-              <li>
-                <strong>Hint: Zoom in further till you see the icons on the map</strong>
-              </li>
-            </ul>
-          </strong>
-        </div>
-        <table>
-          <tbody>
-            <tr *ngIf="locationDetails.ward_id != '' && locationDetails.ward_id != undefined">
-              <td><strong>Ward ID:&nbsp;</strong></td>
-              <td><span>{{locationDetails.ward_id}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.wardName != '' && locationDetails.wardName != undefined">
-              <td><strong>Ward Name:&nbsp;</strong></td>
-              <td><span *ngIf="locationDetails.wardName != ''">{{locationDetails.wardName}}</span><span
-                  *ngIf="locationDetails.wardName == ''">NA</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.name != '' && locationDetails.name != undefined">
-              <td><strong>Name:&nbsp;</strong></td>
-              <td><span>{{locationDetails.name}}</span></td>
-            </tr>
+<agm-map style="visibility: hidden;" #gm [latitude]="lat" [longitude]="lng" [usePanning]="true"
+  [streetViewControl]="false" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="true"
+  (mapClick)="mapClicked($event)" (centerChange)="centerChange($event)" (zoomChange)="zoomChange($event)"
+  (boundsChange)="boundsChange($event)">
+  <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m, i)" [latitude]="m.lat"
+    [longitude]="m.lng" [label]="m.label" [markerDraggable]="m.draggable" (dragEnd)="markerDragEnd(m, $event)"
+    [iconUrl]="m.icon" (markerClick)="select_marker(infoWindow)">
+    <agm-info-window #infoWindow>
+      <div *ngIf="m.data != null">
+        <strong>
+          <ul style="list-style-type:none;padding: 0;margin: 0;" *ngIf="zoom > 12 && zoom < 16">
+            <li>
+              Ward : {{m.wardName}}
+            </li>
+          </ul>
+          <ul style="list-style-type:none;padding: 0;margin: 0;">
+            <li *ngFor="let data of m.data">
+              {{data}}
+            </li>
+          </ul>
+          <ul style="list-style-type:none;padding: 0;margin: 0;">
+            <li>
+              <strong>Hint: Zoom in further till you see the icons on the map</strong>
+            </li>
+          </ul>
+        </strong>
+      </div>
+      <table>
+        <tbody>
+          <tr *ngIf="locationDetails.ward_id != '' && locationDetails.ward_id != undefined">
+            <td><strong>Ward ID:&nbsp;</strong></td>
+            <td><span>{{locationDetails.ward_id}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.wardName != '' && locationDetails.wardName != undefined">
+            <td><strong>Ward Name:&nbsp;</strong></td>
+            <td><span *ngIf="locationDetails.wardName != ''">{{locationDetails.wardName}}</span><span
+                *ngIf="locationDetails.wardName == ''">NA</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.name != '' && locationDetails.name != undefined">
+            <td><strong>Name:&nbsp;</strong></td>
+            <td><span>{{locationDetails.name}}</span></td>
+          </tr>
 
-            <tr *ngIf="locationDetails.streetName != '' && locationDetails.streetName != undefined">
-              <td><strong>streetName:&nbsp;</strong></td>
-              <td><span>{{locationDetails.streetName}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.address != '' && locationDetails.address != undefined">
-              <td><strong>Address:&nbsp;</strong></td>
-              <td><span>{{locationDetails.address}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.contactNum != '' && locationDetails.contactNum != undefined">
-              <td><strong>Contact:&nbsp;</strong></td>
-              <td><span>{{locationDetails.contactNum}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.manager_name != '' && locationDetails.manager_name != undefined">
-              <td><strong>Manager Name:&nbsp;</strong></td>
-              <td><span>{{locationDetails.manager_name}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.facility_type != '' && locationDetails.facility_type != undefined">
-              <td><strong>Facility Type:&nbsp;</strong></td>
-              <td><span>{{locationDetails.facility_type}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.category != '' && locationDetails.category != undefined">
-              <td><strong>Category:&nbsp;</strong></td>
-              <td><span>{{locationDetails.category}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.subcategory != '' && locationDetails.subcategory != undefined">
-              <td><strong>Sub Category:&nbsp;</strong></td>
-              <td><span>{{locationDetails.subcategory}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.status != '' && locationDetails.status != undefined">
-              <td><strong>Status:&nbsp;</strong></td>
-              <td><span>{{locationDetails.status}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.provider_website != '' && locationDetails.provider_website != undefined">
-              <td><strong>Website:&nbsp;</strong></td>
-              <td><span>{{locationDetails.provider_website}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.gents != '' && locationDetails.gents != undefined">
-              <td><strong>Gents:&nbsp;</strong></td>
-              <td><span>{{locationDetails.gents}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.ladies != '' && locationDetails.ladies != undefined">
-              <td><strong>Ladies:&nbsp;</strong></td>
-              <td><span>{{locationDetails.ladies}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.zone != '' && locationDetails.zone != undefined">
-              <td><strong>Zone:&nbsp;</strong></td>
-              <td><span>{{locationDetails.zone}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.source != '' && locationDetails.source != undefined">
-              <td><strong>Source:&nbsp;</strong></td>
-              <td><span>{{locationDetails.source}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.constituency != '' && locationDetails.constituency != undefined">
-              <td><strong>Constituency:&nbsp;</strong></td>
-              <td><span>{{locationDetails.constituency}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.party != '' && locationDetails.party != undefined">
-              <td><strong>Party:&nbsp;</strong></td>
-              <td><span>{{locationDetails.party}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.cityName != '' && locationDetails.cityName != undefined">
-              <td><strong>City Name:&nbsp;</strong></td>
-              <td><span>{{locationDetails.cityName}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.email != '' && locationDetails.email != undefined">
-              <td><strong>Email:&nbsp;</strong></td>
-              <td><span>{{locationDetails.email}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.description != '' && locationDetails.description != undefined">
-              <td><strong>Description:&nbsp;</strong></td>
-              <td><span>{{locationDetails.description}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.campaignEnd != '' && locationDetails.campaignEnd != undefined">
-              <td><strong>Campaign End:&nbsp;</strong></td>
-              <td><span>{{locationDetails.campaignEnd}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.url != '' && locationDetails.url != undefined">
-              <td><strong>URL:&nbsp;</strong></td>
-              <td><a (click)="openURL(locationDetails.url)"
-                  style="color: blue;cursor: pointer;">{{locationDetails.url}}</a>
-            </tr>
-            <tr *ngIf="locationDetails.DateOfCompliant != '' && locationDetails.DateOfCompliant != undefined">
-              <td><strong>Date Of Compliant:&nbsp;</strong></td>
-              <td><span>{{locationDetails.DateOfCompliant}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.complaintNumber != '' && locationDetails.complaintNumber != undefined">
-              <td><strong>Complaint Number:&nbsp;</strong></td>
-              <td><span>{{locationDetails.complaintNumber}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.NoOfLikes != '' && locationDetails.NoOfLikes != undefined">
-              <td><strong>No Of Likes:&nbsp;</strong></td>
-              <td><span>{{locationDetails.NoOfLikes}}</span></td>
-            </tr>
-            <tr *ngIf="locationDetails.wards != '' && locationDetails.wards != undefined">
-              <td><strong>Wards:&nbsp;</strong></td>
-              <td><span>{{locationDetails.wards}}</span></td>
-            </tr>
+          <tr *ngIf="locationDetails.streetName != '' && locationDetails.streetName != undefined">
+            <td><strong>streetName:&nbsp;</strong></td>
+            <td><span>{{locationDetails.streetName}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.address != '' && locationDetails.address != undefined">
+            <td><strong>Address:&nbsp;</strong></td>
+            <td><span>{{locationDetails.address}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.contactNum != '' && locationDetails.contactNum != undefined">
+            <td><strong>Contact:&nbsp;</strong></td>
+            <td><span>{{locationDetails.contactNum}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.manager_name != '' && locationDetails.manager_name != undefined">
+            <td><strong>Manager Name:&nbsp;</strong></td>
+            <td><span>{{locationDetails.manager_name}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.facility_type != '' && locationDetails.facility_type != undefined">
+            <td><strong>Facility Type:&nbsp;</strong></td>
+            <td><span>{{locationDetails.facility_type}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.category != '' && locationDetails.category != undefined">
+            <td><strong>Category:&nbsp;</strong></td>
+            <td><span>{{locationDetails.category}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.subcategory != '' && locationDetails.subcategory != undefined">
+            <td><strong>Sub Category:&nbsp;</strong></td>
+            <td><span>{{locationDetails.subcategory}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.status != '' && locationDetails.status != undefined">
+            <td><strong>Status:&nbsp;</strong></td>
+            <td><span>{{locationDetails.status}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.provider_website != '' && locationDetails.provider_website != undefined">
+            <td><strong>Website:&nbsp;</strong></td>
+            <td><span>{{locationDetails.provider_website}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.gents != '' && locationDetails.gents != undefined">
+            <td><strong>Gents:&nbsp;</strong></td>
+            <td><span>{{locationDetails.gents}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.ladies != '' && locationDetails.ladies != undefined">
+            <td><strong>Ladies:&nbsp;</strong></td>
+            <td><span>{{locationDetails.ladies}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.zone != '' && locationDetails.zone != undefined">
+            <td><strong>Zone:&nbsp;</strong></td>
+            <td><span>{{locationDetails.zone}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.source != '' && locationDetails.source != undefined">
+            <td><strong>Source:&nbsp;</strong></td>
+            <td><span>{{locationDetails.source}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.constituency != '' && locationDetails.constituency != undefined">
+            <td><strong>Constituency:&nbsp;</strong></td>
+            <td><span>{{locationDetails.constituency}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.party != '' && locationDetails.party != undefined">
+            <td><strong>Party:&nbsp;</strong></td>
+            <td><span>{{locationDetails.party}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.cityName != '' && locationDetails.cityName != undefined">
+            <td><strong>City Name:&nbsp;</strong></td>
+            <td><span>{{locationDetails.cityName}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.email != '' && locationDetails.email != undefined">
+            <td><strong>Email:&nbsp;</strong></td>
+            <td><span>{{locationDetails.email}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.description != '' && locationDetails.description != undefined">
+            <td><strong>Description:&nbsp;</strong></td>
+            <td><span>{{locationDetails.description}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.campaignEnd != '' && locationDetails.campaignEnd != undefined">
+            <td><strong>Campaign End:&nbsp;</strong></td>
+            <td><span>{{locationDetails.campaignEnd}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.url != '' && locationDetails.url != undefined">
+            <td><strong>URL:&nbsp;</strong></td>
+            <td><a (click)="openURL(locationDetails.url)"
+                style="color: blue;cursor: pointer;">{{locationDetails.url}}</a>
+          </tr>
+          <tr *ngIf="locationDetails.DateOfCompliant != '' && locationDetails.DateOfCompliant != undefined">
+            <td><strong>Date Of Compliant:&nbsp;</strong></td>
+            <td><span>{{locationDetails.DateOfCompliant}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.complaintNumber != '' && locationDetails.complaintNumber != undefined">
+            <td><strong>Complaint Number:&nbsp;</strong></td>
+            <td><span>{{locationDetails.complaintNumber}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.NoOfLikes != '' && locationDetails.NoOfLikes != undefined">
+            <td><strong>No Of Likes:&nbsp;</strong></td>
+            <td><span>{{locationDetails.NoOfLikes}}</span></td>
+          </tr>
+          <tr *ngIf="locationDetails.wards != '' && locationDetails.wards != undefined">
+            <td><strong>Wards:&nbsp;</strong></td>
+            <td><span>{{locationDetails.wards}}</span></td>
+          </tr>
 
-            <tr *ngIf="locationDetails['data']">
-              <td><strong>Description:&nbsp;</strong></td>
-              <td><span [innerHTML]="locationDetails.data | parseUrl"></span></td>
-            </tr>
+          <tr *ngIf="locationDetails['data']">
+            <td><strong>Description:&nbsp;</strong></td>
+            <td><span [innerHTML]="locationDetails.data | parseUrl"></span></td>
+          </tr>
 
-            <tr *ngIf="!userName">
-              <td><strong></strong></td>
-              <td>
-                <span (click)="userLogin()" style="
+          <tr *ngIf="!userName">
+            <td><strong></strong></td>
+            <td>
+              <span (click)="userLogin()" style="
                   color: #00df8e;
                   font-weight: 500;
                   text-decoration: underline;
                   cursor: pointer;
               ">Login to see more details. </span>
+            </td>
+          </tr>
+
+          <tr *ngIf="locationDetails['phone'] && userName">
+            <td><strong>Phone:&nbsp;</strong></td>
+            <td><span>{{locationDetails['phone']}}</span></td>
+          </tr>
+
+
+          <ng-template [ngIf]="!locationDetails['numberPopup']">
+            <tr *ngIf="userName && locationDetails.menuId && locationDetails.id">
+              <td></td>
+              <td
+                *ngIf="food_ration_asked.indexOf(locationDetails.menuId) != -1 && userName && allAssignedList.indexOf(locationDetails?.id) ==-1 ">
+                <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a"
+                  (click)="assignme('assign', locationDetails)">
+                  <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i> Assign Me
+                </a>
+              </td>
+              <td *ngIf="user_given_listArray.indexOf(locationDetails?.id) != -1 && userName">
+                <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a"
+                  (click)="givenbyme('given', locationDetails)">
+                  <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as Given
+                </a>
               </td>
             </tr>
+          </ng-template>
 
-            <tr *ngIf="locationDetails['phone'] && userName">
-              <td><strong>Phone:&nbsp;</strong></td>
-              <td><span>{{locationDetails['phone']}}</span></td>
+          <ng-template [ngIf]="locationDetails['numberPopup']">
+            <tr>
+              <td></td>
+              <td>
+                <div class="user-action-ass-given">
+                  <input class="" type="number" min="0" max="10" [(ngModel)]="locationDetails['raphonenumber']"
+                    placeholder="Mobile Number">
+                  <a class="user-action-a-a"
+                    (click)="validateMobileNumber(locationDetails['raphonenumber'], locationDetails)">Submit</a>
+                  <a class="user-action-a-a red" (click)="locationDetails['numberPopup'] = false">Cancel</a>
+                </div>
+              </td>
             </tr>
+          </ng-template>
 
+          <ng-template [ngIf]="locationDetails['closed_by']">
+            <tr>
+              <td></td>
+              <td>
+                <div class="closedby_user" style="margin: 0px !important;">
+                  <div><span class="bold">Closed By: </span>{{locationDetails?.closed_by}}</div>
+                  <div><span>{{locationDetails?.closed_at | date:'dd-MM-y h:mm'}}</span></div>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
 
-            <ng-template [ngIf]="!locationDetails['numberPopup']">
-              <tr *ngIf="userName && locationDetails.menuId && locationDetails.id">
-                <td></td>
-                <td
-                  *ngIf="food_ration_asked.indexOf(locationDetails.menuId) != -1 && userName && allAssignedList.indexOf(locationDetails?.id) ==-1 ">
-                  <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a"
-                    (click)="assignme('assign', locationDetails)">
-                    <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-hand-paper-o'"></i> Assign Me
-                  </a>
-                </td>
-                <td *ngIf="user_given_listArray.indexOf(locationDetails?.id) != -1 && userName">
-                  <a [ngClass]="{'isDisabled': loaderAction}" class="animated fadeIn user-action-a-a"
-                    (click)="givenbyme('given', locationDetails)">
-                    <i [ngClass]="loaderAction? 'fa fa-spinner fa-spin isDisabled': 'fa fa-user'"></i> Mark as Given
-                  </a>
-                </td>
-              </tr>
-            </ng-template>
+        </tbody>
+      </table>
+      <div class="row" *ngIf="zoom >= 16" style="margin: 0px;padding-top: 0.5rem;justify-content: flex-end;">
+        <i class="fa fa-flag" aria-hidden="true" (click)="badData(m)"></i>
 
-            <ng-template [ngIf]="locationDetails['numberPopup']">
-              <tr>
-                <td></td>
-                <td>
-                  <div class="user-action-ass-given">
-                    <input class="" type="number" min="0" max="10" [(ngModel)]="locationDetails['raphonenumber']"
-                      placeholder="Mobile Number">
-                    <a class="user-action-a-a"
-                      (click)="validateMobileNumber(locationDetails['raphonenumber'], locationDetails)">Submit</a>
-                    <a class="user-action-a-a red" (click)="locationDetails['numberPopup'] = false">Cancel</a>
-                  </div>
-                </td>
-              </tr>
-            </ng-template>
-
-            <ng-template [ngIf]="locationDetails['closed_by']">
-              <tr>
-                <td></td>
-                <td>
-                  <div class="closedby_user" style="margin: 0px !important;">
-                    <div><span class="bold">Closed By: </span>{{locationDetails?.closed_by}}</div>
-                    <div><span>{{locationDetails?.closed_at | date:'dd-MM-y h:mm'}}</span></div>
-                  </div>
-                </td>
-              </tr>
-            </ng-template>
-
-          </tbody>
-        </table>
-        <div class="row" *ngIf="zoom >= 16" style="margin: 0px;padding-top: 0.5rem;justify-content: flex-end;">
-          <i class="fa fa-flag" aria-hidden="true" (click)="badData(m)"></i>
-
-        </div>
-      </agm-info-window>
-    </agm-marker>
-
-    <agm-marker [latitude]="lat" [longitude]="lng" [iconUrl]="testurl">
-    </agm-marker>
-
-    <agm-data-layer [geoJson]="geoJson" [style]="styleFunc" (layerClick)="onClick($event)"></agm-data-layer>
-  </agm-map>
-
-  <div class="mobilenumber-popup" *ngIf="numberPopup">
-    <div class="nubmer-box animated fadeInDown">
-      <h5>Enter Mobile Number <span class="fa fa-times" (click)="numberPopup = false" style="font-size: 18px;"></span>
-      </h5>
-
-      <div class="body-mobile">
-        <ul>
-          <li>
-            <input type="number" min="0" max="10" [(ngModel)]="mobilenumber" placeholder="XXX XXX XXXX"
-              pattern="[789][0-9]{9}">
-          </li>
-          <li>
-            <a (click)="validateMobileNumber()">Submit</a>
-          </li>
-        </ul>
       </div>
+    </agm-info-window>
+  </agm-marker>
 
+  <agm-marker [latitude]="lat" [longitude]="lng" [iconUrl]="testurl">
+  </agm-marker>
+
+  <agm-data-layer [geoJson]="geoJson" [style]="styleFunc" (layerClick)="onClick($event)"></agm-data-layer>
+</agm-map>
+
+<div class="mobilenumber-popup" *ngIf="numberPopup">
+  <div class="nubmer-box animated fadeInDown">
+    <h5>Enter Mobile Number <span class="fa fa-times" (click)="numberPopup = false" style="font-size: 18px;"></span>
+    </h5>
+
+    <div class="body-mobile">
+      <ul>
+        <li>
+          <input type="number" min="0" max="10" [(ngModel)]="mobilenumber" placeholder="XXX XXX XXXX"
+            pattern="[789][0-9]{9}">
+        </li>
+        <li>
+          <a (click)="validateMobileNumber()">Submit</a>
+        </li>
+      </ul>
     </div>
+
   </div>
+</div>
