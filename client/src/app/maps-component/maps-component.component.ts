@@ -198,6 +198,8 @@ export class MapsComponentComponent implements OnInit {
     },
   };
 
+  showcluster = false;
+  clusterData = [];
   ngOnChanges(changes: SimpleChanges) {
     // this.MapData.forEach(element => {
     //   if (element.total != undefined) {
@@ -208,8 +210,49 @@ export class MapsComponentComponent implements OnInit {
     //     }
     //   }
     // });
-    console.log("test");
     this.markers = this.MapData;
+    console.log(this.markers);
+
+    this.showcluster = false;
+    this.clusterData = [];
+    this.markers.forEach((val) => {
+      console.log(val.menuId);
+      if (val.menuId) {
+        var index = this.clusterData.findIndex((c) => c.menuId == val.menuId);
+        console.log(index);
+        if (index != -1) {
+          this.clusterData[index].features.push({
+            type: "Feature",
+            properties: {
+              ...val,
+            },
+            geometry: {
+              type: "Point",
+              coordinates: [val.lng, val.lat],
+            },
+          });
+        } else {
+          this.clusterData.push({
+            type: "FeatureCollection",
+            name: "BBMP Wards",
+            menuId: val.menuId,
+            icon: val.icon,
+            crs: {
+              type: "name",
+              properties: {
+                name: "urn:ogc:def:crs:OGC:1.3:CRS84",
+              },
+            },
+            features: [],
+          });
+        }
+      }
+    });
+    console.log(this.clusterData);
+    setTimeout(() => {
+      this.showcluster = true;
+    }, 500);
+
     this.previous_info_window = null;
     this.locationDetails = {
       id: "",
