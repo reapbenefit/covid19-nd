@@ -1,5 +1,5 @@
-<mgl-map [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="[10]" [center]="[lng, lat]" (zoomEnd)="dragEnd($event)"
-  (dragEnd)="dragEnd($event)">
+<mgl-map [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="[zoomCus]" [center]="[lng, lat]"
+  (zoomEnd)="dragEnd($event)" (dragEnd)="dragEnd($event)">
 
 
 
@@ -17,8 +17,8 @@
           <ng-template mglClusterPoint let-feature>
             <div style="position: relative;display:flex;flex-direction:column;">
               <img src="{{content.icon}}" />
-              <div
-                style="background: #FF9800;border-radius: 50px;display: flex;padding: 6px;position: relative;bottom: 10px;left: -16px;">
+              <div (click)="zoomCus = zoomCus + 1"
+                style="background: #FF9800;border-radius: 50px;display: flex;padding: 6px;position: relative;bottom: 10px;left: -16px;cursor: pointer;">
                 <span style="margin:auto">{{ feature.properties.point_count }}</span>
               </div>
             </div>

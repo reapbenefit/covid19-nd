@@ -43,6 +43,7 @@ export class MapsComponentComponent implements OnInit {
   geoJson = geoJson;
   popupdetails = {};
   showcorordDetailsCnt = false;
+  zoomCus = 10;
 
   displayCorrdsDetails(marker, index: number, data) {
     this.popupdetails = marker;
@@ -357,30 +358,28 @@ export class MapsComponentComponent implements OnInit {
 
   // New Map Changes...
   dragEnd($event) {
-    console.log($event);
-
-    let topLeft = {
-      lat: $event.target.getBounds()._ne.lat,
-      lng: $event.target.getBounds()._sw.lng,
-    };
-    let bottomRight = {
-      lat: $event.target.getBounds()._sw.lat,
-      lng: $event.target.getBounds()._ne.lng,
-    };
-    this.dataService.topLeft = topLeft;
-    this.dataService.bottomRight = bottomRight;
-
-    var warNmObj = {
-      lat: $event.target.getCenter().lat,
-      lng: $event.target.getCenter().lng,
-    };
-    this.dataService.centerLat = $event.target.getCenter().lat;
-    this.dataService.centerLng = $event.target.getCenter().lng;
-    this.commonService.sendCord(warNmObj);
-    this.dataService.getCorrLocWard(warNmObj).subscribe((data) => {
-      this.currentWard = data;
-      this.wardDetails.emit(this.currentWard.details[0]);
-    });
+    // console.log($event);
+    // let topLeft = {
+    //   lat: $event.target.getBounds()._ne.lat,
+    //   lng: $event.target.getBounds()._sw.lng,
+    // };
+    // let bottomRight = {
+    //   lat: $event.target.getBounds()._sw.lat,
+    //   lng: $event.target.getBounds()._ne.lng,
+    // };
+    // this.dataService.topLeft = topLeft;
+    // this.dataService.bottomRight = bottomRight;
+    // var warNmObj = {
+    //   lat: $event.target.getCenter().lat,
+    //   lng: $event.target.getCenter().lng,
+    // };
+    // this.dataService.centerLat = $event.target.getCenter().lat;
+    // this.dataService.centerLng = $event.target.getCenter().lng;
+    // this.commonService.sendCord(warNmObj);
+    // this.dataService.getCorrLocWard(warNmObj).subscribe((data) => {
+    //   this.currentWard = data;
+    //   this.wardDetails.emit(this.currentWard.details[0]);
+    // });
   }
 
   boundsChange(bounds: LatLngBounds) {
