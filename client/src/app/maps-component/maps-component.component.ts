@@ -21,6 +21,8 @@ import { GoogleAnalyticsService } from "../services/google-analytics.service";
 import geoJson from "../../assets/SampleGeoJson.json";
 import { Subscription, forkJoin } from "rxjs";
 
+import { MapMouseEvent, Map } from "mapbox-gl";
+
 @Component({
   selector: "app-maps-component",
   templateUrl: "./maps-component.component.html",
@@ -29,6 +31,8 @@ import { Subscription, forkJoin } from "rxjs";
 export class MapsComponentComponent implements OnInit {
   @ViewChild("infoWindow") infoWindow: ElementRef;
   @ViewChild("gm") gmmm: ElementRef;
+  @ViewChild("clusterme") clusterme: ElementRef;
+  map: Map;
 
   @Input() MapData;
   @Output() wardDetails = new EventEmitter();
@@ -78,6 +82,23 @@ export class MapsComponentComponent implements OnInit {
     });
   }
 
+  zoomcluster(feature) {
+    console.log(feature);
+    console.log(this.map);
+    let self = this.map;
+    console.log(feature._geometry.coordinates);
+    this.map
+      .getSource(feature.source)
+      ["getClusterExpansionZoom"](feature.properties.cluster_id, function (
+        err,
+        zoom
+      ) {
+        self.easeTo({
+          center: feature._geometry.coordinates,
+          zoom: zoom,
+        });
+      });
+  }
   styleFunc(feature: any): any {
     return {
       clickable: true,
@@ -217,7 +238,7 @@ export class MapsComponentComponent implements OnInit {
     this.showcluster = false;
     this.clusterData = [];
     this.markers.forEach((val) => {
-      console.log(val.menuId);
+      // console.log(val.menuId);
       if (val.menuId) {
         var index = this.clusterData.findIndex((c) => c.menuId == val.menuId);
         console.log(index);
@@ -336,6 +357,7 @@ export class MapsComponentComponent implements OnInit {
   }
 
   markerDragEnd(m, $event: MouseEvent) {
+    console.log();
     console.log("dragEnd", m, $event);
   }
 
