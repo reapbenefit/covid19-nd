@@ -10,7 +10,7 @@
     <ng-template ngFor let-content [ngForOf]="clusterData" let-index="index">
 
       <mgl-geojson-source id="earthquakes{{index}}" type="geojson" [data]="content" [cluster]="true"
-        [clusterRadius]="50" [clusterProperties]="clusterProperties">
+        [clusterRadius]="100" [clusterProperties]="clusterProperties">
         <mgl-markers-for-clusters source="earthquakes{{index}}">
           <ng-template mglPoint let-feature>
             <img src="{{feature.properties.icon}}" style="cursor: pointer;" alt=""
