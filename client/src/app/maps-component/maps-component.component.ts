@@ -95,7 +95,7 @@ export class MapsComponentComponent implements OnInit {
       ) {
         self.easeTo({
           center: feature._geometry.coordinates,
-          zoom: zoom,
+          zoom: zoom + 0.2,
         });
       });
   }
