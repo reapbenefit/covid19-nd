@@ -1,0 +1,237 @@
+ <div class="mt-0" *ngIf="selectedInfo" id="infoWindow1" style="position:relative;">
+  <div class="row" style="/* text-align: right; */position:absolute;right:2%;top: 2%;">
+    <!-- <img src="../../../assets/Icons/close.png" style="width:22%;" alt="filter" /> -->
+    <button type="button" class="button_png" (click)="close_modal($event)">
+      <img src="../../../assets/Icons/close.png" class="img_png" alt="filter" /></button>
+  </div>
+  <div *ngIf="image_show">
+    <img  [offset]="'100'" style="width:100%;border-radius: 16px 16px 0px 0px"
+      [defaultImage]="defaultImage" [lazyLoad]="image" />
+  </div>
+  <div class="container mt-3 pl-5 pr-5 align-items-center">
+  <div class="row pl-1">
+    <ngx-stars [readonly]="false" [size]="0" (ratingOutput)="onRatingSet($event)" [initialStars]="initial_stars">
+    </ngx-stars>
+  </div>
+  <div class="content-row header pl-1">
+    <h5>{{selectedInfo.name}}</h5>
+  </div>
+  <hr class="hr_class_custom">
+  <div class="content-row pl-1">
+    <p class="marker_main_content">{{selectedInfo.description}}</p>
+  </div>
+  <hr>
+  <div *ngIf="assetFields">
+    <!-- <form action="/action_page.php"> -->
+      <div class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Address:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.address}}</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Contact Number:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.contactNumber}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Contact Name:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.contactName}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Working Hours Open:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.workingHoursOpen}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Working Hours Close:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.workingHoursClose}}</span>
+        </div>
+      </div>
+
+    <!-- </form> -->
+  </div> 
+
+  <div *ngIf="issueFields">
+  <!-- <form action="/action_page.php"> -->
+    <div class="row pl-2">
+      <div class="col-md-6 col-6">
+        <label for="fname">Status:</label>
+      </div>
+      <div class="col-md-6 col-6">
+        <select class="browser-default custom-select custom-select_drop" [(ngModel)]="selectedValue"
+          (change)="getSelectedvalue($event.value)" [disabled]="isAllowed == false">
+          <option selected>Open</option>
+          <option 
+          *ngFor="let tab of statuslist ; let index = index " [value]="tab.id">{{tab.name}}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row pl-2">
+      <div class="col-md-6 col-6">
+        <label for="fname">Created By:</label>
+      </div>
+      <div class="col-md-6 col-6">
+        <span>{{selectedInfo.createdBy}}</span>
+      </div>
+    </div>
+
+    <div class="row pl-2">
+      <div class="col-md-6 col-6">
+        <label for="fname">Category:</label>
+      </div>
+      <div class="col-md-6 col-6">
+        <span>{{selectedInfo.catName}}</span>
+      </div>
+    </div>
+
+    <div class="row pl-2">
+      <div class="col-md-6 col-6">
+        <label for="fname">Tags:</label>
+      </div>
+      <div class="col-md-6 col-6">
+        <span>{{selectedInfo.tags}}</span>
+      </div>
+    </div>
+
+    <div class="row pl-2">
+      <div class="col-md-6 col-6">
+        <label for="fname">Members:</label>
+      </div>
+      <div class="col-md-6 col-6">
+        <p>{{memers_name}}</p>
+      </div>
+    </div>
+
+  <!-- </form> -->
+  </div>
+  <div class="row pb-4 pl-2">
+    <div class="col-6">
+      <div class="info">
+        <div class="support_section">
+          <button type="button" class="button_png" (click)="post_supporters($event)">
+            <img src="../../../assets/Icons/likes.png" class="img_png" alt="filter" /></button>
+          <span class="font_span">{{supporters}} Supporters</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-5">
+      <div class="support_section">
+        <button type="button" class="button_png">
+          <img src="../../../assets/Icons/comments.png" class="img_png" alt="filter" /></button>
+        <span class="font_span">{{comments}} Comments</span>
+      </div>
+    </div>
+    <div class="col-1" align="left" style="margin-top:3% !important">
+      <div class="panel-title" data-toggle="collapse" data-target="#demo"></div>
+    </div>
+  </div>
+  <div id="demo" class="collapse">
+    <div class="row" *ngFor="let comment of commentslist">
+      <div class="col-md-12">
+        <h6 class="comment_user">{{comment.name}}</h6>
+        <p class="support_section">{{comment.text}}</p>
+        <hr class="comment_hr" style="margin-top:2% !important;">
+        
+      </div>
+    </div>
+    <div class="row mt-5">
+        <label class="label_font">Enter Your Comments</label>
+        <textarea class="form-control" rows="5" [(ngModel)]="comment_post"></textarea>
+    </div>
+    <div class="row" style="justify-content: center;">
+      <button type="button" class="btn btn-success pull-right m-3"  (click)="post_comments()"
+        style="background-color: #0b7efb;color:#fff;border-radius: 20px;width:100px;padding:3% 0 3% 0;">Post
+      </button>
+    </div>
+  </div>
+</div> 
+</div>
+
+
+
+
+
+<!-- 
+<div class="container" class="mt-3" *ngIf="selectedInfo" id="infoWindow" style="margin-top:0%;">
+  <mat-card class="cardSection mat_card_customize tp-card" style="position:relative;margin-top:10%;padding-top:0px;">
+    <div *ngIf="image_show">
+      <img mat-card-image [offset]="'100'" style="width:100%;border-radius: 16px 16px 0px 0px"
+        [defaultImage]="defaultImage" [lazyLoad]="image" />
+    </div>
+
+    <div class="mt-0" id="infoWindow" style="position:relative;">
+      <div class="row">
+        <ngx-stars [readonly]="false" (ratingOutput)="onRatingSet($event)" [size]="4" [initialStars]="initial_stars">
+        </ngx-stars>
+      </div>
+      <div class="content-row header">
+        <h5>{{selectedInfo.name}}</h5>
+      </div>
+      <hr class="hr_class_custom">
+      <div class="content-row">
+        <p class="marker_main_content">{{selectedInfo.description}}</p>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-6">
+          <div class="info">
+            <div class="support_section">
+              <button type="button" class="button_png" 
+                (click)="supporters($event)">
+                <img src="../../../assets/Icons/likes.png" class="img_png"
+                  [ngClass]="(global_userId === user_disabled) ? 'active' : 'none'" alt="filter" /></button>
+              <span class="font_span">{{supporters}} Supporters</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-5">
+          <div class="support_section">
+            <button type="button" class="button_png">
+              <img src="../../../assets/Icons/comments.png" class="img_png" alt="filter" /></button>
+            <span class="font_span">{{comments}} Comments</span>
+          </div>
+        </div>
+        <div class="col-1" align="left" style="margin-top:3% !important">
+          <div class="panel-title" (click)="expand(info)" data-toggle="collapse" data-target="#demo"></div>
+        </div>
+      </div>
+      <div id="demo" class="collapse mt-3" *ngIf="info.expanded">
+        <div class="row" *ngFor="let comment of comment_list">
+          <div class="col-md-12">
+            <p class="support_section">{{comment}}</p>
+            <hr class="comment_hr">
+          </div>
+           <hr> 
+        </div>
+        <div class="row mt-0">
+          <label class="label_font">Enter Your Comments</label>
+          <textarea class="form-control" rows="5" [(ngModel)]="comments"></textarea>
+        </div>
+        <div class="row" style="justify-content: center;">
+          <button type="button" class="btn btn-success pull-right m-3" (click)="post_comments()"
+            style="background-color: #0b7efb;color:#fff;border-radius: 20px;width:100px;padding:3% 0 3% 0;">Post
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div> -->
+

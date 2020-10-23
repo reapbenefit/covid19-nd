@@ -1,0 +1,28 @@
+<div class="modal-header">
+  <h3 class="modal-title">Select Location</h3>
+  <button type="button" class="close" data-dismiss="modal" (click)="closeModal('dismiss')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body center" style="position: relative;">
+
+  <div class="form-group serchmap form-searchmap">
+    <input type="text" class="form-control search-formcontrol" [(ngModel)]="searchText"
+      (keydown.enter)="$event.preventDefault()" placeholder="Search Location" autocorrect="off" autocapitalize="off"
+      spellcheck="off" type="text" #search>
+  </div>
+
+  <button id="clear" mat-button mat-icon-button (click)="searchClose()">
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" (mapClick)="mapClick($event)">
+    <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
+      (dragEnd)="markerDragEnd($event)"   ></agm-marker>
+  </agm-map>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal('close')">Close</button>
+  <button type="button" class="btn btn-primary" (click)="saveLocation()">Save Location</button>
+</div>

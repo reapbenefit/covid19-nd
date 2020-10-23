@@ -1,0 +1,53 @@
+<div class="header">
+  <div class="userInfoSection">
+    <div class="userIcon">
+      <button mat-fab aria-label="profile icon" (click)="userDetailsToggle()">
+        <img width="25" height="25" src='../../assets/Icons/hippo.svg' />
+      </button>
+    </div>
+    <div class="info" style="padding-left:2% !important;width:100%">
+      <div class="rating">
+        <img src="../../../assets/Icons/StarRating.svg" alt="rating" />
+        <span>4.5</span>
+      </div>
+      <div class="userName">
+        Hands-on-Hippo
+      </div>
+      <div class="logout-wrapper" (click)="doLogout()">Logout</div>
+    </div>
+  </div>
+  <div class="userInfoSection1">
+    <div class="info">
+      <div style="text-align:right" (click)="navigatFilter()">
+        <img src="../../../assets/Icons/Filter.png" style="width:42%;" alt="filter" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template style="position:absolute;top:20%;right: 0;margin: auto;" #content let-modal>
+  <div class="modal-header" style="justify-content: center;position:relative">
+    <button type="button" class="close custom_close" aria-label="Close" #dynamic_form
+      (click)="modal.dismiss('Cross click')">
+      <span style="font-size: 25px;" aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row" style="justify-content: center;">
+        <select class="browser-default custom-select" [(ngModel)]="selectedValue" (change)="getSelectedvalue($event)">
+          <option selected>Select Form Types</option>
+          <option selected>Issues</option>
+        </select>
+      </div>
+      <div class="row" style="justify-content: center;margin-top:5% !important;">
+        <div class="form-group mt-2">
+          <div class="row" style="justify-content: center" *ngFor='let formsarr of formtypelistdata'>
+            <button class="btn btn-success btn_custom"
+              (click)="preview_form_approved(formsarr)">{{formsarr.name}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

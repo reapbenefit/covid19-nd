@@ -1,0 +1,522 @@
+.clear{
+    position: absolute;
+    right: 5%;
+    top: 1.5%;
+    font-size: 23px;
+    cursor: pointer;
+}
+
+.logout_text{
+    top: 15px;
+    right: 65px;
+    position: absolute;
+    cursor: pointer;
+}
+
+.edit{
+    top: 5px;
+    right: 3px;
+    position: absolute;
+    border-radius: 50%;
+    border:none;
+    padding: 2px 4px;
+    background: none;
+}
+
+.imgEdit{
+    top:130px;
+    left: 36%;
+    position: absolute;
+    border-radius: 50%;
+    border: none;
+    padding: 0px 1px;
+    z-index: 6;
+    background: none;
+}
+
+.head{
+    position: absolute;
+    top: 10%;
+    width: 90%;
+}
+
+.imag{
+    max-width: 120px;
+    height: 120px;
+}
+
+.container{
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    height: 100%;
+    background-color: #d6def9f5;
+    z-index: 5;
+    font-family: 'Montserrat',sans-serif;
+    overflow-y: auto;
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+    width: 25%;
+    transition: 0.5s all ease-in;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+#first{
+    margin-top: 10px;
+    font-size: 14px !important;
+    color: #172B60;
+    padding-left: 5%;
+}
+
+.head div{
+    font-size: 12px;
+    font-weight: 300;
+    margin-bottom: 6px;
+    color: #172B60;
+    padding-left: 5%;
+}
+
+.mid{
+    width: 90%;
+    border-top: 1.5px solid #495057e8;
+    position: absolute;
+    top: 40%;
+}
+
+.section{
+    border-top: 1.5px solid #495057e8;
+    position: absolute;
+    top: 50%;
+    width: 90%;
+}
+
+.section div, .mid div{
+    margin-top: 8px;
+    color: #172B60;
+}
+
+.section .col-lg-4 div, .section .col-sm-4 div, .section .col-4 div{
+    opacity: 0.7;
+    font-size: 13px;
+    color: #172B60;
+}
+
+.section .col-lg-8 div,.section .col-sm-8 div,.section .col-8 div{
+    font-size: 12px;
+    color: #172B60;
+}
+
+.mid .col-lg-4 div, .mid .col-sm-4 div, .mid .col-4 div{
+    opacity: 0.7;
+    font-size: 13px;
+    color: #172B60;
+}
+
+.mid .col-lg-8 div,.mid .col-sm-8 div,.mid .col-8 div{
+    font-size: 12px;
+    color: #172B60;
+}
+
+input{
+    border: none;
+}
+
+/* for image edit */
+.editImag{
+    max-width: 180px;
+    height: 160px;
+}
+
+.download_btn {
+    position: relative;
+    transform: translate(-50%,-50%);
+    top: 20%;
+    left: 50%;
+    width: 100%;
+}
+
+.custombtn{
+    background-color: #0975EA !important;
+    border-radius: 2.5rem !important;
+    color:#fff
+}
+
+#template .btn {
+    border-radius: 1.2rem !important;
+    padding: 12px 30px;
+    border: 2px solid #0975EA;
+    background-color: #0975EA;
+    color: #fff;
+    font-size: 14px;
+}
+
+.edit_img{
+    width:100%;
+}
+
+.button_png{
+    display: inline-block;
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    border: none;
+    padding: 0%;
+    outline: none;
+}
+
+.button_png > img{
+    width: 60%;
+}
+
+.card {
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+    transition: 0.3s;
+    top: 7%;
+    border-radius: 15px;
+    width: 100%;
+    height: 445px;
+  }
+
+/* media query */
+@media only screen and (min-width: 1300px) and (max-width: 1400px) {
+    .container{
+        width: 30%;
+    }
+ }
+
+@media only screen and (min-width: 1224px) and (max-width: 1300px) {
+    .container{
+        width: 30%;
+    }   
+ }
+
+ @media only screen and (min-width: 1024px) and (max-width: 1224px) {
+    .container{
+        width: 35%;
+    }
+ }
+
+/* Desktops and laptops ----------- */
+@media only screen and (min-width: 959px) and (max-width: 1024px) {
+    .container{
+        width: 35%;
+    }
+
+    .download_btn {
+        top: 15% !important;
+        left: 50%;
+    }
+
+}
+
+@media only screen and (min-width: 888px) and (max-width: 959px) {
+    .container{
+        width: 40%;
+    }
+
+    .card {
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+        transition: 0.3s;
+        top: 8%;
+        border-radius: 15px;
+        width: 100%;
+        height: 68%;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 888px) {
+    .container{
+        width: 45%;
+    }
+}
+
+@media only screen and (min-width: 575px) and (max-width: 767px) {
+    .container{
+        width: 60%;
+    }
+}
+
+@media only screen and (min-width: 400px) and (max-width: 575px) {
+    .container{
+        width: 100%;
+    }
+
+    #first {
+        margin-top: 10px;
+        font-size: 13px !important;
+        color: #172B60;
+        padding-left: 5%;
+    }
+
+    .head div {
+        font-size: 12px;
+        font-weight: 300;
+        margin-bottom: 6px;
+        color: #172B60;
+        padding-left: 5%;
+    }
+
+    .imgEdit {
+        top: 130px;
+        left: 31%;
+        position: absolute;
+        
+    }
+}
+
+
+@media only screen and (min-width: 360px) and (max-width: 400px) {
+    .container{
+        width: 100%;
+    }
+
+    #first {
+        margin-top: 10px;
+        font-size: 13px !important;
+        color: #172B60;
+        padding-left: 5%;
+    }
+
+    .head div {
+        font-size: 12px;
+        font-weight: 300;
+        margin-bottom: 6px;
+        color: #172B60;
+        padding-left: 5%;
+    }
+
+    .imgEdit {
+        top: 130px;
+        left: 34%;
+        position: absolute;
+        
+    }
+}
+
+
+/* mobiles (landscape and portrait) */
+@media only screen and (min-width: 320px) and (max-width: 360px) {
+    .container{
+        width: 100%;
+    }
+
+    #first {
+        margin-top: 10px;
+        font-size: 13px !important;
+        color: #172B60;
+        padding-left: 5%;
+    }
+
+    .head div {
+        font-size: 12px;
+        font-weight: 300;
+        margin-bottom: 6px;
+        color: #172B60;
+        padding-left: 5%;
+    }
+
+    .imgEdit {
+        top: 130px;
+        left: 34%;
+        position: absolute;
+        
+    }
+
+    .mid .col-lg-4 div, .mid .col-sm-4 div, .mid .col-4 div{
+        opacity: 0.7;
+        font-size: 13px;
+        color: #172B60;
+    }
+
+    .mid .col-lg-8 div,.mid .col-sm-8 div,.mid .col-8 div{
+        font-size: 12px;
+        color: #172B60;
+    }
+
+    .section .col-lg-4 div, .section .col-sm-4 div, .section .col-4 div {
+        opacity: 0.7;
+        font-size: 13px;
+        color: #172B60;
+    }
+
+    .section .col-lg-8 div,.section .col-sm-8 div,.section .col-8 div{
+        font-size: 12px;
+        color: #172B60;
+    } 
+}
+
+@media only screen and (max-width: 320px) {
+    .container{
+        width: 100%;
+    }
+
+    #first {
+        margin-top: 12px;
+        font-size: 11px !important;
+        color: #172B60;
+        padding-left: 5%;
+    }
+
+    .head div {
+        font-size: 11px;
+        font-weight: 300;
+        margin-bottom: 6px;
+        color: #172B60;
+    }
+
+    .imgEdit {
+        top: 130px;
+        left: 35%;
+        position: absolute;
+        
+    }
+
+    .mid .col-lg-4 div, .mid .col-sm-4 div, .mid .col-4 div{
+        opacity: 0.7;
+        font-size: 12px;
+        color: #172B60;
+    }
+
+    .mid .col-lg-8 div,.mid .col-sm-8 div,.mid .col-8 div{
+        font-size: 11px;
+        color: #172B60;
+    }
+
+    .section .col-lg-4 div, .section .col-sm-4 div, .section .col-4 div {
+        opacity: 0.7;
+        font-size: 12px;
+        color: #172B60;
+    }
+
+    .section .col-lg-8 div,.section .col-sm-8 div,.section .col-8 div{
+        font-size: 11px;
+        color: #172B60;
+    }
+
+    #template .btn {
+        border-radius: 2.5rem !important;
+        padding: 10px 15px;
+        border: 2px solid #0975EA;
+        background-color: #0975EA;
+        color: #fff;
+        font-size: 14px;
+    }
+}
+
+/* mediaquery for mobile devices */
+/* nexus 10 */
+@media only screen and (device-width : 800px) and (device-height: 1280px) { 
+    .container{
+        width: 50%;
+    }
+
+    .download_btn {
+        top: 10% !important;
+        left: 50%;
+    }
+
+    .card {
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+        transition: 0.3s;
+        top: 4% !important;
+        border-radius: 15px;
+        width: 100%;
+    }
+
+    .clear{
+        top:0.5%;
+    }
+
+}
+
+/* nexus 7 */
+@media only screen and (device-width : 600px) and (device-height: 960px) { 
+
+    .container{
+        width: 60% !important;
+    }
+    .download_btn {
+        top: 12% !important;
+        left: 50%;
+    }
+}
+
+/* ipad */
+@media only screen and (device-width : 768px) and (device-height: 1024px) {
+    .container{
+        width: 50%;
+    }
+    
+    .download_btn {
+        top: 10%;
+        left: 50%;
+        width: 100%;
+    }
+
+    .card {
+        top: 4% !important;
+        border-radius: 15px;
+        width: 100%;
+    }
+
+    .clear{
+        top:1%;
+    }
+}
+
+/* iphone 5/se */
+@media only screen and (device-width : 320px) and (device-height: 568px) {
+    .container{
+        width: 100%;
+    }
+
+    .card {
+        top: 8% !important;
+        border-radius: 15px;
+        width: 100%;
+    }
+    .download_btn {
+        top: 14% !important;
+        left: 50%;
+        width: 100%;
+    }
+}
+
+/* iphone X */
+@media only screen and (device-width : 375px) and (device-height: 812px) {
+    .download_btn {
+        top: 14% !important;
+    }    
+}
+
+/* pixel 2 */
+@media only screen and (device-width : 411px) and (device-height: 731px) {
+    .download_btn {
+        top: 25% !important;
+        left: 50%;
+        width: 100%;
+    }
+
+    .card{
+        top: 8%;
+    }
+}
+
+/* ipad pro */
+@media only screen and (device-width : 1024px) and (device-height: 1366px) { 
+    .container{
+        width: 50%;
+    }
+    
+    .download_btn {
+        left: 50%;
+        width: 100%;
+    }
+
+    .card {
+        top: 4% !important;
+        border-radius: 15px;
+        width: 100%;
+    }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "formio-resource",
+  "version": "4.7.11",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/formio/angular-formio"
+  },
+  "author": {
+    "name": "Travis Tidwell",
+    "email": "travis@form.io"
+  },
+  "keywords": [
+    "angular"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/formio/angular-formio/issues"
+  },
+  "main": "formio-resource.umd.js",
+  "module": "index.js",
+  "jsnext:main": "index.js",
+  "typings": "index.d.ts",
+  "peerDependencies": {
+  "@angular/core": "^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0",
+  "@angular/common": "^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0",
+  "@angular/forms": "^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0",
+  "@angular/router": "^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0",
+  "@angular/elements": "^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0",
+  "rxjs": "^5.0.0 || ^6.0.0",
+  "zone.js": "^0.8.0"
+},
+  "dependencies": {
+  "core-js": "^3.6.5",
+  "formiojs": "^4.9.27-rc.4",
+  "lodash": "^4.17.15",
+  "ngx-bootstrap": "^5.6.1"
+}
+}

@@ -1,0 +1,84 @@
+<div class="col-lg-12">
+    <h1 mat-dialog-title>{{dialogTitle}}</h1>
+    <button class="btn btn-sm" style="position: absolute;top:0px;right: 0px;" mat-dialog-close>
+        <mat-icon>clear</mat-icon>
+    </button>
+    <mat-dialog-content>
+        <form [formGroup]="myForm" class="form-wide" (ngSubmit)="saveUser()">
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>NickName</mat-label>
+                <input matInput placeholder="NickName" formControlName="nickName" [(ngModel)]="nickName" required>
+                <mat-error>This field is mandatory.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Occupation</mat-label>
+                <input matInput placeholder="Occupation" formControlName="occupation" [(ngModel)]="occupation" required>
+                <mat-error>This field is mandatory.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Organization</mat-label>
+                <mat-select [(ngModel)]="orgIds" formControlName="org" multiple required>
+                    <mat-option *ngFor="let item of orgList" [value]="item.index">
+                        {{item.name}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>This field is mandatory.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Username</mat-label>
+                <input matInput placeholder="UserName" formControlName="uname" [(ngModel)]="uname" required readonly>
+                <mat-error>This field is mandatory.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>First Name</mat-label>
+                <input matInput placeholder="First Name" formControlName="fname" [(ngModel)]="fname" required readonly>
+                <mat-error>This field is mandatory.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Last Name</mat-label>
+                <input matInput placeholder="Last Name" formControlName="lname" [(ngModel)]="lname" required readonly>
+                <mat-error>This field is mandatory.</mat-error>
+            </mat-form-field><br>
+
+            <mat-radio-group (change)="radioChange($event)" [(ngModel)]="gender" formControlName="gender">
+                <mat-label>Gender</mat-label>&nbsp;&nbsp;
+                <mat-radio-button color="primary" value="male">
+                    Male
+                </mat-radio-button>&nbsp;&nbsp;
+                <mat-radio-button color="primary" value="female">
+                    Female
+                </mat-radio-button><br>
+            </mat-radio-group>
+
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>About me</mat-label>
+                <textarea matInput placeholder="About Me" formControlName="description" rows="5"
+                    [(ngModel)]="description" required>
+        </textarea>
+                <mat-error>This field is mandatory.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Contact</mat-label>
+                <input matInput placeholder="Contact" type="text" formControlName="contact" [(ngModel)]="contact"
+                    (keypress)="numberOnly($event)" maxlength="10" required>
+                <mat-error>Please add 10 digits</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Emergency Contact</mat-label>
+                <input matInput placeholder="Emergency contact" formControlName="eContact" [(ngModel)]="eContact"
+                    (keypress)="numberOnly($event)" maxlength="10" required>
+                <mat-error>Please add 10 digits</mat-error>
+            </mat-form-field>
+        </form>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button class="btn" style="border: 1px solid;margin: auto;" (click)="saveUser()">Save</button>
+    </mat-dialog-actions>
+</div>

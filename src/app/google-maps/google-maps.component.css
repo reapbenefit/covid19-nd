@@ -1,0 +1,96 @@
+.center{
+    height: calc(70vh - 70px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #d3d3d3;
+    box-shadow: 1px 2px lightgrey;
+    overflow: hidden;
+}
+
+.search-formcontrol{
+    border-radius: 30px !important;
+    padding: 20px 35px 20px 25px;
+    height: 50px;
+    text-align: center;
+    font-family: 'Montserrat-thin';
+    font-weight: 650;
+}
+@media only screen and (min-width: 300px) and (max-width: 340px) {
+    .search-formcontrol{
+        border-radius: 30px !important;
+        height: 50px;
+        font-size: 12px;
+        padding: 20px 35px 20px 25px;
+    }
+    #clear {
+        top: 7.5% !important;
+    }
+   }
+
+@media only screen and (min-width: 341px) and (max-width: 400px) {
+    .search-formcontrol{
+        border-radius: 30px !important;
+        height: 50px;
+        font-size: 12px;
+        padding: 20px 35px 20px 25px;
+    }
+    #clear {
+        top: 7.5% !important;
+        right: 25%;
+    }
+   }
+
+@media only screen and (min-width: 400px) and (max-width: 500px) {
+    .search-formcontrol{
+        border-radius: 30px !important;
+        height: 50px;
+        font-size: 14px;
+    }
+   }
+
+@media only screen and (min-width: 500px) and (max-width: 600px) {
+    .search-formcontrol{
+        border-radius: 30px !important;
+        height: 50px;
+        font-size: 14px;
+    }
+   }
+
+@media only screen and (min-width: 600px) and (max-width: 700px) {
+    .search-formcontrol{
+        border-radius: 30px !important;
+        height: 50px;
+        font-size: 14px;
+    }
+   }
+
+.modal-header{
+    height: 35px !important;
+    padding: 0rem 1rem !important;
+}
+
+.modal-title{
+    font-size: 16px !important;  
+}
+
+button:focus {
+  border: none !important;
+  outline: none !important;
+}
+
+#clear {
+    position: absolute;
+    float: right;
+    height: 20px;
+    width: 20px;
+    top: 2%;
+    right: 30%;
+    border-radius: 20px;
+    background: none;
+    color: #00000052;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    z-index: 8;
+  }

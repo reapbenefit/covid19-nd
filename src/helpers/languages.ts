@@ -1,0 +1,22 @@
+export const languages = [{
+    code:'en',
+    name:'English'
+  },{
+    code:'tn',
+    name:'Tamil'
+  },{
+    code:'ka',
+    name:'Kannada'
+  },{
+    code:'pun',
+    name:'Punjabi'
+  },{
+    code:'hi',
+    name:'Hindi'
+  },{
+    code:'tu',
+    name:'Telugu'
+  },{
+    code:'mal',
+    name:'Malayalam'
+  }];

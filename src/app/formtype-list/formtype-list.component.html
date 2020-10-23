@@ -1,0 +1,110 @@
+<div class="container">
+  <div class="row" style="justify-content: center;margin-top:8% !important;">
+    <h5> Form Type List</h5>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <mat-tab-group mat-align-tabs="center" (selectedTabChange)="tabClick($event)">
+      <mat-tab label="Form Disable">
+        <div class="col-md-10" *ngIf="form_disable">
+          <div class="col-md-5 offset-1">
+            <nav class="navbar">
+              <input class="form-control" type="text" name="search" [(ngModel)]="filter">
+            </nav>
+          </div>
+          <table class="table table_customize table-striped table-hover mx-auto">
+            <thead>
+              <tr>
+                <th>Sl No.</th>
+                <th>Form Type Name
+                  <span class="glyphicon sort-icon" *ngIf="key =='type'"
+                    [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                </th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let formtype of form_type_list | orderBy: key : reverse | filter:filter | paginate: { itemsPerPage: 5, currentPage: p }; let i = index">
+                <td>{{formtype.index}}</td>
+                <td>{{formtype.type}}</td>
+                <td>
+                  <button class="btn btn-danger" (click)="open_mobile(content,formtype)">Disable</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row mt-3" style="overflow-y:hidden !important;justify-content: center;">
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+          </div>
+        </div>
+
+      </mat-tab>
+      <mat-tab label="Form Enable">
+        <div class="col-md-10" *ngIf="form_enable">
+          <div class="col-md-5 offset-1">
+            <nav class="navbar">
+              <input class="form-control" type="text" name="search" [(ngModel)]="filter1">
+            </nav>
+          </div>
+          <table class="table table_customize table-striped table-hover mx-auto">
+            <thead>
+              <tr>
+                <th>Sl No.</th>
+                <th>Form Type Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let formtype of form_type_disabled | orderBy: key : reverse | filter:filter1 | paginate: { itemsPerPage: 5, currentPage: p }; let i = index">
+                <td>{{formtype.index}}</td>
+                <td>{{formtype.type}}</td>
+                <td>
+                  <button class="btn btn-danger" (click)="enable_form(content,formtype)">Enable</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row mt-3" style="overflow-y:hidden !important;justify-content: center;">
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+
+<ng-template class="modal_customize_tree" #content let-modal>
+  <div class="modal-header" style="justify-content: center;">
+    <h4 class="modal-title" id="modal-basic-title">Are you sure you want to Disable ?</h4>
+    <button type="button" id="closeModal" class="close custom_close" aria-label="Close"
+      (click)="modal.dismiss('Cross click')">
+      <span style="font-size: 25px;" aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class=" row" style="padding-top: 1rem;justify-content: center;">
+      <button class="btn btn-danger" (click)="modal.dismiss('Cross click')">Cancel</button>&nbsp;&nbsp;&nbsp;
+      <button class="btn btn-success" (click)="delete_form(formsarr)">Disable</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template class="modal_customize_tree" #enable_form_type let-modal>
+  <div class="modal-header" style="justify-content: center;">
+    <h4 class="modal-title" id="modal-basic-title">Are you sure you want to Enable ?</h4>
+    <button type="button" class="close custom_close" id="closeModal" aria-label="Close"
+      (click)="modal.dismiss('Cross click')">
+      <span style="font-size: 25px;" aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class=" row" style="padding-top: 1rem;justify-content: center;">
+      <button class="btn btn-danger" (click)="modal.dismiss('Cross click')">Cancel</button>&nbsp;&nbsp;&nbsp;
+      <button class="btn btn-success" (click)="enable_formtype(formsarr)">Enable</button>
+    </div>
+  </div>
+</ng-template>

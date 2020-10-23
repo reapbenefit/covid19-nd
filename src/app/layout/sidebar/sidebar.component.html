@@ -1,0 +1,22 @@
+<mat-sidenav-container fullscreen>
+    <div class="logo" style="padding-top:5%">
+        <a href="/#/dashboard" class="simple-text">
+        </a>
+    </div>
+    <mat-sidenav style="background:cornflowerblue" #sidenav class="example-sidenav" mode="side" opened="true"
+        (mouseenter)="mouseenter()" (mouseleave)="mouseleave()" [fixedInViewport]="true" mode="push">
+        <!---------------------------- super-admin-list --------------------------------->
+        <mat-nav-list>
+            <mat-list-item class="parent mt-5" [routerLinkActive]="['is-active']">
+                <mat-icon mat-list-icon class="font-c">view_list</mat-icon>
+                <a class="full-width font-c" [routerLink]="['../formlist']" mat-list-item>Form List</a>
+            </mat-list-item>
+            <mat-list-item class="parent" [routerLinkActive]="['is-active']">
+                <mat-icon mat-list-icon class="font-c">list</mat-icon>
+                <a class="full-width font-c" [routerLink]="['../formtypelist']" mat-list-item>Form Type List</a>
+            </mat-list-item>
+        </mat-nav-list>
+        <mat-nav-list>
+        </mat-nav-list>
+    </mat-sidenav>
+</mat-sidenav-container>

@@ -1,0 +1,32 @@
+<div class="menuWrapper" [ngClass]="{
+    menuWrapper: isMobileView,
+    largeScreenMenuWrapper: !isMobileView
+  }">
+  <div (click)="setActiveMenuItem(menuItem, i)" *ngFor="let menuItem of menuItems; let i = index" class="menu"
+    [ngClass]="{ active: menuItem.key === activeMenu }">
+    <div *ngIf="menuItem.key != 'list' && menuItem.key != 'dashboard'" class="other">
+      <img [alt]="menuItem.key" [src]="
+          activeMenu === menuItem.key
+            ? imagesList[i].active
+            : imagesList[i].inActive
+        " /><br />
+      <span>{{ menuItem.name }}</span>
+    </div>
+    <div *ngIf="menuItem.key == 'list'" class="other">
+      <img [alt]="menuItem.key" [src]="
+          activeMenu === menuItem.key
+            ? imagesList[i].active
+            : imagesList[i].inActive
+        " /><br />
+      <span>{{ menuItem.name }}</span>
+    </div>
+    <div *ngIf="menuItem.key == 'dashboard'" class="other">
+      <img [alt]="menuItem.key" [src]="
+          activeMenu === menuItem.key
+            ? imagesList[i].active
+            : imagesList[i].inActive
+        " /><br />
+      <span>{{ menuItem.name }}</span>
+    </div>
+  </div>
+</div>
