@@ -1,1 +1,0 @@
-[{"__symbolic":"module","version":4,"metadata":{"FormioAlert":{"__symbolic":"interface"},"FormioAlerts":{"__symbolic":"class","members":{"setAlert":[{"__symbolic":"method"}],"addAlert":[{"__symbolic":"method"}],"setAlerts":[{"__symbolic":"method"}]}}}}]

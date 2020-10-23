@@ -1,1 +1,0 @@
-[{"__symbolic":"module","version":4,"metadata":{},"exports":[{"from":"./core"},{"from":"./elements.common"},{"from":"./custom-component/create-custom-component"},{"from":"./custom-component/register-custom-component"}]}]
