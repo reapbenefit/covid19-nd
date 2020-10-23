@@ -1,8 +1,0 @@
-{
-    "realm": "reap_benefits",
-    "auth-server-url": "http://devlp.solveninja.org:8080/auth/",
-    "ssl-required": "none",
-    "resource": "portal",
-    "public-client": true,
-    "confidential-port": 0
-}
