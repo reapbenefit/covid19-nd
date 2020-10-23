@@ -1,0 +1,174 @@
+<div id="filterPage">
+  <!-- tab -->
+  <div class="container" id="filtertab">
+    <a (click)="onCloseSearch()" class="closeSearch">X</a>
+    <nav>
+      <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+        <a
+          class="nav-item nav-link"
+          id="nav-search-tab"
+          data-toggle="tab"
+          href="#search"
+          role="tab"
+          aria-controls="searchSection"
+          aria-selected="false"
+          [class.active]="true"
+          ><img
+            class="row"
+            class="searchIcon"
+            src="../../../assets/Icons/search.png"
+            alt="filter"
+          /><a class="searchText"> Search</a></a
+        >
+
+        <a
+          class="nav-item nav-link"
+          id="nav-filter-tab"
+          data-toggle="tab"
+          href="#filter"
+          role="tab"
+          aria-controls="filterPanelSection"
+          aria-selected="false"
+          ><img
+            class="row"
+            class="filterIcon"
+            src="../../../assets/Icons/Filter.png"
+            alt="filter"
+          /><a class="searchText">Filter</a></a
+        >
+      </div>
+    </nav>
+
+    <div class="tab-content" id="nav-tabContent">
+      <div
+        class="tab-pane fade show active"
+        id="search"
+        role="tabpanel"
+        aria-labelledby="nav-home-tab"
+      >
+        <div class="section-cab">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="searchSection">
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Type here to Search"
+                      [(ngModel)]="searchKeyword"
+                      (ngModelChange)="onSearchKeyChange($event)"
+                    />
+                    <button
+                      (click)="onSearchGoClick()"
+                      type="button"
+                      class="btn btn-primary goButton"
+                    >
+                      Go
+                    </button>
+                  </div>
+                  <div *ngIf="searchKeyword" class="searchAutoCompleteSection">
+                    <div
+                      *ngFor="
+                        let loc of filteredlocationsList;
+                        let index = index
+                      "
+                      class="searchItem"
+                      style="-webkit-box-orient: vertical;"
+                      [ngClass]="{
+                        selectedSearchItem:
+                          selectedItem && loc.id === selectedItem.id
+                      }"
+                    >
+                      <img
+                        src="../../../assets/Icons/gps-pins.png"
+                        width="10"
+                        height="10"
+                      />{{ loc.name }} ({{ loc.description }})
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="tab-pane fade"
+        id="filter"
+        role="tabpanel"
+        aria-labelledby="nav-home-tab"
+      >
+        <div class="section-cab">
+          <div class="container">
+            <div class="row">
+              <button
+                (click)="onApplyFilterClick()"
+                class="btn btn-primary apply-button"
+              >
+                Apply
+              </button>
+              <div class="row filterBody">
+                <div class="col-md-12">
+                  <div class="filterPanelSection">
+                    <div *ngIf="searchFilterList">
+                      <div
+                        [id]="f.FormType_type"
+                        *ngFor="let f of searchFilterList; let i = index"
+                        class="fPanel"
+                      >
+                        <div class="fHeader">
+                          <span
+                            *ngIf="!isExistInActiveIds(f.FormType_type)"
+                            (click)="togglePanel(f.FormType_type)"
+                          >
+                            <mat-icon>arrow_right</mat-icon>
+                          </span>
+                          <span
+                            *ngIf="isExistInActiveIds(f.FormType_type)"
+                            (click)="togglePanel(f.FormType_type)"
+                          >
+                            <mat-icon>arrow_drop_down</mat-icon>
+                          </span>
+                          <div class="fItem">
+                            <div class="fTextHeader">{{ f.FormType_type }}</div>
+                            <mat-checkbox
+                              color="primary"
+                              class="formHeader"
+                              [(ngModel)]="f.checked"
+                              (change)="onFormTypeChange(f, $event)"
+                            ></mat-checkbox>
+                          </div>
+                        </div>
+                        <div
+                          class="fContent"
+                          [ngbCollapse]="!isExistInActiveIds(f.FormType_type)"
+                        >
+                          <div
+                            *ngFor="let form of f.forms; let formIndex = index"
+                            class="formFilterItem"
+                          >
+                            <div class="fText">{{ form.Forms_name }}</div>
+                            <div>
+                              <mat-checkbox
+                                color="primary"
+                                class="formNameItem"
+                                [(ngModel)]="form.checked"
+                                (change)="onFormChange(f, form, $event)"
+                              ></mat-checkbox>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- tab-end -->
+  </div>
+</div>

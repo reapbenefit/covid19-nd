@@ -1,0 +1,384 @@
+<div class="mt-0" *ngIf="selectedInfo" id="infoWindow1" style="position:relative;">
+  <div class="text-right" style="position:absolute;right:2%;top: 0%;padding-top: 1%;">
+    <button type="button" class="button_png" (click)="close_modal($event)">
+      <img src="../../../assets/Icons/close.png" class="img_png" alt="filter" /></button>
+  </div>
+  <div *ngIf="image_show">
+    <img style="width:100%;border-radius: 16px 16px 0px 0px" [src]="image" />
+  </div>
+  <div class="container mapcard-body">
+    <div class="row pl-1">
+      <ngx-stars [readonly]="false" [size]="0" (ratingOutput)="onRatingSet($event)" [initialStars]="initial_stars">
+      </ngx-stars>
+    </div>
+    <div class="content-row header pl-1">
+      <h5>{{selectedInfo.name}}</h5>
+    </div>
+    <hr class="hr_class_custom">
+    <div class="content-row pl-1">
+      <p class="marker_main_content">{{selectedInfo.description}}</p>
+    </div>
+    <hr>
+    <div *ngIf="assetFields">
+      <div *ngIf="address != '' && address != null && address != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Address:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.address}}</span>
+        </div>
+      </div>
+      <div *ngIf="catName != '' && catName != null && catName != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Category:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.catName}}</span>
+        </div>
+      </div>
+      <div *ngIf="createdBy != '' && createdBy != null && createdBy != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Created By:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <img [src]="imageUrl" onerror="this.onerror=null; this.src='../../../assets/noImage.png'" alt=""
+            class=" createdUser_image">
+          <span class="createdUser_name">{{selectedInfo.createdBy}}</span>
+        </div>
+      </div>
+      <div *ngIf="contactName != '' && contactName != null && contactName != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Contact Name:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.contactName}}</span>
+        </div>
+      </div>
+      <div
+        *ngIf="contactNumber != '' && contactNumber != null && contactNumber != 9999999999 && contactNumber != 'empty'"
+        class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Contact Number:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.contactNumber}}</span>
+        </div>
+      </div>
+      <div *ngIf="workingHoursOpen != '' && workingHoursOpen != null  && workingHoursOpen != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Working Hours Open:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.workingHoursOpen}}</span>
+        </div>
+      </div>
+      <div *ngIf="workingHoursClose != '' && workingHoursClose != null  && workingHoursClose != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Working Hours Close:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.workingHoursClose}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="issueFields">
+      <div class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Status:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <select class="browser-default custom-select custom-select_drop" [disabled]="isAllowed == false"
+            [(ngModel)]="selectedValue" (change)="getSelectedvalue($event.value)" (click)="checkUser()">
+            <option selected *ngFor="let tab of statuslist ; let index = index " [value]="tab.id">{{tab.name}}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div *ngIf="address != '' && address != null && address != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Address:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.address}}</span>
+        </div>
+      </div>
+
+      <div *ngIf="catName != '' && catName != null && catName != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Category:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.catName}}</span>
+        </div>
+      </div>
+
+      <div *ngIf="createdBy != '' && createdBy != null && createdBy != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Created By:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <img [src]="imageUrl" onerror="this.onerror=null; this.src='../../../assets/noImage.png'" alt=""
+            class="createdUser_image">
+          <span class="createdUser_name">{{selectedInfo.createdBy}}</span>
+        </div>
+      </div>
+    </div>
+
+
+    <div *ngIf="caseFields">
+      <div *ngIf="catName != '' && catName != null && catName != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Category:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.catName}}</span>
+        </div>
+      </div>
+
+      <div *ngIf="type != '' && type != null && type != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Type:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.type}}</span>
+        </div>
+      </div>
+
+      <div *ngIf="memers_name != '' && memers_name != null && memers_name != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Members:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{this.memers_name}}</span>
+        </div>
+      </div>
+
+      <div *ngIf="url != '' && url != null && url != 'http://empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">URL:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <a href="{{url}}" target="_blank">{{selectedInfo.url}}</a>
+        </div>
+      </div>
+    </div>
+
+
+    <div *ngIf="ideaFields">
+      <div *ngIf="catName != '' && catName != null  && catName != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Category:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.catName}}</span>
+        </div>
+      </div>
+
+      <div *ngIf="createdBy != '' && createdBy != null && createdBy != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Created By:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <img [src]="imageUrl" onerror="this.onerror=null; this.src='../../../assets/noImage.png'" alt=""
+            class=" createdUser_image">
+          <span class="createdUser_name">{{selectedInfo.createdBy}}</span>
+        </div>
+      </div>
+
+      <div *ngIf="url != '' && url != null && url != 'http://empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">URL:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <a href="{{url}}" target="_blank">{{selectedInfo.url}}</a>
+        </div>
+      </div>
+
+      <div *ngIf="memers_name != '' && memers_name != null && memers_name != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Members:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{this.memers_name}}</span>
+        </div>
+      </div>
+
+      <div *ngIf="contactName != '' && contactName != null && contactName != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Contact Name:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.contactName}}</span>
+        </div>
+      </div>
+      <div
+        *ngIf="contactNumber != '' && contactNumber != null && contactNumber != 9999999999 && contactNumber != 'empty'"
+        class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Contact Number:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.contactNumber}}</span>
+        </div>
+      </div>
+      <div *ngIf="mentor != '' && mentor != null && mentor != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Need Mentor:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.mentor}}</span>
+        </div>
+      </div>
+      <div *ngIf="fund != '' && fund != null  && fund != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Fund Amount Needed:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.fund}}</span>
+        </div>
+      </div>
+      <div *ngIf="targetdate!= '' && targetdate != null && targetdate != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Target Date:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.targetdate}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="campaignFields">
+      <div class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Status:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <select class="browser-default custom-select custom-select_drop" [disabled]="isAllowed == false"
+            [(ngModel)]="selectedValue" (change)="getSelectedvalue($event.value)" (click)="checkUser()">
+            <option selected *ngFor="let tab of statuslist ; let index = index " [value]="tab.id">{{tab.name}}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div *ngIf="catName != '' && catName != null && catName != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Category:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.catName}}</span>
+        </div>
+      </div>
+
+      <div *ngIf="address != '' && address != null && address != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Address:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.address}}</span>
+        </div>
+      </div>
+
+      <div *ngIf="enddate != '' && enddate != null  && enddate != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">End Date:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.enddate}}</span>
+        </div>
+      </div>
+
+      <div *ngIf="url != '' && url != null && url != 'http://empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">URL:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <a href="{{url}}" target="_blank">{{selectedInfo.url}}</a>
+        </div>
+      </div>
+
+      <div *ngIf="createdBy != '' && createdBy != null && createdBy != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Created By:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <img [src]="imageUrl" onerror="this.onerror=null; this.src='../../../assets/noImage.png'" alt=""
+            class=" createdUser_image">
+          <span class="createdUser_name">{{selectedInfo.createdBy}}</span>
+        </div>
+      </div>
+
+      <div *ngIf="memers_name != '' && memers_name != null && memers_name != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Members:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{this.memers_name}}</span>
+        </div>
+      </div>
+      <div *ngIf="fund != '' && fund != null && fund != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Fund Amount Needed:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.fund}}</span>
+        </div>
+      </div>
+      <div *ngIf="targetdate!= '' && targetdate != null && targetdate != 'empty'" class="row">
+        <div class="col-md-6 col-6">
+          <label for="fname">Target Date:</label>
+        </div>
+        <div class="col-md-6 col-6">
+          <span>{{selectedInfo.targetdate}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row pb-4 pl-2">
+      <div class="col-6">
+        <div class="info">
+          <div class="support_section">
+            <button type="button" class="button_png" (click)="post_supporters($event)">
+              <img src="../../../assets/Icons/likes.png" class="img_png" alt="filter" /></button>
+            <span class="font_span">{{supporters}} Supporters</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-5">
+        <div class="support_section">
+          <button type="button" class="button_png">
+            <img src="../../../assets/Icons/comments.png" class="img_png" alt="filter" /></button>
+          <span class="font_span">{{comments}} Comments</span>
+        </div>
+      </div>
+      <div class="col-1">
+        <div class="panel-title" data-toggle="collapse" data-target="#demo"></div>
+      </div>
+    </div>
+    <div id="demo" class="collapse">
+      <div class="row" *ngFor="let comment of commentslist">
+        <div class="col-md-12">
+          <img [src]="commentImage+comment.commenterPic"
+            onerror="this.onerror=null; this.src='../../../assets/noImage.png'" alt="" class=" comment_image">
+          <h6 class="comment_user">{{comment.name}}</h6>
+          <p class="support_section">{{comment.text}}</p>
+          <hr class="comment_hr" style="margin-top:2% !important;">
+        </div>
+      </div>
+      <div class="row mt-5">
+        <label class="label_font">Enter Your Comments</label>
+        <textarea class="form-control" rows="5" [(ngModel)]="comment_post"></textarea>
+      </div>
+      <div *ngIf="spinner_show" class="spinner_class text-center m-auto">
+        <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+      </div>
+      <div class="row" style="justify-content: center;">
+        <button type="button" class="btn btn-success pull-right m-3" (click)="post_comments()"
+          style="background-color: #0b7efb;color:#fff;border-radius: 20px;width:100px;padding:3% 0 3% 0;">Post
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

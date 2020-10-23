@@ -1,0 +1,31 @@
+import { OnInit, OnChanges, OnDestroy, ElementRef, EventEmitter, NgZone } from '@angular/core';
+import { FormioAppConfig } from '../../formio.config';
+import { FormioForm, FormioOptions } from '../../formio.common';
+import { FormBuilder } from '../../../formiojs';
+import { Observable } from 'rxjs';
+import { CustomTagsService } from '../../custom-component/custom-tags.service';
+export declare class FormBuilderComponent implements OnInit, OnChanges, OnDestroy {
+    private ngZone;
+    private config;
+    private customTags?;
+    ready: Promise<object>;
+    readyResolve: any;
+    formio: any;
+    builder: FormBuilder;
+    componentAdding: boolean;
+    private refreshSubscription;
+    form?: FormioForm;
+    options?: FormioOptions;
+    formbuilder?: any;
+    noeval?: boolean;
+    refresh?: Observable<void>;
+    change?: EventEmitter<object>;
+    builderElement?: ElementRef<any>;
+    constructor(ngZone: NgZone, config: FormioAppConfig, customTags?: CustomTagsService);
+    ngOnInit(): void;
+    setInstance(instance: any): any;
+    setDisplay(display: String): any;
+    buildForm(form: any): any;
+    ngOnChanges(changes: any): void;
+    ngOnDestroy(): void;
+}

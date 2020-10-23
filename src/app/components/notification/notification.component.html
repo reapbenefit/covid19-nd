@@ -1,0 +1,38 @@
+<div class="content shadow-lg">
+  <button class="btn clear" (click)="notifClose()">
+    <mat-icon>clear</mat-icon>
+  </button>
+  <div class="row center" style="padding: 2rem 0rem; width: 100%;">
+    <div class="col-lg-12 col-md-12 col-xs-12">
+      <div class="container d-flex justify-content-center">
+        <h5 class="notification-class">Notifications</h5>
+      </div>
+      <div class="cardWrapper">
+        <div *ngIf="notif != ''">
+          <ng-template class="modal_customize_tr" #content let-modal>
+            <app-infowindow-content (closeitem)="close_modal()" [selectedInfo]="selectedInfo"></app-infowindow-content>
+          </ng-template>
+          <div *ngFor="let item of notif" class="justify-content-center" id="notif">
+            <mat-card class="cardSection" (click)="navigate(item)">
+              <div id="infoWindow">
+                <div class="content-row header">
+                  <h6 class="item-class">{{ item.data.form_data.name }}</h6>
+                </div>
+                <hr />
+                <div class="content-row">
+                  <h6 class="marker_main_content">{{
+                    item.data.form_data.description
+                  }}</h6>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+        <div *ngIf="notif == ''" style="margin-top: 100px; text-align: center;">
+          <h6>No New Notifications</h6>
+          <mat-icon>inbox</mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

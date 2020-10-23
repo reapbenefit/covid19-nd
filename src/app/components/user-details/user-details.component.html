@@ -1,0 +1,255 @@
+<div class="container pl-4 pr-4 align-items-center" *ngIf="dataArray">
+  <div class="row align-items-center d-flex">
+    <a (click)="detailsClose()" class="clear">X</a>
+    <div class="logout_text" (click)="doLogout()">Logout</div>
+  </div>
+
+  <div class="card pl-3 pr-3">
+    <button type="button" class="button_png edit" (click)="editDialog()">
+      <img [src]="edit_icon" alt="filter" /></button>
+    <button type="button" class="button_png imgEdit" (click)="imageDialog()">
+      <img [src]="edit_icon" alt="filter" /></button>
+    <div class="row head align-items-center text-center pl-3">
+      <div class="col-6">
+        <img class="img-fluid rounded-circle imag" [src]="imageUrl"
+          onerror="this.onerror=null; this.src='../../../assets/noImage.png'" alt="userImage">
+      </div>
+      <div class="col-6 text-left ml-3">
+        <div id="first">{{dataArray[0].nick}}</div>
+        <div>{{dataArray[0].occupation}}</div>
+        <div>{{orgNames}}</div>
+        <div>{{adress}}</div>
+      </div>
+    </div>
+    <div class="row mid text-center pt-2">
+      <div class="col-4">
+        <div>Username</div>
+      </div>
+      <div class="col-8">
+        <div>{{dataArray[0].username}}</div>
+      </div>
+    </div>
+    <div class="row section text-center pl-3">
+      <div class="row container-fluid text-left">
+        <div class="col-4">
+          <div>Firstname</div>
+        </div>
+        <div class="col-8">
+          <div>{{dataArray[0].firstName}}</div>
+        </div>
+      </div>
+      <div class="row container-fluid text-left">
+        <div class="col-4">
+          <div>Lastname</div>
+        </div>
+        <div class="col-8">
+          <div>{{dataArray[0].lastname}}</div>
+        </div>
+      </div>
+      <div class="row container-fluid text-left">
+        <div class="col-4">
+          <div>Gender</div>
+        </div>
+        <div class="col-8">
+          <div>{{dataArray[0].gender}}</div>
+        </div>
+      </div>
+      <div class="row container-fluid text-left">
+        <div class="col-lg-4 col-sm-4 col-4">
+          <div>About Me</div>
+        </div>
+        <div class="col-lg-8 col-sm-8 col-8">
+          <div>{{dataArray[0].description}}</div>
+        </div>
+      </div>
+      <div class="row container-fluid text-left">
+        <div class="col-lg-4 col-sm-4 col-4">
+          <div>Contact</div>
+        </div>
+        <div class="col-lg-8 col-sm-8 col-8">
+          <div>{{dataArray[0].contcat}}</div>
+        </div>
+      </div>
+      <div class="row container-fluid text-left">
+        <div class="col-lg-4 col-sm-4 col-4">
+          <div>Emergency</div>
+        </div>
+        <div class="col-lg-8 col-sm-8 col-8">
+          <div>{{dataArray[0].emergencyContact}}</div>
+        </div>
+      </div>
+      <div class="row container-fluid text-left">
+        <div class="col-lg-4 col-sm-4 col-4">
+          <div>SNI Score</div>
+        </div>
+        <div class="col-lg-8 col-sm-8 col-8">
+          <div>{{sniScore}}</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- <div id="template" class="download_btn" style="text-align: center;">
+    <a class="btn" href="../../../assets/Sample_Certificate.pdf" download>Download Certificate</a>
+  </div> -->
+  <div id="template" class="download_btn" style="text-align: center;cursor: pointer;">
+    <a class="btn" (click)="modifyPdf()">Download Certificate</a>
+  </div>
+  <div [hidden]="hiddendiv">
+    <canvas  id="radarChart" baseChart [datasets]="radarChartData" [options]="radarChartOptions" [labels]="radarChartLabels"
+    [chartType]="radarChartType"  [colors]="['ff0000']" [legend]="legend">
+  </canvas>
+  </div>
+
+</div>
+<!-- <ng-template #htmlData> -->
+<!-- <div *ngIf="hidePDF">
+  <div *ngFor="let pdfData of pdfData" id="htmlData" #htmlData style="width: 100%; height: 100%">
+    <div style="padding: 4rem 10rem;
+ background-color: #094752;
+color: white;
+display: flex;justify-content: space-between;">
+      <div>
+        <div>
+          <a [href]="pdfData.url" targe="_blank"
+            style="font-weight: bold; color: #fff; text-decoration: none">{{ pdfData.url }}</a> </div>
+        <div>
+          <h3 style="
+         font-size: 26px;
+    font-weight: bold;
+    color: #1bb370;
+    padding-top: 30px;
+    font-family: monospace;
+    letter-spacing: 5px;
+        ">
+            {{ pdfData.title }}
+          </h3>
+        </div>
+      </div>
+      <div style="color: #fff; font-weight: bold">
+        Solve ninja
+      </div>
+    </div>
+
+
+    <div style="
+     padding: 5rem 10rem;
+      background-color: #1bb370;
+      margin-bottom: 30px;
+    ">
+      <div>
+        <h1 style="color: #fff">
+          {{ pdfData.banner_title }}
+        </h1>
+      </div>
+    </div>
+    <div style="padding: 2rem 5rem 0rem 10rem;">
+      <h2 style="border-bottom:3px solid #094752;color: #094752;">
+        {{ pdfData.problemSolving }}
+      </h2>
+      <div style="display: flex;padding-top: 30px;">
+        <div style="width: 33.33%">
+          <h5 style="color: #5bc0ed; font-weight: bold; font-size: 22px">
+            {{ pdfData.skills[0].foundation }}
+          </h5>
+          <h6 style="color: #1bb370; font-size: 18px">
+            {{ pdfData.skills[0].dataOrientation }}
+          </h6>
+          <h6 style="color: #1bb370; font-size: 18px">
+            {{ pdfData.skills[0].h_Skills }}
+          </h6>
+          <h6 style="color: #1bb370; font-size: 18px">
+            {{ pdfData.skills[0].citizenship }}
+          </h6>
+        </div>
+        <div style="width: 33.33%">
+          <h5 style="color: #faaf3e; font-weight: bold; font-size: 22px">
+            {{ pdfData.skills[0].competencies }}
+          </h5>
+          <h6 style="color: #1bb370; font-size: 18px">
+            {{ pdfData.skills[0].problemSolving }}
+          </h6>
+          <h6 style="color: #1bb370; font-size: 18px">
+            {{ pdfData.skills[0].commuSkills }}
+          </h6>
+          <h6 style="color: #1bb370; font-size: 18px">
+            {{ pdfData.skills[0].Crticalthinking }}
+          </h6>
+        </div>
+        <div style="width: 33.33%">
+          <h5 style="color: #f05928; font-weight: bold; font-size: 22px">
+            {{ pdfData.skills[0].character_qualities }}
+          </h5>
+          <h6 style="color: #1bb370; font-size: 18px">
+            {{ pdfData.skills[0].communityCollab }}
+          </h6>
+          <h6 style="color: #1bb370; font-size: 18px">
+            {{ pdfData.skills[0].gritAgency }}
+          </h6>
+          <h6 style="color: #1bb370; font-size: 18px">
+            {{ pdfData.skills[0].Appliedempathy }}y
+          </h6>
+          <h6 style="color: #1bb370; font-size: 18px">
+            {{ pdfData.skills[0].enterpreneurship }}
+          </h6>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding: 3rem 5rem 0rem 10rem;">
+      <div style="
+      border-bottom: 2px solid #094752;
+      margin-bottom: 30px;
+      width: 100%;
+      float: left;
+    ">
+        <h2 style="
+        color: #094752;
+        font-weight: 600;
+        border-bottom: 3px solid #094752;
+        width: auto;
+        margin-bottom: 20px;
+      ">
+          {{ pdfData.skillTitle }}
+        </h2>
+        <div style="
+        display: block;
+        padding-bottom: 10px;
+        margin: 0 auto;
+        width: 55%;
+        float: left;
+       
+        padding-bottom: 10px;
+      ">
+
+          <canvas id="radarChart" baseChart [datasets]="radarChartData" [options]="radarChartOptions" [labels]="radarChartLabels"
+            [chartType]="radarChartType" [legend]="legend">
+          </canvas>
+        </div>
+        <div style="width: 45%; float: right; text-align: center;">
+          <div>
+            <img style="margin-bottom: 20px" width=180 height="180" [src]="getImage(pdfData['persona'])" />
+          </div>
+          <br />
+          <div style="color: #000; font-weight: 600">
+            {{ pdfData.personaImgText }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div style="padding: 3rem 5rem 0rem 10rem;">
+      <img [src]="reapImage" />
+    </div>
+  </div>
+</div> -->
+<!-- </ng-template> -->
+
+<div class="container d-flex justify-content-center text-center align-items-center" *ngIf="!dataArray">
+  <button class="btn btn-sm clear" (click)="detailsClose()">
+    <mat-icon>clear</mat-icon>
+  </button>
+  <h5>Uh-Oh. <br>Something went wrong!</h5>
+</div>

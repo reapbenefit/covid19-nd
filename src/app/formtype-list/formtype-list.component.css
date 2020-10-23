@@ -1,0 +1,9 @@
+.table_customize{
+    width:80%;
+    padding-left:15%;
+    }
+
+tr td{
+    padding: 6px !important;
+    margin: 6px !important;
+}

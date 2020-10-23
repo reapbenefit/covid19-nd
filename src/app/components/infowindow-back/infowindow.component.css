@@ -1,0 +1,165 @@
+#infoWindow {
+    padding: 0px 16px 16px 0px;
+}
+
+#infoWindow .header  {
+    max-width: 90%;
+}
+
+#infoWindow .header h5 {
+    color:#23474f;
+}
+
+.info_wind_subheading{
+    font-size: 14px;
+    font-weight: 400;
+    color: #b9b9b9;
+}
+
+.info_wind_subheading .days {
+    color: #ed9e00;
+}
+
+.pad_left{
+    padding-left: 5px;
+}
+
+.pad_right {
+    padding-right: 5px;
+}
+
+.mar_left {
+    margin-left: 16px;
+}
+
+.mar_bottom {
+    margin-bottom: 16px;
+}
+
+.marker_main_content{
+    font-size: 16px;
+    width: 100%;
+    text-align: justify;
+    padding: 0px 0px 0px 0px;
+    max-height: 70px;
+    overflow-y: auto;
+  }
+  
+.like_share_custom{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid #9e9393;
+    background: #80808017;
+}
+
+
+.panel-title {
+    position: relative;
+  }
+    
+  .panel-title::after {
+      content: "\f107";
+      color: #333;
+      top: 0;
+      left:0%;
+      position: absolute;
+      font-family: "FontAwesome";
+      font-size: 22px;
+  }
+  
+  .panel-title[aria-expanded="true"]::after {
+      content: "\f106";
+  }
+
+  .example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .example-full-width {
+    width: 100%;
+  }
+  
+ 
+.star-full{
+    background-color: #0080ff !important;
+    height: 25px !important;
+    width: 25px !important;
+}
+
+.star-half{
+    background-color: #0080ff !important;
+    height: 25px !important;
+    width: 25px !important;
+}
+
+.star-empty{
+    background-color: #0080ff !important;
+    height: 25px !important;
+    width: 25px !important;
+}
+
+
+.button_png{
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border: none;
+    padding: 0%;
+    /* border-style: none; */
+    outline: none;
+}
+
+.img_png{
+height:30px;
+width:30px;
+}
+.active {
+    /* background-color: #4be4dd; */
+    opacity: 0.4;
+    /* color : #ffffff; */
+  }
+
+
+  .hr_class_custom{
+    margin-top: 0rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 2px solid #212529;
+    width:100%;
+}
+
+.support_section{
+     font-family: 'MONTSERRAT-REGULAR';
+    text-align: left;
+    color: #133c64;
+}
+
+#infoWindow1 .header h5 {
+    color:#133c64;
+    font-family: 'MONTSERRAT-REGULAR';
+}
+
+.font_span {
+    font-family: 'MONTSERRAT-REGULAR';
+    font-size: 11px;
+}
+
+.comment_hr {
+    margin-top: 2% !important;
+    border-top: 1px solid #212529;
+}
+.label_font{
+    font-family: 'MONTSERRAT-REGULAR';
+    color:#212529;
+  }
+
+  .infocard-body{
+    flex: 1 1 auto;
+    padding: 2rem;
+  }
+
+  

@@ -1,0 +1,69 @@
+.header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background-color: cornflowerblue;
+  z-index: 2;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  position: absolute;
+  top: 0;
+  width: 100%; 
+}
+
+.header > .headerTitle {
+  color: #50aa6a;
+  font-weight: bolder;
+  font-size: 18px;
+  font-family: 'MONTSERRAT-BOLD';
+  text-transform: capitalize;
+}
+
+.header > .userInfoSection > .info > .rating {
+  color: #ed9e00;
+  font-weight: bolder;
+  font-size: 16px;
+  display: flex;
+  justify-content: flex-end;
+  font-family: 'MONTSERRAT-THIN';
+}
+
+.header > .userInfoSection > .info > .rating > img {
+  width: 14px;
+  height: 14px;
+  margin: 5px;
+}
+
+.header > .userInfoSection > .info > .userName {
+  color: #474747;
+  font-weight: bolder;
+  font-size: 16px;
+  font-family: 'MONTSERRAT-BOLD';
+}
+
+.header > .userInfoSection > .info > .userActivity {
+  color: #c3c3c3;
+  font-size: 12px;
+  font-family: 'MONTSERRAT-LIGHT';
+}
+
+.header .userInfoSection {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header .userInfoSection .userIcon {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-left: 5px;
+}
+
+.header .userInfoSection .userIcon > button  {
+  background-color: white;
+}
+
+.header .userInfoSection .userIcon > button:focus {
+  outline: none;
+}
