@@ -799,4 +799,7 @@ public deleteConversation(id,index){
       }
     });
   }
+  getLocalHelp(){
+    window.open("https://api.whatsapp.com/send/?phone=919513607460&text=LocalHelp", "_blank");
+  }
 }

@@ -576,6 +576,9 @@
           </div>
         </div> -->
       </div>
+      <div class="text-center">
+        <button class="btn btn-success btn-block" (click)="getLocalHelp()">Local Help</button>
+      </div>
       <div id="{{cardId}}" [ngbCollapse]="!info.colComment" class="mt-3">
         <div class="row" *ngFor="let comment of comment_list" let i = index>
           <div class="col-md-12">
