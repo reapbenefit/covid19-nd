@@ -1,14 +1,21 @@
-<div class="user" *ngIf="
+<div class="" *ngIf="
     _router.url !== '/formbuilder' &&
     _router.url !== '/formlist' &&
     _router.url !== '/formtypelist' &&
     _router.url !== '/filterpage' &&
     _router.url !== '/registration' &&
     _router.url !== '/addfunction' &&
+    _router.url !== '/map' &&
     !_router.url.includes('/addforms') &&
     !userForms &&
     _router.url !== '/sniscore'
   ">
+  <landing-page></landing-page>
+</div>
+<div class="user" *ngIf="
+    _router.url == '/map'
+  ">
+
   <div class="row">
     <div class="col-md-12" style="position: relative">
       <div class="form-group location-group" *ngIf="mob_view">

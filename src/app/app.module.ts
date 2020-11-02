@@ -93,6 +93,12 @@ import { ChartsModule } from 'ng2-charts';
 import { SniscoreComponent } from './sniscore/sniscore.component';
 
 import { NgxMapboxGLModule } from "ngx-mapbox-gl";
+import { LandingPageComponent } from './landing-page/landing-page.component';
+import { HeaderComponent } from './landing-page/child/header/header.component';
+import { BannerComponent } from './landing-page/child/banner/banner.component';
+import { ContentComponent } from './landing-page/child/content/content.component';
+import { FooterComponent } from './landing-page/child/footer/footer.component';
+import { LandingHeaderComponent } from './landing-page/child/landing-header/landing-header.component';
 
 const config = {
   breakPoints: {
@@ -138,6 +144,12 @@ const keycloakService = new KeycloakService();
     AddformsComponent,
     LocationCardDetailComponent,
     SniscoreComponent,
+    LandingPageComponent,
+    HeaderComponent,
+    BannerComponent,
+    ContentComponent,
+    FooterComponent,
+    LandingHeaderComponent,
     // SidebarComponent,
     // AdminHeaderComponent
   ],

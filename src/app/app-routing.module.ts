@@ -17,6 +17,7 @@ import { AppComponent } from "./app.component";
 import { LocationCardDetailComponent } from './location-card-detail/location-card-detail.component';
 import { AddformsComponent } from './addforms/addforms.component';
 import { SniscoreComponent } from './sniscore/sniscore.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 const routes: Routes = [
   {
     path: "registration",
@@ -74,9 +75,15 @@ const routes: Routes = [
     canActivate: [AppAuthGuard]
   },
   {
-    path: "app/:city",
+    path: "map",
     component: AppComponent,
     pathMatch: "full",
+  },
+  
+  {
+    path: "app/:city",
+    component: LandingPageComponent,
+  
   },
 ];
 
