@@ -1024,3 +1024,13 @@ mgl-map {
 
 
 
+
+.theme-color{
+  color: #05386B !important;
+}
+.bg-grey{
+  background-color: #E5EAF0 !important;
+}
+.theme-green-color{
+  color: #5CDB95 !important;
+}
