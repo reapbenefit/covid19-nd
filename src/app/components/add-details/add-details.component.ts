@@ -111,6 +111,7 @@ filterForm(formtypelist){
 //  console.log(window.sessionStorage.getItem("orgId"))
  let selectedorg = window.sessionStorage.getItem("orgId") 
  const selectedLan =  window.sessionStorage.getItem("lang")
+ const selectedSeclang = window.sessionStorage.getItem("seclang")
 // console.log(selectedorg)
  if (selectedorg){
   selectedorg =selectedorg
@@ -122,10 +123,23 @@ filterForm(formtypelist){
   // console.log(orgIDs)
  } 
  if (selectedLan){
-  languages.push(selectedLan)
+  if (languages.indexOf(selectedLan)===-1){
+    languages.push(selectedLan)
+  }
+  // languages.push(selectedLan)
  } 
- console.log(orgIDs,languages)
- const filteredArr= formtypelist.filter((item) => languages.includes(item.lang)
+//  console.log(selectedSeclang)
+ if (selectedSeclang){
+  const orgid:any =selectedSeclang.split(',');
+  orgid.forEach(element => {
+    if (languages.indexOf(element)===-1){
+      languages.push(element)
+    }
+  });
+ }
+//  console.log(orgIDs,languages)
+//  const filteredArr= formtypelist.filter((item) => languages.includes(item.lang)
+ const filteredArr= formtypelist.filter((item) => this.findOrg(languages,item.lang)
 //  item.lang === selectedLan
  );
 //  console.log(filteredArr," filtered")

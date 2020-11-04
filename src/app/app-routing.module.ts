@@ -18,6 +18,7 @@ import { LocationCardDetailComponent } from './location-card-detail/location-car
 import { AddformsComponent } from './addforms/addforms.component';
 import { SniscoreComponent } from './sniscore/sniscore.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+
 const routes: Routes = [
   {
     path: "registration",

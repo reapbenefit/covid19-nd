@@ -61,6 +61,8 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MenubarComponent } from "./components/menubar/menubar.component";
 import { MapComponent } from "./components/map/map.component";
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 import {
   LocationStrategy,
@@ -91,14 +93,19 @@ import { LocationCardDetailComponent } from './location-card-detail/location-car
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { ChartsModule } from 'ng2-charts';
 import { SniscoreComponent } from './sniscore/sniscore.component';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { AppConfig } from './app.config';
 
-import { NgxMapboxGLModule } from "ngx-mapbox-gl";
+
 import { LandingPageComponent } from './landing-page/landing-page.component';
-import { HeaderComponent } from './landing-page/child/header/header.component';
 import { BannerComponent } from './landing-page/child/banner/banner.component';
 import { ContentComponent } from './landing-page/child/content/content.component';
 import { FooterComponent } from './landing-page/child/footer/footer.component';
 import { LandingHeaderComponent } from './landing-page/child/landing-header/landing-header.component';
+
+export function initializeApp(appConfig: AppConfig) {
+  return () => appConfig.load();
+}
 
 const config = {
   breakPoints: {
@@ -145,7 +152,6 @@ const keycloakService = new KeycloakService();
     LocationCardDetailComponent,
     SniscoreComponent,
     LandingPageComponent,
-    HeaderComponent,
     BannerComponent,
     ContentComponent,
     FooterComponent,
@@ -212,25 +218,26 @@ const keycloakService = new KeycloakService();
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
-    LazyLoadImageModule.forRoot(ScrollHooks),
+    LazyLoadImageModule,
     ResponsiveModule.forRoot(config),
     FlatpickrModule.forRoot(),
-    NgxMapboxGLModule.withConfig({
-      accessToken:
-        "pk.eyJ1IjoicmFtZXNoY3NlaXQiLCJhIjoiY2tlanIybGY2MHgwcTJ0bzZjYm02enllbiJ9.9zZSOVLBiD4Ya9wIaDEzsA",
-    })
+    NgSelectModule,
+    InfiniteScrollModule,
+    NgxSpinnerModule
   ],
   providers: [
     CommonService,
     GoogleAnalyticsService,NgxImageCompressService,
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
+    AppConfig,
     {
       provide: APP_INITIALIZER,
       useFactory: initializer,
       deps: [KeycloakService],
       multi: true,
     },
+    {provide: APP_INITIALIZER, useFactory: initializeApp, deps: [AppConfig], multi: true},
     AppAuthGuard,
   ],
   bootstrap: [AppComponent],

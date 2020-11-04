@@ -11,7 +11,7 @@
            
             <tr>
               <th class="sticky-col first-col left-radius">No.</th>
-              <th class="sticky-col second-col" scope="col">Total</th>
+              <!-- <th class="sticky-col second-col" scope="col">Total</th> -->
               <th scope="col">Section</th>
               <th scope="col">Parameter</th>
               <th scope="col">New Parameter - WebAPP</th>
@@ -26,7 +26,8 @@
               <th scope="col">APPLIEDEMPATHY</th>
               <th scope="col">GRIT</th>
               <th scope="col">ENTREPRENEURIALSKILLS</th>
-              <th scope="col">Score</th>
+              <!-- <th scope="col">Score</th> -->
+
               <th scope="col" class="last-col right-radius">Action</th>
             </tr>
           </thead>
@@ -34,7 +35,7 @@
            
             <tr *ngFor="let data of SniData  | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
               <td class="sticky-col first-col">{{((p-1)*itemsPerPage)+(i+1)}}</td>
-              <td class="sticky-col second-col">{{ data.Total }}</td>
+              <!-- <td class="sticky-col second-col">{{ data.Total }}</td> -->
               <td>{{ data.Section }}</td>
               <td>{{ data.Parameter }}</td>
               <td>{{ data.NewParameterWebAPP}}</td>
@@ -49,7 +50,7 @@
               <td>{{ data.APPLIEDEMPATHY }}</td>
               <td>{{ data.GRIT }}</td>
               <td>{{ data.ENTREPRENEURIALSKILLS }}</td>
-              <td>{{ data.Score }}</td>
+              <!-- <td>{{ data.Score }}</td> -->
               <td class="last-col">
                 <!-- <button type="button" class="btn btn-primary mb-2">Add</button> -->
                 <span class="material-icons icn-clr" (click)="openModal(data)">
@@ -207,7 +208,7 @@
                   [(ngModel)]="selectedRow.ENTREPRENEURIALSKILLS"
                 />
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label>Score</label>
                 <input
                   type="text"
@@ -215,7 +216,7 @@
                   class="form-control"
                   [(ngModel)]="selectedRow.Score"
                 />
-              </div>
+              </div> -->
               <button class="btn btn-primary" type="submit">Update</button>
             </form>
           </div>

@@ -85,3 +85,12 @@ body{
   .language-btn{
     text-align: center;
   }
+  .wid-30{
+    width: 30%;
+  }
+
+  @media only screen and (max-width: 960px) {
+    .wid-30{
+      width: 100% !important;
+    }
+    }

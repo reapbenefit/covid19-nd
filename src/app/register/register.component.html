@@ -1,7 +1,7 @@
 
  <div class="container" *ngIf="showLanguage">
         <div class="row" style="justify-content: center;">
-          <mat-card class="login_background">
+          <mat-card class="login_background wid-30">
             <mat-card-content>
               <div class="text-center pb-1">
                 <h4 class="text-dark">Select language</h4>
@@ -9,10 +9,18 @@
     
               <div class="row">
                 <div class="col-md-12 mb-6">
+                  <span class="text-dark">Primary Language</span>
                   <select class="custom-select" [(ngModel)]="selectedLanguage" >
                     <option selected>Select Languages</option>
                     <option *ngFor="let lang of languageList; let index = index" [value]="lang.code">{{lang.name}}</option>
                   </select>
+                </div>
+                <div  class="col-md-12  mb-6 pad-t-10">
+                <span class="text-dark">Secondary Language</span>  
+
+                  <ng-select [(ngModel)]="selectedSecLang" [multiple]="true">
+                    <ng-option *ngFor="let lang of languageList" [value]="lang.code">{{lang.name}}</ng-option>
+                 </ng-select>
                 </div>
                 <div class=" col-md-12 float-right pad-t-10">
                   <button class="btn btn-success btn_custom float-right"

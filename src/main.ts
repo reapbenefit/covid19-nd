@@ -3,9 +3,16 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import Keycloak from 'keycloak-js';
 
+import { AppConfig } from './app/app.config';
 
+export function getImgUrl() {
+  return AppConfig.settings;
+}
+const providers = [
+  {provide: 'Image_URL', useFactory: getImgUrl, deps: []}
+];
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+platformBrowserDynamic(providers).bootstrapModule(AppModule)
 .catch(err => console.error(err));
 //  'https://rb-ingress.study-circle.in/auth/'
 /*let initOptions = {

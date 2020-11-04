@@ -3,6 +3,7 @@ import { BehaviorSubject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment.prod";
 import { filter, map } from "rxjs/operators";
+import { DataService } from './data.service';
 
 @Injectable({
   providedIn: "root",
@@ -12,7 +13,7 @@ export class FilterserviceService {
   public searchFilterList = new BehaviorSubject([]);
   public appliedFilterList = new BehaviorSubject([]);
   public appliedSearchKeyword = new BehaviorSubject("");
-  constructor(protected _http: HttpClient) { }
+  constructor(protected _http: HttpClient,public dataService:DataService) { }
 
   setSeachedItem = (item) => {
     return new Promise((resolve, reject) => {
@@ -37,7 +38,8 @@ export class FilterserviceService {
 
   getFiltersList$ = () => {
     const endPoint = "issueAssetForm";
-    return this._http.get(`${environment.baseURL}${endPoint}`).pipe(
+  const headers=  this.dataService.getHeader();
+    return this._http.get(`${environment.baseURL}${endPoint}`,{ headers:headers}).pipe(
       filter(Boolean),
       map((list: any) => {
         const res = list.map((item) => {

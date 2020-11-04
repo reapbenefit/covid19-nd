@@ -1,0 +1,78 @@
+[
+   
+    {
+      "index": 3,
+      "image": "assets/img/defaultimg/waste.jpg",
+      "type": "Waste"
+    },
+    {
+      "index": 4,
+      "image": "assets/img/defaultimg/water-sanitization.jpg",
+      "type": "Water"
+    },
+    {
+      "index": 5,
+      "image": "assets/img/defaultimg/air.jpg",
+      "type": "Air"
+    },
+    {
+      "index": 6,
+      "image": "assets/img/defaultimg/electricity.jpg",
+      "type": "Electricity"
+    },
+    {
+      "index": 7,
+      "image": "assets/img/defaultimg/traffic-governance.jpg",
+      "type": "Traffic"
+    },
+    {
+      "index": 8,
+      "image": "assets/img/defaultimg/water-sanitization.jpg",
+      "type": "Sanitation"
+    },
+    {
+      "index": 9,
+      "image": "assets/img/defaultimg/covid.jpg",
+      "type": "Covid"
+    },
+    {
+      "index": 10,
+      "image": "assets/img/defaultimg/air.jpg",
+      "type": "Others"
+    },
+    {
+      "index": 11,
+      "image": "assets/img/defaultimg/air.jpg",
+      "type": "Amenities"
+    },
+    {
+      "index": 12,
+      "image": "assets/img/defaultimg/air.jpg",
+      "type": "Service"
+    },
+    {
+      "index": 13,
+      "image": "assets/img/defaultimg/traffic-governance.jpg",
+      "type": "Governance"
+    },
+    {
+      "index": 14,
+      "image": "assets/img/defaultimg/air.jpg",
+      "type": "Utilities"
+    },
+    {
+      "index": 15,
+      "image": "assets/img/defaultimg/air.jpg",
+      "type": "Important Medical Services"
+    },
+    {
+      "index": 16,
+      "image": "assets/img/defaultimg/air.jpg",
+      "type": "Coronavirus"
+    },
+    {
+      "index": 17,
+      "image": "assets/img/defaultimg/traffic-governance.jpg",
+      "type": "Government Resources"
+    }
+  ]

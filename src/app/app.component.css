@@ -467,7 +467,7 @@ ngx-select-dropdown{
 
     .locationContentSection {
         max-height: 100vh;
-        overflow-y: auto;
+        /* overflow-y: auto; */
         height: 100%;
         background-color: #edffedc2;
     }
@@ -1036,4 +1036,8 @@ z-index:1;
     cursor: pointer;
   }
 
-  
+  .search-results {
+    height : 100%;
+     overflow-y: scroll; 
+  }
+  .main-panel { height: 100px; overflow-y: scroll; }

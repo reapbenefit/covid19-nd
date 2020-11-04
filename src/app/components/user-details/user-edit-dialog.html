@@ -32,7 +32,24 @@
                 <input matInput placeholder="UserName" formControlName="uname" [(ngModel)]="uname" required readonly>
                 <mat-error>This field is mandatory.</mat-error>
             </mat-form-field>
-
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Primary language</mat-label>
+                <mat-select [(ngModel)]="lang" formControlName="lang"  required>
+                    <mat-option *ngFor="let item of languageList" [value]="item.code">
+                        {{item.name}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>This field is mandatory.</mat-error>
+            </mat-form-field>
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Secondary language</mat-label>
+                <mat-select [(ngModel)]="langsecondary" formControlName="langsecondary" multiple >
+                    <mat-option *ngFor="let item of languageList" [value]="item.code">
+                        {{item.name}}
+                    </mat-option>
+                </mat-select>
+                <!-- <mat-error>This field is mandatory.</mat-error> -->
+            </mat-form-field>
             <mat-form-field class="full-width" appearance="outline">
                 <mat-label>First Name</mat-label>
                 <input matInput placeholder="First Name" formControlName="fname" [(ngModel)]="fname" required readonly>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, NgZone, TemplateRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, NgZone, TemplateRef, Inject } from '@angular/core';
 import { environment } from './../../../environments/environment.prod';
 import { DataService } from "../../services/data.service";
 import { ToasterService } from "angular2-toaster";
@@ -66,11 +66,12 @@ export class LocationcardComponent implements OnInit {
   url: string = "";
   type: string = "";
   catName: string = "";
+  catId;
   selectedValue = "";
   memers_name = [];
   cardId = "";
   issueCard="";
-
+  defaultImage ="assets/img/default.png"
   heartIcons = {
     empty: '../assets/Icons/star.png',
     half: '../../assets/Icons/star.png',
@@ -111,7 +112,8 @@ export class LocationcardComponent implements OnInit {
     private imageCompress: NgxImageCompressService,
     private mapsAPILoader: MapsAPILoader,
     private fb: FormBuilder,
-    public router: Router) {
+    public router: Router,
+    @Inject('Image_URL') private image_Url:any) {
       this.locationForm = this.fb.group({
         name: ['',[Validators.required]],
         description:['',Validators.required],
@@ -195,7 +197,26 @@ export class LocationcardComponent implements OnInit {
       this.image_show = true;
       this.image = environment.baseURL + "large/image/" + this.info.imgName;
     } else {
-      this.image_show = false;
+      // console.log(this.image_Url,"image_Url");
+      if (this.info["catId"]) {
+        this.catId = this.info["catId"]
+      } else {
+        this.catId = 10
+      }
+      let images =[];
+    // if (this.info.formType == 52) {
+    //    images=  this.image_Url.filter((item)=>item.index === this.catId)
+    // } else {
+    //    images=  this.image_Url.filter((item)=>item.index === this.catId)
+    // }
+    images=  this.image_Url.filter((item)=>item.index === this.catId)
+
+    if (images.length>0){
+      this.image = images[0].image;
+    } else {
+      this.image = "assets/img/defaultimg/air.jpg"
+    }
+      this.image_show = true;      
     }
 
     if (this.info.formType == 49) {

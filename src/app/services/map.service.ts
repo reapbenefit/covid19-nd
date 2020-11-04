@@ -12,6 +12,9 @@ import { Observable } from "rxjs";
 import { of } from "rxjs";
 import { from } from "rxjs";
 import { async } from '@angular/core/testing';
+import * as CryptoJS from 'crypto-js';
+import { DataService } from './data.service';
+
 export interface Location {
   lat: any;
   lng: any;
@@ -34,6 +37,7 @@ export class MapService {
   public updateMapCoordinates: Function;
   public currentLat: number;
   public currentLng: number;
+  public pageNo:number=1
   markerIcon = {
     url: "../../assets/Icons/gps-pins.png",
     scaledSize: { height: 20, width: 20 },
@@ -61,12 +65,15 @@ export class MapService {
         await this.geocoder.geocode(
           { location: { lat: this.currentLat, lng: this.currentLng } },
           (results, status) => {
+            // console.log("called getting addreess")
+            const headers = this.dataService.getHeader()
             this.adress = this.getAddressParts(results[0]);
             this._http
               .post(`${environment.baseURL}${point.endPoint}`, {
                 lat: this.currentLat, long: this.currentLng,
-                district: this.adress
-              })
+                district: this.adress,
+                pageNO:this.pageNo
+              },{headers:headers})
               .pipe(
                 filter(Boolean),
                 map((res: any) => {
@@ -94,7 +101,8 @@ export class MapService {
     protected _http: HttpClient,
     private _menuService: MenuService,
     private _filterService: FilterserviceService,
-    private mapLoader: MapsAPILoader
+    private mapLoader: MapsAPILoader,
+    public dataService:DataService
   ) {
     this.getMapLocations$.subscribe(async (point: any) => {
       await this.gettingAdress(point);
@@ -159,9 +167,12 @@ export class MapService {
     return _locationsData;
   };
   getLocations = (point: any, isFromAdd = false) => {
+    // console.log("called getlocation")
+    const headers = this.dataService.getHeader()
     return this._http.post(`${environment.baseURL}${point.endPoint}`, {
-      district: this.adress
-    }).pipe(
+      district: this.adress,
+      pageNO:this.pageNo
+    },{headers:headers}).pipe(
       filter(Boolean),
       map((res: any) => {
         const _locationsData = this.searchAndFilter(res);
@@ -190,10 +201,12 @@ export class MapService {
 
   
   navigateSet = (endPoint, id, key) => {
+    const headers = this.dataService.getHeader()
+
     return this._http.post(`${environment.baseURL}${endPoint}`, {
       district: this.adress
-
-    }).pipe(
+      
+    },{headers:headers}).pipe(
       filter(Boolean),
       map((res: any[]) => {
         if (res && res.length > 0) {

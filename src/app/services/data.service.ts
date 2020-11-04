@@ -5,7 +5,7 @@ import { Observable, Subject } from "rxjs";
 import { KeycloakService } from "keycloak-angular";
 import { JsonPipe } from "@angular/common";
 import { map } from "rxjs/operators";
-
+import * as CryptoJS from 'crypto-js';
 @Injectable({
   providedIn: "root",
 })
@@ -80,7 +80,23 @@ export class DataService {
     public wardSelectedID = 0;
     private headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
     constructor(private httpClient: HttpClient, private keycloakService: KeycloakService) { }
+    getHeader() {
+        const pwdToken = environment.token;
+      let userToken;
+        if (pwdToken === undefined || pwdToken === '' || pwdToken === null ) {
+          userToken = '';
+        } else {
+        // var cipher = CryptoJS.createCipher('aes192', '@reap#PasdWard');;
+        //  userToken = cipher.update(pwdToken, 'utf8', 'hex') + cipher.final('hex');
+         var ciphertext = CryptoJS.AES.encrypt(pwdToken, 'pwdToken').toString();
+         userToken = ciphertext
 
+        }
+        // const header = {headers: new HttpHeaders().set('Authorization', userToken)};
+        // const header =  new HttpHeaders().set('Authorization', userToken);
+        const header =  new HttpHeaders({'Content-Type': 'application/json; charset=utf-8','Authorization': userToken,'apikey':userToken})
+        return header;
+      }
     getCampaigns(obj) {
         return this.httpClient.get(`${this.baseURL}/neighbourHood/getCampaigns.php`, { headers: this.headers });
     }
@@ -127,12 +143,14 @@ export class DataService {
 
     getRegistrationForm(payload) {
         const url = this.newbaseURLCOVID + this.getRegisterdata;
-        return this.httpClient.post(url,payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url,payload,{ headers:headers});
     }
 
     registrationForm(payload) {
         const url = this.newbaseURLCOVID + this.postRegisterdata;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
 
     getnewMenuList(obj) {
@@ -140,51 +158,61 @@ export class DataService {
             cityId: '1'
         }
         const url = this.newbaseURLCOVID + this.getMenuItems;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
 
     getCategoryList() {
         const url = this.newbaseURLCOVID + this.getCategory;
-        return this.httpClient.get(url);
+        const headers = this.getHeader();
+        return this.httpClient.get(url,{ headers:headers});
     }
 
     postitemdata(payload) {
         const url = this.newbaseURLCOVID + this.postItems;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
 
     postformdata(payload) {
         const url = this.newbaseURLCOVID + this.postForms;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
 
     approveformdata(payload) {
         const url = this.newbaseURLCOVID + this.updateapproveForms;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
 
     deleteForm(payload) {
         const url = this.newbaseURLCOVID + this.deleteFormslist;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
 
     deleteformtype(payload) {
         const url = this.newbaseURLCOVID + this.deleteFormsoftdelete;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
 
     enableformtype(payload) {
         const url = this.newbaseURLCOVID + this.enableFormdtypes;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
 
     getSniScore(usrid) {
         const url = this.newbaseURLCOVID + this.sniScore+usrid;
-        return this.httpClient.get(url);
+        const headers = this.getHeader();
+        return this.httpClient.get(url,{ headers:headers});
     }
     postSniscore(payload){
         const url = this.newbaseURLCOVID + this.shareSniScore;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
 
     getFormList(obj) {
@@ -192,86 +220,107 @@ export class DataService {
             cityId: '1'
         }
         const url = this.newbaseURLCOVID + this.getFormslist;
-        return this.httpClient.get(url);
+        const headers = this.getHeader();
+        return this.httpClient.get(url,{ headers:headers});
     }
 
     getorguserdata(payload): Observable<any> {
         const httpParams = new HttpParams().set('orgid', payload.orgid);
         const url = this.newbaseURLCOVID + this.getOrguserlist;
-        return this.httpClient.get<any>(url, { params: httpParams });
+         const headers = this.getHeader();
+         const options= {
+            headers:headers,
+            params: httpParams
+         }
+        return this.httpClient.get<any>(url, options);
     }
 
     getOrgList() {
         const url = this.newbaseURLCOVID + this.getOrganisations;
-        return this.httpClient.get(url);
+        const headers = this.getHeader();
+        return this.httpClient.get(url,{ headers:headers});
     }
 
     getFormtype() {
         const url = this.newbaseURLCOVID + this.getFormstype;
-        return this.httpClient.get(url);
+        const headers = this.getHeader();
+        return this.httpClient.get(url,{ headers:headers});
     }
 
     getFormtypedisabled() {
         const url = this.newbaseURLCOVID + this.getFormdisabled;
-        return this.httpClient.get(url);
+        const headers = this.getHeader();
+        return this.httpClient.get(url,{ headers:headers});
     }
 
     getAssetIssueTYpe() {
         const url = this.newbaseURLCOVID + this.getFiltertypes;
-        return this.httpClient.get(url);
+        const headers = this.getHeader();
+        return this.httpClient.get(url,{ headers:headers});
     }
 
     getFormlisttype(payload) {
         const url = this.newbaseURLCOVID + this.getselectedFormlist;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
 
     addFormtypname(payload) {
         const url = this.newbaseURLCOVID + this.addFormtype;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
 
     getFormById(payload) {
         const url = this.newbaseURLCOVID + this.getformId;
-        return this.httpClient.post(url,payload)
+        const headers = this.getHeader();
+        return this.httpClient.post(url,payload,{ headers:headers})
     }
 
     getIssueDetailById(payload) {
         const url = this.newbaseURLCOVID + this.getIssueDetail + '/'+ payload.uid;
-        return this.httpClient.get(url)
+        const headers = this.getHeader();
+        return this.httpClient.get(url,{ headers:headers})
     }
     getAssetDetailByID(payload) {
         const url = this.newbaseURLCOVID + this.getAssetDetail + '/'+ payload.uid;
-        return this.httpClient.get(url)
+        const headers = this.getHeader();
+        return this.httpClient.get(url,{ headers:headers})
     }
 
     deleteAssetCommentsById (payload) {
         const url = this.newbaseURLCOVID + this.deleteAssetComment + '/' + payload;
-        return this.httpClient.delete(url)
+        const headers = this.getHeader();
+        return this.httpClient.delete(url,{ headers:headers})
     }
     deleteIssueCommentsById (payload) {
         const url = this.newbaseURLCOVID + this.deleteIssueComment + '/' + payload;
-        return this.httpClient.delete(url)
+        const headers = this.getHeader();
+        return this.httpClient.delete(url,{ headers:headers})
     }
     deleteIssueConversation(payload) {
         const url = this.newbaseURLCOVID + this.issueConversation + '/' + payload;
-        return this.httpClient.delete(url)
+        const headers = this.getHeader();
+        return this.httpClient.delete(url,{ headers:headers})
     }
 
 
     submissionForm(payload) {
         const url = this.newbaseURLCOVID + this.submissioFormslist;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
 
     post_ratingdata(payload) {
         const url = this.newbaseURLCOVID + this.postRatingData;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
 
     update_status(payload) {
         const url = this.newbaseURLCOVID + this.updatecardStatus;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
 
     signin(username): Observable<any> {
@@ -279,8 +328,9 @@ export class DataService {
             email: username,
             withCredentials: true
         };
+        const headers = this.getHeader();
         const url = this.newbaseURLCOVID + this.signindataData;
-        return this.httpClient.post(url, Payload, { withCredentials: true });
+        return this.httpClient.post(url, Payload, { withCredentials: true ,headers:headers});
     }
 
 
@@ -290,7 +340,8 @@ export class DataService {
     cityDetails() {
         let payload = {}
         const url = this.newbaseURLCOVID + this.getCityList;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
     wardDetails(obj) {
         return this.httpClient.post(`${this.baseURL}/neighbourHood/getWards.php`, obj, { headers: this.headers });
@@ -301,28 +352,32 @@ export class DataService {
 
     getNotifications(district: String) {
         const url = this.newbaseURLCOVID + this.getNotification;
-        return this.httpClient.post(url, { "districtName": district });
+        const headers = this.getHeader();
+        return this.httpClient.post(url, { "districtName": district },{ headers:headers});
     }
 
     getUserDetails(payload) {
         let params = new HttpParams();
         params = params.set('uid', payload);
         const url = this.newbaseURLCOVID + this.userDetails;
-        return this.httpClient.get(url, { params: params });
+        const headers = this.getHeader();
+        return this.httpClient.get(url, { params: params,headers:headers });
     }
 
     editUserDetails(payload, id) {
         let params = new HttpParams();
         params = params.set('id', id);
         const url = this.newbaseURLCOVID + this.editUserData;
-        return this.httpClient.put(url, payload, { params: params });
+        const headers = this.getHeader();
+        return this.httpClient.put(url, payload, { params: params,headers:headers });
     }
 
     editImageDetails(payload, id) {
         let params = new HttpParams();
         params = params.set('id', id);
         const url = this.newbaseURLCOVID + this.editImage;
-        return this.httpClient.put(url, payload, { params: params });
+        const headers = this.getHeader();
+        return this.httpClient.put(url, payload, { params: params,headers:headers });
     }
     async checkUser() {
         let personId = window.sessionStorage.getItem("personId");
@@ -345,23 +400,28 @@ export class DataService {
     }
     editassetDetails(payload,id) {
         const url = this.newbaseURLCOVID + this.updateAsset + id;
-        return this.httpClient.put(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.put(url, payload,{ headers:headers});
     }
     editissueDetails(payload,id) {
         const url = this.newbaseURLCOVID + this.updateIssue + id;
-        return this.httpClient.put(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.put(url, payload,{ headers:headers});
     }
     addConversation(payload) {
         const url = this.newbaseURLCOVID + this.addConversations ;
-        return this.httpClient.post(url, payload);
+        const headers = this.getHeader();
+        return this.httpClient.post(url, payload,{ headers:headers});
     }
     upDateSniScore(payload) {
       const url = this.newbaseURLCOVID + this.UpdateSniScore;
-      return this.httpClient.post(url,payload);
+      const headers = this.getHeader();
+      return this.httpClient.post(url,payload,{ headers:headers});
     }
     getSniData() {
       const url = this.newbaseURLCOVID + this.SniData;
-      return this.httpClient.get(url)
+      const headers = this.getHeader();
+      return this.httpClient.get(url,{ headers:headers})
     }
   
 }

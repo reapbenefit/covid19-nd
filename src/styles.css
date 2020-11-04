@@ -2,6 +2,7 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 @import "../node_modules/angular2-toaster/toaster.css";
 @import '../node_modules/flatpickr/dist/flatpickr.css'; 
+@import "../node_modules/@ng-select/ng-select/themes/material.theme.css";
 
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined");
@@ -996,13 +997,6 @@ simple-snack-bar.mat-simple-snackbar.ng-star-inserted {
     text-align: center;
   }
 }
-/*Map box */
-mgl-map {
-  height: 100%;
-  width: 100%;
-}
-
-/*End Map box */
 
 
 
@@ -1022,15 +1016,3 @@ mgl-map {
 
 
 
-
-
-
-.theme-color{
-  color: #05386B !important;
-}
-.bg-grey{
-  background-color: #E5EAF0 !important;
-}
-.theme-green-color{
-  color: #5CDB95 !important;
-}

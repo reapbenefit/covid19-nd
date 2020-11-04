@@ -17,6 +17,7 @@ import { chart, Data,base64file } from "./chart.json"
 import { capitalize } from '../../../helpers/textHelper';
 import { degrees, PDFDocument, rgb, StandardFonts  } from 'pdf-lib';
 import * as download from 'downloadjs';
+import { languages } from 'src/helpers/languages';
 @Component({
   selector: 'app-user-details',
   templateUrl: './user-details.component.html',
@@ -221,7 +222,7 @@ const arrayBufferpdf = await fetch(pdfURL).then(res => res.arrayBuffer())
         this.sniScore = val.score;
         let radarData = [];
         for (let thing in val) {
-          console.log(thing,"thing")
+          // console.log(thing,"thing")
           if(!isNaN(val[thing]) && thing !== 'score' && thing !== 'NumberofActions'){
             radarData.push(val[thing])
             // this.radarChartLabels.push(thing)
@@ -387,6 +388,7 @@ export class UserEditDialog {
   occupation: string = '';
   org = [];
   orgIds = [];
+
   uname: string = '';
   fname: string = '';
   lname: string = '';
@@ -395,18 +397,24 @@ export class UserEditDialog {
   contact: number = null;
   eContact: number = null;
   personId: string = '';
-
+  lang :string='';
+  langsecondary =[];
+  languageList =[];
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<UserEditDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder, private toast: ToasterService,
 
     private dataService: DataService) {
+      this.languageList = languages;
     if (data) {
+      console.log(data,"datat======")
       this.id = data.rowData[0]['id'];
       this.personId = data.personId;
       this.nickName = data.rowData[0]['nick'];
       this.occupation = data.rowData[0]['occupation'];
       this.org = data.rowData[0]['orgName'];
+      this.lang = data.rowData[0]['lang'];
+      this.langsecondary = data.rowData[0]['langsecondary'];
       this.org.forEach(obj => {
         this.orgIds.push(obj.id);
       });
@@ -433,7 +441,9 @@ export class UserEditDialog {
       gender: [''],
       description: ['', [Validators.required]],
       contact: ['', [Validators.required, Validators.minLength(10), Validators.pattern('(?=\\D*\\d).{10,10}')]],
-      eContact: ['', [Validators.required, Validators.minLength(10), Validators.pattern('(?=\\D*\\d).{10,10}')]]
+      eContact: ['', [Validators.required, Validators.minLength(10), Validators.pattern('(?=\\D*\\d).{10,10}')]],
+      lang:['',Validators.required],
+      langsecondary:['']
     });
   }
 
@@ -462,7 +472,9 @@ export class UserEditDialog {
       emergencyContact: this.eContact,
       contcat: this.contact,
       description: this.description,
-      personId: this.personId
+      personId: this.personId,
+      lang:this.lang,
+     langsecondary:this.langsecondary
     }
     let payload = {
       form_data: form_data

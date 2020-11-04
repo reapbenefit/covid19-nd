@@ -44,6 +44,7 @@ export class RegisterComponent implements OnInit {
     },
   ];
   selectedLanguage = "en";
+  selectedSecLang:[]
   preview_fields: any;
   selectedRow: Number;
   selectedorgRow: Number;
@@ -387,7 +388,8 @@ export class RegisterComponent implements OnInit {
               contact: this.phone,
               ImageData: this.localCompressedURl,
               imageName: this.imageName,
-              lang:this.selectedLanguage
+              lang:this.selectedLanguage,
+              langsecondary:this.selectedSecLang
             };
             this.dataService.registrationForm(payload).subscribe(
               (formtypelist) => {
